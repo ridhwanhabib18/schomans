@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="77" failures="0" errors="0" time="6.8339243">
+    <testsuite name="src/app/router.test.tsx" timestamp="2026-10-23T09:48:39.636Z" hostname="IEI22120006NB" tests="10" failures="0" errors="0" skipped="0" time="2.0132012">
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows the public landing page to guests" time="0.8057577">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; sends an anonymous visitor who opens the dashboard to the login page with the demo buttons" time="0.204327">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Principal their own dashboard inside the app shell" time="0.2393709">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Teacher their own dashboard inside the app shell" time="0.1386927">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Student their own dashboard inside the app shell" time="0.1631674">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Parent their own dashboard inside the app shell" time="0.1251023">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Admin their own dashboard inside the app shell" time="0.1721528">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Applicant their own dashboard inside the app shell" time="0.102582">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; redirects a signed-in user who opens the login page to the dashboard" time="0.0385578">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a not-found page for an unknown address" time="0.0186579">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/auth/api/authService.test.ts" timestamp="2026-10-23T09:48:39.659Z" hostname="IEI22120006NB" tests="5" failures="0" errors="0" skipped="0" time="0.0385878">
+        <testcase classname="src/features/auth/api/authService.test.ts" name="demoLogin &gt; requests a token for the demo user of the role and signs in" time="0.0164462">
+        </testcase>
+        <testcase classname="src/features/auth/api/authService.test.ts" name="demoLogin &gt; refuses an account that holds no SchoMans role" time="0.0075343">
+        </testcase>
+        <testcase classname="src/features/auth/api/authService.test.ts" name="demoLogin &gt; renews the token with the refresh token shortly before it expires" time="0.0047733">
+        </testcase>
+        <testcase classname="src/features/auth/api/authService.test.ts" name="demoLogin &gt; signs out when the renewal fails" time="0.0018861">
+        </testcase>
+        <testcase classname="src/features/auth/api/authService.test.ts" name="logout &gt; ends a demo session without leaving the app" time="0.0037334">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/auth/components/DemoLoginButtons.test.tsx" timestamp="2026-10-23T09:48:39.665Z" hostname="IEI22120006NB" tests="8" failures="0" errors="0" skipped="0" time="2.1104583">
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; offers one button for each of the six roles" time="1.0362794">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Principal and continues to the dashboard" time="0.2145792">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Teacher and continues to the dashboard" time="0.157597">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Student and continues to the dashboard" time="0.1805717">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Parent and continues to the dashboard" time="0.1701142">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Admin and continues to the dashboard" time="0.0975971">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Applicant and continues to the dashboard" time="0.1117133">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; shows an error and stays on the page when the demo login fails" time="0.1374009">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/auth/components/guards.test.tsx" timestamp="2026-10-23T09:48:39.670Z" hostname="IEI22120006NB" tests="9" failures="0" errors="0" skipped="0" time="0.8619274">
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireAuth &gt; shows a loading state while the session is being checked, and does not redirect yet" time="0.4776434">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireAuth &gt; sends an anonymous visitor to the login page, remembering where they wanted to go" time="0.050836">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireAuth &gt; lets a signed-in user through" time="0.0179966">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; lets Admin in" time="0.0315542">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; lets Principal in" time="0.0151956">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; shows a forbidden notice to Teacher" time="0.0598584">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; shows a forbidden notice to Student" time="0.099906">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; shows a forbidden notice to Parent" time="0.0764926">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; shows a forbidden notice to Applicant" time="0.0276205">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/dashboard/pages/DashboardPage.test.tsx" timestamp="2026-10-23T09:48:39.677Z" hostname="IEI22120006NB" tests="8" failures="0" errors="0" skipped="0" time="1.6890339">
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows a skeleton while loading" time="0.6941878">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Principal dashboard" time="0.2883334">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Teacher dashboard" time="0.165496">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Student dashboard" time="0.0905196">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Parent dashboard" time="0.1260164">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Admin dashboard" time="0.1338756">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Applicant dashboard" time="0.0814712">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows an error with a retry button when the API call fails, and recovers" time="0.1040374">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/locales/locales.test.ts" timestamp="2026-10-23T09:48:39.685Z" hostname="IEI22120006NB" tests="7" failures="0" errors="0" skipped="0" time="0.0147709">
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Principal" time="0.0062658">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Teacher" time="0.0005501">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Student" time="0.0003381">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Parent" time="0.0003403">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Admin" time="0.0003123">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Applicant" time="0.0003024">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have no empty texts" time="0.0021869">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/format.test.ts" timestamp="2026-10-23T09:48:39.689Z" hostname="IEI22120006NB" tests="3" failures="0" errors="0" skipped="0" time="0.012349">
+        <testcase classname="src/shared/lib/format.test.ts" name="date formatting &gt; shows DD/MM/YYYY" time="0.0063658">
+        </testcase>
+        <testcase classname="src/shared/lib/format.test.ts" name="date formatting &gt; uses Western Indonesia Time (UTC+7), even across midnight UTC" time="0.0007667">
+        </testcase>
+        <testcase classname="src/shared/lib/format.test.ts" name="date formatting &gt; accepts Date objects and timestamps" time="0.0005193">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/http.test.ts" timestamp="2026-10-23T09:48:39.714Z" hostname="IEI22120006NB" tests="5" failures="0" errors="0" skipped="0" time="0.0334221">
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; sends the access token as a bearer token" time="0.0115298">
+        </testcase>
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; sends no Authorization header when nobody is signed in" time="0.0012068">
+        </testcase>
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; returns only the response body" time="0.0041999">
+        </testcase>
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; drops the session when the API answers 401" time="0.010206">
+        </testcase>
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; keeps the session when the API answers 403" time="0.0022929">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/jwt.test.ts" timestamp="2026-10-23T09:48:39.736Z" hostname="IEI22120006NB" tests="3" failures="0" errors="0" skipped="0" time="0.0153862">
+        <testcase classname="src/shared/lib/jwt.test.ts" name="decodeAccessToken &gt; reads the claims of a token" time="0.0079854">
+        </testcase>
+        <testcase classname="src/shared/lib/jwt.test.ts" name="decodeAccessToken &gt; handles non-ASCII names" time="0.0009257">
+        </testcase>
+        <testcase classname="src/shared/lib/jwt.test.ts" name="decodeAccessToken &gt; rejects something that is not a JWT" time="0.0021612">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/roles.test.ts" timestamp="2026-10-23T09:48:39.741Z" hostname="IEI22120006NB" tests="11" failures="0" errors="0" skipped="0" time="0.0163155">
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Principal" time="0.0056701">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Teacher" time="0.0006179">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Student" time="0.000297">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Parent" time="0.0002687">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Admin" time="0.0002584">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Applicant" time="0.0002325">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; picks the most privileged role when a token carries several" time="0.0004687">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; returns null when the token has no SchoMans role" time="0.0004605">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; is exact: it does not accept other casings or numbers" time="0.0003823">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; ignores surrounding whitespace" time="0.0003888">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="isAppRole &gt; knows the six realm roles and nothing else" time="0.0024635">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/stores/useAuthStore.test.ts" timestamp="2026-10-23T09:48:39.764Z" hostname="IEI22120006NB" tests="5" failures="0" errors="0" skipped="0" time="0.0150427">
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; starts in the loading state, before the session check has finished" time="0.0049143">
+        </testcase>
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; signs in from an access token and derives the role" time="0.0031655">
+        </testcase>
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; refuses a token without a SchoMans role and stays signed out" time="0.0006772">
+        </testcase>
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; clears the session" time="0.0016621">
+        </testcase>
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; never writes the token to browser storage" time="0.0011792">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/stores/useUiStore.test.ts" timestamp="2026-10-23T09:48:39.769Z" hostname="IEI22120006NB" tests="3" failures="0" errors="0" skipped="0" time="0.0134293">
+        <testcase classname="src/stores/useUiStore.test.ts" name="useUiStore &gt; stores the theme preference and remembers it" time="0.0072752">
+        </testcase>
+        <testcase classname="src/stores/useUiStore.test.ts" name="useUiStore &gt; still works when browser storage is unavailable" time="0.0007837">
+        </testcase>
+        <testcase classname="src/stores/useUiStore.test.ts" name="isDark &gt; follows the system only for the system preference" time="0.0006325">
+        </testcase>
+    </testsuite>
+</testsuites>

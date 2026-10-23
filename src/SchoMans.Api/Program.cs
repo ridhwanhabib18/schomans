@@ -1,0 +1,51 @@
+using Scalar.AspNetCore;
+using SchoMans.Api.Auth;
+using SchoMans.Api.Endpoints;
+using SchoMans.Api.Extensions;
+using SchoMans.Api.Middleware;
+using SchoMans.Application.Common;
+using SchoMans.Infrastructure;
+using SchoMans.Infrastructure.Persistence;
+using Serilog;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, services, logger) => logger
+    .ReadFrom.Configuration(context.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext()
+    .WriteTo.Console());
+
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration)
+    .AddSchoMansAuth(builder.Configuration)
+    .AddSchoMansApi(builder.Configuration);
+
+var app = builder.Build();
+
+app.UseMiddleware<CorrelationIdMiddleware>();
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+app.UseSerilogRequestLogging();
+app.UseCors(ServiceCollectionExtensions.CorsPolicy);
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseMiddleware<UserSyncMiddleware>();
+
+app.MapDashboardEndpoints();
+app.MapUserEndpoints();
+app.MapHealthEndpoints();
+
+// The API docs are not public in production.
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Demo"))
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
+await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
+await app.RunAsync();
+
+// Makes the entry point visible to WebApplicationFactory in the integration tests.
+public partial class Program;

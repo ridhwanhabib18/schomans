@@ -63,7 +63,10 @@ PRD yang bagus untuk Claude itu spesifik, terukur, dan tegas soal apa yang *tida
 | Siswa | Lihat dan kumpulkan PR, scan QR absensi, lihat nilai | HP |
 | Orang tua | Pantau nilai, absensi, dan pengumuman anak | HP |
 | Petugas Tata Usaha (Admin) | Kelola data master, PPDB, surat, akun pengguna | Laptop |
-| Tamu umum | Baca berita, info PPDB, daftar sebagai calon siswa | HP |
+| Pendaftar PPDB (Applicant) | Tamu yang sudah mendaftar PPDB: isi formulir, unggah dokumen, pantau status seleksi | HP |
+| Tamu umum (Guest) | Pengunjung anonim tanpa akun: baca berita, info PPDB, dan prestasi; pakai chatbot; memulai pendaftaran | HP |
+
+Guest dan Applicant dibedakan: Guest tidak punya akun dan tidak punya peran di Keycloak, sedangkan Applicant punya akun dengan realm role `Applicant` yang diberikan otomatis saat registrasi mandiri. Jadi enam realm role adalah Principal, Teacher, Student, Parent, Admin, dan Applicant. Setelah pendaftar yang diterima resmi terdaftar (F-07), peran akunnya berubah menjadi Student.
 
 Satu orang tua bisa terhubung ke lebih dari satu anak, dan satu guru bisa sekaligus wali kelas.
 
@@ -123,17 +126,18 @@ Pengelolaan data inti yang dipakai semua modul: siswa, guru, kelas, mata pelajar
 
 **F-02: Autentikasi & hak akses** (semua story)
 
-- [ ] Login melalui halaman Keycloak (bisa diberi tema SchoMans) dengan email atau NISN; lupa password dan verifikasi email ditangani Keycloak
+- [ ] Login melalui halaman Keycloak (bisa diberi tema SchoMans) dengan email dan password; lupa password dan verifikasi email ditangani Keycloak. Karena itu setiap siswa wajib punya email unik, termasuk di import Excel
+- [ ] Tamu membuka halaman publik tanpa login; registrasi mandiri di halaman Keycloak membuat akun dengan realm role `Applicant`
 - [ ] Peran diambil dari realm roles di token; setiap endpoint API dilindungi policy, bukan hanya menu yang disembunyikan di UI
 - [ ] Orang tua hanya bisa melihat data anak yang terhubung ke akunnya
 - [ ] User Keycloak tersinkron ke tabel User saat login pertama (berdasarkan `sub`)
-- [ ] Tombol login demo per peran di halaman login (khusus mode demo)
+- [ ] Tombol login demo untuk enam realm role di halaman login (khusus mode demo); tautan "Jelajahi sebagai tamu" tanpa login
 
 **F-03: Absensi QR** (US-06)
 
 Guru menampilkan QR di layar kelas; siswa scan dari HP masing-masing.
 
-- [ ] QR berganti tiap 30 detik dan hanya berlaku untuk sesi kelas itu, supaya tidak bisa dibagikan lewat foto
+- [ ] QR berganti tiap 1 menit (recurring job Hangfire merotasi secret semua sesi yang terbuka) dan hanya berlaku untuk sesi kelas itu; secret sebelumnya masih diterima 10 detik setelah rotasi supaya scan di saat pergantian tidak ditolak, supaya tidak bisa dibagikan lewat foto
 - [ ] Scan tercatat < 3 detik dan langsung muncul di layar guru secara realtime
 - [ ] Siswa yang tidak scan otomatis berstatus alpa saat sesi ditutup; guru bisa ubah ke izin/sakit
 - [ ] Rekap absensi per siswa, kelas, dan bulan bisa diekspor ke Excel
@@ -158,7 +162,7 @@ Edge case: siswa scan dua kali → dicatat sekali; HP tanpa kamera → guru bisa
 
 **F-06: Berita & pengumuman** (US-05)
 
-- [ ] Admin membuat berita publik (tampil di landing page) atau pengumuman internal dengan target peran/kelas
+- [ ] Admin membuat berita publik (tampil di landing page) atau pengumuman dengan target peran/kelas; pengumuman bersifat internal secara default, dan admin bisa menandai pengumuman tertentu sebagai publik (`IsPublic`) supaya tamu juga melihatnya di landing page
 - [ ] Editor teks kaya dengan gambar sampul; status draf atau terbit
 - [ ] Pengumuman internal muncul realtime sebagai notifikasi in-app dengan badge belum dibaca
 - [ ] Halaman berita publik ramah SEO (URL slug, meta tag)
@@ -244,7 +248,7 @@ Prinsip untuk semua fitur AI:
 **AI-08: Chatbot info sekolah & PPDB** (US-17, Sebaiknya)
 
 - [ ] Widget chat di landing page dan dashboard orang tua
-- [ ] Sumber jawaban hanya pengumuman yang sudah terbit dan dokumen PPDB; backend mengambil 5 potongan paling relevan lewat full-text search SQL Server lalu mengirimkannya sebagai konteks
+- [ ] Sumber jawaban hanya yang sudah terbit: widget di landing page (pengguna anonim) memakai berita, termasuk info PPDB (kategori `AdmissionInfo`), dan pengumuman yang ditandai `IsPublic`; widget di dashboard orang tua juga memakai pengumuman terbit, tetapi hanya yang ditujukan ke orang tua itu (perannya atau kelas anak-anaknya). Pengumuman yang tidak publik tidak pernah ditampilkan ke pengguna anonim; backend mengambil 5 potongan paling relevan lewat full-text search SQL Server lalu mengirimkannya sebagai konteks
 - [ ] Setiap jawaban menyertakan tautan ke sumbernya
 - [ ] Jika jawaban tidak ada di sumber, chatbot mengatakan tidak tahu dan memberikan kontak TU, tanpa menebak
 - [ ] Pengguna publik dibatasi per IP untuk mencegah penyalahgunaan dan biaya membengkak
@@ -288,7 +292,7 @@ Stack sudah ditetapkan: backend .NET 10 (LTS terbaru, didukung sampai November 2
 | Otorisasi API | JWT Bearer dari Keycloak + policy-based authorization | Akses data milik sendiri (misal orang tua → anaknya) dicek di layer Application | Gratis |
 | Validasi | FluentValidation | Pesan error konsisten dalam format ProblemDetails | Gratis (Apache 2.0) |
 | Realtime | SignalR (self-hosted) | Absensi QR live dan notifikasi in-app; tidak memakai Azure SignalR Service | Gratis (MIT) |
-| Background job | Hangfire versi core atau .NET BackgroundService | Pengingat tenggat H-1, rotasi QR, pengumuman PPDB terjadwal | Gratis (LGPL); fitur Pro tidak dipakai |
+| Background job | Hangfire versi core (storage SQL Server) | Pengingat tenggat H-1, rotasi QR (recurring job tiap 1 menit), pengumuman PPDB terjadwal | Gratis (LGPL); fitur Pro tidak dipakai |
 | Storage file | API S3 lewat AWSSDK.S3: SeaweedFS di Docker untuk lokal, Cloudflare R2 untuk demo live | Berkas PR, PPDB, gambar berita. Satu implementasi S3FileStorage di balik interface IFileStorage; lokal dan demo hanya beda konfigurasi endpoint. MinIO tidak dipakai karena edisi komunitasnya dikurangi sejak 2025 | Gratis (SeaweedFS Apache 2.0; R2 free tier, berbayar jika melebihi kuota) |
 | PDF | QuestPDF | Rapor dan surat bernomor dengan QR verifikasi | Gratis (Community License, individu & omzet < 1 juta USD) |
 | Import/ekspor Excel | ClosedXML | Import siswa, ekspor rekap absensi | Gratis (MIT) |
@@ -296,11 +300,11 @@ Stack sudah ditetapkan: backend .NET 10 (LTS terbaru, didukung sampai November 2
 | Server state | TanStack Query | Semua data dari API: caching, loading/error, pagination, invalidasi setelah mutasi; event SignalR memicu invalidasi query terkait | Gratis (MIT) |
 | Client state | Zustand | Hanya state di browser, satu store kecil per kebutuhan: useAuthStore, useAttendanceSessionStore, useAdmissionWizardStore, useUiStore; selalu pakai selector; tidak menyimpan salinan data API | Gratis (MIT) |
 | i18n | react-i18next | Bahasa Inggris sebagai default, bahasa Indonesia bisa ditambahkan sebagai locale id | Gratis (MIT) |
-| Auth di frontend | keycloak-js atau oidc-client-ts | Token di memori, refresh otomatis | Gratis (Apache 2.0) |
+| Auth di frontend | oidc-client-ts | Token di memori, refresh otomatis | Gratis (Apache 2.0) |
 | UI & grafik | Tailwind CSS + shadcn/ui, Recharts | Dashboard F-09 | Gratis (MIT) |
 | API client | Axios + tipe TypeScript hasil generate dari OpenAPI (NSwag/orval) | Kontrak backend–frontend selalu sinkron; dipakai di dalam query function TanStack Query | Gratis (MIT) |
 | Testing | xUnit + Testcontainers (SQL Server, SeaweedFS), Vitest untuk store dan hook, Playwright end-to-end | CI di GitHub Actions, repo publik | Gratis |
-| Deployment | Docker Compose: api, web, sqlserver, keycloak (+ seaweedfs di lokal) | VPS atau Azure; reverse proxy Nginx/Caddy dengan HTTPS; Docker Engine di server | Software gratis, server berbayar |
+| Deployment | Docker Compose: api, web, sqlserver, keycloak (+ seaweedfs di lokal) | VPS sendiri; reverse proxy Caddy dengan HTTPS otomatis; Docker Engine di server | Software gratis, server berbayar |
 | Logging | Serilog + Seq, health check endpoint | Mendukung audit log F-11; alternatif: log ke file | Gratis (Seq lisensi individu) |
 | AI | Claude API dipanggil dari backend .NET | Hanya F-10; pasang batas budget dan mode mock untuk demo | Berbayar per token |
 
@@ -316,28 +320,62 @@ Stack sudah ditetapkan: backend .NET 10 (LTS terbaru, didukung sampai November 2
 **Data model** (entitas utama):
 
 ```
-User: Id, KeycloakId (sub), Email, FullName, Role, PhotoKey   ← password dikelola Keycloak
+-- Orang & struktur sekolah
+User: Id, KeycloakId (sub), Email, FullName, Role (Principal|Teacher|Student|Parent|Admin|Applicant), PhotoKey   ← password dikelola Keycloak
 Student: Id, UserId → User, Nisn, ClassroomId → Classroom, DateOfBirth
 StudentParent: ParentUserId → User, StudentId → Student
 Teacher: Id, UserId → User, Nip
 AcademicYear: Id, Name, StartDate, EndDate, IsActive
+Term: Id, AcademicYearId → AcademicYear, Name, StartDate, EndDate, IsActive
 Classroom: Id, Name, AcademicYearId → AcademicYear, HomeroomTeacherId → Teacher
 Subject: Id, Name, MinimumPassingScore
 Schedule: Id, ClassroomId, SubjectId, TeacherId, DayOfWeek, StartTime, EndTime
-AttendanceSession: Id, ScheduleId, Date, QrSecret, OpenedAt, ClosedAt
-Attendance: Id, SessionId, StudentId, Status (Present|Excused|Sick|Absent), ScannedAt
-Assignment: Id, TeacherId, SubjectId, Title, Description, DueAt
-Submission: Id, AssignmentId, StudentId, FileKey, Score, Feedback, IsLate
-Grade: Id, StudentId, SubjectId, Component, Score, Term
-Announcement: Id, Title, Body, IsPublic, TargetRoles, TargetClassroomIds, PublishedAt
-Applicant: Id, UserId, FormData, Status, Notes
-Request: Id, Type, RequesterId, Status, CurrentStep
-Approval: Id, RequestId, ApproverId, Decision, Notes
-ProgressSummary: Id, StudentId, Month, Body, Status (Draft|Approved|Sent)
-AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
+
+-- Absensi
+AttendanceSession: Id, ScheduleId, Date, QrSecret, QrRotatedAt, OpenedAt, ClosedAt
+Attendance: Id, SessionId, StudentId, Status (Present|Excused|Sick|Absent), ScannedAt, IsManual, MarkedById → User, Note
+
+-- Tugas, kuis & bank soal
+Assignment: Id, TeacherId, SubjectId, TermId, Title, Description, DueAt, Type (Regular|Quiz), Component (GradeComponent)
+AssignmentClassroom: AssignmentId → Assignment, ClassroomId → Classroom
+AssignmentAttachment: Id, AssignmentId → Assignment, FileKey, FileName
+AssignmentQuestion: AssignmentId → Assignment, QuestionId → Question, Order, Points   ← hanya untuk tugas tipe kuis
+Submission: Id, AssignmentId, StudentId, FileKey, TextBody, Answers (json, kuis), SubmittedAt, Score, Feedback, IsLate
+Rubric: Id, AssignmentId → Assignment
+RubricCriterion: Id, RubricId → Rubric, Name, Description, MaxScore
+RubricScore: Id, SubmissionId → Submission, CriterionId → RubricCriterion, Score, Reason, Suggestion, Status (Draft|Accepted|Rejected)   ← draf AI-05 sampai guru memutuskan
+Question: Id, SubjectId → Subject, Type (MultipleChoice|ShortAnswer), Difficulty, Body, Options, AnswerKey, Explanation   ← QuestionBank milik satu mapel
+
+-- Nilai & rapor
+GradeComponent (enum): Assignment | Quiz | Midterm | Final
+GradeWeight: Id, SubjectId → Subject, Component (GradeComponent), WeightPercent   ← bobot per mapel berjumlah 100
+LearningObjective: Id, SubjectId → Subject, Code, Description
+Grade: Id, StudentId, SubjectId, TermId → Term, Component (GradeComponent), LearningObjectiveId → LearningObjective (opsional), SubmissionId → Submission (opsional, terisi saat nilai mengalir dari tugas), Score
+GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, PublishedById → User   ← nilai baru terlihat oleh siswa dan orang tua setelah baris ini ada
+ReportCard: Id, StudentId, TermId, Status (Draft|Published), PdfKey, GeneratedAt
+AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status (Draft|Accepted), IsAiDrafted
+ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt
+
+-- PPDB
+AdmissionPeriod: Id, AcademicYearId, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline
+Applicant: Id, UserId → User, AdmissionPeriodId, FormData, Status (Draft|Submitted|InVerification|Accepted|Rejected|Enrolled), Notes, StudentId → Student (terisi saat resmi terdaftar)
+ApplicantDocument: Id, ApplicantId → Applicant, Type (BirthCertificate|FamilyCard|ReportCard), FileKey, Status (Pending|Verified|Rejected), ReviewNote, ExtractedData (json, AI-03)
+
+-- Administrasi & approval
+ApprovalChainStep: Id, RequestType, StepOrder, ApproverRole   ← rantai approval yang bisa dikonfigurasi per jenis pengajuan
+Request: Id, Type (StudentLeave|TeacherLeave|CertificateLetter), RequesterId → User, StudentId → Student (opsional), StartDate, EndDate, Reason, Status (Pending|Approved|Rejected|Cancelled), CurrentStep
+Approval: Id, RequestId, ApproverId, Step, Decision, Notes, DecidedAt
+Letter: Id, RequestId → Request, LetterNumber, VerificationCode, PdfKey, IssuedAt
+
+-- Berita, pengumuman & notifikasi
+NewsArticle: Id, Title, Slug, Body, CoverImageKey, Category (News|AdmissionInfo|Award), MetaDescription, Status (Draft|Published), PublishedAt   ← publik
+Announcement: Id, Title, Body, IsPublic, CoverImageKey, TargetRoles, TargetClassroomIds, Status (Draft|Published), PublishedAt   ← internal secara default; IsPublic juga menampilkannya ke tamu
 AnnouncementRead: AnnouncementId → Announcement, UserId → User, ReadAt
-Question: Id, SubjectId → Subject, Body, Options, AnswerKey
-AiUsageLog: Id, UserId → User, Feature, Tokens, CostUsd, CreatedAt
+Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← notifikasi in-app (tugas, approval, draf AI, ...)
+
+-- Audit & AI
+AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
+AiUsageLog: Id, UserId → User, Feature, Model, Tokens, CostUsd, DurationMs, CreatedAt
 
 Semua entitas: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (concurrency EF Core)
 ```
@@ -502,7 +540,7 @@ Aturan backend:
 - **Otorisasi dua lapis.** Policy per peran di endpoint, lalu cek kepemilikan data di Application lewat `ICurrentUser`; lapis kedua wajib punya test.
 - **Layanan luar di balik interface.** S3, Claude, PDF, SignalR, dan email, sehingga ada `MockAiService` untuk demo dan test.
 - **Error bisnis sebagai `Result<T>`.** Api memetakannya ke ProblemDetails; exception hanya untuk hal tak terduga.
-- **Tanpa MediatR dan AutoMapper**, karena menambah lapisan yang tidak perlu untuk proyek ini dan sejak 2025 keduanya berlisensi komersial. Tidak memakai library mediator apa pun: setiap handler adalah class biasa yang didaftarkan di DI dan di-inject langsung ke endpoint, misalnya `app.MapPost("/attendance/sessions", (OpenSessionCommand command, OpenSessionHandler handler) => handler.Handle(command))`. Kebutuhan lintas fitur diurus tanpa pipeline mediator: validasi lewat endpoint filter FluentValidation, audit log lewat `SaveChangesInterceptor` EF Core, dan logging lewat middleware Serilog. Mapping DTO ditulis manual atau dengan Mapperly.
+- **Tanpa MediatR dan AutoMapper**, karena menambah lapisan yang tidak perlu untuk proyek ini dan sejak 2025 keduanya berlisensi komersial. Tidak memakai library mediator apa pun: setiap handler adalah class biasa yang didaftarkan di DI dan di-inject langsung ke endpoint, misalnya `group.MapPost("/sessions", OpenSession)`, dengan method static bernama `OpenSession` yang menerima handler dan memanggil `handler.Handle(command, ct)` (lihat konvensi Minimal API di bawah). Kebutuhan lintas fitur diurus tanpa pipeline mediator: validasi lewat endpoint filter FluentValidation, audit log lewat `SaveChangesInterceptor` EF Core, dan logging lewat middleware Serilog. Mapping DTO ditulis manual (Mapperly tidak dipakai).
 
 **ADR-001: Tidak memakai pattern mediator** (salin ke `docs/id/adr/001-no-mediator.md`)
 
@@ -673,7 +711,7 @@ Claude bisa membaca gambar, jadi lampirkan wireframe, sketsa tangan, atau screen
 
 ## 9. Batasan, asumsi & pertanyaan terbuka
 
-**Batasan:** dikerjakan 1 orang, target MVP (Fase 1–4) sekitar 6–8 minggu, dan seluruh fase termasuk 8 fitur AI sekitar 13–17 minggu. SQL Server + Keycloak di Docker butuh RAM sekitar 4 GB, jadi hosting demo perlu VPS kecil atau kredit cloud (misalnya Azure for Students), tidak bisa sepenuhnya gratis.
+**Batasan:** dikerjakan 1 orang, target MVP (Fase 1–4) sekitar 6–8 minggu, dan seluruh fase termasuk 8 fitur AI sekitar 13–17 minggu. SQL Server + Keycloak di Docker butuh RAM sekitar 4 GB, jadi hosting demo perlu VPS kecil, tidak bisa sepenuhnya gratis.
 
 **Asumsi:** aplikasi berbasis web + PWA, bukan mobile native; satu sekolah fiktif dengan data demo realistis (5 kelas, 150 siswa, 15 guru) di-seed otomatis.
 
@@ -681,7 +719,6 @@ Claude bisa membaca gambar, jadi lampirkan wireframe, sketsa tangan, atau screen
 
 - [ ] Jenjang sekolah: SD, SMP, atau SMA/SMK? Ini memengaruhi format rapor dan komponen nilai
 - [ ] Kurikulum yang diikuti untuk format rapor (Kurikulum Merdeka?)
-- [ ] Hosting demo: VPS sendiri atau Azure?
 - [ ] Perlu validasi lokasi (geofence) di absensi QR?
 - [ ] Notifikasi WhatsApp dimasukkan, atau cukup email + in-app?
 - [ ] Apakah dokumen resmi (rapor, surat) perlu locale bahasa Indonesia di v1, atau tetap bahasa Inggris untuk demo?

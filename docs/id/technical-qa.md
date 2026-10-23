@@ -8,7 +8,7 @@ Hampir semua komponen open source dan gratis. Yang benar-benar berbayar hanya Cl
 
 | Kategori | Komponen | Catatan |
 | --- | --- | --- |
-| Berbayar | Claude API, VPS/Azure, domain (opsional), gateway WhatsApp (opsional) | Pasang batas budget dan mode mock untuk AI |
+| Berbayar | Claude API, VPS, domain (opsional), gateway WhatsApp (opsional) | Pasang batas budget dan mode mock untuk AI |
 | Gratis bersyarat | SQL Server | Developer hanya untuk dev/test; Express boleh produksi dengan batas 10 GB per database |
 | Gratis bersyarat | QuestPDF | Gratis untuk individu dan perusahaan dengan omzet < 1 juta USD/tahun |
 | Gratis bersyarat | Seq, Hangfire, Docker Desktop, GitHub Actions, Cloudflare R2 | Lisensi individu, versi core, pemakaian pribadi, repo publik, dan free tier sudah cukup untuk portofolio |

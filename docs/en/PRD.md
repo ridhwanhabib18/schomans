@@ -61,7 +61,10 @@ This is the English version of the PRD and the primary reference; the Indonesian
 | Student | View and submit assignments, scan attendance QR, view grades | Phone |
 | Parent | Follow their child's grades, attendance, and announcements | Phone |
 | Admin staff | Manage master data, admissions, letters, user accounts | Laptop |
-| Guest | Read news, admission info, register as an applicant | Phone |
+| Applicant | A guest who registered for admissions: fill in the form, upload documents, track selection status | Phone |
+| Guest | Anonymous visitor without an account: read news, admission info, and awards; use the chatbot; start registration | Phone |
+
+Guest and Applicant are separate: a Guest has no account and no role in Keycloak, while an Applicant has an account with the realm role `Applicant`, assigned automatically on self-registration. The six realm roles are therefore Principal, Teacher, Student, Parent, Admin, and Applicant. After an accepted applicant is enrolled (F-07) the account's role changes to Student.
 
 One parent can be linked to more than one child, and one teacher can also be a homeroom teacher.
 
@@ -121,17 +124,18 @@ Core records used by every module: students, teachers, classrooms, subjects, aca
 
 **F-02: Authentication & permissions** (all stories)
 
-- [ ] Login through the Keycloak page (themed as SchoMans) with email or NISN; password reset and email verification are handled by Keycloak
+- [ ] Login through the Keycloak page (themed as SchoMans) with email and password; password reset and email verification are handled by Keycloak. Every student therefore needs a unique email, also in the Excel import
+- [ ] Guests browse public pages without logging in; self-registration on the Keycloak page creates an account with the realm role `Applicant`
 - [ ] Roles come from realm roles in the token; every API endpoint is protected by a policy, not just hidden in the UI
 - [ ] Parents can only see data of children linked to their account
 - [ ] Keycloak users are synced to the User table on first login (by `sub`)
-- [ ] Demo login buttons per role on the login page (demo mode only)
+- [ ] Demo login buttons for the six realm roles on the login page (demo mode only); a "Browse as guest" link needs no login
 
 **F-03: QR attendance** (US-06)
 
 The teacher shows a QR code on the classroom screen; students scan it with their own phones.
 
-- [ ] The QR code changes every 30 seconds and is only valid for that class session, so it cannot be shared via photo
+- [ ] The QR code changes every minute (a Hangfire recurring job rotates the secret of every open session) and is only valid for that class session; the previous secret is still accepted for 10 seconds after a rotation so a scan at the changeover is not rejected, so it cannot be shared via photo
 - [ ] A scan is recorded in < 3 seconds and appears on the teacher's screen in real time
 - [ ] Students who have not scanned are marked absent when the session closes; the teacher can change it to excused or sick
 - [ ] Attendance summaries per student, classroom, and month can be exported to Excel
@@ -156,7 +160,7 @@ Edge cases: a student scans twice → recorded once; a phone without a camera �
 
 **F-06: News & announcements** (US-05)
 
-- [ ] Admin creates public news (shown on the landing page) or internal announcements targeted at roles or classrooms
+- [ ] Admin creates public news (shown on the landing page) or announcements targeted at roles or classrooms; an announcement is internal by default, and the admin can mark a specific one as public (`IsPublic`) so guests see it on the landing page too
 - [ ] Rich-text editor with a cover image; draft or published status
 - [ ] Internal announcements arrive in real time as in-app notifications with an unread badge
 - [ ] Public news pages are SEO friendly (URL slug, meta tags)
@@ -242,7 +246,7 @@ Principles for every AI feature:
 **AI-08: School & admissions chatbot** (US-17, Should)
 
 - [ ] Chat widget on the landing page and the parent dashboard
-- [ ] Answers come only from published announcements and admission documents; the backend retrieves the 5 most relevant passages via SQL Server full-text search and sends them as context
+- [ ] Answers come only from published sources: the landing-page widget (anonymous users) uses news articles, including admission information (category `AdmissionInfo`), and announcements marked `IsPublic`; the parent-dashboard widget also uses published announcements, but only those targeted at that parent (their role or their children's classrooms). Announcements that are not public are never shown to anonymous users; the backend retrieves the 5 most relevant passages via SQL Server full-text search and sends them as context
 - [ ] Every answer links to its source
 - [ ] If the answer is not in the sources, the chatbot says it doesn't know and gives the staff contact, without guessing
 - [ ] Public users are rate limited per IP to prevent abuse and runaway cost
@@ -286,7 +290,7 @@ The stack is fixed: .NET 10 backend (latest LTS, supported until November 2028),
 | API authorization | JWT Bearer from Keycloak + policy-based authorization | Ownership checks (e.g. parent → their child) in the Application layer | Free |
 | Validation | FluentValidation | Consistent errors in ProblemDetails format | Free (Apache 2.0) |
 | Real time | SignalR (self-hosted) | Live QR attendance and in-app notifications; no Azure SignalR Service | Free (MIT) |
-| Background jobs | Hangfire core or .NET BackgroundService | Due-date reminders, QR rotation, scheduled admission announcements | Free (LGPL); Pro features not used |
+| Background jobs | Hangfire core (SQL Server storage) | Due-date reminders, QR rotation (recurring job every minute), scheduled admission announcements | Free (LGPL); Pro features not used |
 | File storage | S3 API via AWSSDK.S3: SeaweedFS in Docker locally, Cloudflare R2 for the live demo | Assignment files, admission documents, news images. One S3FileStorage implementation behind IFileStorage; local and demo differ only by endpoint config. MinIO is not used because its community edition was cut back in 2025 | Free (SeaweedFS Apache 2.0; R2 free tier, billed above quota) |
 | PDF | QuestPDF | Report cards and numbered letters with verification QR | Free (Community License, individuals & revenue < USD 1M) |
 | Excel import/export | ClosedXML | Student import, attendance export | Free (MIT) |
@@ -294,11 +298,11 @@ The stack is fixed: .NET 10 backend (latest LTS, supported until November 2028),
 | Server state | TanStack Query | All API data: caching, loading/error, pagination, invalidation after mutations; SignalR events invalidate related queries | Free (MIT) |
 | Client state | Zustand | Browser-only state, one small store per need: useAuthStore, useAttendanceSessionStore, useAdmissionWizardStore, useUiStore; always use selectors; never a copy of API data | Free (MIT) |
 | i18n | react-i18next | English default, Indonesian addable as `id` | Free (MIT) |
-| Frontend auth | keycloak-js or oidc-client-ts | Tokens in memory, automatic refresh | Free (Apache 2.0) |
+| Frontend auth | oidc-client-ts | Tokens in memory, automatic refresh | Free (Apache 2.0) |
 | UI & charts | Tailwind CSS + shadcn/ui, Recharts | F-09 dashboard | Free (MIT) |
 | API client | Axios + TypeScript types generated from OpenAPI (orval) | Backend–frontend contract always in sync; used inside TanStack Query query functions | Free (MIT) |
 | Testing | xUnit + Testcontainers (SQL Server, SeaweedFS), Vitest for stores and hooks, Playwright end to end | CI on GitHub Actions, public repo | Free |
-| Deployment | Docker Compose: api, web, sqlserver, keycloak (+ seaweedfs locally) | VPS or Azure; Nginx/Caddy reverse proxy with HTTPS; Docker Engine on the server | Software free, server paid |
+| Deployment | Docker Compose: api, web, sqlserver, keycloak (+ seaweedfs locally) | Own VPS; Caddy reverse proxy with automatic HTTPS; Docker Engine on the server | Software free, server paid |
 | Logging | Serilog + Seq, health check endpoint | Supports the F-11 audit log; alternative: log to files | Free (Seq individual license) |
 | AI | Claude API called from the .NET backend | F-10 only; budget cap and mock mode for demos | Paid per token |
 
@@ -379,28 +383,62 @@ The stack is fixed: .NET 10 backend (latest LTS, supported until November 2028),
 **Data model** (main entities):
 
 ```
-User: Id, KeycloakId (sub), Email, FullName, Role, PhotoKey   ← password managed by Keycloak
+-- People & school structure
+User: Id, KeycloakId (sub), Email, FullName, Role (Principal|Teacher|Student|Parent|Admin|Applicant), PhotoKey   ← password managed by Keycloak
 Student: Id, UserId → User, Nisn, ClassroomId → Classroom, DateOfBirth
 StudentParent: ParentUserId → User, StudentId → Student
 Teacher: Id, UserId → User, Nip
 AcademicYear: Id, Name, StartDate, EndDate, IsActive
+Term: Id, AcademicYearId → AcademicYear, Name, StartDate, EndDate, IsActive
 Classroom: Id, Name, AcademicYearId → AcademicYear, HomeroomTeacherId → Teacher
 Subject: Id, Name, MinimumPassingScore
 Schedule: Id, ClassroomId, SubjectId, TeacherId, DayOfWeek, StartTime, EndTime
-AttendanceSession: Id, ScheduleId, Date, QrSecret, OpenedAt, ClosedAt
-Attendance: Id, SessionId, StudentId, Status (Present|Excused|Sick|Absent), ScannedAt
-Assignment: Id, TeacherId, SubjectId, Title, Description, DueAt
-Submission: Id, AssignmentId, StudentId, FileKey, Score, Feedback, IsLate
-Grade: Id, StudentId, SubjectId, Component, Score, Term
-Announcement: Id, Title, Body, IsPublic, TargetRoles, TargetClassroomIds, PublishedAt
-Applicant: Id, UserId, FormData, Status, Notes
-Request: Id, Type, RequesterId, Status, CurrentStep
-Approval: Id, RequestId, ApproverId, Decision, Notes
-ProgressSummary: Id, StudentId, Month, Body, Status (Draft|Approved|Sent)
-AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
+
+-- Attendance
+AttendanceSession: Id, ScheduleId, Date, QrSecret, QrRotatedAt, OpenedAt, ClosedAt
+Attendance: Id, SessionId, StudentId, Status (Present|Excused|Sick|Absent), ScannedAt, IsManual, MarkedById → User, Note
+
+-- Assignments, quizzes & question bank
+Assignment: Id, TeacherId, SubjectId, TermId, Title, Description, DueAt, Type (Regular|Quiz), Component (GradeComponent)
+AssignmentClassroom: AssignmentId → Assignment, ClassroomId → Classroom
+AssignmentAttachment: Id, AssignmentId → Assignment, FileKey, FileName
+AssignmentQuestion: AssignmentId → Assignment, QuestionId → Question, Order, Points   ← quiz assignments only
+Submission: Id, AssignmentId, StudentId, FileKey, TextBody, Answers (json, quizzes), SubmittedAt, Score, Feedback, IsLate
+Rubric: Id, AssignmentId → Assignment
+RubricCriterion: Id, RubricId → Rubric, Name, Description, MaxScore
+RubricScore: Id, SubmissionId → Submission, CriterionId → RubricCriterion, Score, Reason, Suggestion, Status (Draft|Accepted|Rejected)   ← AI-05 draft until the teacher decides
+Question: Id, SubjectId → Subject, Type (MultipleChoice|ShortAnswer), Difficulty, Body, Options, AnswerKey, Explanation   ← the QuestionBank of a subject
+
+-- Grading & report cards
+GradeComponent (enum): Assignment | Quiz | Midterm | Final
+GradeWeight: Id, SubjectId → Subject, Component (GradeComponent), WeightPercent   ← weights per subject add up to 100
+LearningObjective: Id, SubjectId → Subject, Code, Description
+Grade: Id, StudentId, SubjectId, TermId → Term, Component (GradeComponent), LearningObjectiveId → LearningObjective (optional), SubmissionId → Submission (optional, set when the score flows in from an assignment), Score
+GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, PublishedById → User   ← grades are visible to students and parents only after this exists
+ReportCard: Id, StudentId, TermId, Status (Draft|Published), PdfKey, GeneratedAt
+AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status (Draft|Accepted), IsAiDrafted
+ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt
+
+-- Admissions
+AdmissionPeriod: Id, AcademicYearId, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline
+Applicant: Id, UserId → User, AdmissionPeriodId, FormData, Status (Draft|Submitted|InVerification|Accepted|Rejected|Enrolled), Notes, StudentId → Student (set on enrollment)
+ApplicantDocument: Id, ApplicantId → Applicant, Type (BirthCertificate|FamilyCard|ReportCard), FileKey, Status (Pending|Verified|Rejected), ReviewNote, ExtractedData (json, AI-03)
+
+-- Administration & approvals
+ApprovalChainStep: Id, RequestType, StepOrder, ApproverRole   ← configurable chain per request type
+Request: Id, Type (StudentLeave|TeacherLeave|CertificateLetter), RequesterId → User, StudentId → Student (optional), StartDate, EndDate, Reason, Status (Pending|Approved|Rejected|Cancelled), CurrentStep
+Approval: Id, RequestId, ApproverId, Step, Decision, Notes, DecidedAt
+Letter: Id, RequestId → Request, LetterNumber, VerificationCode, PdfKey, IssuedAt
+
+-- News, announcements & notifications
+NewsArticle: Id, Title, Slug, Body, CoverImageKey, Category (News|AdmissionInfo|Award), MetaDescription, Status (Draft|Published), PublishedAt   ← public
+Announcement: Id, Title, Body, IsPublic, CoverImageKey, TargetRoles, TargetClassroomIds, Status (Draft|Published), PublishedAt   ← internal by default; IsPublic also shows it to guests
 AnnouncementRead: AnnouncementId → Announcement, UserId → User, ReadAt
-Question: Id, SubjectId → Subject, Body, Options, AnswerKey
-AiUsageLog: Id, UserId → User, Feature, Tokens, CostUsd, CreatedAt
+Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← in-app notifications (assignments, approvals, AI drafts, ...)
+
+-- Audit & AI
+AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
+AiUsageLog: Id, UserId → User, Feature, Model, Tokens, CostUsd, DurationMs, CreatedAt
 
 Every entity: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (EF Core concurrency)
 ```
@@ -500,7 +538,7 @@ Backend rules:
 - **Two-layer authorization.** A role policy on the endpoint, then a data-ownership check in Application via `ICurrentUser`; the second layer must have tests.
 - **External services behind interfaces.** S3, Claude, PDF, SignalR, and email, which makes `MockAiService` possible for demos and tests.
 - **Business errors as `Result<T>`.** The Api maps them to ProblemDetails; exceptions are only for the unexpected.
-- **No MediatR and no AutoMapper**, because they add an unnecessary layer for this project and both became commercially licensed in 2025. No mediator library at all: each handler is a plain class registered in DI and injected straight into the endpoint, for example `app.MapPost("/attendance/sessions", (OpenSessionCommand command, OpenSessionHandler handler) => handler.Handle(command))`. Cross-cutting needs are handled without a mediator pipeline: validation through a FluentValidation endpoint filter, audit logging through an EF Core `SaveChangesInterceptor`, and logging through Serilog middleware. DTO mapping is written by hand or with Mapperly.
+- **No MediatR and no AutoMapper**, because they add an unnecessary layer for this project and both became commercially licensed in 2025. No mediator library at all: each handler is a plain class registered in DI and injected straight into the endpoint, for example `group.MapPost("/sessions", OpenSession)`, where the named static method `OpenSession` receives the handler and calls `handler.Handle(command, ct)` (see the Minimal API conventions below). Cross-cutting needs are handled without a mediator pipeline: validation through a FluentValidation endpoint filter, audit logging through an EF Core `SaveChangesInterceptor`, and logging through Serilog middleware. DTO mapping is written by hand (Mapperly is not used).
 
 **ADR-001: No mediator pattern** (copy to `docs/en/adr/001-no-mediator.md`)
 
@@ -669,7 +707,7 @@ Claude can read images, so attach wireframes, hand sketches, or screenshots of r
 
 ## 9. Constraints, assumptions & open questions
 
-**Constraints:** built by one person; MVP (Phases 1–4) targeted at about 6–8 weeks, and all phases including the 8 AI features at about 13–17 weeks. SQL Server + Keycloak in Docker need about 4 GB of RAM, so the demo needs a small VPS or cloud credits (for example Azure for Students) and cannot be completely free.
+**Constraints:** built by one person; MVP (Phases 1–4) targeted at about 6–8 weeks, and all phases including the 8 AI features at about 13–17 weeks. SQL Server + Keycloak in Docker need about 4 GB of RAM, so the demo needs a small VPS and cannot be completely free.
 
 **Assumptions:** a web app + PWA, not a native mobile app; one fictional school with realistic demo data (5 classrooms, 150 students, 15 teachers) seeded automatically.
 
@@ -677,7 +715,6 @@ Claude can read images, so attach wireframes, hand sketches, or screenshots of r
 
 - [ ] School level: elementary, junior high, or senior/vocational high school? This affects the report-card format and grade components
 - [ ] Which curriculum the report-card format follows (Kurikulum Merdeka?)
-- [ ] Demo hosting: own VPS or Azure?
 - [ ] Location check (geofence) for QR attendance?
 - [ ] Include WhatsApp notifications, or email + in-app only?
 - [ ] Should official documents (report cards, letters) get an Indonesian locale in v1, or stay English for the demo?

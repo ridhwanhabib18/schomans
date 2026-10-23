@@ -6,7 +6,7 @@ sequenceDiagram
   participant D as SQL Server
   B->>K: authorize (PKCE challenge)
   K-->>B: login page
-  B->>K: email or NISN + password
+  B->>K: email + password
   K-->>B: redirect with code
   B->>K: code + verifier
   K-->>B: access + refresh token (kept in memory)

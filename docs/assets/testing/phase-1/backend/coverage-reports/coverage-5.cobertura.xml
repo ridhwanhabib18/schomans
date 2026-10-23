@@ -1,0 +1,1254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<coverage line-rate="0.3186" branch-rate="0.4464" version="1.9" timestamp="1792749318" lines-covered="87" lines-valid="273" branches-covered="25" branches-valid="56">
+  <sources>
+    <source>C:/Users/iei22120006/Downloads/schomans-starter/schomans/src/</source>
+  </sources>
+  <packages>
+    <package name="SchoMans.Application" line-rate="0.5044" branch-rate="0.46869999999999995" complexity="57">
+      <classes>
+        <class name="SchoMans.Application.Features.Users.SyncUser.SyncUserCommand" filename="SchoMans.Application/Features/Users/SyncUser/SyncUserCommand.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_Sub" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="4" hits="28" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="4" hits="28" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Users.SyncUser.SyncedUserDto" filename="SchoMans.Application/Features/Users/SyncUser/SyncUserHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_UserId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="8" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="8" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Users.SyncUser.SyncUserHandler" filename="SchoMans.Application/Features/Users/SyncUser/SyncUserHandler.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name=".ctor" signature="(SchoMans.Application.Common.Interfaces.IAppDbContext)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="14" hits="1" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="14" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Users.SyncUser.SyncUserHandler/&lt;Handle&gt;d__2" filename="SchoMans.Application/Features/Users/SyncUser/SyncUserHandler.cs" line-rate="0.3333" branch-rate="0.1666" complexity="6">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0.3333" branch-rate="0.1666" complexity="6">
+              <lines>
+                <line number="17" hits="1" branch="False" />
+                <line number="18" hits="1" branch="True" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="45" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="19" hits="1" branch="False" />
+                <line number="20" hits="1" branch="False" />
+                <line number="24" hits="0" branch="False" />
+                <line number="25" hits="0" branch="False" />
+                <line number="26" hits="0" branch="False" />
+                <line number="27" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="244" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="28" hits="0" branch="False" />
+                <line number="29" hits="0" branch="False" />
+                <line number="32" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="269" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="33" hits="0" branch="False" />
+                <line number="34" hits="0" branch="False" />
+                <line number="36" hits="0" branch="False" />
+                <line number="37" hits="1" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="17" hits="1" branch="False" />
+            <line number="18" hits="1" branch="True" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="45" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="19" hits="1" branch="False" />
+            <line number="20" hits="1" branch="False" />
+            <line number="24" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+            <line number="26" hits="0" branch="False" />
+            <line number="27" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="244" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="28" hits="0" branch="False" />
+            <line number="29" hits="0" branch="False" />
+            <line number="32" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="269" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="33" hits="0" branch="False" />
+            <line number="34" hits="0" branch="False" />
+            <line number="36" hits="0" branch="False" />
+            <line number="37" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Users.SyncUser.SyncUserHandler/&lt;TrySync&gt;d__3" filename="SchoMans.Application/Features/Users/SyncUser/SyncUserHandler.cs" line-rate="0" branch-rate="0" complexity="10">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="10">
+              <lines>
+                <line number="40" hits="0" branch="False" />
+                <line number="41" hits="0" branch="False" />
+                <line number="43" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="344" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="44" hits="0" branch="False" />
+                <line number="45" hits="0" branch="False" />
+                <line number="46" hits="0" branch="False" />
+                <line number="48" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="649" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="49" hits="0" branch="False" />
+                <line number="52" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="663" type="jump" coverage="0%" />
+                    <condition number="704" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="53" hits="0" branch="False" />
+                <line number="54" hits="0" branch="False" />
+                <line number="57" hits="0" branch="False" />
+                <line number="58" hits="0" branch="False" />
+                <line number="59" hits="0" branch="False" />
+                <line number="61" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="783" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="62" hits="0" branch="False" />
+                <line number="63" hits="0" branch="False" />
+                <line number="64" hits="0" branch="False" />
+                <line number="65" hits="0" branch="False" />
+                <line number="67" hits="0" branch="False" />
+                <line number="68" hits="0" branch="False" />
+                <line number="69" hits="0" branch="False" />
+                <line number="72" hits="0" branch="False" />
+                <line number="73" hits="0" branch="False" />
+                <line number="74" hits="0" branch="False" />
+                <line number="75" hits="0" branch="False" />
+                <line number="76" hits="0" branch="False" />
+                <line number="78" hits="0" branch="False" />
+                <line number="79" hits="0" branch="False" />
+                <line number="82" hits="0" branch="False" />
+                <line number="83" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="40" hits="0" branch="False" />
+            <line number="41" hits="0" branch="False" />
+            <line number="43" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="344" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="44" hits="0" branch="False" />
+            <line number="45" hits="0" branch="False" />
+            <line number="46" hits="0" branch="False" />
+            <line number="48" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="649" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="49" hits="0" branch="False" />
+            <line number="52" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="663" type="jump" coverage="0%" />
+                <condition number="704" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="53" hits="0" branch="False" />
+            <line number="54" hits="0" branch="False" />
+            <line number="57" hits="0" branch="False" />
+            <line number="58" hits="0" branch="False" />
+            <line number="59" hits="0" branch="False" />
+            <line number="61" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="783" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="62" hits="0" branch="False" />
+            <line number="63" hits="0" branch="False" />
+            <line number="64" hits="0" branch="False" />
+            <line number="65" hits="0" branch="False" />
+            <line number="67" hits="0" branch="False" />
+            <line number="68" hits="0" branch="False" />
+            <line number="69" hits="0" branch="False" />
+            <line number="72" hits="0" branch="False" />
+            <line number="73" hits="0" branch="False" />
+            <line number="74" hits="0" branch="False" />
+            <line number="75" hits="0" branch="False" />
+            <line number="76" hits="0" branch="False" />
+            <line number="78" hits="0" branch="False" />
+            <line number="79" hits="0" branch="False" />
+            <line number="82" hits="0" branch="False" />
+            <line number="83" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Users.SyncUser.SyncUserValidator" filename="SchoMans.Application/Features/Users/SyncUser/SyncUserValidator.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name=".ctor" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="6" branch="False" />
+                <line number="8" hits="6" branch="False" />
+                <line number="9" hits="6" branch="False" />
+                <line number="10" hits="6" branch="False" />
+                <line number="11" hits="6" branch="False" />
+                <line number="12" hits="6" branch="False" />
+                <line number="13" hits="6" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="7" hits="6" branch="False" />
+            <line number="8" hits="6" branch="False" />
+            <line number="9" hits="6" branch="False" />
+            <line number="10" hits="6" branch="False" />
+            <line number="11" hits="6" branch="False" />
+            <line number="12" hits="6" branch="False" />
+            <line number="13" hits="6" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Users.GetMe.MeDto" filename="SchoMans.Application/Features/Users/GetMe/GetMeHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_Id" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="7" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Users.GetMe.GetMeHandler" filename="SchoMans.Application/Features/Users/GetMe/GetMeHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name=".ctor" signature="(SchoMans.Application.Common.Interfaces.IAppDbContext,SchoMans.Application.Common.Interfaces.ICurrentUser)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="9" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="9" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Users.GetMe.GetMeHandler/&lt;Handle&gt;d__3" filename="SchoMans.Application/Features/Users/GetMe/GetMeHandler.cs" line-rate="0" branch-rate="0" complexity="2">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="12" hits="0" branch="False" />
+                <line number="13" hits="0" branch="False" />
+                <line number="14" hits="0" branch="False" />
+                <line number="15" hits="0" branch="False" />
+                <line number="17" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="361" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="18" hits="0" branch="False" />
+                <line number="19" hits="0" branch="False" />
+                <line number="23" hits="0" branch="False" />
+                <line number="24" hits="0" branch="False" />
+                <line number="26" hits="0" branch="False" />
+                <line number="27" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="12" hits="0" branch="False" />
+            <line number="13" hits="0" branch="False" />
+            <line number="14" hits="0" branch="False" />
+            <line number="15" hits="0" branch="False" />
+            <line number="17" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="361" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="18" hits="0" branch="False" />
+            <line number="19" hits="0" branch="False" />
+            <line number="23" hits="0" branch="False" />
+            <line number="24" hits="0" branch="False" />
+            <line number="26" hits="0" branch="False" />
+            <line number="27" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Dashboard.GetDashboard.DashboardDto" filename="SchoMans.Application/Features/Dashboard/GetDashboard/GetDashboardHandler.cs" line-rate="1" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_Role" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="24" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="7" hits="24" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.Dashboard.GetDashboard.GetDashboardHandler" filename="SchoMans.Application/Features/Dashboard/GetDashboard/GetDashboardHandler.cs" line-rate="1" branch-rate="1" complexity="2">
+          <methods>
+            <method name="Handle" signature="(SchoMans.Application.Features.Dashboard.GetDashboard.GetDashboardQuery,System.Threading.CancellationToken)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="12" hits="6" branch="False" />
+                <line number="13" hits="6" branch="False" />
+                <line number="14" hits="6" branch="False" />
+                <line number="15" hits="6" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(SchoMans.Application.Common.Interfaces.ICurrentUser)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="9" hits="6" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="12" hits="6" branch="False" />
+            <line number="13" hits="6" branch="False" />
+            <line number="14" hits="6" branch="False" />
+            <line number="15" hits="6" branch="False" />
+            <line number="9" hits="6" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Common.DependencyInjection" filename="SchoMans.Application/Common/DependencyInjection.cs" line-rate="1" branch-rate="1" complexity="10">
+          <methods>
+            <method name="AddApplication" signature="(Microsoft.Extensions.DependencyInjection.IServiceCollection)" line-rate="1" branch-rate="1" complexity="10">
+              <lines>
+                <line number="10" hits="2" branch="False" />
+                <line number="11" hits="2" branch="False" />
+                <line number="13" hits="106" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="98" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="14" hits="50" branch="False" />
+                <line number="15" hits="50" branch="True" condition-coverage="100% (8/8)">
+                  <conditions>
+                    <condition number="35" type="jump" coverage="100%" />
+                    <condition number="43" type="jump" coverage="100%" />
+                    <condition number="51" type="jump" coverage="100%" />
+                    <condition number="77" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="16" hits="6" branch="False" />
+                <line number="17" hits="6" branch="False" />
+                <line number="18" hits="6" branch="False" />
+                <line number="19" hits="50" branch="False" />
+                <line number="21" hits="2" branch="False" />
+                <line number="22" hits="2" branch="False" />
+                <line number="23" hits="2" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="10" hits="2" branch="False" />
+            <line number="11" hits="2" branch="False" />
+            <line number="13" hits="106" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="98" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="14" hits="50" branch="False" />
+            <line number="15" hits="50" branch="True" condition-coverage="100% (8/8)">
+              <conditions>
+                <condition number="35" type="jump" coverage="100%" />
+                <condition number="43" type="jump" coverage="100%" />
+                <condition number="51" type="jump" coverage="100%" />
+                <condition number="77" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="16" hits="6" branch="False" />
+            <line number="17" hits="6" branch="False" />
+            <line number="18" hits="6" branch="False" />
+            <line number="19" hits="50" branch="False" />
+            <line number="21" hits="2" branch="False" />
+            <line number="22" hits="2" branch="False" />
+            <line number="23" hits="2" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Common.PagedResult`1" filename="SchoMans.Application/Common/PagedResult.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_Items" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="4" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="4" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Common.Errors.Error" filename="SchoMans.Application/Common/Errors/Error.cs" line-rate="1" branch-rate="1" complexity="7">
+          <methods>
+            <method name="get_Code" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="14" hits="18" branch="False" />
+              </lines>
+            </method>
+            <method name="Failure" signature="(System.String,System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="16" hits="1" branch="False" />
+              </lines>
+            </method>
+            <method name="Validation" signature="(System.String,System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="18" hits="1" branch="False" />
+              </lines>
+            </method>
+            <method name="Unauthorized" signature="(System.String,System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="20" hits="1" branch="False" />
+              </lines>
+            </method>
+            <method name="Forbidden" signature="(System.String,System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="22" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name="NotFound" signature="(System.String,System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="24" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name="Conflict" signature="(System.String,System.String)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="26" hits="1" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="14" hits="18" branch="False" />
+            <line number="16" hits="1" branch="False" />
+            <line number="18" hits="1" branch="False" />
+            <line number="20" hits="1" branch="False" />
+            <line number="22" hits="2" branch="False" />
+            <line number="24" hits="2" branch="False" />
+            <line number="26" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Common.Errors.Result`1" filename="SchoMans.Application/Common/Errors/Result.cs" line-rate="1" branch-rate="1" complexity="12">
+          <methods>
+            <method name="get_IsSuccess" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="17" hits="34" branch="False" />
+              </lines>
+            </method>
+            <method name="get_IsFailure" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="19" hits="7" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Value" signature="()" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="21" hits="20" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="6" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="22" hits="20" branch="False" />
+                <line number="23" hits="20" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Error" signature="()" line-rate="1" branch-rate="1" complexity="2">
+              <lines>
+                <line number="25" hits="5" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="6" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="26" hits="5" branch="False" />
+                <line number="27" hits="5" branch="False" />
+              </lines>
+            </method>
+            <method name="Success" signature="(T)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="29" hits="7" branch="False" />
+              </lines>
+            </method>
+            <method name="Failure" signature="(SchoMans.Application.Common.Errors.Error)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="31" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name="op_Implicit" signature="(T)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="33" hits="7" branch="False" />
+              </lines>
+            </method>
+            <method name="op_Implicit" signature="(SchoMans.Application.Common.Errors.Error)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="35" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(T)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="9" hits="7" branch="False" />
+                <line number="10" hits="7" branch="False" />
+                <line number="11" hits="7" branch="False" />
+                <line number="12" hits="7" branch="False" />
+                <line number="13" hits="7" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(SchoMans.Application.Common.Errors.Error)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="4" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="17" hits="34" branch="False" />
+            <line number="19" hits="7" branch="False" />
+            <line number="21" hits="20" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="6" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="22" hits="20" branch="False" />
+            <line number="23" hits="20" branch="False" />
+            <line number="25" hits="5" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="6" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="26" hits="5" branch="False" />
+            <line number="27" hits="5" branch="False" />
+            <line number="29" hits="7" branch="False" />
+            <line number="31" hits="2" branch="False" />
+            <line number="33" hits="7" branch="False" />
+            <line number="35" hits="2" branch="False" />
+            <line number="9" hits="7" branch="False" />
+            <line number="10" hits="7" branch="False" />
+            <line number="11" hits="7" branch="False" />
+            <line number="12" hits="7" branch="False" />
+            <line number="13" hits="7" branch="False" />
+            <line number="15" hits="4" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="SchoMans.Domain" line-rate="0.1875" branch-rate="0.41659999999999997" complexity="77">
+      <classes>
+        <class name="SchoMans.Domain.Students.AcademicYear" filename="SchoMans.Domain/Students/AcademicYear.cs" line-rate="0" branch-rate="0" complexity="7">
+          <methods>
+            <method name="get_Name" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="11" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_StartDate" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="13" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_EndDate" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_IsActive" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="17" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="Create" signature="(System.String,System.DateOnly,System.DateOnly,System.Boolean)" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="20" hits="0" branch="False" />
+                <line number="21" hits="0" branch="False" />
+                <line number="23" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="22" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="24" hits="0" branch="False" />
+                <line number="25" hits="0" branch="False" />
+                <line number="28" hits="0" branch="False" />
+                <line number="29" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="0" branch="False" />
+                <line number="8" hits="0" branch="False" />
+                <line number="9" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="11" hits="0" branch="False" />
+            <line number="13" hits="0" branch="False" />
+            <line number="15" hits="0" branch="False" />
+            <line number="17" hits="0" branch="False" />
+            <line number="20" hits="0" branch="False" />
+            <line number="21" hits="0" branch="False" />
+            <line number="23" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="22" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="24" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+            <line number="28" hits="0" branch="False" />
+            <line number="29" hits="0" branch="False" />
+            <line number="7" hits="0" branch="False" />
+            <line number="8" hits="0" branch="False" />
+            <line number="9" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Domain.Students.Classroom" filename="SchoMans.Domain/Students/Classroom.cs" line-rate="0" branch-rate="1" complexity="7">
+          <methods>
+            <method name="get_Name" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="11" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_AcademicYearId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="13" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_AcademicYear" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_HomeroomTeacherId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="17" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_HomeroomTeacher" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="19" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="Create" signature="(System.String,System.Guid,System.Guid)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="22" hits="0" branch="False" />
+                <line number="23" hits="0" branch="False" />
+                <line number="25" hits="0" branch="False" />
+                <line number="26" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="0" branch="False" />
+                <line number="8" hits="0" branch="False" />
+                <line number="9" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="11" hits="0" branch="False" />
+            <line number="13" hits="0" branch="False" />
+            <line number="15" hits="0" branch="False" />
+            <line number="17" hits="0" branch="False" />
+            <line number="19" hits="0" branch="False" />
+            <line number="22" hits="0" branch="False" />
+            <line number="23" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+            <line number="26" hits="0" branch="False" />
+            <line number="7" hits="0" branch="False" />
+            <line number="8" hits="0" branch="False" />
+            <line number="9" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Domain.Students.Student" filename="SchoMans.Domain/Students/Student.cs" line-rate="0" branch-rate="1" complexity="8">
+          <methods>
+            <method name="get_UserId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="11" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_User" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="13" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Nisn" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_ClassroomId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="17" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Classroom" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="19" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_DateOfBirth" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="21" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="Create" signature="(System.Guid,System.String,System.Guid,System.DateOnly)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="24" hits="0" branch="False" />
+                <line number="25" hits="0" branch="False" />
+                <line number="27" hits="0" branch="False" />
+                <line number="28" hits="0" branch="False" />
+                <line number="29" hits="0" branch="False" />
+                <line number="30" hits="0" branch="False" />
+                <line number="31" hits="0" branch="False" />
+                <line number="32" hits="0" branch="False" />
+                <line number="33" hits="0" branch="False" />
+                <line number="34" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="0" branch="False" />
+                <line number="8" hits="0" branch="False" />
+                <line number="9" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="11" hits="0" branch="False" />
+            <line number="13" hits="0" branch="False" />
+            <line number="15" hits="0" branch="False" />
+            <line number="17" hits="0" branch="False" />
+            <line number="19" hits="0" branch="False" />
+            <line number="21" hits="0" branch="False" />
+            <line number="24" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+            <line number="27" hits="0" branch="False" />
+            <line number="28" hits="0" branch="False" />
+            <line number="29" hits="0" branch="False" />
+            <line number="30" hits="0" branch="False" />
+            <line number="31" hits="0" branch="False" />
+            <line number="32" hits="0" branch="False" />
+            <line number="33" hits="0" branch="False" />
+            <line number="34" hits="0" branch="False" />
+            <line number="7" hits="0" branch="False" />
+            <line number="8" hits="0" branch="False" />
+            <line number="9" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Domain.Students.StudentParent" filename="SchoMans.Domain/Students/StudentParent.cs" line-rate="0" branch-rate="1" complexity="6">
+          <methods>
+            <method name="get_ParentUserId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="12" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_ParentUser" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="14" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_StudentId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="16" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Student" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="18" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="Create" signature="(System.Guid,System.Guid)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="21" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="8" hits="0" branch="False" />
+                <line number="9" hits="0" branch="False" />
+                <line number="10" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="12" hits="0" branch="False" />
+            <line number="14" hits="0" branch="False" />
+            <line number="16" hits="0" branch="False" />
+            <line number="18" hits="0" branch="False" />
+            <line number="21" hits="0" branch="False" />
+            <line number="8" hits="0" branch="False" />
+            <line number="9" hits="0" branch="False" />
+            <line number="10" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Domain.Students.Teacher" filename="SchoMans.Domain/Students/Teacher.cs" line-rate="0" branch-rate="1" complexity="5">
+          <methods>
+            <method name="get_UserId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="11" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_User" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="13" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Nip" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="Create" signature="(System.Guid,System.String)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="18" hits="0" branch="False" />
+                <line number="19" hits="0" branch="False" />
+                <line number="21" hits="0" branch="False" />
+                <line number="22" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="0" branch="False" />
+                <line number="8" hits="0" branch="False" />
+                <line number="9" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="11" hits="0" branch="False" />
+            <line number="13" hits="0" branch="False" />
+            <line number="15" hits="0" branch="False" />
+            <line number="18" hits="0" branch="False" />
+            <line number="19" hits="0" branch="False" />
+            <line number="21" hits="0" branch="False" />
+            <line number="22" hits="0" branch="False" />
+            <line number="7" hits="0" branch="False" />
+            <line number="8" hits="0" branch="False" />
+            <line number="9" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Domain.Students.Term" filename="SchoMans.Domain/Students/Term.cs" line-rate="0" branch-rate="0" complexity="9">
+          <methods>
+            <method name="get_AcademicYearId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="12" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_AcademicYear" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="14" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Name" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="16" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_StartDate" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="18" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_EndDate" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="20" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_IsActive" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="22" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="Create" signature="(System.Guid,System.String,System.DateOnly,System.DateOnly,System.Boolean)" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="25" hits="0" branch="False" />
+                <line number="26" hits="0" branch="False" />
+                <line number="28" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="22" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="29" hits="0" branch="False" />
+                <line number="30" hits="0" branch="False" />
+                <line number="33" hits="0" branch="False" />
+                <line number="34" hits="0" branch="False" />
+                <line number="35" hits="0" branch="False" />
+                <line number="36" hits="0" branch="False" />
+                <line number="37" hits="0" branch="False" />
+                <line number="38" hits="0" branch="False" />
+                <line number="39" hits="0" branch="False" />
+                <line number="40" hits="0" branch="False" />
+                <line number="41" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="8" hits="0" branch="False" />
+                <line number="9" hits="0" branch="False" />
+                <line number="10" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="12" hits="0" branch="False" />
+            <line number="14" hits="0" branch="False" />
+            <line number="16" hits="0" branch="False" />
+            <line number="18" hits="0" branch="False" />
+            <line number="20" hits="0" branch="False" />
+            <line number="22" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+            <line number="26" hits="0" branch="False" />
+            <line number="28" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="22" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="29" hits="0" branch="False" />
+            <line number="30" hits="0" branch="False" />
+            <line number="33" hits="0" branch="False" />
+            <line number="34" hits="0" branch="False" />
+            <line number="35" hits="0" branch="False" />
+            <line number="36" hits="0" branch="False" />
+            <line number="37" hits="0" branch="False" />
+            <line number="38" hits="0" branch="False" />
+            <line number="39" hits="0" branch="False" />
+            <line number="40" hits="0" branch="False" />
+            <line number="41" hits="0" branch="False" />
+            <line number="8" hits="0" branch="False" />
+            <line number="9" hits="0" branch="False" />
+            <line number="10" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Domain.Students.User" filename="SchoMans.Domain/Students/User.cs" line-rate="0" branch-rate="0" complexity="14">
+          <methods>
+            <method name="get_KeycloakId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="13" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Email" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="15" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_FullName" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="17" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_Role" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="19" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_PhotoKey" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="21" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="Create" signature="(System.String,System.String,SchoMans.Domain.Students.UserRole,System.String)" line-rate="0" branch-rate="0" complexity="2">
+              <lines>
+                <line number="24" hits="0" branch="False" />
+                <line number="25" hits="0" branch="False" />
+                <line number="26" hits="0" branch="False" />
+                <line number="27" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="24" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="28" hits="0" branch="False" />
+                <line number="29" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="NormalizeEmail" signature="(System.String)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="31" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="LinkKeycloak" signature="(System.String)" line-rate="0" branch-rate="0" complexity="4">
+              <lines>
+                <line number="35" hits="0" branch="False" />
+                <line number="36" hits="0" branch="False" />
+                <line number="38" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="19" type="jump" coverage="0%" />
+                    <condition number="38" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="39" hits="0" branch="False" />
+                <line number="40" hits="0" branch="False" />
+                <line number="43" hits="0" branch="False" />
+                <line number="44" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="SyncProfile" signature="(System.String,System.String,SchoMans.Domain.Students.UserRole)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="48" hits="0" branch="False" />
+                <line number="49" hits="0" branch="False" />
+                <line number="50" hits="0" branch="False" />
+                <line number="52" hits="0" branch="False" />
+                <line number="53" hits="0" branch="False" />
+                <line number="54" hits="0" branch="False" />
+                <line number="55" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="8" hits="0" branch="False" />
+                <line number="9" hits="0" branch="False" />
+                <line number="10" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="13" hits="0" branch="False" />
+            <line number="15" hits="0" branch="False" />
+            <line number="17" hits="0" branch="False" />
+            <line number="19" hits="0" branch="False" />
+            <line number="21" hits="0" branch="False" />
+            <line number="24" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+            <line number="26" hits="0" branch="False" />
+            <line number="27" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="24" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="28" hits="0" branch="False" />
+            <line number="29" hits="0" branch="False" />
+            <line number="31" hits="0" branch="False" />
+            <line number="35" hits="0" branch="False" />
+            <line number="36" hits="0" branch="False" />
+            <line number="38" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="19" type="jump" coverage="0%" />
+                <condition number="38" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="39" hits="0" branch="False" />
+            <line number="40" hits="0" branch="False" />
+            <line number="43" hits="0" branch="False" />
+            <line number="44" hits="0" branch="False" />
+            <line number="48" hits="0" branch="False" />
+            <line number="49" hits="0" branch="False" />
+            <line number="50" hits="0" branch="False" />
+            <line number="52" hits="0" branch="False" />
+            <line number="53" hits="0" branch="False" />
+            <line number="54" hits="0" branch="False" />
+            <line number="55" hits="0" branch="False" />
+            <line number="8" hits="0" branch="False" />
+            <line number="9" hits="0" branch="False" />
+            <line number="10" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Domain.Students.UserRoleResolver" filename="SchoMans.Domain/Students/UserRoleResolver.cs" line-rate="0.7692" branch-rate="0.7142000000000001" complexity="15">
+          <methods>
+            <method name="TryResolve" signature="(System.Collections.Generic.IEnumerable`1&lt;System.String&gt;,SchoMans.Domain.Students.UserRole&amp;)" line-rate="0.6842" branch-rate="0.75" complexity="8">
+              <lines>
+                <line number="19" hits="1" branch="False" />
+                <line number="20" hits="1" branch="False" />
+                <line number="21" hits="7" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="56" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="22" hits="2" branch="False" />
+                <line number="23" hits="2" branch="True" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="37" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="24" hits="0" branch="False" />
+                <line number="25" hits="0" branch="False" />
+                <line number="26" hits="0" branch="False" />
+                <line number="27" hits="2" branch="False" />
+                <line number="29" hits="15" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="129" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="30" hits="6" branch="False" />
+                <line number="31" hits="6" branch="True" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="104" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="32" hits="0" branch="False" />
+                <line number="33" hits="0" branch="False" />
+                <line number="34" hits="0" branch="False" />
+                <line number="36" hits="6" branch="False" />
+                <line number="38" hits="1" branch="False" />
+                <line number="39" hits="1" branch="False" />
+                <line number="40" hits="1" branch="False" />
+              </lines>
+            </method>
+            <method name="TryParse" signature="(System.String,SchoMans.Domain.Students.UserRole&amp;)" line-rate="0.7272" branch-rate="0.6666" complexity="6">
+              <lines>
+                <line number="44" hits="2" branch="False" />
+                <line number="45" hits="30" branch="True" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="70" type="jump" coverage="100%" />
+                  </conditions>
+                </line>
+                <line number="46" hits="12" branch="False" />
+                <line number="47" hits="12" branch="True" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="31" type="jump" coverage="50%" />
+                    <condition number="50" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="48" hits="0" branch="False" />
+                <line number="49" hits="0" branch="False" />
+                <line number="50" hits="0" branch="False" />
+                <line number="52" hits="12" branch="False" />
+                <line number="54" hits="2" branch="False" />
+                <line number="55" hits="2" branch="False" />
+                <line number="56" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name=".cctor" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="8" hits="1" branch="False" />
+                <line number="9" hits="1" branch="False" />
+                <line number="10" hits="1" branch="False" />
+                <line number="11" hits="1" branch="False" />
+                <line number="12" hits="1" branch="False" />
+                <line number="13" hits="1" branch="False" />
+                <line number="14" hits="1" branch="False" />
+                <line number="15" hits="1" branch="False" />
+                <line number="16" hits="1" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="19" hits="1" branch="False" />
+            <line number="20" hits="1" branch="False" />
+            <line number="21" hits="7" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="56" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="22" hits="2" branch="False" />
+            <line number="23" hits="2" branch="True" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="37" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="24" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+            <line number="26" hits="0" branch="False" />
+            <line number="27" hits="2" branch="False" />
+            <line number="29" hits="15" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="129" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="30" hits="6" branch="False" />
+            <line number="31" hits="6" branch="True" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="104" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="32" hits="0" branch="False" />
+            <line number="33" hits="0" branch="False" />
+            <line number="34" hits="0" branch="False" />
+            <line number="36" hits="6" branch="False" />
+            <line number="38" hits="1" branch="False" />
+            <line number="39" hits="1" branch="False" />
+            <line number="40" hits="1" branch="False" />
+            <line number="44" hits="2" branch="False" />
+            <line number="45" hits="30" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="70" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="46" hits="12" branch="False" />
+            <line number="47" hits="12" branch="True" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="31" type="jump" coverage="50%" />
+                <condition number="50" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="48" hits="0" branch="False" />
+            <line number="49" hits="0" branch="False" />
+            <line number="50" hits="0" branch="False" />
+            <line number="52" hits="12" branch="False" />
+            <line number="54" hits="2" branch="False" />
+            <line number="55" hits="2" branch="False" />
+            <line number="56" hits="2" branch="False" />
+            <line number="8" hits="1" branch="False" />
+            <line number="9" hits="1" branch="False" />
+            <line number="10" hits="1" branch="False" />
+            <line number="11" hits="1" branch="False" />
+            <line number="12" hits="1" branch="False" />
+            <line number="13" hits="1" branch="False" />
+            <line number="14" hits="1" branch="False" />
+            <line number="15" hits="1" branch="False" />
+            <line number="16" hits="1" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Domain.Common.BaseEntity" filename="SchoMans.Domain/Common/BaseEntity.cs" line-rate="0" branch-rate="1" complexity="6">
+          <methods>
+            <method name="get_Id" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="6" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_CreatedAt" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="8" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_UpdatedAt" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="10" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_IsDeleted" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="12" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="get_RowVersion" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="14" hits="0" branch="False" />
+              </lines>
+            </method>
+            <method name="MarkDeleted" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="16" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="6" hits="0" branch="False" />
+            <line number="8" hits="0" branch="False" />
+            <line number="10" hits="0" branch="False" />
+            <line number="12" hits="0" branch="False" />
+            <line number="14" hits="0" branch="False" />
+            <line number="16" hits="0" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>

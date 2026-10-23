@@ -5,7 +5,8 @@ flowchart LR
   student([Student])
   parent([Parent])
   admin([Admin staff])
-  guest([Guest or applicant])
+  guest([Guest])
+  applicant([Applicant])
 
   schomans["<b>SchoMans</b><br/>Web app + API<br/>Attendance, grading,<br/>admissions, approvals, AI"]
 
@@ -15,7 +16,7 @@ flowchart LR
   email["Email (SMTP)<br/>Notifications"]
   whatsapp["WhatsApp gateway<br/>Optional"]
 
-  principal & teacher & student & parent & admin & guest -->|HTTPS| schomans
+  principal & teacher & student & parent & admin & applicant & guest -->|HTTPS| schomans
   schomans --> keycloak
   schomans --> claude
   schomans --> s3

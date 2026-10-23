@@ -8,7 +8,7 @@ Almost everything is open source and free. Only the Claude API (per token) and s
 
 | Category | Components | Notes |
 | --- | --- | --- |
-| Paid | Claude API, VPS/Azure, domain (optional), WhatsApp gateway (optional) | Set a budget cap and a mock mode for AI |
+| Paid | Claude API, VPS, domain (optional), WhatsApp gateway (optional) | Set a budget cap and a mock mode for AI |
 | Free with conditions | SQL Server | Developer is for dev/test only; Express allows production with a 10 GB per-database limit |
 | Free with conditions | QuestPDF | Free for individuals and companies with revenue < USD 1M/year |
 | Free with conditions | Seq, Hangfire, Docker Desktop, GitHub Actions, Cloudflare R2 | Individual license, core edition, personal use, public repo, and free tier are enough for a portfolio |

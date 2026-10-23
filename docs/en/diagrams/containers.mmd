@@ -3,7 +3,7 @@ flowchart TB
   browser["Browser<br/>React SPA (PWA)"]
 
   subgraph vps["VPS (Docker Compose)"]
-    proxy["Reverse proxy (Nginx or Caddy)<br/>HTTPS: / to web, /api and /hubs to api, /auth to keycloak"]
+    proxy["Reverse proxy (Caddy)<br/>HTTPS: / to web, /api and /hubs to api, /auth to keycloak"]
     web["web<br/>React build, static files"]
     keycloak["keycloak<br/>Realm schomans, OIDC + PKCE"]
     api["<b>api</b><br/>ASP.NET Core .NET 10<br/>Minimal API, SignalR, Hangfire, EF Core"]

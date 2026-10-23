@@ -1,0 +1,47 @@
+# Local development dependencies. Run with: docker compose -f infra/docker-compose.yml up -d
+# The api and web run on the host (dotnet run / npm run dev). Containers for them, the reverse proxy and
+# SeaweedFS arrive with the phases that need them.
+name: schomans
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?Copy infra/.env.example to infra/.env}
+      MSSQL_PID: ${MSSQL_PID:-Developer}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1
+    # start-dev keeps its H2 database inside the container: the realm (with the demo users) is re-imported on a fresh
+    # start, and accounts registered during development are lost when the container is recreated.
+    command: start-dev --import-realm
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?Copy infra/.env.example to infra/.env}
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/realm-schomans.json:/opt/keycloak/data/import/realm-schomans.json:ro
+      - ./keycloak/themes:/opt/keycloak/themes:ro
+    healthcheck:
+      # The image has no curl; open a TCP connection to the management port instead.
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9000 && printf 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q '\"status\": \"UP\"' <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 30s
+
+volumes:
+  sqlserver-data:

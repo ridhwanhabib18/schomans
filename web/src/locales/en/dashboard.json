@@ -1,0 +1,16 @@
+{
+  "title": {
+    "Principal": "Principal dashboard",
+    "Teacher": "Teacher dashboard",
+    "Student": "Student dashboard",
+    "Parent": "Parent dashboard",
+    "Admin": "Admin dashboard",
+    "Applicant": "Applicant dashboard"
+  },
+  "welcome": "Welcome, {{name}}",
+  "empty": {
+    "title": "Nothing to show yet",
+    "body": "Your {{role}} dashboard fills up as school modules are added."
+  },
+  "error": "The dashboard could not be loaded."
+}

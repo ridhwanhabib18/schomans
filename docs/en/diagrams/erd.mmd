@@ -5,6 +5,7 @@ erDiagram
   User ||--o| Teacher : "is"
   User ||--o{ StudentParent : "parent of"
   Student ||--o{ StudentParent : "has parents"
+  AcademicYear ||--o{ Term : "has"
   AcademicYear ||--o{ Classroom : "contains"
   Teacher ||--o{ Classroom : "homeroom of"
   Classroom ||--o{ Student : "enrolls"
@@ -16,20 +17,48 @@ erDiagram
   Student ||--o{ Attendance : "checks in"
   Teacher ||--o{ Assignment : "creates"
   Subject ||--o{ Assignment : "for"
+  Term ||--o{ Assignment : "in"
+  Assignment ||--o{ AssignmentClassroom : "given to"
+  Classroom ||--o{ AssignmentClassroom : "receives"
+  Assignment ||--o{ AssignmentAttachment : "has"
+  Assignment ||--o{ AssignmentQuestion : "quiz items"
+  Question ||--o{ AssignmentQuestion : "used in"
+  Subject ||--o{ Question : "question bank"
   Assignment ||--o{ Submission : "receives"
   Student ||--o{ Submission : "submits"
+  Assignment ||--o| Rubric : "graded by"
+  Rubric ||--o{ RubricCriterion : "has"
+  Submission ||--o{ RubricScore : "scored by"
+  RubricCriterion ||--o{ RubricScore : "applies to"
+  Subject ||--o{ GradeWeight : "weighted by"
+  Subject ||--o{ LearningObjective : "defines"
   Student ||--o{ Grade : "earns"
   Subject ||--o{ Grade : "in"
+  Term ||--o{ Grade : "during"
+  LearningObjective ||--o{ Grade : "measured by"
+  Submission ||--o| Grade : "feeds"
+  Classroom ||--o{ GradePublication : "published for"
+  Term ||--o{ GradePublication : "per"
+  Student ||--o{ ReportCard : "receives"
+  Term ||--o{ ReportCard : "per"
+  ReportCard ||--o{ AchievementDescription : "describes"
+  Subject ||--o{ AchievementDescription : "for"
   Student ||--o{ ProgressSummary : "summarized in"
+  AcademicYear ||--o{ AdmissionPeriod : "runs"
   User ||--o| Applicant : "applies as"
+  AdmissionPeriod ||--o{ Applicant : "receives"
+  Applicant ||--o{ ApplicantDocument : "uploads"
+  Applicant |o--o| Student : "enrolled as"
   User ||--o{ Request : "submits"
+  Student |o--o{ Request : "concerns"
   Request ||--o{ Approval : "goes through"
-  User ||--o{ Approval : "approves"
+  User ||--o{ Approval : "decides"
+  Request ||--o| Letter : "issues"
   Announcement ||--o{ AnnouncementRead : "read by"
   User ||--o{ AnnouncementRead : "reads"
+  User ||--o{ Notification : "receives"
   User ||--o{ AuditLog : "changes"
   User ||--o{ AiUsageLog : "uses AI"
-  Subject ||--o{ Question : "has"
 
   User {
     guid Id PK
@@ -37,6 +66,7 @@ erDiagram
     string Email UK
     string FullName
     string Role
+    string PhotoKey
   }
   Student {
     guid Id PK
@@ -45,17 +75,25 @@ erDiagram
     guid ClassroomId FK
     date DateOfBirth
   }
+  StudentParent {
+    guid ParentUserId PK
+    guid StudentId PK
+  }
   Teacher {
     guid Id PK
     guid UserId FK
     string Nip UK
   }
-  StudentParent {
-    guid ParentUserId PK
-    guid StudentId PK
-  }
   AcademicYear {
     guid Id PK
+    string Name
+    date StartDate
+    date EndDate
+    bool IsActive
+  }
+  Term {
+    guid Id PK
+    guid AcademicYearId FK
     string Name
     date StartDate
     date EndDate
@@ -86,6 +124,7 @@ erDiagram
     guid ScheduleId FK
     date Date
     string QrSecret
+    datetime QrRotatedAt
     datetime OpenedAt
     datetime ClosedAt
   }
@@ -95,46 +134,173 @@ erDiagram
     guid StudentId FK
     string Status
     datetime ScannedAt
+    bool IsManual
+    guid MarkedById FK
+    string Note
   }
   Assignment {
     guid Id PK
     guid TeacherId FK
     guid SubjectId FK
+    guid TermId FK
     string Title
+    string Description
     datetime DueAt
+    string Type
+    string Component
+  }
+  AssignmentClassroom {
+    guid AssignmentId PK
+    guid ClassroomId PK
+  }
+  AssignmentAttachment {
+    guid Id PK
+    guid AssignmentId FK
+    string FileKey
+    string FileName
+  }
+  AssignmentQuestion {
+    guid AssignmentId PK
+    guid QuestionId PK
+    int Order
+    decimal Points
   }
   Submission {
     guid Id PK
     guid AssignmentId FK
     guid StudentId FK
     string FileKey
+    string TextBody
+    json Answers
+    datetime SubmittedAt
     decimal Score
+    string Feedback
     bool IsLate
+  }
+  Rubric {
+    guid Id PK
+    guid AssignmentId FK
+  }
+  RubricCriterion {
+    guid Id PK
+    guid RubricId FK
+    string Name
+    string Description
+    decimal MaxScore
+  }
+  RubricScore {
+    guid Id PK
+    guid SubmissionId FK
+    guid CriterionId FK
+    decimal Score
+    string Reason
+    string Suggestion
+    string Status
+  }
+  Question {
+    guid Id PK
+    guid SubjectId FK
+    string Type
+    string Difficulty
+    string Body
+    json Options
+    string AnswerKey
+    string Explanation
+  }
+  GradeWeight {
+    guid Id PK
+    guid SubjectId FK
+    string Component
+    decimal WeightPercent
+  }
+  LearningObjective {
+    guid Id PK
+    guid SubjectId FK
+    string Code
+    string Description
   }
   Grade {
     guid Id PK
     guid StudentId FK
     guid SubjectId FK
+    guid TermId FK
     string Component
+    guid LearningObjectiveId FK
+    guid SubmissionId FK
     decimal Score
-    string Term
+  }
+  GradePublication {
+    guid Id PK
+    guid ClassroomId FK
+    guid TermId FK
+    datetime PublishedAt
+    guid PublishedById FK
+  }
+  ReportCard {
+    guid Id PK
+    guid StudentId FK
+    guid TermId FK
+    string Status
+    string PdfKey
+    datetime GeneratedAt
+  }
+  AchievementDescription {
+    guid Id PK
+    guid ReportCardId FK
+    guid SubjectId FK
+    string Body
+    string Status
+    bool IsAiDrafted
   }
   ProgressSummary {
     guid Id PK
     guid StudentId FK
     string Month
+    string Body
     string Status
+    guid ApprovedById FK
+    datetime SentAt
+  }
+  AdmissionPeriod {
+    guid Id PK
+    guid AcademicYearId FK
+    datetime OpensAt
+    datetime ClosesAt
+    datetime ResultsAnnouncedAt
+    string ReregistrationDeadline
   }
   Applicant {
     guid Id PK
     guid UserId FK
+    guid AdmissionPeriodId FK
     json FormData
     string Status
+    string Notes
+    guid StudentId FK
+  }
+  ApplicantDocument {
+    guid Id PK
+    guid ApplicantId FK
+    string Type
+    string FileKey
+    string Status
+    string ReviewNote
+    json ExtractedData
+  }
+  ApprovalChainStep {
+    guid Id PK
+    string RequestType
+    int StepOrder
+    string ApproverRole
   }
   Request {
     guid Id PK
     string Type
     guid RequesterId FK
+    guid StudentId FK
+    date StartDate
+    date EndDate
+    string Reason
     string Status
     int CurrentStep
   }
@@ -142,14 +308,39 @@ erDiagram
     guid Id PK
     guid RequestId FK
     guid ApproverId FK
+    int Step
     string Decision
     string Notes
+    datetime DecidedAt
+  }
+  Letter {
+    guid Id PK
+    guid RequestId FK
+    string LetterNumber UK
+    string VerificationCode UK
+    string PdfKey
+    bool IssuedAt
+  }
+  NewsArticle {
+    guid Id PK
+    string Title
+    string Slug UK
+    string Body
+    string CoverImageKey
+    string Category
+    string MetaDescription
+    string Status
+    datetime PublishedAt
   }
   Announcement {
     guid Id PK
     string Title
+    string Body
     bool IsPublic
+    string CoverImageKey
     string TargetRoles
+    string TargetClassroomIds
+    string Status
     datetime PublishedAt
   }
   AnnouncementRead {
@@ -157,9 +348,19 @@ erDiagram
     guid UserId PK
     datetime ReadAt
   }
+  Notification {
+    guid Id PK
+    guid UserId FK
+    string Type
+    string Title
+    string Body
+    string LinkUrl
+    datetime ReadAt
+  }
   AuditLog {
     guid Id PK
     guid UserId FK
+    string Action
     string EntityName
     json OldValues
     json NewValues
@@ -169,13 +370,9 @@ erDiagram
     guid Id PK
     guid UserId FK
     string Feature
+    string Model
     int Tokens
     decimal CostUsd
-  }
-  Question {
-    guid Id PK
-    guid SubjectId FK
-    string Body
-    json Options
-    string AnswerKey
+    int DurationMs
+    datetime CreatedAt
   }
