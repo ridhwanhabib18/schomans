@@ -162,7 +162,7 @@ Edge case: siswa scan dua kali → dicatat sekali; HP tanpa kamera → guru bisa
 
 **F-06: Berita & pengumuman** (US-05)
 
-- [ ] Admin membuat berita publik (tampil di landing page) atau pengumuman internal dengan target peran/kelas
+- [ ] Admin membuat berita publik (tampil di landing page) atau pengumuman dengan target peran/kelas; pengumuman bersifat internal secara default, dan admin bisa menandai pengumuman tertentu sebagai publik (`IsPublic`) supaya tamu juga melihatnya di landing page
 - [ ] Editor teks kaya dengan gambar sampul; status draf atau terbit
 - [ ] Pengumuman internal muncul realtime sebagai notifikasi in-app dengan badge belum dibaca
 - [ ] Halaman berita publik ramah SEO (URL slug, meta tag)
@@ -248,7 +248,7 @@ Prinsip untuk semua fitur AI:
 **AI-08: Chatbot info sekolah & PPDB** (US-17, Sebaiknya)
 
 - [ ] Widget chat di landing page dan dashboard orang tua
-- [ ] Sumber jawaban hanya yang sudah terbit: widget di landing page (pengguna anonim) hanya memakai berita, termasuk info PPDB (kategori `AdmissionInfo`); widget di dashboard orang tua juga memakai pengumuman terbit, tetapi hanya yang ditujukan ke orang tua itu (perannya atau kelas anak-anaknya). Pengumuman internal tidak pernah ditampilkan ke pengguna anonim; backend mengambil 5 potongan paling relevan lewat full-text search SQL Server lalu mengirimkannya sebagai konteks
+- [ ] Sumber jawaban hanya yang sudah terbit: widget di landing page (pengguna anonim) memakai berita, termasuk info PPDB (kategori `AdmissionInfo`), dan pengumuman yang ditandai `IsPublic`; widget di dashboard orang tua juga memakai pengumuman terbit, tetapi hanya yang ditujukan ke orang tua itu (perannya atau kelas anak-anaknya). Pengumuman yang tidak publik tidak pernah ditampilkan ke pengguna anonim; backend mengambil 5 potongan paling relevan lewat full-text search SQL Server lalu mengirimkannya sebagai konteks
 - [ ] Setiap jawaban menyertakan tautan ke sumbernya
 - [ ] Jika jawaban tidak ada di sumber, chatbot mengatakan tidak tahu dan memberikan kontak TU, tanpa menebak
 - [ ] Pengguna publik dibatasi per IP untuk mencegah penyalahgunaan dan biaya membengkak
@@ -369,7 +369,7 @@ Letter: Id, RequestId → Request, LetterNumber, VerificationCode, PdfKey, Issue
 
 -- Berita, pengumuman & notifikasi
 NewsArticle: Id, Title, Slug, Body, CoverImageKey, Category (News|AdmissionInfo|Award), MetaDescription, Status (Draft|Published), PublishedAt   ← publik
-Announcement: Id, Title, Body, CoverImageKey, TargetRoles, TargetClassroomIds, Status (Draft|Published), PublishedAt   ← khusus internal
+Announcement: Id, Title, Body, IsPublic, CoverImageKey, TargetRoles, TargetClassroomIds, Status (Draft|Published), PublishedAt   ← internal secara default; IsPublic juga menampilkannya ke tamu
 AnnouncementRead: AnnouncementId → Announcement, UserId → User, ReadAt
 Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← notifikasi in-app (tugas, approval, draf AI, ...)
 

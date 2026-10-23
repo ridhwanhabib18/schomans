@@ -485,6 +485,7 @@ erDiagram
     guid Id PK
     string Title
     string Body
+    bool IsPublic
     string CoverImageKey
     string TargetRoles
     string TargetClassroomIds
@@ -526,7 +527,7 @@ erDiagram
   }
 ```
 
-NewsArticle is public (landing page, and a source for the AI-08 chatbot); the chatbot on the parent dashboard also draws on announcements targeted at that parent; Announcement is internal and targeted by role or classroom. Notification backs the in-app unread badge for every event type, AnnouncementRead tracks which announcements a user has opened.
+NewsArticle is public (landing page and a source for the AI-08 chatbot); Announcement is internal by default and targeted by role or classroom; IsPublic also shows a specific announcement to guests. Notification backs the in-app unread badge for every event type, AnnouncementRead tracks which announcements a user has opened.
 
 **Key constraints & indexes**
 
@@ -649,7 +650,7 @@ Authentication is OIDC Authorization Code + PKCE against Keycloak; the SPA keeps
 | Attendance summaries | All | Own classes | Own | Own child | All | — | — |
 | Assignments | Read | Own subjects | Own classes | Own child (read) | — | — | — |
 | Grades & report cards | All | Own subjects | Own (published) | Own child (published) | All | — | — |
-| Announcements | Create, read | Read | Read | Read | Create, read | Public news | Public news |
+| Announcements | Create, read | Read | Read | Read | Create, read | Public news and public announcements | Public news and public announcements |
 | Admissions | Read | — | — | — | Verify, announce | Own application | Start registration |
 | Requests & approvals | Approve | Submit, approve as homeroom | — | Submit for own child | Read | — | — |
 | AI features | Assistant (AI-04) | AI-02, AI-05, AI-06 | — | Read AI-01 summaries | AI-03, AI-09 | Chatbot (AI-08), AI-03 on own documents | Chatbot (AI-08) |

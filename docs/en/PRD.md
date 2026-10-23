@@ -160,7 +160,7 @@ Edge cases: a student scans twice → recorded once; a phone without a camera �
 
 **F-06: News & announcements** (US-05)
 
-- [ ] Admin creates public news (shown on the landing page) or internal announcements targeted at roles or classrooms
+- [ ] Admin creates public news (shown on the landing page) or announcements targeted at roles or classrooms; an announcement is internal by default, and the admin can mark a specific one as public (`IsPublic`) so guests see it on the landing page too
 - [ ] Rich-text editor with a cover image; draft or published status
 - [ ] Internal announcements arrive in real time as in-app notifications with an unread badge
 - [ ] Public news pages are SEO friendly (URL slug, meta tags)
@@ -246,7 +246,7 @@ Principles for every AI feature:
 **AI-08: School & admissions chatbot** (US-17, Should)
 
 - [ ] Chat widget on the landing page and the parent dashboard
-- [ ] Answers come only from published sources: the landing-page widget (anonymous users) uses news articles only, including admission information (category `AdmissionInfo`); the parent-dashboard widget also uses published announcements, but only those targeted at that parent (their role or their children's classrooms). Internal announcements are never shown to anonymous users; the backend retrieves the 5 most relevant passages via SQL Server full-text search and sends them as context
+- [ ] Answers come only from published sources: the landing-page widget (anonymous users) uses news articles, including admission information (category `AdmissionInfo`), and announcements marked `IsPublic`; the parent-dashboard widget also uses published announcements, but only those targeted at that parent (their role or their children's classrooms). Announcements that are not public are never shown to anonymous users; the backend retrieves the 5 most relevant passages via SQL Server full-text search and sends them as context
 - [ ] Every answer links to its source
 - [ ] If the answer is not in the sources, the chatbot says it doesn't know and gives the staff contact, without guessing
 - [ ] Public users are rate limited per IP to prevent abuse and runaway cost
@@ -432,7 +432,7 @@ Letter: Id, RequestId → Request, LetterNumber, VerificationCode, PdfKey, Issue
 
 -- News, announcements & notifications
 NewsArticle: Id, Title, Slug, Body, CoverImageKey, Category (News|AdmissionInfo|Award), MetaDescription, Status (Draft|Published), PublishedAt   ← public
-Announcement: Id, Title, Body, CoverImageKey, TargetRoles, TargetClassroomIds, Status (Draft|Published), PublishedAt   ← internal only
+Announcement: Id, Title, Body, IsPublic, CoverImageKey, TargetRoles, TargetClassroomIds, Status (Draft|Published), PublishedAt   ← internal by default; IsPublic also shows it to guests
 AnnouncementRead: AnnouncementId → Announcement, UserId → User, ReadAt
 Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← in-app notifications (assignments, approvals, AI drafts, ...)
 
