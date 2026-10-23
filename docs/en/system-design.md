@@ -31,7 +31,8 @@ flowchart LR
   student([Student])
   parent([Parent])
   admin([Admin staff])
-  guest([Guest or applicant])
+  guest([Guest])
+  applicant([Applicant])
 
   schomans["<b>SchoMans</b><br/>Web app + API<br/>Attendance, grading,<br/>admissions, approvals, AI"]
 
@@ -41,7 +42,7 @@ flowchart LR
   email["Email (SMTP)<br/>Notifications"]
   whatsapp["WhatsApp gateway<br/>Optional"]
 
-  principal & teacher & student & parent & admin & guest -->|HTTPS| schomans
+  principal & teacher & student & parent & admin & applicant & guest -->|HTTPS| schomans
   schomans --> keycloak
   schomans --> claude
   schomans --> s3
@@ -49,7 +50,7 @@ flowchart LR
   schomans -.-> whatsapp
 ```
 
-Applicants start as guests and get the Applicant role once they register for admissions.
+A guest is an anonymous visitor with no account. Registering for admissions creates an account with the Applicant role; when an accepted applicant is enrolled, the role becomes Student.
 
 ## 3. Containers & deployment
 
@@ -61,7 +62,7 @@ flowchart TB
   browser["Browser<br/>React SPA (PWA)"]
 
   subgraph vps["VPS (Docker Compose)"]
-    proxy["Reverse proxy (Nginx or Caddy)<br/>HTTPS: / to web, /api and /hubs to api, /auth to keycloak"]
+    proxy["Reverse proxy (Caddy)<br/>HTTPS: / to web, /api and /hubs to api, /auth to keycloak"]
     web["web<br/>React build, static files"]
     keycloak["keycloak<br/>Realm schomans, OIDC + PKCE"]
     api["<b>api</b><br/>ASP.NET Core .NET 10<br/>Minimal API, SignalR, Hangfire, EF Core"]
@@ -90,7 +91,7 @@ The api validates tokens against Keycloak's signing keys, writes to SQL Server, 
 
 | Container | Image | Resources (approx.) | Persistent volume |
 | --- | --- | --- | --- |
-| proxy | nginx or caddy | 64 MB | TLS certificates |
+| proxy | caddy | 64 MB | TLS certificates |
 | web | nginx serving the Vite build | 32 MB | — |
 | api | .NET 10 ASP.NET Core runtime | 300–500 MB | — |
 | sqlserver | mssql/server 2022, `MSSQL_PID=Express` | 2 GB | Database files |
@@ -112,7 +113,7 @@ The API follows Clean Architecture with vertical slices; the full layer diagram,
 
 ## 5. Data model
 
-One SQL Server database, code-first with EF Core. The model is split into three ERDs by domain; every entity also carries `CreatedAt`, `UpdatedAt`, `IsDeleted` (soft delete, filtered globally), and `RowVersion` (optimistic concurrency), which are left out of the diagrams.
+One SQL Server database, code-first with EF Core. The model is split into five ERDs by domain; every entity also carries `CreatedAt`, `UpdatedAt`, `IsDeleted` (soft delete, filtered globally), and `RowVersion` (optimistic concurrency), which are left out of the diagrams. The data model in PRD · English section 6 is the reference; `GradeComponent` is an enum (Assignment, Quiz, Midterm, Final), not a table.
 
 ```mermaid
 %% Source: diagrams/erd.mmd (people & school structure)
@@ -121,9 +122,13 @@ erDiagram
   User ||--o| Teacher : "is"
   User ||--o{ StudentParent : "parent of"
   Student ||--o{ StudentParent : "has parents"
+  AcademicYear ||--o{ Term : "has"
   AcademicYear ||--o{ Classroom : "contains"
   Teacher ||--o{ Classroom : "homeroom of"
   Classroom ||--o{ Student : "enrolls"
+  Classroom ||--o{ Schedule : "has"
+  Subject ||--o{ Schedule : "taught in"
+  Teacher ||--o{ Schedule : "teaches"
 
   User {
     guid Id PK
@@ -131,6 +136,7 @@ erDiagram
     string Email UK
     string FullName
     string Role
+    string PhotoKey
   }
   Student {
     guid Id PK
@@ -139,17 +145,25 @@ erDiagram
     guid ClassroomId FK
     date DateOfBirth
   }
+  StudentParent {
+    guid ParentUserId PK
+    guid StudentId PK
+  }
   Teacher {
     guid Id PK
     guid UserId FK
     string Nip UK
   }
-  StudentParent {
-    guid ParentUserId PK
-    guid StudentId PK
-  }
   AcademicYear {
     guid Id PK
+    string Name
+    date StartDate
+    date EndDate
+    bool IsActive
+  }
+  Term {
+    guid Id PK
+    guid AcademicYearId FK
     string Name
     date StartDate
     date EndDate
@@ -161,27 +175,6 @@ erDiagram
     guid AcademicYearId FK
     guid HomeroomTeacherId FK
   }
-```
-
-A parent is a User linked to one or more students through StudentParent; a classroom belongs to one academic year and has one homeroom teacher.
-
-```mermaid
-%% Source: diagrams/erd.mmd (attendance, assignments & grading)
-erDiagram
-  Classroom ||--o{ Schedule : "has"
-  Subject ||--o{ Schedule : "taught in"
-  Teacher ||--o{ Schedule : "teaches"
-  Schedule ||--o{ AttendanceSession : "opens"
-  AttendanceSession ||--o{ Attendance : "records"
-  Student ||--o{ Attendance : "checks in"
-  Teacher ||--o{ Assignment : "creates"
-  Subject ||--o{ Assignment : "for"
-  Assignment ||--o{ Submission : "receives"
-  Student ||--o{ Submission : "submits"
-  Student ||--o{ Grade : "earns"
-  Subject ||--o{ Grade : "in"
-  Student ||--o{ ProgressSummary : "summarized in"
-
   Subject {
     guid Id PK
     string Name
@@ -196,11 +189,38 @@ erDiagram
     time StartTime
     time EndTime
   }
+```
+
+A parent is a User linked to one or more students through StudentParent; a classroom belongs to one academic year and has one homeroom teacher; terms belong to an academic year.
+
+```mermaid
+%% Source: diagrams/erd.mmd (attendance, assignments & question bank)
+erDiagram
+  Schedule ||--o{ AttendanceSession : "opens"
+  AttendanceSession ||--o{ Attendance : "records"
+  Student ||--o{ Attendance : "checks in"
+  Teacher ||--o{ Assignment : "creates"
+  Subject ||--o{ Assignment : "for"
+  Term ||--o{ Assignment : "in"
+  Assignment ||--o{ AssignmentClassroom : "given to"
+  Classroom ||--o{ AssignmentClassroom : "receives"
+  Assignment ||--o{ AssignmentAttachment : "has"
+  Assignment ||--o{ AssignmentQuestion : "quiz items"
+  Question ||--o{ AssignmentQuestion : "used in"
+  Subject ||--o{ Question : "question bank"
+  Assignment ||--o{ Submission : "receives"
+  Student ||--o{ Submission : "submits"
+  Assignment ||--o| Rubric : "graded by"
+  Rubric ||--o{ RubricCriterion : "has"
+  Submission ||--o{ RubricScore : "scored by"
+  RubricCriterion ||--o{ RubricScore : "applies to"
+
   AttendanceSession {
     guid Id PK
     guid ScheduleId FK
     date Date
     string QrSecret
+    datetime QrRotatedAt
     datetime OpenedAt
     datetime ClosedAt
   }
@@ -210,63 +230,213 @@ erDiagram
     guid StudentId FK
     string Status
     datetime ScannedAt
+    bool IsManual
+    guid MarkedById FK
+    string Note
   }
   Assignment {
     guid Id PK
     guid TeacherId FK
     guid SubjectId FK
+    guid TermId FK
     string Title
+    string Description
     datetime DueAt
+    string Type
+    string Component
+  }
+  AssignmentClassroom {
+    guid AssignmentId PK
+    guid ClassroomId PK
+  }
+  AssignmentAttachment {
+    guid Id PK
+    guid AssignmentId FK
+    string FileKey
+    string FileName
+  }
+  AssignmentQuestion {
+    guid AssignmentId PK
+    guid QuestionId PK
+    int Order
+    decimal Points
   }
   Submission {
     guid Id PK
     guid AssignmentId FK
     guid StudentId FK
     string FileKey
+    string TextBody
+    json Answers
+    datetime SubmittedAt
     decimal Score
+    string Feedback
     bool IsLate
+  }
+  Rubric {
+    guid Id PK
+    guid AssignmentId FK
+  }
+  RubricCriterion {
+    guid Id PK
+    guid RubricId FK
+    string Name
+    string Description
+    decimal MaxScore
+  }
+  RubricScore {
+    guid Id PK
+    guid SubmissionId FK
+    guid CriterionId FK
+    decimal Score
+    string Reason
+    string Suggestion
+    string Status
+  }
+  Question {
+    guid Id PK
+    guid SubjectId FK
+    string Type
+    string Difficulty
+    string Body
+    json Options
+    string AnswerKey
+    string Explanation
+  }
+```
+
+An assignment can be given to several classrooms (AssignmentClassroom). Quiz assignments pull items from the subject's question bank through AssignmentQuestion. The unique constraint on Attendance (SessionId + StudentId) makes a double scan harmless: the second insert is rejected and the API returns the existing record.
+
+```mermaid
+%% Source: diagrams/erd.mmd (grading & report cards)
+erDiagram
+  Subject ||--o{ GradeWeight : "weighted by"
+  Subject ||--o{ LearningObjective : "defines"
+  Student ||--o{ Grade : "earns"
+  Subject ||--o{ Grade : "in"
+  Term ||--o{ Grade : "during"
+  LearningObjective ||--o{ Grade : "measured by"
+  Submission ||--o| Grade : "feeds"
+  Classroom ||--o{ GradePublication : "published for"
+  Term ||--o{ GradePublication : "per"
+  Student ||--o{ ReportCard : "receives"
+  Term ||--o{ ReportCard : "per"
+  ReportCard ||--o{ AchievementDescription : "describes"
+  Subject ||--o{ AchievementDescription : "for"
+  Student ||--o{ ProgressSummary : "summarized in"
+
+  GradeWeight {
+    guid Id PK
+    guid SubjectId FK
+    string Component
+    decimal WeightPercent
+  }
+  LearningObjective {
+    guid Id PK
+    guid SubjectId FK
+    string Code
+    string Description
   }
   Grade {
     guid Id PK
     guid StudentId FK
     guid SubjectId FK
+    guid TermId FK
     string Component
+    guid LearningObjectiveId FK
+    guid SubmissionId FK
     decimal Score
-    string Term
+  }
+  GradePublication {
+    guid Id PK
+    guid ClassroomId FK
+    guid TermId FK
+    datetime PublishedAt
+    guid PublishedById FK
+  }
+  ReportCard {
+    guid Id PK
+    guid StudentId FK
+    guid TermId FK
+    string Status
+    string PdfKey
+    datetime GeneratedAt
+  }
+  AchievementDescription {
+    guid Id PK
+    guid ReportCardId FK
+    guid SubjectId FK
+    string Body
+    string Status
+    bool IsAiDrafted
   }
   ProgressSummary {
     guid Id PK
     guid StudentId FK
     string Month
+    string Body
     string Status
+    guid ApprovedById FK
+    datetime SentAt
   }
 ```
 
-The unique constraint on Attendance (SessionId + StudentId) is what makes a double scan harmless: the second insert is rejected and the API returns the existing record.
+Grade weights are per subject and component and add up to 100. A GradePublication row per classroom and term is what makes grades visible to students and parents. A graded submission creates its Grade row automatically (Grade.SubmissionId).
 
 ```mermaid
-%% Source: diagrams/erd.mmd (workflows, communication, audit & AI)
+%% Source: diagrams/erd.mmd (admissions & approvals)
 erDiagram
+  AcademicYear ||--o{ AdmissionPeriod : "runs"
   User ||--o| Applicant : "applies as"
+  AdmissionPeriod ||--o{ Applicant : "receives"
+  Applicant ||--o{ ApplicantDocument : "uploads"
+  Applicant |o--o| Student : "enrolled as"
   User ||--o{ Request : "submits"
+  Student |o--o{ Request : "concerns"
   Request ||--o{ Approval : "goes through"
-  User ||--o{ Approval : "approves"
-  Announcement ||--o{ AnnouncementRead : "read by"
-  User ||--o{ AnnouncementRead : "reads"
-  User ||--o{ AuditLog : "changes"
-  User ||--o{ AiUsageLog : "uses AI"
-  Subject ||--o{ Question : "has"
+  User ||--o{ Approval : "decides"
+  Request ||--o| Letter : "issues"
 
+  AdmissionPeriod {
+    guid Id PK
+    guid AcademicYearId FK
+    datetime OpensAt
+    datetime ClosesAt
+    datetime ResultsAnnouncedAt
+    string ReregistrationDeadline
+  }
   Applicant {
     guid Id PK
     guid UserId FK
+    guid AdmissionPeriodId FK
     json FormData
     string Status
+    string Notes
+    guid StudentId FK
+  }
+  ApplicantDocument {
+    guid Id PK
+    guid ApplicantId FK
+    string Type
+    string FileKey
+    string Status
+    string ReviewNote
+    json ExtractedData
+  }
+  ApprovalChainStep {
+    guid Id PK
+    string RequestType
+    int StepOrder
+    string ApproverRole
   }
   Request {
     guid Id PK
     string Type
     guid RequesterId FK
+    guid StudentId FK
+    date StartDate
+    date EndDate
+    string Reason
     string Status
     int CurrentStep
   }
@@ -274,14 +444,51 @@ erDiagram
     guid Id PK
     guid RequestId FK
     guid ApproverId FK
+    int Step
     string Decision
     string Notes
+    datetime DecidedAt
+  }
+  Letter {
+    guid Id PK
+    guid RequestId FK
+    string LetterNumber UK
+    string VerificationCode UK
+    string PdfKey
+    bool IssuedAt
+  }
+```
+
+ApprovalChainStep holds the configurable chain per request type (for example homeroom teacher, then principal); Request.CurrentStep points at the step awaiting a decision. When an accepted applicant is enrolled, a Student is created and Applicant.StudentId is set.
+
+```mermaid
+%% Source: diagrams/erd.mmd (news, announcements, notifications, audit & AI)
+erDiagram
+  Announcement ||--o{ AnnouncementRead : "read by"
+  User ||--o{ AnnouncementRead : "reads"
+  User ||--o{ Notification : "receives"
+  User ||--o{ AuditLog : "changes"
+  User ||--o{ AiUsageLog : "uses AI"
+
+  NewsArticle {
+    guid Id PK
+    string Title
+    string Slug UK
+    string Body
+    string CoverImageKey
+    string Category
+    string MetaDescription
+    string Status
+    datetime PublishedAt
   }
   Announcement {
     guid Id PK
     string Title
-    bool IsPublic
+    string Body
+    string CoverImageKey
     string TargetRoles
+    string TargetClassroomIds
+    string Status
     datetime PublishedAt
   }
   AnnouncementRead {
@@ -289,9 +496,19 @@ erDiagram
     guid UserId PK
     datetime ReadAt
   }
+  Notification {
+    guid Id PK
+    guid UserId FK
+    string Type
+    string Title
+    string Body
+    string LinkUrl
+    datetime ReadAt
+  }
   AuditLog {
     guid Id PK
     guid UserId FK
+    string Action
     string EntityName
     json OldValues
     json NewValues
@@ -301,19 +518,15 @@ erDiagram
     guid Id PK
     guid UserId FK
     string Feature
+    string Model
     int Tokens
     decimal CostUsd
-  }
-  Question {
-    guid Id PK
-    guid SubjectId FK
-    string Body
-    json Options
-    string AnswerKey
+    int DurationMs
+    datetime CreatedAt
   }
 ```
 
-AnnouncementRead, AiUsageLog, and Question are added here beyond the PRD data model: they back the unread badge, AI cost tracking, and the AI-06 question bank.
+NewsArticle is public (landing page and the AI-08 chatbot); Announcement is internal and targeted by role or classroom. Notification backs the in-app unread badge for every event type, AnnouncementRead tracks which announcements a user has opened.
 
 **Key constraints & indexes**
 
@@ -322,11 +535,19 @@ AnnouncementRead, AiUsageLog, and Question are added here beyond the PRD data mo
 | Attendance | Unique (SessionId, StudentId) | Idempotent QR scans |
 | Student | Unique Nisn; unique UserId | One record per student and per account |
 | User | Unique KeycloakId; unique Email | Sync by Keycloak `sub` on first login |
-| Grade | Index (StudentId, Term) | Report-card and dashboard queries |
+| Grade | Index (StudentId, TermId) | Report-card and dashboard queries |
 | Submission | Unique (AssignmentId, StudentId) | One submission per student per assignment |
 | AttendanceSession | Index (ScheduleId, Date) | Today's sessions per teacher |
 | AnnouncementRead | Primary key (AnnouncementId, UserId) | Unread counts |
 | AuditLog | Index (EntityName, Timestamp) | Audit lookups; append-only |
+| Term | Index (AcademicYearId, IsActive) | Current term lookups |
+| GradeWeight | Unique (SubjectId, Component) | One weight per component per subject |
+| GradePublication | Unique (ClassroomId, TermId) | Grades published once per classroom and term |
+| ReportCard | Unique (StudentId, TermId) | One report card per student and term |
+| Grade | Unique SubmissionId (where not null) | An assignment score feeds one grade row |
+| NewsArticle | Unique Slug | SEO-friendly URLs |
+| Letter | Unique LetterNumber; unique VerificationCode | Authenticity check by QR |
+| Notification | Index (UserId, ReadAt) | Unread badge |
 | All entities | Global query filter on IsDeleted; RowVersion | Soft delete and optimistic concurrency |
 
 ## 6. Key flows
@@ -342,7 +563,7 @@ sequenceDiagram
   participant D as SQL Server
   B->>K: authorize (PKCE challenge)
   K-->>B: login page
-  B->>K: email or NISN + password
+  B->>K: email + password
   K-->>B: redirect with code
   B->>K: code + verifier
   K-->>B: access + refresh token (kept in memory)
@@ -366,7 +587,7 @@ sequenceDiagram
   T->>A: POST /api/v1/attendance/sessions
   A->>D: insert AttendanceSession
   A-->>T: 201 session + QR token
-  loop every 30 s
+  loop every minute
     A->>T: QrRotated (SignalR)
   end
   S->>A: POST /api/v1/attendance/scans
@@ -377,7 +598,7 @@ sequenceDiagram
   A->>D: mark non-scanners Absent
 ```
 
-The QR token is a short-lived signed value tied to the session; scans after rotation or after the session closes are rejected with ProblemDetails code `attendance.qr_expired`.
+The QR token is a short-lived signed value tied to the session; scans with an outdated secret or after the session closes are rejected with ProblemDetails code `attendance.qr_expired`.
 
 **File upload with presigned URL**
 
@@ -420,18 +641,18 @@ REST over HTTPS, JSON only, versioned under `/api/v1`, one endpoint group per fe
 
 Authentication is OIDC Authorization Code + PKCE against Keycloak; the SPA keeps tokens in memory and the API validates JWT bearer tokens. Authorization has two layers: a role policy on every endpoint, then a data-ownership check in the Application layer.
 
-| Capability | Principal | Teacher | Student | Parent | Admin | Guest |
-| --- | --- | --- | --- | --- | --- | --- |
-| Master data | Read | Read own classes | — | — | Full | — |
-| Open/close attendance session | — | Own schedule | — | — | — | — |
-| Scan attendance QR | — | — | Own | — | — | — |
-| Attendance summaries | All | Own classes | Own | Own child | All | — |
-| Assignments | Read | Own subjects | Own classes | Own child (read) | — | — |
-| Grades & report cards | All | Own subjects | Own (published) | Own child (published) | All | — |
-| Announcements | Create, read | Read | Read | Read | Create, read | Public news |
-| Admissions | Read | — | — | — | Verify, announce | Apply (as applicant) |
-| Requests & approvals | Approve | Submit, approve as homeroom | — | Submit for own child | Read | — |
-| AI features | Assistant (AI-04) | AI-02, AI-05, AI-06 | — | Read AI-01 summaries | AI-03, AI-09 | Chatbot (AI-08) |
+| Capability | Principal | Teacher | Student | Parent | Admin | Applicant | Guest |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Master data | Read | Read own classes | — | — | Full | — | — |
+| Open/close attendance session | — | Own schedule | — | — | — | — | — |
+| Scan attendance QR | — | — | Own | — | — | — | — |
+| Attendance summaries | All | Own classes | Own | Own child | All | — | — |
+| Assignments | Read | Own subjects | Own classes | Own child (read) | — | — | — |
+| Grades & report cards | All | Own subjects | Own (published) | Own child (published) | All | — | — |
+| Announcements | Create, read | Read | Read | Read | Create, read | Public news | Public news |
+| Admissions | Read | — | — | — | Verify, announce | Own application | Start registration |
+| Requests & approvals | Approve | Submit, approve as homeroom | — | Submit for own child | Read | — | — |
+| AI features | Assistant (AI-04) | AI-02, AI-05, AI-06 | — | Read AI-01 summaries | AI-03, AI-09 | Chatbot (AI-08), AI-03 on own documents | Chatbot (AI-08) |
 
 **Other controls:** rate limiting on login, public chatbot, and uploads; file type and size validation before issuing upload URLs; HTTPS only behind the reverse proxy; secrets in environment variables, never in the repo; audit log for grade, attendance, and approval changes; student names pseudonymized before AI calls.
 
@@ -451,7 +672,7 @@ Authentication is OIDC Authorization Code + PKCE against Keycloak; the SPA keeps
 
 | Job | Schedule | Purpose |
 | --- | --- | --- |
-| RotateAttendanceQr | Every 30 s per open session | Issue a new QR secret and push `QrRotated` |
+| RotateAttendanceQr | Recurring, every minute | Issue a new QR secret for every open session and push `QrRotated` |
 | CloseStaleSessions | Every 15 min | Close sessions left open and mark non-scanners absent |
 | AssignmentDueReminder | Daily 07:00 WIB | Notify students one day before due dates |
 | DraftProgressSummaries | 1st of each month, 02:00 WIB | Draft AI-01 summaries for homeroom review |
