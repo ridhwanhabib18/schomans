@@ -1,0 +1,45 @@
+{
+  "app": {
+    "name": "SchoMans",
+    "tagline": "School management in one place"
+  },
+  "roles": {
+    "Principal": "Principal",
+    "Teacher": "Teacher",
+    "Student": "Student",
+    "Parent": "Parent",
+    "Admin": "Admin staff",
+    "Applicant": "Applicant"
+  },
+  "nav": {
+    "main": "Main navigation",
+    "dashboard": "Dashboard",
+    "skipToContent": "Skip to content"
+  },
+  "actions": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "retry": "Try again",
+    "backHome": "Back to home"
+  },
+  "theme": {
+    "label": "Theme: {{mode}}. Click to change.",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "session": {
+    "restoring": "Checking your session…"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "notFound": {
+      "title": "Page not found",
+      "body": "The page you are looking for does not exist or has moved."
+    },
+    "forbidden": {
+      "title": "You do not have access to this page",
+      "body": "Your role is not allowed to open this page. Go back to your dashboard."
+    }
+  }
+}
