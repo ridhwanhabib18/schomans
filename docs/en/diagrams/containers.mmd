@@ -1,0 +1,28 @@
+%% Containers & deployment: one VPS runs every container; files, AI, and email are external
+flowchart TB
+  browser["Browser<br/>React SPA (PWA)"]
+
+  subgraph vps["VPS (Docker Compose)"]
+    proxy["Reverse proxy (Nginx or Caddy)<br/>HTTPS: / to web, /api and /hubs to api, /auth to keycloak"]
+    web["web<br/>React build, static files"]
+    keycloak["keycloak<br/>Realm schomans, OIDC + PKCE"]
+    api["<b>api</b><br/>ASP.NET Core .NET 10<br/>Minimal API, SignalR, Hangfire, EF Core"]
+    sql[("sqlserver<br/>SQL Server 2022 Express")]
+    seaweed["seaweedfs<br/>S3 API, local dev only"]
+  end
+
+  r2["Cloudflare R2<br/>S3 buckets"]
+  claude["Claude API"]
+  smtp["Email (SMTP)"]
+
+  browser --> proxy
+  proxy --> web
+  proxy --> keycloak
+  proxy --> api
+  api --> sql
+  api -->|signing keys, user sync| keycloak
+  api -.->|local only| seaweed
+  api --> r2
+  api --> claude
+  api --> smtp
+  browser -->|presigned upload| r2

@@ -1,0 +1,181 @@
+%% ERD (planned). After Phase 1 this file is regenerated from the EF Core model by tools/SchoMans.DocGen.
+%% Every entity also has CreatedAt, UpdatedAt, IsDeleted, RowVersion (omitted here).
+erDiagram
+  User ||--o| Student : "is"
+  User ||--o| Teacher : "is"
+  User ||--o{ StudentParent : "parent of"
+  Student ||--o{ StudentParent : "has parents"
+  AcademicYear ||--o{ Classroom : "contains"
+  Teacher ||--o{ Classroom : "homeroom of"
+  Classroom ||--o{ Student : "enrolls"
+  Classroom ||--o{ Schedule : "has"
+  Subject ||--o{ Schedule : "taught in"
+  Teacher ||--o{ Schedule : "teaches"
+  Schedule ||--o{ AttendanceSession : "opens"
+  AttendanceSession ||--o{ Attendance : "records"
+  Student ||--o{ Attendance : "checks in"
+  Teacher ||--o{ Assignment : "creates"
+  Subject ||--o{ Assignment : "for"
+  Assignment ||--o{ Submission : "receives"
+  Student ||--o{ Submission : "submits"
+  Student ||--o{ Grade : "earns"
+  Subject ||--o{ Grade : "in"
+  Student ||--o{ ProgressSummary : "summarized in"
+  User ||--o| Applicant : "applies as"
+  User ||--o{ Request : "submits"
+  Request ||--o{ Approval : "goes through"
+  User ||--o{ Approval : "approves"
+  Announcement ||--o{ AnnouncementRead : "read by"
+  User ||--o{ AnnouncementRead : "reads"
+  User ||--o{ AuditLog : "changes"
+  User ||--o{ AiUsageLog : "uses AI"
+  Subject ||--o{ Question : "has"
+
+  User {
+    guid Id PK
+    string KeycloakId UK
+    string Email UK
+    string FullName
+    string Role
+  }
+  Student {
+    guid Id PK
+    guid UserId FK
+    string Nisn UK
+    guid ClassroomId FK
+    date DateOfBirth
+  }
+  Teacher {
+    guid Id PK
+    guid UserId FK
+    string Nip UK
+  }
+  StudentParent {
+    guid ParentUserId PK
+    guid StudentId PK
+  }
+  AcademicYear {
+    guid Id PK
+    string Name
+    date StartDate
+    date EndDate
+    bool IsActive
+  }
+  Classroom {
+    guid Id PK
+    string Name
+    guid AcademicYearId FK
+    guid HomeroomTeacherId FK
+  }
+  Subject {
+    guid Id PK
+    string Name
+    decimal MinimumPassingScore
+  }
+  Schedule {
+    guid Id PK
+    guid ClassroomId FK
+    guid SubjectId FK
+    guid TeacherId FK
+    int DayOfWeek
+    time StartTime
+    time EndTime
+  }
+  AttendanceSession {
+    guid Id PK
+    guid ScheduleId FK
+    date Date
+    string QrSecret
+    datetime OpenedAt
+    datetime ClosedAt
+  }
+  Attendance {
+    guid Id PK
+    guid SessionId FK
+    guid StudentId FK
+    string Status
+    datetime ScannedAt
+  }
+  Assignment {
+    guid Id PK
+    guid TeacherId FK
+    guid SubjectId FK
+    string Title
+    datetime DueAt
+  }
+  Submission {
+    guid Id PK
+    guid AssignmentId FK
+    guid StudentId FK
+    string FileKey
+    decimal Score
+    bool IsLate
+  }
+  Grade {
+    guid Id PK
+    guid StudentId FK
+    guid SubjectId FK
+    string Component
+    decimal Score
+    string Term
+  }
+  ProgressSummary {
+    guid Id PK
+    guid StudentId FK
+    string Month
+    string Status
+  }
+  Applicant {
+    guid Id PK
+    guid UserId FK
+    json FormData
+    string Status
+  }
+  Request {
+    guid Id PK
+    string Type
+    guid RequesterId FK
+    string Status
+    int CurrentStep
+  }
+  Approval {
+    guid Id PK
+    guid RequestId FK
+    guid ApproverId FK
+    string Decision
+    string Notes
+  }
+  Announcement {
+    guid Id PK
+    string Title
+    bool IsPublic
+    string TargetRoles
+    datetime PublishedAt
+  }
+  AnnouncementRead {
+    guid AnnouncementId PK
+    guid UserId PK
+    datetime ReadAt
+  }
+  AuditLog {
+    guid Id PK
+    guid UserId FK
+    string EntityName
+    json OldValues
+    json NewValues
+    datetime Timestamp
+  }
+  AiUsageLog {
+    guid Id PK
+    guid UserId FK
+    string Feature
+    int Tokens
+    decimal CostUsd
+  }
+  Question {
+    guid Id PK
+    guid SubjectId FK
+    string Body
+    json Options
+    string AnswerKey
+  }

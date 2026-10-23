@@ -1,0 +1,16 @@
+%% Login is a PKCE code exchange with Keycloak; the API only validates tokens
+sequenceDiagram
+  participant B as Browser (SPA)
+  participant K as Keycloak
+  participant A as API
+  participant D as SQL Server
+  B->>K: authorize (PKCE challenge)
+  K-->>B: login page
+  B->>K: email or NISN + password
+  K-->>B: redirect with code
+  B->>K: code + verifier
+  K-->>B: access + refresh token (kept in memory)
+  B->>A: GET /api/v1/dashboard (Bearer)
+  A->>K: signing keys (cached)
+  A->>D: upsert User by sub
+  A-->>B: role-specific dashboard

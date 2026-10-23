@@ -1,0 +1,23 @@
+%% System context: six roles use SchoMans, which relies on external services
+flowchart LR
+  principal([Principal])
+  teacher([Teacher])
+  student([Student])
+  parent([Parent])
+  admin([Admin staff])
+  guest([Guest or applicant])
+
+  schomans["<b>SchoMans</b><br/>Web app + API<br/>Attendance, grading,<br/>admissions, approvals, AI"]
+
+  keycloak["Keycloak<br/>Login, roles, tokens"]
+  claude["Claude API<br/>AI drafts and assistant"]
+  s3["S3 storage (R2)<br/>Files and PDFs"]
+  email["Email (SMTP)<br/>Notifications"]
+  whatsapp["WhatsApp gateway<br/>Optional"]
+
+  principal & teacher & student & parent & admin & guest -->|HTTPS| schomans
+  schomans --> keycloak
+  schomans --> claude
+  schomans --> s3
+  schomans --> email
+  schomans -.-> whatsapp

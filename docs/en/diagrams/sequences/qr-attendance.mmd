@@ -1,0 +1,18 @@
+%% A scan reaches the teacher's screen through one write and one push
+sequenceDiagram
+  participant T as Teacher screen
+  participant S as Student phone
+  participant A as API + SignalR
+  participant D as SQL Server
+  T->>A: POST /api/v1/attendance/sessions
+  A->>D: insert AttendanceSession
+  A-->>T: 201 session + QR token
+  loop every 30 s
+    A->>T: QrRotated (SignalR)
+  end
+  S->>A: POST /api/v1/attendance/scans
+  A->>D: insert Attendance (unique SessionId + StudentId)
+  A-->>S: 200 checked in
+  A->>T: StudentCheckedIn (SignalR)
+  T->>A: POST /api/v1/attendance/sessions/{id}/close
+  A->>D: mark non-scanners Absent

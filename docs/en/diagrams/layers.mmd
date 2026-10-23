@@ -1,0 +1,11 @@
+%% Clean Architecture layers: dependencies only point inward
+flowchart TB
+  api["<b>Api</b><br/>Endpoints, SignalR hubs, auth, middleware"]
+  infra["<b>Infrastructure</b><br/>EF Core, S3, Claude, PDF, Excel, Keycloak"]
+  app["<b>Application</b><br/>Use cases per feature, interfaces, validation"]
+  domain["<b>Domain</b><br/>Entities & business rules, no dependencies"]
+
+  api -->|DI wiring| infra
+  api -->|injects handlers| app
+  infra -->|implements interfaces| app
+  app --> domain
