@@ -1,0 +1,280 @@
+{
+  "realm": "schomans",
+  "displayName": "SchoMans",
+  "enabled": true,
+  "sslRequired": "external",
+  "loginTheme": "schomans",
+  "registrationAllowed": true,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "rememberMe": false,
+  "verifyEmail": false,
+  "bruteForceProtected": true,
+  "failureFactor": 5,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 3600,
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "en"
+  ],
+  "defaultLocale": "en",
+  "defaultRole": {
+    "name": "default-roles-schomans",
+    "description": "${role_default-roles}",
+    "composite": true,
+    "clientRole": false
+  },
+  "roles": {
+    "realm": [
+      {
+        "name": "Principal",
+        "description": "Principal: approvals and school-wide monitoring"
+      },
+      {
+        "name": "Teacher",
+        "description": "Teacher, including homeroom teachers"
+      },
+      {
+        "name": "Student",
+        "description": "Student"
+      },
+      {
+        "name": "Parent",
+        "description": "Parent of one or more students"
+      },
+      {
+        "name": "Admin",
+        "description": "Admin staff"
+      },
+      {
+        "name": "Applicant",
+        "description": "A guest who registered for admissions"
+      },
+      {
+        "name": "offline_access",
+        "description": "${role_offline-access}"
+      },
+      {
+        "name": "uma_authorization",
+        "description": "${role_uma_authorization}"
+      },
+      {
+        "name": "default-roles-schomans",
+        "description": "${role_default-roles}",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "offline_access",
+            "uma_authorization",
+            "Applicant"
+          ],
+          "client": {
+            "account": [
+              "view-profile",
+              "manage-account"
+            ]
+          }
+        },
+        "clientRole": false
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "schomans-api",
+      "name": "SchoMans API",
+      "description": "Resource server. It only validates tokens, nobody logs in with it.",
+      "enabled": true,
+      "bearerOnly": true,
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "schomans-web",
+      "name": "SchoMans web app",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "rootUrl": "http://localhost:5173",
+      "baseUrl": "/",
+      "redirectUris": [
+        "http://localhost:5173/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5173"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:5173/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "schomans-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "schomans-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "schomans-web-demo",
+      "name": "SchoMans demo login",
+      "description": "DEMO MODE ONLY: lets the one-click demo buttons sign in with a password grant. Remove this client for any real deployment.",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "protocolMappers": [
+        {
+          "name": "schomans-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "schomans-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ],
+      "webOrigins": [
+        "http://localhost:5173"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "principal@schomans.demo",
+      "email": "principal@schomans.demo",
+      "firstName": "Hendra",
+      "lastName": "Wirawan",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Demo123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "Principal"
+      ],
+      "id": "5c0a0000-0000-4000-8000-000000000001"
+    },
+    {
+      "username": "teacher@schomans.demo",
+      "email": "teacher@schomans.demo",
+      "firstName": "Budi",
+      "lastName": "Santoso",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Demo123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "Teacher"
+      ],
+      "id": "5c0a0000-0000-4000-8000-000000000002"
+    },
+    {
+      "username": "student@schomans.demo",
+      "email": "student@schomans.demo",
+      "firstName": "Rina",
+      "lastName": "Putri",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Demo123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "Student"
+      ],
+      "id": "5c0a0000-0000-4000-8000-000000000003"
+    },
+    {
+      "username": "parent@schomans.demo",
+      "email": "parent@schomans.demo",
+      "firstName": "Agus",
+      "lastName": "Putra",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Demo123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "Parent"
+      ],
+      "id": "5c0a0000-0000-4000-8000-000000000004"
+    },
+    {
+      "username": "admin@schomans.demo",
+      "email": "admin@schomans.demo",
+      "firstName": "Sari",
+      "lastName": "Utami",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Demo123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "Admin"
+      ],
+      "id": "5c0a0000-0000-4000-8000-000000000005"
+    },
+    {
+      "username": "applicant@schomans.demo",
+      "email": "applicant@schomans.demo",
+      "firstName": "Dewi",
+      "lastName": "Lestari",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Demo123!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "Applicant"
+      ],
+      "id": "5c0a0000-0000-4000-8000-000000000006"
+    }
+  ]
+}

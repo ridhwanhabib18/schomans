@@ -1,0 +1,12 @@
+/* SchoMans brand colors on top of keycloak.v2 (PatternFly 5). */
+:root {
+  --pf-v5-global--primary-color--100: #1d4ed8;
+  --pf-v5-global--primary-color--200: #1e40af;
+  --pf-v5-global--link--Color: #1d4ed8;
+  --pf-v5-global--link--Color--hover: #1e40af;
+}
+
+#kc-header-wrapper {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
