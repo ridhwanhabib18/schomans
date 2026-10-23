@@ -137,7 +137,7 @@ Pengelolaan data inti yang dipakai semua modul: siswa, guru, kelas, mata pelajar
 
 Guru menampilkan QR di layar kelas; siswa scan dari HP masing-masing.
 
-- [ ] QR berganti tiap 1 menit (recurring job Hangfire merotasi secret semua sesi yang terbuka) dan hanya berlaku untuk sesi kelas itu, supaya tidak bisa dibagikan lewat foto
+- [ ] QR berganti tiap 1 menit (recurring job Hangfire merotasi secret semua sesi yang terbuka) dan hanya berlaku untuk sesi kelas itu; secret sebelumnya masih diterima 10 detik setelah rotasi supaya scan di saat pergantian tidak ditolak, supaya tidak bisa dibagikan lewat foto
 - [ ] Scan tercatat < 3 detik dan langsung muncul di layar guru secara realtime
 - [ ] Siswa yang tidak scan otomatis berstatus alpa saat sesi ditutup; guru bisa ubah ke izin/sakit
 - [ ] Rekap absensi per siswa, kelas, dan bulan bisa diekspor ke Excel
@@ -248,7 +248,7 @@ Prinsip untuk semua fitur AI:
 **AI-08: Chatbot info sekolah & PPDB** (US-17, Sebaiknya)
 
 - [ ] Widget chat di landing page dan dashboard orang tua
-- [ ] Sumber jawaban hanya berita yang sudah terbit (termasuk info PPDB, kategori `AdmissionInfo`); pengumuman internal tidak pernah dipakai karena chatbot bersifat publik; backend mengambil 5 potongan paling relevan lewat full-text search SQL Server lalu mengirimkannya sebagai konteks
+- [ ] Sumber jawaban hanya yang sudah terbit: widget di landing page (pengguna anonim) hanya memakai berita, termasuk info PPDB (kategori `AdmissionInfo`); widget di dashboard orang tua juga memakai pengumuman terbit, tetapi hanya yang ditujukan ke orang tua itu (perannya atau kelas anak-anaknya). Pengumuman internal tidak pernah ditampilkan ke pengguna anonim; backend mengambil 5 potongan paling relevan lewat full-text search SQL Server lalu mengirimkannya sebagai konteks
 - [ ] Setiap jawaban menyertakan tautan ke sumbernya
 - [ ] Jika jawaban tidak ada di sumber, chatbot mengatakan tidak tahu dan memberikan kontak TU, tanpa menebak
 - [ ] Pengguna publik dibatasi per IP untuk mencegah penyalahgunaan dan biaya membengkak

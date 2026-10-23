@@ -526,7 +526,7 @@ erDiagram
   }
 ```
 
-NewsArticle is public (landing page and the AI-08 chatbot); Announcement is internal and targeted by role or classroom. Notification backs the in-app unread badge for every event type, AnnouncementRead tracks which announcements a user has opened.
+NewsArticle is public (landing page, and a source for the AI-08 chatbot); the chatbot on the parent dashboard also draws on announcements targeted at that parent; Announcement is internal and targeted by role or classroom. Notification backs the in-app unread badge for every event type, AnnouncementRead tracks which announcements a user has opened.
 
 **Key constraints & indexes**
 
@@ -598,7 +598,7 @@ sequenceDiagram
   A->>D: mark non-scanners Absent
 ```
 
-The QR token is a short-lived signed value tied to the session; scans with an outdated secret or after the session closes are rejected with ProblemDetails code `attendance.qr_expired`.
+The QR token is a short-lived signed value tied to the session; scans with a secret older than the 10-second grace after a rotation or after the session closes are rejected with ProblemDetails code `attendance.qr_expired`.
 
 **File upload with presigned URL**
 

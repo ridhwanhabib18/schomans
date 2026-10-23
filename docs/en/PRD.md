@@ -135,7 +135,7 @@ Core records used by every module: students, teachers, classrooms, subjects, aca
 
 The teacher shows a QR code on the classroom screen; students scan it with their own phones.
 
-- [ ] The QR code changes every minute (a Hangfire recurring job rotates the secret of every open session) and is only valid for that class session, so it cannot be shared via photo
+- [ ] The QR code changes every minute (a Hangfire recurring job rotates the secret of every open session) and is only valid for that class session; the previous secret is still accepted for 10 seconds after a rotation so a scan at the changeover is not rejected, so it cannot be shared via photo
 - [ ] A scan is recorded in < 3 seconds and appears on the teacher's screen in real time
 - [ ] Students who have not scanned are marked absent when the session closes; the teacher can change it to excused or sick
 - [ ] Attendance summaries per student, classroom, and month can be exported to Excel
@@ -246,7 +246,7 @@ Principles for every AI feature:
 **AI-08: School & admissions chatbot** (US-17, Should)
 
 - [ ] Chat widget on the landing page and the parent dashboard
-- [ ] Answers come only from published news articles (including admission information, category `AdmissionInfo`); internal announcements are never used, because the chatbot is public; the backend retrieves the 5 most relevant passages via SQL Server full-text search and sends them as context
+- [ ] Answers come only from published sources: the landing-page widget (anonymous users) uses news articles only, including admission information (category `AdmissionInfo`); the parent-dashboard widget also uses published announcements, but only those targeted at that parent (their role or their children's classrooms). Internal announcements are never shown to anonymous users; the backend retrieves the 5 most relevant passages via SQL Server full-text search and sends them as context
 - [ ] Every answer links to its source
 - [ ] If the answer is not in the sources, the chatbot says it doesn't know and gives the staff contact, without guessing
 - [ ] Public users are rate limited per IP to prevent abuse and runaway cost
