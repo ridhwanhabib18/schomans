@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend (build and tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - run: dotnet restore SchoMans.sln
+      - run: dotnet build SchoMans.sln --no-restore --configuration Release
+      # Integration tests start SQL Server with Testcontainers; the runner provides Docker.
+      - name: Test with coverage
+        run: >
+          dotnet test SchoMans.sln --no-build --configuration Release
+          --collect:"XPlat Code Coverage"
+          --logger trx
+          --results-directory TestResults
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-test-results
+          path: TestResults/**
+          if-no-files-found: warn
+
+  frontend:
+    name: Frontend (lint, build, unit tests)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - run: npm test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-test-results
+          path: web/test-results/**
+          if-no-files-found: warn
+
+  e2e:
+    name: End-to-end (Playwright)
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Start SQL Server and Keycloak
+        run: |
+          cp infra/.env.example infra/.env
+          docker compose -f infra/docker-compose.yml --env-file infra/.env up -d --wait --wait-timeout 300
+      - name: Install web dependencies and the browser
+        working-directory: web
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      # Playwright starts the API and the web dev server itself (see web/playwright.config.ts).
+      - name: Run end-to-end tests
+        working-directory: web
+        env:
+          CI: "true"
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: |
+            web/playwright-report/**
+            web/test-results/**
+          if-no-files-found: warn
+      - name: Show service logs on failure
+        if: failure()
+        run: docker compose -f infra/docker-compose.yml --env-file infra/.env logs --no-color --tail 200
