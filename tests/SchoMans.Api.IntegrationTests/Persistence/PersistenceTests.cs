@@ -20,10 +20,13 @@ public class PersistenceTests(ApiFixture fixture)
         await using var scope = NewScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        Assert.Equal(15, await db.Teachers.CountAsync());
-        Assert.Equal(5, await db.Classrooms.CountAsync());
-        Assert.Equal(150, await db.Students.CountAsync());
-        Assert.Equal(2, await db.Terms.CountAsync());
+        // The database is shared with other tests, so count the seeded demo school only.
+        Assert.Equal(15, await db.Teachers.CountAsync(t => t.User!.Email.EndsWith("@schomans.demo")));
+        Assert.Equal(5, await db.Classrooms.CountAsync(c => c.AcademicYear!.Name == "2026/2027" && c.Name.StartsWith("Class ") && c.Name.Length == 7));
+        Assert.Equal(150, await db.Students.CountAsync(s => s.User!.Email.EndsWith("@schomans.demo")));
+        Assert.Equal(2, await db.Terms.CountAsync(t => t.AcademicYear!.Name == "2026/2027"));
+        string[] subjects = ["Mathematics", "Indonesian Language", "English", "Natural Sciences", "Social Studies", "Arts and Culture", "Physical Education", "Civics"];
+        Assert.Equal(subjects.Length, await db.Subjects.CountAsync(s => subjects.Contains(s.Name)));
         Assert.Single(await db.AcademicYears.Where(a => a.IsActive).ToListAsync());
 
         var demoRoles = await db.Users
@@ -42,7 +45,8 @@ public class PersistenceTests(ApiFixture fixture)
         await using var scope = NewScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        var children = await db.StudentParents.CountAsync(p => p.ParentUser!.Email == "parent@schomans.demo");
+        // Other tests link the demo parent to extra students of their own, so count the seeded children only.
+        var children = await db.StudentParents.CountAsync(p => p.ParentUser!.Email == "parent@schomans.demo" && p.Student!.User!.Email.EndsWith("@schomans.demo"));
         var homeroomClassrooms = await db.Classrooms.CountAsync(c => c.HomeroomTeacher!.User!.Email == "teacher@schomans.demo");
 
         Assert.Equal(2, children);
@@ -54,12 +58,19 @@ public class PersistenceTests(ApiFixture fixture)
     {
         await using var scope = NewScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var before = await db.Users.CountAsync();
+        var users = await db.Users.CountAsync();
+        var students = await db.Students.CountAsync();
+        var subjects = await db.Subjects.CountAsync();
+        var news = await db.NewsArticles.CountAsync();
+        var announcements = await db.Announcements.CountAsync();
 
         await scope.ServiceProvider.GetRequiredService<DemoDataSeeder>().SeedAsync();
 
-        Assert.Equal(before, await db.Users.CountAsync());
-        Assert.Equal(150, await db.Students.CountAsync());
+        Assert.Equal(users, await db.Users.CountAsync());
+        Assert.Equal(students, await db.Students.CountAsync());
+        Assert.Equal(subjects, await db.Subjects.CountAsync());
+        Assert.Equal(news, await db.NewsArticles.CountAsync());
+        Assert.Equal(announcements, await db.Announcements.CountAsync());
     }
 
     [Fact]
