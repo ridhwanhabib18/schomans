@@ -1,0 +1,348 @@
+{
+  "common": {
+    "error": "The data could not be loaded.",
+    "yes": "Yes",
+    "no": "No",
+    "actions": "Actions",
+    "searchPlaceholder": "Search",
+    "allClassrooms": "All classrooms",
+    "allStatuses": "All students",
+    "readOnly": "You can view this list. Only admin staff can change it.",
+    "managedByAccount": "This person has already signed in, so the name and email belong to their account and cannot be changed here.",
+    "accountYes": "Signed in",
+    "accountNo": "Not yet",
+    "deleted": "Deleted.",
+    "saved": "Saved."
+  },
+  "students": {
+    "title": "Students",
+    "description": "Everybody enrolled at the school.",
+    "descriptionTeacher": "The students of the classroom you are homeroom teacher of.",
+    "caption": "Students",
+    "add": "Add student",
+    "import": "Import from Excel",
+    "columns": {
+      "name": "Name",
+      "nisn": "NISN",
+      "email": "Email",
+      "classroom": "Classroom",
+      "dateOfBirth": "Date of birth",
+      "status": "Status",
+      "account": "Account"
+    },
+    "status": {
+      "Active": "Active",
+      "Graduated": "Graduated"
+    },
+    "filter": {
+      "search": "Search by name, NISN or email"
+    },
+    "empty": {
+      "title": "No students found",
+      "description": "Add a student or import a list from Excel.",
+      "descriptionFiltered": "No student matches the filters."
+    },
+    "form": {
+      "newTitle": "Add student",
+      "editTitle": "Edit student",
+      "fullName": "Full name",
+      "email": "Email",
+      "emailHint": "The student signs in with this email.",
+      "nisn": "NISN",
+      "nisnHint": "Exactly 10 digits.",
+      "classroom": "Classroom",
+      "classroomPlaceholder": "Choose a classroom",
+      "dateOfBirth": "Date of birth",
+      "graduatedNote": "A graduated student keeps the last classroom and cannot be moved.",
+      "conflict": "Somebody else changed this student while you were editing. Reload to see the latest data."
+    },
+    "delete": {
+      "title": "Delete this student?",
+      "body": "{{name}} is removed from the lists. Their records stay for history, and they can no longer sign in.",
+      "confirm": "Delete student"
+    },
+    "errors": {
+      "students": {
+        "nisn_taken": "Another student already has this NISN.",
+        "graduated": "A graduated student cannot be moved to a classroom."
+      },
+      "users": {
+        "email_taken": "Another account already uses this email.",
+        "managed_by_keycloak": "The name and email of a student who has signed in cannot be changed here."
+      },
+      "classrooms": {
+        "not_found": "That classroom no longer exists."
+      }
+    }
+  },
+  "import": {
+    "title": "Import students from Excel",
+    "description": "Fill in the template with one student per row, then upload it. Students are placed in the classrooms of the current academic year, by classroom name.",
+    "downloadTemplate": "Download the template",
+    "choose": "Excel file (.xlsx)",
+    "chooseHint": "Up to 5 MB and 2,000 rows.",
+    "start": "Import",
+    "importing": "Importing…",
+    "done": "Import finished",
+    "summary": "{{created}} of {{total}} rows were imported.",
+    "allGood": "Every row was imported.",
+    "failedTitle": "{{count}} row(s) were not imported",
+    "failedHint": "Fix these rows in your file and import it again. The rows that already worked will be reported as duplicates.",
+    "columns": {
+      "row": "Row",
+      "reason": "Reason"
+    },
+    "failedCaption": "Rows that were not imported",
+    "again": "Import another file",
+    "close": "Close",
+    "fileError": "The file could not be used.",
+    "noFile": "Choose a file first.",
+    "wrongExtension": "Choose an .xlsx file."
+  },
+  "teachers": {
+    "title": "Teachers",
+    "description": "Teachers and homeroom teachers.",
+    "caption": "Teachers",
+    "add": "Add teacher",
+    "columns": {
+      "name": "Name",
+      "nip": "NIP",
+      "email": "Email",
+      "homeroom": "Homeroom",
+      "account": "Account"
+    },
+    "homeroom": "Homeroom teacher",
+    "filter": {
+      "search": "Search by name, NIP or email"
+    },
+    "empty": {
+      "title": "No teachers found",
+      "description": "Add the first teacher."
+    },
+    "form": {
+      "newTitle": "Add teacher",
+      "editTitle": "Edit teacher",
+      "fullName": "Full name",
+      "email": "Email",
+      "emailHint": "The teacher signs in with this email.",
+      "nip": "NIP",
+      "nipHint": "Exactly 18 digits."
+    },
+    "delete": {
+      "title": "Delete this teacher?",
+      "body": "{{name}} is removed from the lists and can no longer sign in.",
+      "confirm": "Delete teacher"
+    },
+    "errors": {
+      "teachers": {
+        "nip_taken": "Another teacher already has this NIP.",
+        "is_homeroom": "This teacher is the homeroom teacher of a classroom. Appoint another teacher there first."
+      },
+      "users": {
+        "email_taken": "Another account already uses this email.",
+        "managed_by_keycloak": "The name and email of a teacher who has signed in cannot be changed here."
+      }
+    }
+  },
+  "classrooms": {
+    "title": "Classrooms",
+    "description": "The classrooms of each academic year and their homeroom teachers.",
+    "caption": "Classrooms",
+    "add": "Add classroom",
+    "columns": {
+      "name": "Name",
+      "year": "Academic year",
+      "homeroom": "Homeroom teacher",
+      "students": "Students"
+    },
+    "filter": {
+      "search": "Search by name",
+      "allYears": "All academic years"
+    },
+    "empty": {
+      "title": "No classrooms found",
+      "description": "Add the first classroom."
+    },
+    "form": {
+      "newTitle": "Add classroom",
+      "editTitle": "Edit classroom",
+      "name": "Name",
+      "year": "Academic year",
+      "yearPlaceholder": "Choose an academic year",
+      "yearLocked": "The academic year of a classroom cannot change.",
+      "homeroom": "Homeroom teacher",
+      "homeroomPlaceholder": "Choose a teacher"
+    },
+    "delete": {
+      "title": "Delete this classroom?",
+      "body": "{{name}} is removed. This is only possible when it has no students.",
+      "confirm": "Delete classroom"
+    },
+    "errors": {
+      "classrooms": {
+        "name_taken": "This academic year already has a classroom with this name.",
+        "has_students": "This classroom still has students. Move them to another classroom first."
+      },
+      "teachers": {
+        "not_found": "That teacher no longer exists."
+      },
+      "academic_years": {
+        "not_found": "That academic year no longer exists."
+      }
+    }
+  },
+  "subjects": {
+    "title": "Subjects",
+    "description": "The subjects taught at the school and the score needed to pass each.",
+    "caption": "Subjects",
+    "add": "Add subject",
+    "columns": {
+      "name": "Name",
+      "score": "Minimum passing score"
+    },
+    "filter": {
+      "search": "Search by name"
+    },
+    "empty": {
+      "title": "No subjects found",
+      "description": "Add the first subject."
+    },
+    "form": {
+      "newTitle": "Add subject",
+      "editTitle": "Edit subject",
+      "name": "Name",
+      "score": "Minimum passing score",
+      "scoreHint": "A number from 0 to 100."
+    },
+    "delete": {
+      "title": "Delete this subject?",
+      "body": "{{name}} is removed from the list.",
+      "confirm": "Delete subject"
+    },
+    "errors": {
+      "subjects": {
+        "name_taken": "A subject with this name already exists."
+      }
+    }
+  },
+  "years": {
+    "title": "Academic years",
+    "description": "The school years and their terms. Exactly one year is current.",
+    "caption": "Academic years",
+    "add": "Add academic year",
+    "rollover": "Start a new year",
+    "current": "Current",
+    "columns": {
+      "name": "Name",
+      "period": "Period",
+      "terms": "Terms",
+      "classrooms": "Classrooms",
+      "status": "Status"
+    },
+    "activate": "Make current",
+    "activateTitle": "Make {{name}} the current academic year?",
+    "activateBody": "The current year becomes inactive. Students are not moved; use “Start a new year” to promote them.",
+    "activated": "{{name}} is now the current academic year.",
+    "empty": {
+      "title": "No academic years",
+      "description": "Add the first academic year."
+    },
+    "form": {
+      "newTitle": "Add academic year",
+      "editTitle": "Edit academic year",
+      "name": "Name",
+      "nameHint": "For example 2027/2028.",
+      "start": "Starts on",
+      "end": "Ends on",
+      "terms": "Terms",
+      "termName": "Term name",
+      "termStart": "Term starts on",
+      "termEnd": "Term ends on",
+      "addTerm": "Add term",
+      "removeTerm": "Remove term",
+      "termsHint": "Between 1 and 4 terms inside the academic year. A saved term cannot be removed.",
+      "newYearNote": "A new year starts inactive. Make it current when it begins."
+    },
+    "errors": {
+      "academic_years": {
+        "name_taken": "An academic year with this name already exists.",
+        "invalid": "The dates are not valid: terms must be inside the year and have different names."
+      },
+      "terms": {
+        "not_found": "One of the terms does not belong to this academic year."
+      }
+    }
+  },
+  "rollover": {
+    "title": "Start a new academic year",
+    "description": "Create the next academic year and promote the students in one step. Nothing changes until you confirm on the last step.",
+    "back": "Academic years",
+    "steps": {
+      "year": "New year",
+      "classrooms": "Classrooms",
+      "review": "Review"
+    },
+    "stepLabel": "Step {{current}} of {{total}}: {{name}}",
+    "next": "Next",
+    "previous": "Back",
+    "confirm": "Start the new academic year",
+    "working": "Starting the new year…",
+    "year": {
+      "title": "The new academic year",
+      "hint": "The terms of the new year can be edited later."
+    },
+    "map": {
+      "title": "What happens to each classroom?",
+      "description": "Every classroom of {{year}} needs a decision. Several classrooms can move into the same new classroom.",
+      "caption": "Classrooms of the current academic year",
+      "columns": {
+        "classroom": "Classroom",
+        "students": "Students",
+        "action": "What happens",
+        "newClassroom": "New classroom",
+        "homeroom": "Homeroom teacher"
+      },
+      "move": "Move up to a new classroom",
+      "graduate": "Graduate (leave school)",
+      "newName": "Name of the new classroom",
+      "homeroomPlaceholder": "Choose a teacher",
+      "noCurrent": "There is no current academic year to start from."
+    },
+    "review": {
+      "title": "Check before you start",
+      "summary": "{{moving}} student(s) move up, {{graduating}} graduate, and {{created}} new classroom(s) are created in {{year}}.",
+      "yearLine": "{{name}}: {{start}} to {{end}}, {{terms}} term(s)",
+      "classroomLine": "{{from}} → {{to}}",
+      "graduateLine": "{{from}} graduates",
+      "warning": "This cannot be undone from the screen: the current year becomes inactive, students change classroom, and graduates leave their classroom.",
+      "listLabel": "What happens to each classroom"
+    },
+    "done": {
+      "title": "The new academic year has started",
+      "summary": "{{moved}} student(s) moved up, {{graduated}} graduated, {{created}} classroom(s) created.",
+      "toYears": "Back to academic years",
+      "toClassrooms": "See the classrooms"
+    },
+    "errors": {
+      "academic_years": {
+        "rollover_mapping_incomplete": "Every classroom of the current year must be mapped exactly once. Reload the page and try again.",
+        "rollover_dates": "The new year must start after the current one starts.",
+        "name_taken": "An academic year with this name already exists.",
+        "invalid": "The dates are not valid: terms must be inside the year and have different names.",
+        "no_active_year": "There is no current academic year to start from.",
+        "rollover_conflict": "The rollover conflicted with another change. Nothing was changed; try again."
+      },
+      "teachers": {
+        "not_found": "One of the homeroom teachers no longer exists."
+      }
+    },
+    "problems": {
+      "name": "Enter a name for the new academic year.",
+      "dates": "The year must end after it starts.",
+      "terms": "Add between 1 and 4 terms, inside the year, with different names.",
+      "classroomName": "Name the new classroom of {{from}}.",
+      "teacher": "Choose a homeroom teacher for the new classroom of {{from}}.",
+      "teacherSame": "The classrooms that move into {{to}} need the same homeroom teacher."
+    }
+  }
+}

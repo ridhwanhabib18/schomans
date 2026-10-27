@@ -1,0 +1,80 @@
+{
+  "categories": {
+    "News": "News",
+    "AdmissionInfo": "Admission information",
+    "Award": "Awards"
+  },
+  "public": {
+    "title": "School news",
+    "description": "News, admission information and awards from our school.",
+    "filterLabel": "Show",
+    "all": "All",
+    "empty": "There is no news in this category yet.",
+    "error": "The news could not be loaded.",
+    "readMore": "Read more",
+    "publishedOn": "Published {{date}}",
+    "back": "All news",
+    "notFound": {
+      "title": "This article does not exist",
+      "body": "It may have been removed, or the address is not right."
+    },
+    "caption": "School news",
+    "latest": "Latest news",
+    "viewAll": "All news"
+  },
+  "manage": {
+    "title": "Manage news",
+    "description": "Write news and admission information for the public pages.",
+    "new": "New article",
+    "caption": "News articles",
+    "columns": {
+      "title": "Title",
+      "category": "Category",
+      "status": "Status",
+      "published": "Published",
+      "actions": "Actions"
+    },
+    "status": { "Draft": "Draft", "Published": "Published" },
+    "filter": { "search": "Search by title", "allStatuses": "All statuses", "allCategories": "All categories" },
+    "empty": {
+      "title": "No articles",
+      "description": "Create the first article for the public pages."
+    },
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View on the site",
+    "error": "News could not be loaded."
+  },
+  "form": {
+    "newTitle": "New article",
+    "editTitle": "Edit article",
+    "title": "Title",
+    "category": "Category",
+    "metaDescription": "Description for search engines",
+    "metaHint": "A sentence or two shown in search results. Leave empty to use the start of the article. {{count}}/300",
+    "body": "Article",
+    "bodyLabel": "Article text",
+    "saveDraft": "Save draft",
+    "save": "Save changes",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "publishTitle": "Publish this article?",
+    "publishBody": "It becomes visible to everybody on the public pages, at the address /news/{{slug}}.",
+    "unpublishTitle": "Take this article off the public site?",
+    "unpublishBody": "It goes back to a draft and visitors can no longer open it.",
+    "published": "The article is published.",
+    "unpublished": "The article is a draft again.",
+    "saved": "Saved.",
+    "address": "Address: /news/{{slug}}",
+    "addressHint": "The address is fixed when the article is created, so shared links keep working when the title changes.",
+    "conflict": "Somebody else changed this article while you were editing it.",
+    "reload": "Load the latest version",
+    "loadError": "The article could not be loaded."
+  },
+  "delete": {
+    "title": "Delete this article?",
+    "body": "“{{title}}” is removed from the site. Its address is not reused.",
+    "confirm": "Delete article",
+    "done": "The article was deleted."
+  }
+}

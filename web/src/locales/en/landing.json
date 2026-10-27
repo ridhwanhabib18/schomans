@@ -2,9 +2,5 @@
   "hero": {
     "title": "School management in one place",
     "body": "Grading, attendance, assignments, admissions, announcements, and approvals for teachers, students, parents, and school staff."
-  },
-  "news": {
-    "title": "News and admissions",
-    "placeholder": "Public news and admission information will appear here."
   }
 }
