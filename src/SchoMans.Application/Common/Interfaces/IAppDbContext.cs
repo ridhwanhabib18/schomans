@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using SchoMans.Domain.Common;
+using SchoMans.Domain.Communication;
 using SchoMans.Domain.Students;
 
 namespace SchoMans.Application.Common.Interfaces;
@@ -21,7 +24,26 @@ public interface IAppDbContext
 
     DbSet<Classroom> Classrooms { get; }
 
+    DbSet<Subject> Subjects { get; }
+
+    DbSet<NewsArticle> NewsArticles { get; }
+
+    DbSet<Announcement> Announcements { get; }
+
+    DbSet<AnnouncementRead> AnnouncementReads { get; }
+
+    DbSet<Notification> Notifications { get; }
+
     ChangeTracker ChangeTracker { get; }
 
+    /// <summary>Needed for explicit transactions (through an execution strategy, because SQL Server retries are enabled).</summary>
+    DatabaseFacade Database { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Makes the next save fail with a concurrency exception if somebody changed the row since the client read it
+    /// (the client sends back the row version it got with the data), and makes the save bump the version of the row.
+    /// </summary>
+    void SetExpectedRowVersion(BaseEntity entity, byte[] rowVersion);
 }
