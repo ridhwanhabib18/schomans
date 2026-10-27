@@ -12,4 +12,10 @@ public static class Policies
 
     /// <summary>Any signed-in person that holds one of the six SchoMans roles.</summary>
     public const string AnyRole = nameof(AnyRole);
+
+    /// <summary>The people who write news and announcements: admin staff and the principal.</summary>
+    public const string Editors = nameof(Editors);
+
+    /// <summary>Staff who may read master data: admin, principal and teachers (a teacher only sees their own classes, enforced in Application).</summary>
+    public const string StaffRead = nameof(StaffRead);
 }

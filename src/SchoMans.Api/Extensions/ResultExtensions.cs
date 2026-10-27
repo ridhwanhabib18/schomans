@@ -12,9 +12,17 @@ public static class ResultExtensions
     public static Results<Ok<T>, ProblemHttpResult> ToHttpResult<T>(this Result<T> result) =>
         result.IsSuccess ? TypedResults.Ok(result.Value) : result.Error.ToProblem();
 
-    /// <summary>Same mapping with a custom success response, for example 201 Created.</summary>
+    /// <summary>Same mapping with a custom success response, for example 202 Accepted.</summary>
     public static IResult ToHttpResult<T>(this Result<T> result, Func<T, IResult> onSuccess) =>
         result.IsSuccess ? onSuccess(result.Value) : result.Error.ToProblem();
+
+    /// <summary>Success becomes 201 Created with the address of the new resource.</summary>
+    public static Results<Created<T>, ProblemHttpResult> ToCreatedResult<T>(this Result<T> result, Func<T, string> location) =>
+        result.IsSuccess ? TypedResults.Created(location(result.Value), result.Value) : result.Error.ToProblem();
+
+    /// <summary>Success becomes 204 No Content, for use cases with nothing to return, such as a delete.</summary>
+    public static Results<NoContent, ProblemHttpResult> ToNoContentResult(this Result<Unit> result) =>
+        result.IsSuccess ? TypedResults.NoContent() : result.Error.ToProblem();
 
     public static ProblemHttpResult ToProblem(this Error error)
     {
