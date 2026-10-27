@@ -23,6 +23,13 @@ public sealed class Term : BaseEntity
 
     public static Term Create(Guid academicYearId, string name, DateOnly startDate, DateOnly endDate, bool isActive)
     {
+        var term = new Term { AcademicYearId = academicYearId, IsActive = isActive };
+        term.Update(name, startDate, endDate);
+        return term;
+    }
+
+    public void Update(string name, DateOnly startDate, DateOnly endDate)
+    {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
         if (endDate <= startDate)
@@ -30,13 +37,10 @@ public sealed class Term : BaseEntity
             throw new ArgumentException("A term must end after it starts.", nameof(endDate));
         }
 
-        return new Term
-        {
-            AcademicYearId = academicYearId,
-            Name = name.Trim(),
-            StartDate = startDate,
-            EndDate = endDate,
-            IsActive = isActive,
-        };
+        Name = name.Trim();
+        StartDate = startDate;
+        EndDate = endDate;
     }
+
+    public void SetActive(bool isActive) => IsActive = isActive;
 }

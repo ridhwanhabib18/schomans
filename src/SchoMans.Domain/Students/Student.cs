@@ -20,16 +20,44 @@ public sealed class Student : BaseEntity
 
     public DateOnly DateOfBirth { get; private set; }
 
+    public StudentStatus Status { get; private set; } = StudentStatus.Active;
+
     public static Student Create(Guid userId, string nisn, Guid classroomId, DateOnly dateOfBirth)
+    {
+        var student = new Student { UserId = userId, ClassroomId = classroomId };
+        student.UpdateDetails(nisn, dateOfBirth);
+        return student;
+    }
+
+    public void UpdateDetails(string nisn, DateOnly dateOfBirth)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(nisn);
 
-        return new Student
+        Nisn = nisn.Trim();
+        DateOfBirth = dateOfBirth;
+    }
+
+    /// <summary>Moves an active student to another classroom. A graduated student cannot be moved.</summary>
+    public bool MoveTo(Guid classroomId)
+    {
+        if (Status != StudentStatus.Active)
         {
-            UserId = userId,
-            Nisn = nisn.Trim(),
-            ClassroomId = classroomId,
-            DateOfBirth = dateOfBirth,
-        };
+            return false;
+        }
+
+        ClassroomId = classroomId;
+        return true;
+    }
+
+    /// <summary>Marks the student as graduated; the last classroom stays on the record.</summary>
+    public bool Graduate()
+    {
+        if (Status == StudentStatus.Graduated)
+        {
+            return false;
+        }
+
+        Status = StudentStatus.Graduated;
+        return true;
     }
 }

@@ -20,8 +20,16 @@ public sealed class Classroom : BaseEntity
 
     public static Classroom Create(string name, Guid academicYearId, Guid homeroomTeacherId)
     {
+        var classroom = new Classroom { AcademicYearId = academicYearId };
+        classroom.Update(name, homeroomTeacherId);
+        return classroom;
+    }
+
+    public void Update(string name, Guid homeroomTeacherId)
+    {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
-        return new Classroom { Name = name.Trim(), AcademicYearId = academicYearId, HomeroomTeacherId = homeroomTeacherId };
+        Name = name.Trim();
+        HomeroomTeacherId = homeroomTeacherId;
     }
 }

@@ -18,6 +18,13 @@ public sealed class AcademicYear : BaseEntity
 
     public static AcademicYear Create(string name, DateOnly startDate, DateOnly endDate, bool isActive)
     {
+        var year = new AcademicYear { IsActive = isActive };
+        year.Update(name, startDate, endDate);
+        return year;
+    }
+
+    public void Update(string name, DateOnly startDate, DateOnly endDate)
+    {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
         if (endDate <= startDate)
@@ -25,6 +32,12 @@ public sealed class AcademicYear : BaseEntity
             throw new ArgumentException("An academic year must end after it starts.", nameof(endDate));
         }
 
-        return new AcademicYear { Name = name.Trim(), StartDate = startDate, EndDate = endDate, IsActive = isActive };
+        Name = name.Trim();
+        StartDate = startDate;
+        EndDate = endDate;
     }
+
+    public void Activate() => IsActive = true;
+
+    public void Deactivate() => IsActive = false;
 }

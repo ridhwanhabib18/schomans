@@ -43,6 +43,25 @@ public sealed class User : BaseEntity
         KeycloakId = keycloakId;
     }
 
+    /// <summary>True once the person has logged in: from then on Keycloak owns the email and the name.</summary>
+    public bool IsLinkedToKeycloak => KeycloakId is not null;
+
+    /// <summary>Changes the email and name of an account that has not logged in yet. A linked account is managed by Keycloak.</summary>
+    public bool TryUpdateIdentity(string email, string fullName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(email);
+        ArgumentException.ThrowIfNullOrWhiteSpace(fullName);
+
+        if (IsLinkedToKeycloak)
+        {
+            return false;
+        }
+
+        Email = NormalizeEmail(email);
+        FullName = fullName.Trim();
+        return true;
+    }
+
     /// <summary>Keycloak is the authority for identity and role, so a login overwrites these values.</summary>
     public void SyncProfile(string email, string fullName, UserRole role)
     {
