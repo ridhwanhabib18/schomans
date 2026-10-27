@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest'
 import auth from '@/locales/en/auth.json'
 import common from '@/locales/en/common.json'
 import dashboard from '@/locales/en/dashboard.json'
+import announcements from '@/locales/en/announcements.json'
 import landing from '@/locales/en/landing.json'
+import masterdata from '@/locales/en/masterdata.json'
+import news from '@/locales/en/news.json'
+import notifications from '@/locales/en/notifications.json'
 import { APP_ROLES } from '@/shared/lib/roles'
 
 describe('English locale files', () => {
@@ -10,6 +14,12 @@ describe('English locale files', () => {
     expect(common.roles[role]).toBeTruthy()
     expect(auth.demo.roles[role]).toBeTruthy()
     expect(dashboard.title[role]).toBeTruthy()
+  })
+
+  it('have an error text for every business error code the master data forms can show', () => {
+    expect(masterdata.students.errors.students.nisn_taken).toBeTruthy()
+    expect(masterdata.rollover.errors.academic_years.rollover_mapping_incomplete).toBeTruthy()
+    expect(masterdata.subjects.errors.subjects.name_taken).toBeTruthy()
   })
 
   it('have no empty texts', () => {
@@ -21,7 +31,7 @@ describe('English locale files', () => {
         for (const [key, value] of Object.entries(node)) walk(value, `${path}.${key}`)
       }
     }
-    walk({ common, auth, dashboard, landing }, '')
+    walk({ common, auth, dashboard, landing, masterdata, news, announcements, notifications }, '')
 
     expect(empty).toEqual([])
   })
