@@ -1,0 +1,15 @@
+{
+  "identities": [
+    {
+      "name": "schomans-api",
+      "credentials": [
+        { "accessKey": "schomans-dev-access-key", "secretKey": "schomans-dev-secret-key-change-me" }
+      ],
+      "actions": [ "Admin", "Read", "Write", "List", "Tagging" ]
+    },
+    {
+      "name": "anonymous",
+      "actions": [ "Read:schomans-public" ]
+    }
+  ]
+}
