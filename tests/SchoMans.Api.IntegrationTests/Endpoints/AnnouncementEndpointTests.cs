@@ -36,11 +36,11 @@ public class AnnouncementEndpointTests(ApiFixture fixture)
         return await response.ReadAsync<AnnouncementDto>();
     }
 
-    private static async Task<PublishAnnouncementResult> PublishAsync(HttpClient editor, Guid id)
+    private static async Task<PublishAnnouncementSummary> PublishAsync(HttpClient editor, Guid id)
     {
         var response = await editor.PostAsync($"{Url}/{id}/publish", null);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        return await response.ReadAsync<PublishAnnouncementResult>();
+        return await response.ReadAsync<PublishAnnouncementSummary>();
     }
 
     private static async Task<List<AnnouncementSummaryDto>> InboxAsync(HttpClient client, string query = "") =>

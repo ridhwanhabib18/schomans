@@ -81,7 +81,7 @@ public static class StudentEndpoints
         [FromRoute] Guid id, DeleteStudentHandler handler, CancellationToken ct)
         => (await handler.Handle(new DeleteStudentCommand(id), ct)).ToNoContentResult();
 
-    private static async Task<Results<Ok<ImportStudentsResult>, ProblemHttpResult>> ImportStudents(
+    private static async Task<Results<Ok<ImportStudentsSummary>, ProblemHttpResult>> ImportStudents(
         IFormFile file, ImportStudentsHandler handler, CancellationToken ct)
     {
         await using var stream = file.OpenReadStream();

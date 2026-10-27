@@ -15,12 +15,12 @@ public class ImportStudentsEndpointTests(ApiFixture fixture)
     private static string[] Row(string? nisn, string name, string? email, string? born, string? classroom) =>
         [nisn!, name, email!, born!, classroom!];
 
-    private async Task<ImportStudentsResult> ImportAsync(HttpClient admin, byte[] workbook, string fileName = "students.xlsx")
+    private async Task<ImportStudentsSummary> ImportAsync(HttpClient admin, byte[] workbook, string fileName = "students.xlsx")
     {
         using var content = TestData.FileContent(workbook, fileName);
         var response = await admin.PostAsync(ImportUrl, content);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        return await response.ReadAsync<ImportStudentsResult>();
+        return await response.ReadAsync<ImportStudentsSummary>();
     }
 
     [Fact]

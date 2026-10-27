@@ -13,7 +13,7 @@ public sealed class ImportStudentsHandler(
     IValidator<CreateStudentCommand> rowValidator,
     IValidator<ImportStudentsCommand> fileValidator)
 {
-    public async Task<Result<ImportStudentsResult>> Handle(ImportStudentsCommand command, CancellationToken ct)
+    public async Task<Result<ImportStudentsSummary>> Handle(ImportStudentsCommand command, CancellationToken ct)
     {
         var fileCheck = await fileValidator.ValidateAsync(command, ct);
         if (!fileCheck.IsValid)
@@ -96,7 +96,7 @@ public sealed class ImportStudentsHandler(
         }
 
         var created = await Save(accepted, failed, ct);
-        return new ImportStudentsResult(parsed.Rows.Count, created, failed.OrderBy(f => f.Row).ToList());
+        return new ImportStudentsSummary(parsed.Rows.Count, created, failed.OrderBy(f => f.Row).ToList());
     }
 
     private async Task<int> Save(List<(ParsedStudentRow Row, Guid ClassroomId)> accepted, List<ImportRowError> failed, CancellationToken ct)

@@ -11,4 +11,4 @@ public sealed record ImportStudentsCommand(Stream File, string FileName, long Le
 public sealed record ImportRowError(int Row, string Message);
 
 /// <summary>Rows that fail are listed with the reason; the other rows are still imported.</summary>
-public sealed record ImportStudentsResult(int TotalRows, int Created, IReadOnlyList<ImportRowError> Failed);
+public sealed record ImportStudentsSummary(int TotalRows, int Created, IReadOnlyList<ImportRowError> Failed);

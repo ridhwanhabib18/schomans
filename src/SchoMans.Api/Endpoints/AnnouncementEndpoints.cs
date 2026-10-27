@@ -118,7 +118,7 @@ public static class AnnouncementEndpoints
         [FromRoute] Guid id, [FromBody] UpdateAnnouncementCommand command, UpdateAnnouncementHandler handler, CancellationToken ct)
         => (await handler.Handle(command with { Id = id }, ct)).ToHttpResult();
 
-    private static async Task<Results<Ok<PublishAnnouncementResult>, ProblemHttpResult>> PublishAnnouncement(
+    private static async Task<Results<Ok<PublishAnnouncementSummary>, ProblemHttpResult>> PublishAnnouncement(
         [FromRoute] Guid id, PublishAnnouncementHandler handler, CancellationToken ct)
         => (await handler.Handle(new PublishAnnouncementCommand(id), ct)).ToHttpResult();
 

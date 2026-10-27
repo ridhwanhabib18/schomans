@@ -24,7 +24,13 @@ public static class ServiceCollectionExtensions
             .WithExposedHeaders(CorrelationIdMiddleware.HeaderName)));
 
         // Enums travel as names ("Teacher", "Draft"), which is what the API contract and the generated client show.
-        services.ConfigureHttpJsonOptions(options => options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+        services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+            // Numbers are numbers: without this the OpenAPI document says "integer or string" and the generated client types follow.
+            options.SerializerOptions.NumberHandling = JsonNumberHandling.Strict;
+        });
 
         services.AddProblemDetails(options => options.CustomizeProblemDetails = context =>
         {

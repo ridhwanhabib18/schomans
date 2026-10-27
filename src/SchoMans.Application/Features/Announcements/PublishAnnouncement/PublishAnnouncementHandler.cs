@@ -16,7 +16,7 @@ public sealed class PublishAnnouncementHandler(
     INotificationService notifications,
     TimeProvider timeProvider)
 {
-    public async Task<Result<PublishAnnouncementResult>> Handle(PublishAnnouncementCommand command, CancellationToken ct)
+    public async Task<Result<PublishAnnouncementSummary>> Handle(PublishAnnouncementCommand command, CancellationToken ct)
     {
         var announcement = await db.Announcements.FirstOrDefaultAsync(a => a.Id == command.Id, ct);
         if (announcement is null)
@@ -49,6 +49,6 @@ public sealed class PublishAnnouncementHandler(
                 .ToList(),
             ct);
 
-        return new PublishAnnouncementResult(AnnouncementMapping.ToDto(announcement, storage), stored.Count);
+        return new PublishAnnouncementSummary(AnnouncementMapping.ToDto(announcement, storage), stored.Count);
     }
 }
