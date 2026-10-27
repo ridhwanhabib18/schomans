@@ -74,3 +74,70 @@
     outline-offset: 2px;
   }
 }
+
+/* Rich text written in the editor and shown on news and announcement pages. */
+.rich-text {
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.rich-text > * + * {
+  margin-top: 0.75rem;
+}
+
+.rich-text h2 {
+  margin-top: 1.25rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.rich-text h3 {
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.rich-text ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.rich-text ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.rich-text blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  color: var(--muted-foreground);
+}
+
+.rich-text a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.rich-text pre {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  background: var(--muted);
+  padding: 0.75rem;
+}
+
+.rich-text code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+}
+
+.rich-text hr {
+  border-color: var(--border);
+}
+
+.rich-text .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
