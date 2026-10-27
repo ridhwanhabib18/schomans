@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using SchoMans.Application.Common.Interfaces;
 using SchoMans.Domain.Common;
+using SchoMans.Domain.Communication;
 using SchoMans.Domain.Students;
 
 namespace SchoMans.Infrastructure.Persistence;
@@ -21,6 +22,26 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<Term> Terms => Set<Term>();
 
     public DbSet<Classroom> Classrooms => Set<Classroom>();
+
+    public DbSet<Subject> Subjects => Set<Subject>();
+
+    public DbSet<NewsArticle> NewsArticles => Set<NewsArticle>();
+
+    public DbSet<Announcement> Announcements => Set<Announcement>();
+
+    public DbSet<AnnouncementRead> AnnouncementReads => Set<AnnouncementRead>();
+
+    public DbSet<Notification> Notifications => Set<Notification>();
+
+    public void SetExpectedRowVersion(BaseEntity entity, byte[] rowVersion)
+    {
+        var entry = Entry(entity);
+        entry.Property(e => e.RowVersion).OriginalValue = rowVersion;
+
+        // An edit always bumps the version, even when only a related row changed (the account behind a student, the
+        // terms of a year). Without this the next editor with a stale version would not be noticed.
+        entry.State = EntityState.Modified;
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
