@@ -51,6 +51,7 @@ app.MapScheduleEndpoints();
 app.MapAttendanceEndpoints();
 app.MapAssignmentEndpoints();
 app.MapGradeEndpoints();
+app.MapReportCardEndpoints();
 app.MapGradeBandEndpoints();
 app.MapGradeWeightEndpoints();
 app.MapNewsEndpoints();
