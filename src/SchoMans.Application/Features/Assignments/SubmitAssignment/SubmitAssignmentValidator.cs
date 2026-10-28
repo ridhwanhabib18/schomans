@@ -8,7 +8,7 @@ public sealed class SubmitAssignmentValidator : AbstractValidator<SubmitAssignme
     public SubmitAssignmentValidator()
     {
         RuleFor(x => x)
-            .Must(x => !string.IsNullOrWhiteSpace(x.FileKey) || !string.IsNullOrWhiteSpace(x.TextBody))
+            .Must(x => !string.IsNullOrWhiteSpace(x.FileKey) || !string.IsNullOrWhiteSpace(x.TextBody) || x.KeepFile)
             .OverridePropertyName("TextBody")
             .WithMessage("Hand in a file or write your answer.");
         RuleFor(x => x.FileKey).MaximumLength(300);

@@ -28,6 +28,18 @@ public sealed class SubmitAssignmentHandler(IAppDbContext db, ICurrentUser curre
             return Error.Conflict("assignments.already_graded", "Your work is already scored and cannot be replaced.");
         }
 
+        var fileName = command.FileName;
+        if (fileKey is null && command.KeepFile)
+        {
+            fileKey = submission?.FileKey;
+            fileName = submission?.FileName;
+        }
+
+        if (fileKey is null && string.IsNullOrWhiteSpace(command.TextBody))
+        {
+            return Error.Validation("assignments.nothing_to_submit", "Hand in a file or write your answer.");
+        }
+
         if (fileKey is not null && fileKey != submission?.FileKey)
         {
             if (!AssignmentFiles.IsSubmissionKeyOf(fileKey, assignment.Id, studentId.Value))
@@ -46,12 +58,12 @@ public sealed class SubmitAssignmentHandler(IAppDbContext db, ICurrentUser curre
         var oldFile = submission?.FileKey;
         if (submission is null)
         {
-            submission = Submission.Create(assignment, studentId.Value, fileKey, command.FileName, command.TextBody, now);
+            submission = Submission.Create(assignment, studentId.Value, fileKey, fileName, command.TextBody, now);
             db.Submissions.Add(submission);
         }
         else
         {
-            submission.Replace(assignment, fileKey, command.FileName ?? submission.FileName, command.TextBody, now);
+            submission.Replace(assignment, fileKey, fileName, command.TextBody, now);
         }
 
         try
