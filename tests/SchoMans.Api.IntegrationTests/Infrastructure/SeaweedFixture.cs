@@ -14,6 +14,7 @@ public sealed class SeaweedFixture : IAsyncLifetime
 {
     public const string ExternalEndpointVariable = "SCHOMANS_TEST_S3";
     private const int S3Port = 8333;
+    private const int MasterPort = 9333;
 
     private IContainer? _container;
 
@@ -29,11 +30,14 @@ public sealed class SeaweedFixture : IAsyncLifetime
             var configPath = Path.Combine(AppContext.BaseDirectory, "seaweedfs", "s3.json");
             _container = new ContainerBuilder("chrislusf/seaweedfs:4.50")
                 .WithPortBinding(S3Port, assignRandomHostPort: true)
+                .WithPortBinding(MasterPort, assignRandomHostPort: true) // the wait strategy below asks the master, so it must be published
                 .WithCommand("server", "-dir=/data", "-s3", $"-s3.port={S3Port}", "-s3.config=/etc/seaweedfs/s3.json", "-master.volumeSizeLimitMB=64")
                 .WithResourceMapping(await File.ReadAllBytesAsync(configPath), "/etc/seaweedfs/s3.json")
-                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(request => request.ForPort(9333).ForPath("/cluster/status")))
+                .WithWaitStrategy(Wait.ForUnixContainer().UntilHttpRequestIsSucceeded(request => request.ForPort(MasterPort).ForPath("/cluster/status")))
                 .Build();
-            await _container.StartAsync();
+            // Never hang a whole test run on a container that does not come up.
+            using var startup = new CancellationTokenSource(TimeSpan.FromMinutes(3));
+            await _container.StartAsync(startup.Token);
             endpoint = $"http://127.0.0.1:{_container.GetMappedPublicPort(S3Port)}";
         }
 
