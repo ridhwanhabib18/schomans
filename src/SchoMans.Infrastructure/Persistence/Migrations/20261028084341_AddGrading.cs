@@ -281,6 +281,15 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                 name: "IX_ReportCards_TermId",
                 table: "ReportCards",
                 column: "TermId");
+
+            // Work scored in Phase 3, before grades existed, becomes the grade it would have created.
+            migrationBuilder.Sql("""
+                INSERT INTO [Grades] ([Id], [StudentId], [SubjectId], [TermId], [Component], [SubmissionId], [Score], [CreatedAt], [UpdatedAt], [IsDeleted])
+                SELECT NEWID(), s.[StudentId], a.[SubjectId], a.[TermId], a.[Component], s.[Id], s.[Score], COALESCE(s.[GradedAt], SYSDATETIMEOFFSET()), SYSDATETIMEOFFSET(), 0
+                FROM [Submissions] s
+                INNER JOIN [Assignments] a ON a.[Id] = s.[AssignmentId]
+                WHERE s.[Score] IS NOT NULL AND s.[IsDeleted] = 0 AND a.[IsDeleted] = 0;
+                """);
         }
 
         /// <inheritdoc />
