@@ -170,13 +170,16 @@ describe('RichTextEditor', () => {
     await waitFor(() => expect(screen.getByRole('textbox', { name: 'Article text' }).textContent).toBe('Loaded later'))
   })
 
-  it('toggles a format from the toolbar', async () => {
-    render(<RichTextEditor value="<p>Hello</p>" onChange={vi.fn()} label="Article text" />)
+  it('shows which format is on: the button of a format that was switched on is pressed', async () => {
+    render(<RichTextEditor value="" onChange={vi.fn()} label="Article text" />)
     const bold = await screen.findByRole('button', { name: 'Bold' })
+    expect(bold.getAttribute('aria-pressed')).toBe('false')
 
     fireEvent.click(bold)
 
-    expect(bold.getAttribute('aria-pressed')).toBe('false')
+    await waitFor(() => expect(bold.getAttribute('aria-pressed')).toBe('true'))
+    fireEvent.click(bold)
+    await waitFor(() => expect(bold.getAttribute('aria-pressed')).toBe('false'))
   })
 })
 

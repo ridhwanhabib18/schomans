@@ -17,7 +17,9 @@ test('the admin adds a lesson to the timetable, a clash is refused, and the less
   await loginAs(page, 'Admin staff')
   await page.getByRole('link', { name: 'Timetable', exact: true }).first().click()
   await expect(page.getByRole('heading', { level: 1, name: 'Timetable' })).toBeVisible()
-  await page.getByLabel('Classroom', { exact: true }).selectOption({ label: 'Class C' })
+  const classroom = page.getByRole('combobox', { name: 'Classroom' })
+  await expect(classroom.getByRole('option', { name: 'Class C' })).toBeAttached({ timeout: 15_000 })
+  await classroom.selectOption({ label: 'Class C' })
   await expect(page.getByRole('heading', { name: 'Monday' })).toBeVisible()
   await page.screenshot({ path: 'test-results/screens/timetable-week.png', fullPage: true })
 

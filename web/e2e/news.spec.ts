@@ -21,8 +21,12 @@ test('an admin writes, illustrates and publishes an article, and a guest reads i
     const editor = page.getByRole('textbox', { name: 'Article text' })
     await editor.click()
     await page.keyboard.type('Welcome ')
-    await page.getByRole('button', { name: 'Bold' }).click()
-    await page.keyboard.type('everybody')
+    const bold = page.getByRole('button', { name: 'Bold' })
+    await bold.click()
+    await expect(bold).toHaveAttribute('aria-pressed', 'true')
+    // A short delay between keys: a slow machine (CI) must not drop letters while the editor re-renders.
+    await page.keyboard.type('everybody', { delay: 30 })
+    await expect(editor.locator('strong')).toHaveText('everybody')
     await page.getByRole('button', { name: 'Save draft' }).click()
 
     // Saving moves to the edit page of the new draft.
