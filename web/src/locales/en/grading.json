@@ -1,0 +1,110 @@
+{
+  "components": {
+    "Assignment": "Assignments",
+    "Quiz": "Quiz",
+    "Midterm": "Midterm",
+    "Final": "Final exam"
+  },
+  "book": {
+    "title": "Grade book",
+    "description": "Scores, final grades and report card texts of your classes.",
+    "pick": {
+      "classAndSubject": "Class and subject",
+      "choose": "Choose…",
+      "term": "Term",
+      "none": "You do not teach any class yet, so there is no grade book to open.",
+      "prompt": "Choose a class, a subject and a term to open the grade book."
+    },
+    "caption": "Grades of the students of the chosen class",
+    "columns": {
+      "student": "Student",
+      "final": "Final grade",
+      "band": "Band",
+      "status": "Result",
+      "description": "Report text"
+    },
+    "empty": "There are no students in this class.",
+    "assignmentHint": "Average of the scored assignments",
+    "enterHint": "Type a score from 0 to 100",
+    "scoreLabel": "{{component}} score of {{name}}",
+    "passing": "Passed",
+    "below": "Below minimum",
+    "noGrade": "No scores yet",
+    "minimum": "Minimum passing score: {{score}}",
+    "published": "Published",
+    "draft": "Not published",
+    "lockedNote": "The grades of this term are published and locked. Unpublish them to change a score or a text.",
+    "error": "The grade book could not be loaded.",
+    "scoreSaved": "Score saved",
+    "invalidScore": "A score is between 0 and 100.",
+    "actions": {
+      "weights": "Weights",
+      "publish": "Publish grades",
+      "unpublish": "Unpublish grades",
+      "generate": "Generate report cards",
+      "text": "Report text"
+    },
+    "publish": {
+      "title": "Publish the grades of this class?",
+      "body": "Students and parents will see the grades of this term. The grades are locked until you unpublish them.",
+      "done": "Grades published"
+    },
+    "unpublish": {
+      "title": "Unpublish the grades?",
+      "body": "Students and parents stop seeing the grades and the report cards until you publish them again.",
+      "done": "Grades unpublished"
+    },
+    "generate": {
+      "title": "Generate the report cards?",
+      "body": "A PDF report card is made for every student of the class. Older PDFs of this term are replaced.",
+      "done_one": "{{count}} report card generated",
+      "done_other": "{{count}} report cards generated"
+    },
+    "description": {
+      "title": "Report text for {{name}}",
+      "label": "What the student achieved in this subject",
+      "help": "This text is printed on the report card.",
+      "saved": "Report text saved",
+      "save": "Save text"
+    }
+  },
+  "weights": {
+    "title": "Weights of the components",
+    "body": "How much each component counts in the final grade. The weights add up to 100.",
+    "default": "These are the default weights. Save them to make them the weights of this subject.",
+    "total": "Total: {{total}}",
+    "mustBe100": "The weights must add up to 100.",
+    "save": "Save weights",
+    "saved": "Weights saved",
+    "error": "The weights could not be loaded."
+  },
+  "bands": {
+    "title": "Grade bands",
+    "description": "The letters on grades and report cards. A final grade gets the band with the highest minimum it reaches.",
+    "label": "Label",
+    "minScore": "From score",
+    "add": "Add band",
+    "remove": "Remove band {{label}}",
+    "save": "Save bands",
+    "saved": "Grade bands saved",
+    "error": "The grade bands could not be loaded.",
+    "needZero": "One band must start at 0, so every grade gets a label.",
+    "duplicate": "Every band needs its own label and its own starting score.",
+    "invalid": "Fill in a label and a score from 0 to 100 for every band.",
+    "tooMany": "At most 10 bands."
+  },
+  "errors": {
+    "grades": {
+      "published": "The grades of this term are published. Unpublish them before changing a score or a text.",
+      "not_your_class": "You can only grade the subjects you teach in your own classes.",
+      "not_your_subject": "You can only change the weights of a subject you teach.",
+      "not_homeroom": "Only the homeroom teacher of the class can do this.",
+      "already_published": "The grades of this term are already published.",
+      "not_published": "The grades of this term are not published.",
+      "not_found": "The class, subject or term no longer exists."
+    },
+    "report_cards": {
+      "grades_not_published": "Publish the grades of this term before generating report cards."
+    }
+  }
+}
