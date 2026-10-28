@@ -27,6 +27,9 @@ builder.Services
 
 var app = builder.Build();
 
+// The database first: Hangfire keeps its tables inside it and creates them as soon as the dashboard is mapped below.
+await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
+
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
@@ -64,7 +67,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Demo"))
     app.MapScalarApiReference();
 }
 
-await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
 await StorageInitializer.InitializeAsync(app.Services);
 JobsSetup.RegisterRecurringJobs(app.Services);
 await app.RunAsync();
