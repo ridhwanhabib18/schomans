@@ -20,6 +20,12 @@ public sealed class DeleteTeacherHandler(IAppDbContext db)
             return Error.Conflict("teachers.is_homeroom", "This teacher is the homeroom teacher of a classroom. Appoint another teacher first.");
         }
 
+        // Lessons and assignments name their teacher; give the lessons to somebody else first.
+        if (await db.Schedules.AnyAsync(s => s.TeacherId == teacher.Id, ct) || await db.Assignments.AnyAsync(a => a.TeacherId == teacher.Id, ct))
+        {
+            return Error.Conflict("teachers.has_lessons", "This teacher has lessons in the timetable or assignments. Give the lessons to another teacher first.");
+        }
+
         db.Teachers.Remove(teacher);
         if (teacher.User is not null)
         {

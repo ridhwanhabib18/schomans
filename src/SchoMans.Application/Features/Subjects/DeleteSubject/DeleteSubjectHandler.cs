@@ -14,7 +14,11 @@ public sealed class DeleteSubjectHandler(IAppDbContext db)
             return Error.NotFound("subjects.not_found", "The subject does not exist.");
         }
 
-        // Nothing references a subject yet. Schedules, assignments and grades will add their own checks when they arrive.
+        if (await db.Schedules.AnyAsync(s => s.SubjectId == subject.Id, ct) || await db.Assignments.AnyAsync(a => a.SubjectId == subject.Id, ct))
+        {
+            return Error.Conflict("subjects.in_use", "This subject is in the timetable or has assignments, so it cannot be deleted.");
+        }
+
         db.Subjects.Remove(subject);
         await db.SaveChangesAsync(ct);
         return new Unit();

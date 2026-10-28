@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using SchoMans.Domain.Assignments;
+using SchoMans.Domain.Attendance;
 using SchoMans.Domain.Common;
 using SchoMans.Domain.Communication;
 using SchoMans.Domain.Students;
@@ -25,6 +27,16 @@ public interface IAppDbContext
     DbSet<Classroom> Classrooms { get; }
 
     DbSet<Subject> Subjects { get; }
+
+    DbSet<Schedule> Schedules { get; }
+
+    DbSet<AttendanceSession> AttendanceSessions { get; }
+
+    DbSet<AttendanceRecord> AttendanceRecords { get; }
+
+    DbSet<Assignment> Assignments { get; }
+
+    DbSet<Submission> Submissions { get; }
 
     DbSet<NewsArticle> NewsArticles { get; }
 
