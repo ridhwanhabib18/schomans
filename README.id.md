@@ -50,6 +50,10 @@ http://localhost:8080, dan endpoint S3 SeaweedFS di http://localhost:8333.
 | `cd web && npm run test:e2e` | Test end-to-end (Playwright); butuh container dari langkah 1 |
 | `cd web && npm run api:generate` | Membuat ulang klien API TypeScript (API harus sedang berjalan) |
 
+Job latar belakang (rotasi kode QR tiap menit, menutup sesi absensi yang terlupa, pengingat tugas) berjalan di API dengan
+Hangfire; admin bisa memantaunya lewat tautan "Background jobs" di aplikasi, yang membuka `/hangfire`. Isi `Jobs:Enabled`
+dengan `false` untuk menjalankan API tanpa job itu.
+
 Jika Docker hanya bisa dijangkau dari WSL, integration test bisa memakai SQL Server yang sudah berjalan sebagai
 pengganti Testcontainers: isi `SCHOMANS_TEST_SQL` dengan connection string-nya tanpa nama database, misalnya
 `Server=127.0.0.1,1433;User Id=sa;Password=...;TrustServerCertificate=True;Encrypt=False`, dan isi `SCHOMANS_TEST_S3`
