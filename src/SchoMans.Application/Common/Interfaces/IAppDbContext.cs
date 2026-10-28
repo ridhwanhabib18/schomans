@@ -5,6 +5,7 @@ using SchoMans.Domain.Assignments;
 using SchoMans.Domain.Attendance;
 using SchoMans.Domain.Common;
 using SchoMans.Domain.Communication;
+using SchoMans.Domain.Grading;
 using SchoMans.Domain.Students;
 
 namespace SchoMans.Application.Common.Interfaces;
@@ -37,6 +38,18 @@ public interface IAppDbContext
     DbSet<Assignment> Assignments { get; }
 
     DbSet<Submission> Submissions { get; }
+
+    DbSet<GradeWeight> GradeWeights { get; }
+
+    DbSet<Grade> Grades { get; }
+
+    DbSet<GradePublication> GradePublications { get; }
+
+    DbSet<ReportCard> ReportCards { get; }
+
+    DbSet<AchievementDescription> AchievementDescriptions { get; }
+
+    DbSet<GradeBand> GradeBands { get; }
 
     DbSet<NewsArticle> NewsArticles { get; }
 
