@@ -182,6 +182,27 @@ public class AssignmentEndpointTests(ApiFixture fixture)
     }
 
     [Fact]
+    public async Task Handing_in_again_can_keep_the_earlier_file_with_a_new_text()
+    {
+        var (scenario, assignment) = await GiveAsync();
+        using var student = scenario.StudentClient(0);
+        var upload = await (await student.PostJsonAsync($"{Url}/{assignment.Id}/submission/upload-url", new CreateSubmissionUploadUrlCommand(assignment.Id, "application/pdf", 900))).ReadAsync<UploadUrlDto>();
+        fixture.Storage.Put(FileBucket.Private, upload.Key, 900, "application/pdf");
+        await student.PutJsonAsync($"{Url}/{assignment.Id}/submission", new SubmitAssignmentCommand(assignment.Id, upload.Key, "answer.pdf", null));
+
+        var again = await (await student.PutJsonAsync($"{Url}/{assignment.Id}/submission", new SubmitAssignmentCommand(assignment.Id, null, null, "A note", KeepFile: true))).ReadAsync<SubmissionDto>();
+        var nothing = await ClassroomScenario.CreateAsync(fixture.Factory, 1, day: DayOfWeek.Sunday);
+        var empty = await student.PutJsonAsync($"{Url}/{assignment.Id}/submission", new SubmitAssignmentCommand(assignment.Id, null, null, null, KeepFile: false));
+
+        Assert.True(again.HasFile);
+        Assert.Equal("answer.pdf", again.FileName);
+        Assert.Equal("A note", again.TextBody);
+        Assert.True(fixture.Storage.Contains(FileBucket.Private, upload.Key)); // the kept file is not deleted
+        Assert.NotNull(nothing);
+        Assert.Equal(HttpStatusCode.BadRequest, empty.StatusCode);
+    }
+
+    [Fact]
     public async Task A_file_of_another_student_or_type_is_refused()
     {
         var (scenario, assignment) = await GiveAsync();
