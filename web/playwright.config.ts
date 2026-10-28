@@ -6,6 +6,8 @@ const isCi = !!process.env.CI
 // Locally the servers below are reused when they already run; in CI they are started here.
 export default defineConfig({
   testDir: './e2e',
+  // Some stories use several browsers at once (real-time push) and run against real services, so 30 seconds is tight.
+  timeout: 90_000,
   fullyParallel: false,
   workers: 1,
   retries: isCi ? 1 : 0,
