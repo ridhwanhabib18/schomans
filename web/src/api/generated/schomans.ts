@@ -5,8 +5,60 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
+  AcademicYearDto,
+  AnnouncementDto,
+  AnnouncementReaderDto,
+  ClassroomDto,
+  CreateAcademicYearCommand,
+  CreateAnnouncementCommand,
+  CreateClassroomCommand,
+  CreateNewsCommand,
+  CreateStudentCommand,
+  CreateSubjectCommand,
+  CreateTeacherCommand,
+  CreateUploadUrlCommand,
   DashboardDto,
-  MeDto
+  ImportStudentsBody,
+  ImportStudentsSummary,
+  ListAcademicYearsParams,
+  ListAnnouncementsParams,
+  ListClassroomsParams,
+  ListMyAnnouncementsParams,
+  ListMyNotificationsParams,
+  ListNewsParams,
+  ListPublicAnnouncementsParams,
+  ListPublicNewsParams,
+  ListStudentsParams,
+  ListSubjectsParams,
+  ListTeachersParams,
+  MeDto,
+  NewsDto,
+  PagedResultOfAcademicYearDto,
+  PagedResultOfAnnouncementDto,
+  PagedResultOfAnnouncementSummaryDto,
+  PagedResultOfClassroomDto,
+  PagedResultOfNewsDto,
+  PagedResultOfNotificationDto,
+  PagedResultOfPublicNewsSummaryDto,
+  PagedResultOfStudentDto,
+  PagedResultOfSubjectDto,
+  PagedResultOfTeacherDto,
+  PublicNewsDto,
+  PublishAnnouncementSummary,
+  RolloverAcademicYearCommand,
+  RolloverResult,
+  StudentDto,
+  SubjectDto,
+  TeacherDto,
+  UnreadNotificationCountDto,
+  UpdateAcademicYearCommand,
+  UpdateAnnouncementCommand,
+  UpdateClassroomCommand,
+  UpdateNewsCommand,
+  UpdateStudentCommand,
+  UpdateSubjectCommand,
+  UpdateTeacherCommand,
+  UploadUrlDto
 } from './model';
 
 import { customInstance } from '../../shared/lib/http';
@@ -31,5 +83,589 @@ export const getCurrentUser = (
       options);
     }
 
+export const listStudents = (
+    params?: ListStudentsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfStudentDto>>,) => {
+      return customInstance<PagedResultOfStudentDto>(
+      {url: `/api/v1/students`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createStudent = (
+    createStudentCommand: CreateStudentCommand,
+ options?: SecondParameter<typeof customInstance<StudentDto>>,) => {
+      return customInstance<StudentDto>(
+      {url: `/api/v1/students`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createStudentCommand
+    },
+      options);
+    }
+
+export const getStudent = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<StudentDto>>,) => {
+      return customInstance<StudentDto>(
+      {url: `/api/v1/students/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const updateStudent = (
+    id: string,
+    updateStudentCommand: UpdateStudentCommand,
+ options?: SecondParameter<typeof customInstance<StudentDto>>,) => {
+      return customInstance<StudentDto>(
+      {url: `/api/v1/students/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateStudentCommand
+    },
+      options);
+    }
+
+export const deleteStudent = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/students/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const importStudents = (
+    importStudentsBody: ImportStudentsBody,
+ options?: SecondParameter<typeof customInstance<ImportStudentsSummary>>,) => {const formData = new FormData();
+formData.append(`file`, importStudentsBody.file);
+
+      return customInstance<ImportStudentsSummary>(
+      {url: `/api/v1/students/import`, method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data', },
+       data: formData
+    },
+      options);
+    }
+
+export const getStudentImportTemplate = (
+
+ options?: SecondParameter<typeof customInstance<unknown>>,) => {
+      return customInstance<unknown>(
+      {url: `/api/v1/students/import-template`, method: 'GET'
+    },
+      options);
+    }
+
+export const listTeachers = (
+    params?: ListTeachersParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfTeacherDto>>,) => {
+      return customInstance<PagedResultOfTeacherDto>(
+      {url: `/api/v1/teachers`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createTeacher = (
+    createTeacherCommand: CreateTeacherCommand,
+ options?: SecondParameter<typeof customInstance<TeacherDto>>,) => {
+      return customInstance<TeacherDto>(
+      {url: `/api/v1/teachers`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createTeacherCommand
+    },
+      options);
+    }
+
+export const getTeacher = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<TeacherDto>>,) => {
+      return customInstance<TeacherDto>(
+      {url: `/api/v1/teachers/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const updateTeacher = (
+    id: string,
+    updateTeacherCommand: UpdateTeacherCommand,
+ options?: SecondParameter<typeof customInstance<TeacherDto>>,) => {
+      return customInstance<TeacherDto>(
+      {url: `/api/v1/teachers/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateTeacherCommand
+    },
+      options);
+    }
+
+export const deleteTeacher = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/teachers/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const listClassrooms = (
+    params?: ListClassroomsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfClassroomDto>>,) => {
+      return customInstance<PagedResultOfClassroomDto>(
+      {url: `/api/v1/classrooms`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createClassroom = (
+    createClassroomCommand: CreateClassroomCommand,
+ options?: SecondParameter<typeof customInstance<ClassroomDto>>,) => {
+      return customInstance<ClassroomDto>(
+      {url: `/api/v1/classrooms`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createClassroomCommand
+    },
+      options);
+    }
+
+export const getClassroom = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<ClassroomDto>>,) => {
+      return customInstance<ClassroomDto>(
+      {url: `/api/v1/classrooms/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const updateClassroom = (
+    id: string,
+    updateClassroomCommand: UpdateClassroomCommand,
+ options?: SecondParameter<typeof customInstance<ClassroomDto>>,) => {
+      return customInstance<ClassroomDto>(
+      {url: `/api/v1/classrooms/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateClassroomCommand
+    },
+      options);
+    }
+
+export const deleteClassroom = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/classrooms/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const listSubjects = (
+    params?: ListSubjectsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfSubjectDto>>,) => {
+      return customInstance<PagedResultOfSubjectDto>(
+      {url: `/api/v1/subjects`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createSubject = (
+    createSubjectCommand: CreateSubjectCommand,
+ options?: SecondParameter<typeof customInstance<SubjectDto>>,) => {
+      return customInstance<SubjectDto>(
+      {url: `/api/v1/subjects`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createSubjectCommand
+    },
+      options);
+    }
+
+export const getSubject = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<SubjectDto>>,) => {
+      return customInstance<SubjectDto>(
+      {url: `/api/v1/subjects/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const updateSubject = (
+    id: string,
+    updateSubjectCommand: UpdateSubjectCommand,
+ options?: SecondParameter<typeof customInstance<SubjectDto>>,) => {
+      return customInstance<SubjectDto>(
+      {url: `/api/v1/subjects/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateSubjectCommand
+    },
+      options);
+    }
+
+export const deleteSubject = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/subjects/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const listAcademicYears = (
+    params?: ListAcademicYearsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfAcademicYearDto>>,) => {
+      return customInstance<PagedResultOfAcademicYearDto>(
+      {url: `/api/v1/academic-years`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createAcademicYear = (
+    createAcademicYearCommand: CreateAcademicYearCommand,
+ options?: SecondParameter<typeof customInstance<AcademicYearDto>>,) => {
+      return customInstance<AcademicYearDto>(
+      {url: `/api/v1/academic-years`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAcademicYearCommand
+    },
+      options);
+    }
+
+export const getAcademicYear = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<AcademicYearDto>>,) => {
+      return customInstance<AcademicYearDto>(
+      {url: `/api/v1/academic-years/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const updateAcademicYear = (
+    id: string,
+    updateAcademicYearCommand: UpdateAcademicYearCommand,
+ options?: SecondParameter<typeof customInstance<AcademicYearDto>>,) => {
+      return customInstance<AcademicYearDto>(
+      {url: `/api/v1/academic-years/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAcademicYearCommand
+    },
+      options);
+    }
+
+export const activateAcademicYear = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<AcademicYearDto>>,) => {
+      return customInstance<AcademicYearDto>(
+      {url: `/api/v1/academic-years/${id}/activate`, method: 'POST'
+    },
+      options);
+    }
+
+export const rolloverAcademicYear = (
+    rolloverAcademicYearCommand: RolloverAcademicYearCommand,
+ options?: SecondParameter<typeof customInstance<RolloverResult>>,) => {
+      return customInstance<RolloverResult>(
+      {url: `/api/v1/academic-years/rollover`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: rolloverAcademicYearCommand
+    },
+      options);
+    }
+
+export const listPublicNews = (
+    params?: ListPublicNewsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfPublicNewsSummaryDto>>,) => {
+      return customInstance<PagedResultOfPublicNewsSummaryDto>(
+      {url: `/api/v1/news/public`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const getPublicNews = (
+    slug: string,
+ options?: SecondParameter<typeof customInstance<PublicNewsDto>>,) => {
+      return customInstance<PublicNewsDto>(
+      {url: `/api/v1/news/public/${slug}`, method: 'GET'
+    },
+      options);
+    }
+
+export const listNews = (
+    params?: ListNewsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfNewsDto>>,) => {
+      return customInstance<PagedResultOfNewsDto>(
+      {url: `/api/v1/news`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createNews = (
+    createNewsCommand: CreateNewsCommand,
+ options?: SecondParameter<typeof customInstance<NewsDto>>,) => {
+      return customInstance<NewsDto>(
+      {url: `/api/v1/news`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createNewsCommand
+    },
+      options);
+    }
+
+export const getNews = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<NewsDto>>,) => {
+      return customInstance<NewsDto>(
+      {url: `/api/v1/news/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const updateNews = (
+    id: string,
+    updateNewsCommand: UpdateNewsCommand,
+ options?: SecondParameter<typeof customInstance<NewsDto>>,) => {
+      return customInstance<NewsDto>(
+      {url: `/api/v1/news/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateNewsCommand
+    },
+      options);
+    }
+
+export const deleteNews = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/news/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const publishNews = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<NewsDto>>,) => {
+      return customInstance<NewsDto>(
+      {url: `/api/v1/news/${id}/publish`, method: 'POST'
+    },
+      options);
+    }
+
+export const unpublishNews = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<NewsDto>>,) => {
+      return customInstance<NewsDto>(
+      {url: `/api/v1/news/${id}/unpublish`, method: 'POST'
+    },
+      options);
+    }
+
+export const listPublicAnnouncements = (
+    params?: ListPublicAnnouncementsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfAnnouncementSummaryDto>>,) => {
+      return customInstance<PagedResultOfAnnouncementSummaryDto>(
+      {url: `/api/v1/announcements/public`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const getPublicAnnouncement = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<AnnouncementReaderDto>>,) => {
+      return customInstance<AnnouncementReaderDto>(
+      {url: `/api/v1/announcements/public/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const listMyAnnouncements = (
+    params?: ListMyAnnouncementsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfAnnouncementSummaryDto>>,) => {
+      return customInstance<PagedResultOfAnnouncementSummaryDto>(
+      {url: `/api/v1/announcements/mine`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const getMyAnnouncement = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<AnnouncementReaderDto>>,) => {
+      return customInstance<AnnouncementReaderDto>(
+      {url: `/api/v1/announcements/mine/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const markAnnouncementRead = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/announcements/mine/${id}/read`, method: 'POST'
+    },
+      options);
+    }
+
+export const listAnnouncements = (
+    params?: ListAnnouncementsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfAnnouncementDto>>,) => {
+      return customInstance<PagedResultOfAnnouncementDto>(
+      {url: `/api/v1/announcements`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createAnnouncement = (
+    createAnnouncementCommand: CreateAnnouncementCommand,
+ options?: SecondParameter<typeof customInstance<AnnouncementDto>>,) => {
+      return customInstance<AnnouncementDto>(
+      {url: `/api/v1/announcements`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAnnouncementCommand
+    },
+      options);
+    }
+
+export const getAnnouncement = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<AnnouncementDto>>,) => {
+      return customInstance<AnnouncementDto>(
+      {url: `/api/v1/announcements/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const updateAnnouncement = (
+    id: string,
+    updateAnnouncementCommand: UpdateAnnouncementCommand,
+ options?: SecondParameter<typeof customInstance<AnnouncementDto>>,) => {
+      return customInstance<AnnouncementDto>(
+      {url: `/api/v1/announcements/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAnnouncementCommand
+    },
+      options);
+    }
+
+export const deleteAnnouncement = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/announcements/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const publishAnnouncement = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<PublishAnnouncementSummary>>,) => {
+      return customInstance<PublishAnnouncementSummary>(
+      {url: `/api/v1/announcements/${id}/publish`, method: 'POST'
+    },
+      options);
+    }
+
+export const listMyNotifications = (
+    params?: ListMyNotificationsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfNotificationDto>>,) => {
+      return customInstance<PagedResultOfNotificationDto>(
+      {url: `/api/v1/notifications`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const getUnreadNotificationCount = (
+
+ options?: SecondParameter<typeof customInstance<UnreadNotificationCountDto>>,) => {
+      return customInstance<UnreadNotificationCountDto>(
+      {url: `/api/v1/notifications/unread-count`, method: 'GET'
+    },
+      options);
+    }
+
+export const markNotificationRead = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/notifications/${id}/read`, method: 'POST'
+    },
+      options);
+    }
+
+export const markAllNotificationsRead = (
+
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/notifications/read-all`, method: 'POST'
+    },
+      options);
+    }
+
+export const createUploadUrl = (
+    createUploadUrlCommand: CreateUploadUrlCommand,
+ options?: SecondParameter<typeof customInstance<UploadUrlDto>>,) => {
+      return customInstance<UploadUrlDto>(
+      {url: `/api/v1/files/upload-url`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createUploadUrlCommand
+    },
+      options);
+    }
+
 export type GetDashboardResult = NonNullable<Awaited<ReturnType<typeof getDashboard>>>
 export type GetCurrentUserResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
+export type ListStudentsResult = NonNullable<Awaited<ReturnType<typeof listStudents>>>
+export type CreateStudentResult = NonNullable<Awaited<ReturnType<typeof createStudent>>>
+export type GetStudentResult = NonNullable<Awaited<ReturnType<typeof getStudent>>>
+export type UpdateStudentResult = NonNullable<Awaited<ReturnType<typeof updateStudent>>>
+export type DeleteStudentResult = NonNullable<Awaited<ReturnType<typeof deleteStudent>>>
+export type ImportStudentsResult = NonNullable<Awaited<ReturnType<typeof importStudents>>>
+export type GetStudentImportTemplateResult = NonNullable<Awaited<ReturnType<typeof getStudentImportTemplate>>>
+export type ListTeachersResult = NonNullable<Awaited<ReturnType<typeof listTeachers>>>
+export type CreateTeacherResult = NonNullable<Awaited<ReturnType<typeof createTeacher>>>
+export type GetTeacherResult = NonNullable<Awaited<ReturnType<typeof getTeacher>>>
+export type UpdateTeacherResult = NonNullable<Awaited<ReturnType<typeof updateTeacher>>>
+export type DeleteTeacherResult = NonNullable<Awaited<ReturnType<typeof deleteTeacher>>>
+export type ListClassroomsResult = NonNullable<Awaited<ReturnType<typeof listClassrooms>>>
+export type CreateClassroomResult = NonNullable<Awaited<ReturnType<typeof createClassroom>>>
+export type GetClassroomResult = NonNullable<Awaited<ReturnType<typeof getClassroom>>>
+export type UpdateClassroomResult = NonNullable<Awaited<ReturnType<typeof updateClassroom>>>
+export type DeleteClassroomResult = NonNullable<Awaited<ReturnType<typeof deleteClassroom>>>
+export type ListSubjectsResult = NonNullable<Awaited<ReturnType<typeof listSubjects>>>
+export type CreateSubjectResult = NonNullable<Awaited<ReturnType<typeof createSubject>>>
+export type GetSubjectResult = NonNullable<Awaited<ReturnType<typeof getSubject>>>
+export type UpdateSubjectResult = NonNullable<Awaited<ReturnType<typeof updateSubject>>>
+export type DeleteSubjectResult = NonNullable<Awaited<ReturnType<typeof deleteSubject>>>
+export type ListAcademicYearsResult = NonNullable<Awaited<ReturnType<typeof listAcademicYears>>>
+export type CreateAcademicYearResult = NonNullable<Awaited<ReturnType<typeof createAcademicYear>>>
+export type GetAcademicYearResult = NonNullable<Awaited<ReturnType<typeof getAcademicYear>>>
+export type UpdateAcademicYearResult = NonNullable<Awaited<ReturnType<typeof updateAcademicYear>>>
+export type ActivateAcademicYearResult = NonNullable<Awaited<ReturnType<typeof activateAcademicYear>>>
+export type RolloverAcademicYearResult = NonNullable<Awaited<ReturnType<typeof rolloverAcademicYear>>>
+export type ListPublicNewsResult = NonNullable<Awaited<ReturnType<typeof listPublicNews>>>
+export type GetPublicNewsResult = NonNullable<Awaited<ReturnType<typeof getPublicNews>>>
+export type ListNewsResult = NonNullable<Awaited<ReturnType<typeof listNews>>>
+export type CreateNewsResult = NonNullable<Awaited<ReturnType<typeof createNews>>>
+export type GetNewsResult = NonNullable<Awaited<ReturnType<typeof getNews>>>
+export type UpdateNewsResult = NonNullable<Awaited<ReturnType<typeof updateNews>>>
+export type DeleteNewsResult = NonNullable<Awaited<ReturnType<typeof deleteNews>>>
+export type PublishNewsResult = NonNullable<Awaited<ReturnType<typeof publishNews>>>
+export type UnpublishNewsResult = NonNullable<Awaited<ReturnType<typeof unpublishNews>>>
+export type ListPublicAnnouncementsResult = NonNullable<Awaited<ReturnType<typeof listPublicAnnouncements>>>
+export type GetPublicAnnouncementResult = NonNullable<Awaited<ReturnType<typeof getPublicAnnouncement>>>
+export type ListMyAnnouncementsResult = NonNullable<Awaited<ReturnType<typeof listMyAnnouncements>>>
+export type GetMyAnnouncementResult = NonNullable<Awaited<ReturnType<typeof getMyAnnouncement>>>
+export type MarkAnnouncementReadResult = NonNullable<Awaited<ReturnType<typeof markAnnouncementRead>>>
+export type ListAnnouncementsResult = NonNullable<Awaited<ReturnType<typeof listAnnouncements>>>
+export type CreateAnnouncementResult = NonNullable<Awaited<ReturnType<typeof createAnnouncement>>>
+export type GetAnnouncementResult = NonNullable<Awaited<ReturnType<typeof getAnnouncement>>>
+export type UpdateAnnouncementResult = NonNullable<Awaited<ReturnType<typeof updateAnnouncement>>>
+export type DeleteAnnouncementResult = NonNullable<Awaited<ReturnType<typeof deleteAnnouncement>>>
+export type PublishAnnouncementResult = NonNullable<Awaited<ReturnType<typeof publishAnnouncement>>>
+export type ListMyNotificationsResult = NonNullable<Awaited<ReturnType<typeof listMyNotifications>>>
+export type GetUnreadNotificationCountResult = NonNullable<Awaited<ReturnType<typeof getUnreadNotificationCount>>>
+export type MarkNotificationReadResult = NonNullable<Awaited<ReturnType<typeof markNotificationRead>>>
+export type MarkAllNotificationsReadResult = NonNullable<Awaited<ReturnType<typeof markAllNotificationsRead>>>
+export type CreateUploadUrlResult = NonNullable<Awaited<ReturnType<typeof createUploadUrl>>>

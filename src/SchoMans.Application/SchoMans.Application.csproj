@@ -1,5 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <InternalsVisibleTo Include="SchoMans.Application.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SchoMans.Domain\SchoMans.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>

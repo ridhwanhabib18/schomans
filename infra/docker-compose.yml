@@ -1,6 +1,6 @@
 # Local development dependencies. Run with: docker compose -f infra/docker-compose.yml up -d
-# The api and web run on the host (dotnet run / npm run dev). Containers for them, the reverse proxy and
-# SeaweedFS arrive with the phases that need them.
+# The api and web run on the host (dotnet run / npm run dev). Containers for them and the reverse proxy
+# arrive with the phases that need them.
 name: schomans
 
 services:
@@ -43,5 +43,23 @@ services:
       retries: 18
       start_period: 30s
 
+  # S3-compatible object storage for local development (Cloudflare R2 plays this role in the demo).
+  # s3.json holds throwaway development credentials and makes only the public bucket readable without a key.
+  seaweedfs:
+    image: chrislusf/seaweedfs:4.50
+    command: server -dir=/data -s3 -s3.port=8333 -s3.config=/etc/seaweedfs/s3.json -master.volumeSizeLimitMB=256
+    ports:
+      - "8333:8333"
+    volumes:
+      - ./seaweedfs/s3.json:/etc/seaweedfs/s3.json:ro
+      - seaweedfs-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:9333/cluster/status >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
 volumes:
   sqlserver-data:
+  seaweedfs-data:

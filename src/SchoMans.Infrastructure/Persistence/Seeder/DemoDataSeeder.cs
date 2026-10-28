@@ -1,16 +1,19 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SchoMans.Domain.Communication;
 using SchoMans.Domain.Students;
 
 namespace SchoMans.Infrastructure.Persistence.Seeder;
 
 /// <summary>
-/// Fills an empty database with one fictional school: one academic year, 5 classrooms, 15 teachers and 150 students,
-/// plus one login-ready account per role. Every name and number is made up; nothing here is real personal data.
+/// Fills an empty database with one fictional school: one academic year, 5 classrooms, 15 teachers, 150 students and
+/// 8 subjects, one login-ready account per role, and some news and announcements. Every name and number is made up;
+/// nothing here is real personal data. Each part is seeded only when its tables are empty, so running it again (or on
+/// a database that already holds an earlier part) never duplicates anything.
 /// The demo accounts have no Keycloak id yet; the first login links them by email (see SyncUserHandler).
 /// </summary>
-public sealed class DemoDataSeeder(AppDbContext db, ILogger<DemoDataSeeder> logger)
+public sealed class DemoDataSeeder(AppDbContext db, TimeProvider timeProvider, ILogger<DemoDataSeeder> logger)
 {
     public const string DemoDomain = "schomans.demo";
 
@@ -31,11 +34,24 @@ public sealed class DemoDataSeeder(AppDbContext db, ILogger<DemoDataSeeder> logg
         "Permana", "Maharani", "Setiawan", "Utami", "Firmansyah",
     ];
 
+    private static readonly (string Name, decimal MinimumPassingScore)[] Subjects =
+    [
+        ("Mathematics", 75), ("Indonesian Language", 75), ("English", 75), ("Natural Sciences", 70),
+        ("Social Studies", 70), ("Arts and Culture", 70), ("Physical Education", 70), ("Civics", 75),
+    ];
+
     public async Task SeedAsync(CancellationToken ct = default)
+    {
+        await SeedSchoolAsync(ct);
+        await SeedSubjectsAsync(ct);
+        await SeedCommunicationAsync(ct);
+    }
+
+    private async Task SeedSchoolAsync(CancellationToken ct)
     {
         if (await db.Users.IgnoreQueryFilters().AnyAsync(ct))
         {
-            logger.LogInformation("Demo data not seeded: the database already contains users");
+            logger.LogInformation("School data not seeded: the database already contains users");
             return;
         }
 
@@ -66,10 +82,79 @@ public sealed class DemoDataSeeder(AppDbContext db, ILogger<DemoDataSeeder> logg
 
         await db.SaveChangesAsync(ct);
         logger.LogInformation(
-            "Seeded demo data: {Teachers} teachers, {Classrooms} classrooms, {Students} students",
+            "Seeded demo school: {Teachers} teachers, {Classrooms} classrooms, {Students} students",
             teachers.Count,
             classrooms.Count,
             students.Count);
+    }
+
+    private async Task SeedSubjectsAsync(CancellationToken ct)
+    {
+        if (await db.Subjects.IgnoreQueryFilters().AnyAsync(ct))
+        {
+            return;
+        }
+
+        db.Subjects.AddRange(Subjects.Select(s => Subject.Create(s.Name, s.MinimumPassingScore)));
+        await db.SaveChangesAsync(ct);
+        logger.LogInformation("Seeded {Count} subjects", Subjects.Length);
+    }
+
+    private async Task SeedCommunicationAsync(CancellationToken ct)
+    {
+        if (await db.NewsArticles.IgnoreQueryFilters().AnyAsync(ct) || await db.Announcements.IgnoreQueryFilters().AnyAsync(ct))
+        {
+            return;
+        }
+
+        var admin = await db.Users.FirstOrDefaultAsync(u => u.Email == Email("admin"), ct);
+        if (admin is null)
+        {
+            return; // no school data to attach the announcements to
+        }
+
+        var now = timeProvider.GetUtcNow();
+        AddNews("Welcome to the 2026/2027 academic year", NewsCategory.News, now.AddDays(-14),
+            "<p>A warm welcome to all students, parents, and teachers. Classes start on <strong>13 July</strong>.</p>"
+            + "<p>Please check the announcements page for your class schedule and the first-week program.</p>");
+        AddNews("Open house for new applicants", NewsCategory.AdmissionInfo, now.AddDays(-7),
+            "<p>Prospective students and their parents are invited to our open house on the first Saturday of the month.</p>"
+            + "<ul><li>Tour of the classrooms and laboratories</li><li>Meet the teachers</li><li>How to apply online</li></ul>");
+        AddNews("Our students won the regional science olympiad", NewsCategory.Award, now.AddDays(-3),
+            "<p>Congratulations to the science team for winning first place at the regional olympiad.</p>");
+        AddNews("Library renovation schedule", NewsCategory.News, null,
+            "<p>The library will be renovated during the mid-term break. The schedule is still being prepared.</p>");
+
+        db.Announcements.Add(PublishedAnnouncement(
+            "School closed on Friday for a teachers' meeting", isPublic: true, [], now.AddDays(-2), admin.Id,
+            "<p>All classes are suspended this Friday. Classes resume on Monday as usual.</p>"));
+        db.Announcements.Add(PublishedAnnouncement(
+            "Report card meeting next week", isPublic: false, [UserRole.Teacher], now.AddDays(-1), admin.Id,
+            "<p>All teachers are asked to attend the report card meeting on Wednesday after the last lesson.</p>"));
+        db.Announcements.Add(Announcement.Create(
+            "Parent-teacher conference", "<p>Dates and time slots will follow.</p>", isPublic: false, [UserRole.Parent], [], admin.Id));
+
+        await db.SaveChangesAsync(ct);
+        logger.LogInformation("Seeded demo news and announcements");
+    }
+
+    private void AddNews(string title, NewsCategory category, DateTimeOffset? publishedAt, string body)
+    {
+        var article = NewsArticle.Create(title, SlugGenerator.Slugify(title), body, category, metaDescription: null);
+        if (publishedAt is { } at)
+        {
+            article.Publish(at);
+        }
+
+        db.NewsArticles.Add(article);
+    }
+
+    private static Announcement PublishedAnnouncement(
+        string title, bool isPublic, IEnumerable<UserRole> roles, DateTimeOffset publishedAt, Guid createdById, string body)
+    {
+        var announcement = Announcement.Create(title, body, isPublic, roles, [], createdById);
+        announcement.Publish(publishedAt);
+        return announcement;
     }
 
     private List<Teacher> SeedTeachers()

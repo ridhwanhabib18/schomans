@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="299" failures="0" errors="0" time="67.2298252">
+    <testsuite name="src/app/RealtimeBridge.test.tsx" timestamp="2026-10-28T00:32:10.526Z" hostname="IEI22120006NB" tests="7" failures="0" errors="0" skipped="0" time="0.1635452">
+        <testcase classname="src/app/RealtimeBridge.test.tsx" name="RealtimeBridge &gt; stays disconnected while nobody is signed in" time="0.0644187">
+        </testcase>
+        <testcase classname="src/app/RealtimeBridge.test.tsx" name="RealtimeBridge &gt; connects once somebody signs in, and hands the connection the current token" time="0.0121406">
+        </testcase>
+        <testcase classname="src/app/RealtimeBridge.test.tsx" name="RealtimeBridge &gt; refreshes the notification and announcement queries and shows a toast for a pushed notification" time="0.0346068">
+        </testcase>
+        <testcase classname="src/app/RealtimeBridge.test.tsx" name="RealtimeBridge &gt; catches up on what it missed when the connection comes back" time="0.0059761">
+        </testcase>
+        <testcase classname="src/app/RealtimeBridge.test.tsx" name="RealtimeBridge &gt; retries the first connection until it works" time="0.018631">
+        </testcase>
+        <testcase classname="src/app/RealtimeBridge.test.tsx" name="RealtimeBridge &gt; stops retrying and closes the connection when the user signs out" time="0.0048918">
+        </testcase>
+        <testcase classname="src/app/RealtimeBridge.test.tsx" name="RealtimeBridge &gt; closes the connection when the page goes away" time="0.0176949">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/router.test.tsx" timestamp="2026-10-28T00:32:10.546Z" hostname="IEI22120006NB" tests="20" failures="0" errors="0" skipped="0" time="4.6624929">
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows the public landing page to guests" time="1.1315269">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows the latest news and the public announcements on the landing page" time="0.311308">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; opens the public news list without signing in" time="0.1071087">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; tells a Teacher who opens /manage/teachers that the page is not for their role" time="0.1788398">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; tells a Teacher who opens /manage/news that the page is not for their role" time="0.1391068">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; tells a Teacher who opens /manage/announcements/new that the page is not for their role" time="0.1897434">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; tells a Student who opens /manage/students that the page is not for their role" time="0.1190708">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; tells a Parent who opens /manage/academic-years that the page is not for their role" time="0.1485704">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; tells a Principal who opens /manage/academic-years/rollover that the page is not for their role" time="0.11924">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows the admin the management entries in the navigation, grouped under their sections" time="0.5331949">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a student only the dashboard and the announcements" time="0.1388776">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; sends an anonymous visitor who opens the dashboard to the login page with the demo buttons" time="0.1202331">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Principal their own dashboard inside the app shell" time="0.2905412">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Teacher their own dashboard inside the app shell" time="0.2206276">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Student their own dashboard inside the app shell" time="0.1833555">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Parent their own dashboard inside the app shell" time="0.1653788">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Admin their own dashboard inside the app shell" time="0.2844224">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a signed-in Applicant their own dashboard inside the app shell" time="0.1692421">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; redirects a signed-in user who opens the login page to the dashboard" time="0.0875081">
+        </testcase>
+        <testcase classname="src/app/router.test.tsx" name="app routes &gt; shows a not-found page for an unknown address" time="0.0194229">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/announcements/audience.test.ts" timestamp="2026-10-28T00:32:10.557Z" hostname="IEI22120006NB" tests="5" failures="0" errors="0" skipped="0" time="0.016473">
+        <testcase classname="src/features/announcements/audience.test.ts" name="describeAudience &gt; means every school role, not applicants, when nothing is chosen" time="0.0093947">
+        </testcase>
+        <testcase classname="src/features/announcements/audience.test.ts" name="describeAudience &gt; lists the chosen roles in the order of the application, not the order they were picked" time="0.0010645">
+        </testcase>
+        <testcase classname="src/features/announcements/audience.test.ts" name="describeAudience &gt; describes classrooms without roles as the people of those classrooms" time="0.0003889">
+        </testcase>
+        <testcase classname="src/features/announcements/audience.test.ts" name="describeAudience &gt; describes roles inside classrooms when both are chosen" time="0.0004598">
+        </testcase>
+        <testcase classname="src/features/announcements/audience.test.ts" name="isTargetRole &gt; accepts the six roles and nothing else" time="0.00048">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/announcements/pages/AnnouncementPages.test.tsx" timestamp="2026-10-28T00:32:10.561Z" hostname="IEI22120006NB" tests="29" failures="0" errors="0" skipped="0" time="9.4333851">
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsInboxPage &gt; lists the announcements and marks the unread ones" time="0.4700677">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsInboxPage &gt; opens an announcement" time="0.6889253">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsInboxPage &gt; shows unread ones only on request" time="0.3898946">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsInboxPage &gt; tells the difference between having none and having read everything" time="0.2040813">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsInboxPage &gt; offers a retry when the list cannot be loaded" time="0.0960294">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementDetailPage &gt; shows the announcement and marks it read once" time="0.1240762">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementDetailPage &gt; does not mark an announcement read again when it is already read" time="0.1122533">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementDetailPage &gt; says the announcement cannot be found when it is not meant for the reader" time="0.0493176">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="PublicAnnouncementPage &gt; shows a public announcement to a guest" time="0.0595595">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="PublicAnnouncementPage &gt; says it does not exist when the announcement is not public" time="0.0346344">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsManagePage &gt; lists announcements with their audience, status and public mark" time="0.266656">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsManagePage &gt; offers to publish only a draft" time="0.2631502">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsManagePage &gt; publishes after confirmation and says how many people were notified" time="0.3910032">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsManagePage &gt; reports a failed publication" time="0.3185216">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsManagePage &gt; filters by status and title" time="0.6570722">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsManagePage &gt; deletes after confirmation" time="0.5879826">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementsManagePage &gt; shows the empty state" time="0.0493568">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; describes the audience as the editor changes it" time="0.5651817">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; creates a draft with the chosen roles, classrooms and public flag" time="1.052357">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; unchecking a role takes it out of the audience again" time="0.5959057">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; shows the validation message of the title" time="0.2294907">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; loads a draft and updates it with its row version" time="0.4761645">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; publishes a saved draft after confirmation, naming the audience" time="0.2732049">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; still confirms and moves on when publishing changes the row version and the form is rebuilt" time="0.5379709">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; does not let unsaved changes be published" time="0.2609676">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; locks the audience of a published announcement but still lets the text be corrected" time="0.1884288">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; shows the concurrency message" time="0.2826899">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; says so when the classrooms cannot be loaded" time="0.098721">
+        </testcase>
+        <testcase classname="src/features/announcements/pages/AnnouncementPages.test.tsx" name="AnnouncementEditPage &gt; says so when the current year has no classrooms" time="0.0991308">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/auth/api/authService.test.ts" timestamp="2026-10-28T00:32:10.575Z" hostname="IEI22120006NB" tests="5" failures="0" errors="0" skipped="0" time="0.0410099">
+        <testcase classname="src/features/auth/api/authService.test.ts" name="demoLogin &gt; requests a token for the demo user of the role and signs in" time="0.0174762">
+        </testcase>
+        <testcase classname="src/features/auth/api/authService.test.ts" name="demoLogin &gt; refuses an account that holds no SchoMans role" time="0.0071872">
+        </testcase>
+        <testcase classname="src/features/auth/api/authService.test.ts" name="demoLogin &gt; renews the token with the refresh token shortly before it expires" time="0.0050286">
+        </testcase>
+        <testcase classname="src/features/auth/api/authService.test.ts" name="demoLogin &gt; signs out when the renewal fails" time="0.0020344">
+        </testcase>
+        <testcase classname="src/features/auth/api/authService.test.ts" name="logout &gt; ends a demo session without leaving the app" time="0.0046661">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/auth/components/DemoLoginButtons.test.tsx" timestamp="2026-10-28T00:32:10.578Z" hostname="IEI22120006NB" tests="8" failures="0" errors="0" skipped="0" time="1.3604416">
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; offers one button for each of the six roles" time="0.7386975">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Principal and continues to the dashboard" time="0.1234446">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Teacher and continues to the dashboard" time="0.0913264">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Student and continues to the dashboard" time="0.085737">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Parent and continues to the dashboard" time="0.0841571">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Admin and continues to the dashboard" time="0.0750223">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; signs in as Applicant and continues to the dashboard" time="0.0595527">
+        </testcase>
+        <testcase classname="src/features/auth/components/DemoLoginButtons.test.tsx" name="DemoLoginButtons &gt; shows an error and stays on the page when the demo login fails" time="0.0983334">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/auth/components/guards.test.tsx" timestamp="2026-10-28T00:32:10.582Z" hostname="IEI22120006NB" tests="9" failures="0" errors="0" skipped="0" time="1.0112612">
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireAuth &gt; shows a loading state while the session is being checked, and does not redirect yet" time="0.6722534">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireAuth &gt; sends an anonymous visitor to the login page, remembering where they wanted to go" time="0.0425902">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireAuth &gt; lets a signed-in user through" time="0.0213996">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; lets Admin in" time="0.0451606">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; lets Principal in" time="0.0239629">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; shows a forbidden notice to Teacher" time="0.0381921">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; shows a forbidden notice to Student" time="0.0662593">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; shows a forbidden notice to Parent" time="0.0412881">
+        </testcase>
+        <testcase classname="src/features/auth/components/guards.test.tsx" name="RequireRole &gt; shows a forbidden notice to Applicant" time="0.0549278">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/dashboard/pages/DashboardPage.test.tsx" timestamp="2026-10-28T00:32:10.587Z" hostname="IEI22120006NB" tests="8" failures="0" errors="0" skipped="0" time="1.7180885">
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows a skeleton while loading" time="0.6184949">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Principal dashboard" time="0.3445462">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Teacher dashboard" time="0.126914">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Student dashboard" time="0.0901161">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Parent dashboard" time="0.1789307">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Admin dashboard" time="0.0597009">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows the empty Applicant dashboard" time="0.0437185">
+        </testcase>
+        <testcase classname="src/features/dashboard/pages/DashboardPage.test.tsx" name="DashboardPage &gt; shows an error with a retry button when the API call fails, and recovers" time="0.2498848">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/masterdata/pages/AcademicYearsPage.test.tsx" timestamp="2026-10-28T00:32:10.599Z" hostname="IEI22120006NB" tests="9" failures="0" errors="0" skipped="0" time="4.5148067">
+        <testcase classname="src/features/masterdata/pages/AcademicYearsPage.test.tsx" name="AcademicYearsPage &gt; lists the years with their terms and marks the current one" time="0.5026504">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/AcademicYearsPage.test.tsx" name="AcademicYearsPage &gt; shows a teacher no way to change anything" time="0.130623">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/AcademicYearsPage.test.tsx" name="AcademicYearsPage &gt; leads the admin to the rollover wizard" time="0.5720766">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/AcademicYearsPage.test.tsx" name="AcademicYearsPage &gt; makes another year current only after the admin confirms" time="0.6962703">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/AcademicYearsPage.test.tsx" name="AcademicYearsPage &gt; creates a year with its terms" time="0.6783797">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/AcademicYearsPage.test.tsx" name="AcademicYearsPage &gt; adds and removes terms, up to four, and keeps at least one" time="0.771405">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/AcademicYearsPage.test.tsx" name="AcademicYearsPage &gt; does not offer to remove a term that is already saved" time="0.3791342">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/AcademicYearsPage.test.tsx" name="AcademicYearsPage &gt; sends the ids of saved terms when the year is updated" time="0.3388939">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/AcademicYearsPage.test.tsx" name="AcademicYearsPage &gt; explains an invalid set of dates" time="0.4402353">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/masterdata/pages/MasterdataPages.test.tsx" timestamp="2026-10-28T00:32:10.603Z" hostname="IEI22120006NB" tests="18" failures="0" errors="0" skipped="0" time="9.204409">
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="TeachersPage &gt; lists the teachers and marks the homeroom teachers and the accounts" time="0.5570375">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="TeachersPage &gt; lets only the admin change the list" time="0.848945">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="TeachersPage &gt; adds a teacher" time="0.6910976">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="TeachersPage &gt; edits a teacher with the row version it loaded" time="0.6291769">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="TeachersPage &gt; explains a duplicate NIP" time="0.2499584">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="TeachersPage &gt; explains why a homeroom teacher cannot be deleted" time="0.4834944">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="TeachersPage &gt; deletes a teacher after confirmation" time="0.461854">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="ClassroomsPage &gt; lists the classrooms with their year, homeroom teacher and size" time="0.2046686">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="ClassroomsPage &gt; filters by academic year" time="0.2464557">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="ClassroomsPage &gt; creates a classroom in the current academic year unless another is chosen" time="0.5550942">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="ClassroomsPage &gt; does not let the academic year of a saved classroom change" time="0.4846548">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="ClassroomsPage &gt; explains a duplicate name and a classroom that still has students" time="1.3837534">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="SubjectsPage &gt; lists the subjects with the minimum passing score" time="0.1477716">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="SubjectsPage &gt; sorts by the passing score when its header is clicked" time="0.4535777">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="SubjectsPage &gt; creates a subject with a numeric score" time="0.4206025">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="SubjectsPage &gt; edits a subject starting from its current values" time="0.4692281">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="SubjectsPage &gt; shows the validation message of the score and a duplicate name" time="0.4076161">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/MasterdataPages.test.tsx" name="SubjectsPage &gt; deletes a subject after confirmation" time="0.5037155">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/masterdata/pages/RolloverPage.test.tsx" timestamp="2026-10-28T00:32:10.614Z" hostname="IEI22120006NB" tests="11" failures="0" errors="0" skipped="0" time="5.0025929">
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; starts with the new year and does not move on while it is incomplete" time="0.6239767">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; says there is nothing to start from when no year is current" time="0.0306173">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; offers a retry when the data cannot be loaded" time="0.0964662">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; lists every classroom of the current year with its students on the second step" time="0.5321098">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; asks for a name and a teacher for each classroom that moves up" time="0.5634159">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; does not ask anything of a classroom that graduates, and disables its fields" time="0.60385">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; asks for one homeroom teacher when two classrooms move into the same new classroom" time="0.5250349">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; reviews the plan, goes back to change it, and sends nothing before the last click" time="0.5211837">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; sends the whole plan in one request and shows the result" time="0.7303876">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; shows the server error in words and keeps the plan when the rollover fails" time="0.5996381">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/RolloverPage.test.tsx" name="RolloverPage &gt; goes back to the list of academic years" time="0.1690078">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/masterdata/pages/StudentsPage.test.tsx" timestamp="2026-10-28T00:32:10.619Z" hostname="IEI22120006NB" tests="21" failures="0" errors="0" skipped="0" time="11.1802044">
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; lists the students with their classroom and status" time="0.7098781">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; asks the API for active students first, sorted by name" time="0.2565763">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; gives the admin the buttons to add, import, edit and delete" time="1.0088818">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; shows a Teacher the list without any way to change it" time="0.2050384">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; shows a Principal the list without any way to change it" time="0.2345927">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; searches after the typing has paused and goes back to the first page" time="0.6316302">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; shows the filtered empty state when nothing matches" time="0.0823984">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; offers a retry when the list cannot be loaded" time="0.2223347">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; adds a student with the fields of the form, then closes the dialog and confirms" time="0.9379324">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; shows the field messages of a validation failure and keeps the dialog open" time="0.6036109">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; explains a business error in the words of the feature" time="0.4200787">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; says somebody else changed the student when the row version is stale" time="0.8905044">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; locks the name and email of a student who already signed in" time="0.7757245">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; deletes a student only after the admin confirms" time="0.6613985">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; does not delete when the admin cancels" time="0.671474">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; tells the admin when a delete fails" time="0.702877">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; import &gt; asks for a file before it sends anything" time="0.2938311">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; import &gt; refuses a file that is not .xlsx" time="0.380641">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; import &gt; reports how many rows were imported when all of them worked" time="0.4060588">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; import &gt; lists the rows that failed with the reason, and lets the admin start over" time="0.6691725">
+        </testcase>
+        <testcase classname="src/features/masterdata/pages/StudentsPage.test.tsx" name="StudentsPage &gt; import &gt; shows what the server says is wrong with the file itself" time="0.3988044">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/masterdata/rollover.test.ts" timestamp="2026-10-28T00:32:10.661Z" hostname="IEI22120006NB" tests="21" failures="0" errors="0" skipped="0" time="0.0262631">
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="initialMappings &gt; starts every classroom as &quot;move up&quot; with its current homeroom teacher" time="0.0070776">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; accepts a complete year" time="0.000974">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; asks for a name" time="0.0023866">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; refuses a year that does not end after it starts, or has no dates" time="0.000672">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; refuses the empty draft" time="0.0005255">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; refuses no terms" time="0.0004742">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; refuses five terms" time="0.000452">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; refuses equal names ignoring case" time="0.0004288">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; refuses a term outside the year" time="0.0004624">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; refuses a term that ends before it starts" time="0.0003971">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateYear &gt; refuses a term without a name" time="0.0004439">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateMappings &gt; accepts a graduate and a move with a name and a teacher" time="0.0007866">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateMappings &gt; asks for the name of the new classroom, naming the old one" time="0.0004321">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateMappings &gt; asks for a teacher once the name is there" time="0.0007964">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateMappings &gt; needs one homeroom teacher for classrooms that move into the same new classroom, whatever the casing" time="0.0004874">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateMappings &gt; accepts several classrooms moving into one with the same teacher" time="0.0003493">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateMappings &gt; reports a conflicting target only once" time="0.0013871">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="validateMappings &gt; ignores the fields of a graduating classroom" time="0.0003444">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="summarize &gt; counts the students that move up and graduate, and the distinct new classrooms" time="0.0008417">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="summarize &gt; creates nothing when everybody graduates" time="0.0004032">
+        </testcase>
+        <testcase classname="src/features/masterdata/rollover.test.ts" name="toCommand &gt; trims the names and sends no name or teacher for a graduating classroom" time="0.0010734">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/news/pages/NewsPages.test.tsx" timestamp="2026-10-28T00:32:10.670Z" hostname="IEI22120006NB" tests="27" failures="0" errors="0" skipped="0" time="8.0444448">
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="PublicNewsListPage &gt; shows the published articles and opens one" time="1.0615506">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="PublicNewsListPage &gt; sets the page title for search engines" time="0.1342399">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="PublicNewsListPage &gt; filters by category and starts again from the first page" time="0.483219">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="PublicNewsListPage &gt; says so when a category has no news" time="0.0600607">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="PublicNewsListPage &gt; offers a retry when the news cannot be loaded" time="0.1400554">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="PublicNewsArticlePage &gt; shows the article and puts its title and description in the meta tags" time="0.1484883">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="PublicNewsArticlePage &gt; says the article does not exist when the address is wrong" time="0.0435464">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsManagePage &gt; lists drafts and published articles, and links to the site only for the published ones" time="0.4532047">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsManagePage &gt; passes the filters to the API" time="0.6797416">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsManagePage &gt; leads to the new-article page" time="0.0821953">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsManagePage &gt; deletes an article after confirmation, and reports a failure" time="0.8272334">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsManagePage &gt; shows the empty state" time="0.1444828">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; creates a draft, then moves to its edit page" time="0.2856931">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; shows the validation message of a field" time="0.1495006">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; explains that a cover image needs a saved draft" time="0.0640971">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; loads a saved article, with its address, and only enables saving after a change" time="0.2046029">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; does not let a draft with unsaved changes be published" time="0.2029548">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; publishes only after the editor confirms, and tells them where it will appear" time="0.32026">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; unpublishes a published article after confirmation" time="0.3869226">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; shows the concurrency message with a way to load the latest version" time="0.3230553">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; shows a general error when publishing fails" time="0.4616401">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; offers a retry when the article cannot be loaded" time="0.1933932">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; cover image &gt; asks for a presigned URL, sends the file straight to storage, and saves the key with the article" time="0.4962271">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; cover image &gt; refuses image/gif of 1024 bytes before anything is sent" time="0.1457887">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; cover image &gt; refuses image/png of 6291456 bytes before anything is sent" time="0.1134878">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; cover image &gt; says the upload failed when storage refuses the file" time="0.1297389">
+        </testcase>
+        <testcase classname="src/features/news/pages/NewsPages.test.tsx" name="NewsEditPage &gt; cover image &gt; removes the image from the article" time="0.3018415">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/features/notifications/components/NotificationBell.test.tsx" timestamp="2026-10-28T00:32:10.683Z" hostname="IEI22120006NB" tests="10" failures="0" errors="0" skipped="0" time="2.239113">
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; shows no badge when everything is read" time="0.7249053">
+        </testcase>
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; shows the unread count in the badge and in the accessible name" time="0.0936163">
+        </testcase>
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; caps the badge at 99+" time="0.0478977">
+        </testcase>
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; opens a panel with the latest notifications and closes it with Escape" time="0.144614">
+        </testcase>
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; says so when there is nothing yet" time="0.1429596">
+        </testcase>
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; marks an unread notification read and goes to its page when it is clicked" time="0.3676087">
+        </testcase>
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; does not mark a read notification again" time="0.2945011">
+        </testcase>
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; marks everything read, and offers that only while something is unread" time="0.126982">
+        </testcase>
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; disables &quot;mark all as read&quot; when nothing is unread" time="0.0597753">
+        </testcase>
+        <testcase classname="src/features/notifications/components/NotificationBell.test.tsx" name="NotificationBell &gt; offers a retry when the list cannot be loaded" time="0.2313436">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/locales/locales.test.ts" timestamp="2026-10-28T00:32:10.687Z" hostname="IEI22120006NB" tests="8" failures="0" errors="0" skipped="0" time="0.0159947">
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Principal" time="0.0059481">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Teacher" time="0.0005833">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Student" time="0.0003352">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Parent" time="0.000308">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Admin" time="0.0002942">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have a label, a demo description and a dashboard title for Applicant" time="0.0002621">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have an error text for every business error code the master data forms can show" time="0.000512">
+        </testcase>
+        <testcase classname="src/locales/locales.test.ts" name="English locale files &gt; have no empty texts" time="0.0031784">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/hooks/useDocumentMeta.test.tsx" timestamp="2026-10-28T00:32:10.693Z" hostname="IEI22120006NB" tests="5" failures="0" errors="0" skipped="0" time="0.2283131">
+        <testcase classname="src/shared/hooks/useDocumentMeta.test.tsx" name="useDocumentMeta &gt; sets the title and the meta tags while the page is shown" time="0.1465815">
+        </testcase>
+        <testcase classname="src/shared/hooks/useDocumentMeta.test.tsx" name="useDocumentMeta &gt; shows only the product name when there is no title yet" time="0.0264584">
+        </testcase>
+        <testcase classname="src/shared/hooks/useDocumentMeta.test.tsx" name="useDocumentMeta &gt; leaves out the tags it has no content for" time="0.0204625">
+        </testcase>
+        <testcase classname="src/shared/hooks/useDocumentMeta.test.tsx" name="useDocumentMeta &gt; puts the previous title back and removes its tags when the page goes away" time="0.0089111">
+        </testcase>
+        <testcase classname="src/shared/hooks/useDocumentMeta.test.tsx" name="useDocumentMeta &gt; updates the tags when the article changes" time="0.0203376">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/format.test.ts" timestamp="2026-10-28T00:32:10.697Z" hostname="IEI22120006NB" tests="3" failures="0" errors="0" skipped="0" time="0.0114509">
+        <testcase classname="src/shared/lib/format.test.ts" name="date formatting &gt; shows DD/MM/YYYY" time="0.0058346">
+        </testcase>
+        <testcase classname="src/shared/lib/format.test.ts" name="date formatting &gt; uses Western Indonesia Time (UTC+7), even across midnight UTC" time="0.0008279">
+        </testcase>
+        <testcase classname="src/shared/lib/format.test.ts" name="date formatting &gt; accepts Date objects and timestamps" time="0.0004505">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/http.test.ts" timestamp="2026-10-28T00:32:10.699Z" hostname="IEI22120006NB" tests="5" failures="0" errors="0" skipped="0" time="0.0440961">
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; sends the access token as a bearer token" time="0.0143421">
+        </testcase>
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; sends no Authorization header when nobody is signed in" time="0.0014576">
+        </testcase>
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; returns only the response body" time="0.0049209">
+        </testcase>
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; drops the session when the API answers 401" time="0.010045">
+        </testcase>
+        <testcase classname="src/shared/lib/http.test.ts" name="http client &gt; keeps the session when the API answers 403" time="0.0086107">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/jwt.test.ts" timestamp="2026-10-28T00:32:10.702Z" hostname="IEI22120006NB" tests="3" failures="0" errors="0" skipped="0" time="0.0160925">
+        <testcase classname="src/shared/lib/jwt.test.ts" name="decodeAccessToken &gt; reads the claims of a token" time="0.0084042">
+        </testcase>
+        <testcase classname="src/shared/lib/jwt.test.ts" name="decodeAccessToken &gt; handles non-ASCII names" time="0.0009415">
+        </testcase>
+        <testcase classname="src/shared/lib/jwt.test.ts" name="decodeAccessToken &gt; rejects something that is not a JWT" time="0.0020024">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/problem.test.ts" timestamp="2026-10-28T00:32:10.704Z" hostname="IEI22120006NB" tests="8" failures="0" errors="0" skipped="0" time="0.0161547">
+        <testcase classname="src/shared/lib/problem.test.ts" name="parseProblem &gt; reads the code, the title and the status of a business error" time="0.0072405">
+        </testcase>
+        <testcase classname="src/shared/lib/problem.test.ts" name="parseProblem &gt; collects the validation messages per field and drops anything that is not a text" time="0.0013347">
+        </testcase>
+        <testcase classname="src/shared/lib/problem.test.ts" name="parseProblem &gt; ignores a code or title that is not a string" time="0.0005959">
+        </testcase>
+        <testcase classname="src/shared/lib/problem.test.ts" name="parseProblem &gt; returns an empty problem for an error that did not come from the API" time="0.0005444">
+        </testcase>
+        <testcase classname="src/shared/lib/problem.test.ts" name="parseProblem &gt; copes with a response without a body" time="0.0003898">
+        </testcase>
+        <testcase classname="src/shared/lib/problem.test.ts" name="fieldError &gt; finds the first message of a field whatever its casing" time="0.0006773">
+        </testcase>
+        <testcase classname="src/shared/lib/problem.test.ts" name="fieldError &gt; returns nothing for another field or without a problem" time="0.000354">
+        </testcase>
+        <testcase classname="src/shared/lib/problem.test.ts" name="isConcurrencyConflict &gt; is true only for the concurrency code" time="0.0004787">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/roles.test.ts" timestamp="2026-10-28T00:32:10.712Z" hostname="IEI22120006NB" tests="11" failures="0" errors="0" skipped="0" time="0.0150379">
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Principal" time="0.0057008">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Teacher" time="0.0004247">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Student" time="0.0002799">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Parent" time="0.0002464">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Admin" time="0.0002196">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; resolves Applicant" time="0.0001777">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; picks the most privileged role when a token carries several" time="0.0003647">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; returns null when the token has no SchoMans role" time="0.0003734">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; is exact: it does not accept other casings or numbers" time="0.0003276">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="resolveRole &gt; ignores surrounding whitespace" time="0.0002416">
+        </testcase>
+        <testcase classname="src/shared/lib/roles.test.ts" name="isAppRole &gt; knows the six realm roles and nothing else" time="0.0020922">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/lib/upload.test.ts" timestamp="2026-10-28T00:32:10.717Z" hostname="IEI22120006NB" tests="11" failures="0" errors="0" skipped="0" time="0.0245586">
+        <testcase classname="src/shared/lib/upload.test.ts" name="validateCoverImage &gt; accepts image/jpeg" time="0.0053918">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="validateCoverImage &gt; accepts image/png" time="0.0004405">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="validateCoverImage &gt; accepts image/webp" time="0.0004976">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="validateCoverImage &gt; refuses the type &quot;image/gif&quot;" time="0.0006074">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="validateCoverImage &gt; refuses the type &quot;application/pdf&quot;" time="0.0002609">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="validateCoverImage &gt; refuses the type &quot;text/html&quot;" time="0.0002399">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="validateCoverImage &gt; refuses the type &quot;&quot;" time="0.0002211">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="validateCoverImage &gt; accepts a file of exactly the maximum size and refuses one byte more" time="0.0004452">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="validateCoverImage &gt; refuses an empty file" time="0.0003664">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="putToPresignedUrl &gt; sends the file with exactly the signed content type and no credentials header" time="0.0067399">
+        </testcase>
+        <testcase classname="src/shared/lib/upload.test.ts" name="putToPresignedUrl &gt; throws when storage rejects the file" time="0.004129">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/ui/data-table.test.tsx" timestamp="2026-10-28T00:32:10.722Z" hostname="IEI22120006NB" tests="10" failures="0" errors="0" skipped="0" time="1.6864779">
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="DataTable &gt; shows a row per item under a captioned table" time="0.7875322">
+        </testcase>
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="DataTable &gt; shows a busy skeleton while loading, and no table" time="0.1320034">
+        </testcase>
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="DataTable &gt; shows the empty state when there are no rows ([])" time="0.0198858">
+        </testcase>
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="DataTable &gt; shows the empty state when there are no rows (undefined)" time="0.0503247">
+        </testcase>
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="DataTable &gt; makes only columns with a sort field sortable, and says which way they are sorted" time="0.2057269">
+        </testcase>
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="DataTable &gt; sorts ascending on the first click of a column and flips on the next click of the same column" time="0.2062801">
+        </testcase>
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="Pagination &gt; summarizes the visible range and the page" time="0.0326576">
+        </testcase>
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="Pagination &gt; cannot go back from the first page, and cannot go on from the last" time="0.1753392">
+        </testcase>
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="Pagination &gt; asks for the previous and the next page" time="0.0408605">
+        </testcase>
+        <testcase classname="src/shared/ui/data-table.test.tsx" name="Pagination &gt; shows 0 to 0 of 0 and a single page when there is nothing" time="0.0308103">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/shared/ui/ui-parts.test.tsx" timestamp="2026-10-28T00:32:10.731Z" hostname="IEI22120006NB" tests="16" failures="0" errors="0" skipped="0" time="6.5078465">
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="Alert &gt; announces an error at once and an information politely" time="0.6778994">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="Alert &gt; shows its action next to the message" time="0.1316307">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="page parts &gt; PageHeader shows the title, the description and the actions" time="0.0902159">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="page parts &gt; EmptyState shows what is missing and what to do" time="0.017318">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="page parts &gt; ErrorNotice offers a retry only when it can retry" time="0.0808429">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="FormField &gt; wires the label, the hint and the error to the control for screen readers" time="0.058749">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="FormField &gt; has no error state or description when there is neither" time="0.0058375">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="RichTextContent &gt; renders the sanitized HTML it is given" time="0.0290055">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="Toaster &gt; shows the toasts and lets the user dismiss one" time="0.2414117">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="Toaster &gt; goes to the page of a toast with a link when it is clicked, and dismisses it" time="0.1118212">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="Toaster &gt; removes a toast by itself after a while" time="0.0656442">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="RichTextEditor &gt; shows the toolbar and the text, and reports the HTML when the text changes" time="0.5732616">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="RichTextEditor &gt; has no toolbar and cannot be edited when disabled" time="0.0692413">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="RichTextEditor &gt; shows new text when the value is replaced from outside" time="0.2123119">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="RichTextEditor &gt; toggles a format from the toolbar" time="0.1595346">
+        </testcase>
+        <testcase classname="src/shared/ui/ui-parts.test.tsx" name="createNotificationConnection &gt; builds a connection to the notification hub of the API" time="3.977438">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/stores/useAuthStore.test.ts" timestamp="2026-10-28T00:32:10.748Z" hostname="IEI22120006NB" tests="5" failures="0" errors="0" skipped="0" time="0.0185051">
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; starts in the loading state, before the session check has finished" time="0.0060229">
+        </testcase>
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; signs in from an access token and derives the role" time="0.0040575">
+        </testcase>
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; refuses a token without a SchoMans role and stays signed out" time="0.0009343">
+        </testcase>
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; clears the session" time="0.0021308">
+        </testcase>
+        <testcase classname="src/stores/useAuthStore.test.ts" name="useAuthStore &gt; never writes the token to browser storage" time="0.0014253">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/stores/useToastStore.test.ts" timestamp="2026-10-28T00:32:10.751Z" hostname="IEI22120006NB" tests="3" failures="0" errors="0" skipped="0" time="0.0136209">
+        <testcase classname="src/stores/useToastStore.test.ts" name="useToastStore &gt; adds a toast and gives every toast its own id" time="0.0079424">
+        </testcase>
+        <testcase classname="src/stores/useToastStore.test.ts" name="useToastStore &gt; keeps only the newest four so a burst cannot cover the page" time="0.0008459">
+        </testcase>
+        <testcase classname="src/stores/useToastStore.test.ts" name="useToastStore &gt; dismisses one toast and leaves the others" time="0.0006769">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/stores/useUiStore.test.ts" timestamp="2026-10-28T00:32:10.753Z" hostname="IEI22120006NB" tests="3" failures="0" errors="0" skipped="0" time="0.013145">
+        <testcase classname="src/stores/useUiStore.test.ts" name="useUiStore &gt; stores the theme preference and remembers it" time="0.007019">
+        </testcase>
+        <testcase classname="src/stores/useUiStore.test.ts" name="useUiStore &gt; still works when browser storage is unavailable" time="0.0008915">
+        </testcase>
+        <testcase classname="src/stores/useUiStore.test.ts" name="isDark &gt; follows the system only for the system preference" time="0.0006405">
+        </testcase>
+    </testsuite>
+</testsuites>

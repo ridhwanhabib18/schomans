@@ -15,6 +15,10 @@
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
+    <!-- The same S3 configuration the local SeaweedFS uses, mounted into the test container. -->
+    <Content Include="../../infra/seaweedfs/s3.json" Link="seaweedfs/s3.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="../../src/SchoMans.Api/SchoMans.Api.csproj" />
   </ItemGroup>
 </Project>

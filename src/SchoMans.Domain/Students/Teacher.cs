@@ -16,8 +16,15 @@ public sealed class Teacher : BaseEntity
 
     public static Teacher Create(Guid userId, string nip)
     {
+        var teacher = new Teacher { UserId = userId };
+        teacher.UpdateNip(nip);
+        return teacher;
+    }
+
+    public void UpdateNip(string nip)
+    {
         ArgumentException.ThrowIfNullOrWhiteSpace(nip);
 
-        return new Teacher { UserId = userId, Nip = nip.Trim() };
+        Nip = nip.Trim();
     }
 }

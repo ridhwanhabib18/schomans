@@ -14,13 +14,42 @@
   "nav": {
     "main": "Main navigation",
     "dashboard": "Dashboard",
-    "skipToContent": "Skip to content"
+    "home": "Home",
+    "skipToContent": "Skip to content",
+    "announcements": "Announcements",
+    "students": "Students",
+    "teachers": "Teachers",
+    "classrooms": "Classrooms",
+    "subjects": "Subjects",
+    "academicYears": "Academic years",
+    "news": "News",
+    "manageNews": "Manage news",
+    "manageAnnouncements": "Manage announcements",
+    "sections": {
+      "school": "School",
+      "communication": "Communication",
+      "manage": "Manage"
+    },
+    "publicMain": "Public navigation",
+    "notifications": "Notifications"
   },
   "actions": {
     "signIn": "Sign in",
     "signOut": "Sign out",
     "retry": "Try again",
-    "backHome": "Back to home"
+    "backHome": "Back to home",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "close": "Close",
+    "dismiss": "Dismiss",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "reload": "Reload",
+    "back": "Back",
+    "apply": "Apply"
   },
   "theme": {
     "label": "Theme: {{mode}}. Click to change.",
@@ -40,6 +69,50 @@
     "forbidden": {
       "title": "You do not have access to this page",
       "body": "Your role is not allowed to open this page. Go back to your dashboard."
-    }
+    },
+    "concurrency": "Somebody else changed this record while you were editing it. Reload it to see the latest version, then make your change again.",
+    "load": "The data could not be loaded."
+  },
+  "states": {
+    "loading": "Loading…",
+    "noResults": "Nothing matches your search.",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "summary": "{{from}} to {{to}} of {{total}}",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{page}} of {{pages}}"
+  },
+  "editor": {
+    "toolbar": "Text formatting",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "heading2": "Heading",
+    "heading3": "Subheading",
+    "bulletList": "Bulleted list",
+    "orderedList": "Numbered list",
+    "quote": "Quote",
+    "link": "Link",
+    "undo": "Undo",
+    "redo": "Redo",
+    "linkPrompt": "Link address (leave empty to remove the link)"
+  },
+  "cover": {
+    "label": "Cover image",
+    "preview": "Cover image preview",
+    "none": "No cover image yet.",
+    "saveFirst": "Save the draft first, then you can add a cover image.",
+    "choose": "Choose an image",
+    "replace": "Replace image",
+    "remove": "Remove image",
+    "uploading": "Uploading…",
+    "rules": "JPEG, PNG or WebP, up to 5 MB.",
+    "wrongType": "Only JPEG, PNG and WebP images can be used.",
+    "wrongSize": "The image must be at most 5 MB.",
+    "failed": "The image could not be uploaded. Please try again."
   }
 }

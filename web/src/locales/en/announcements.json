@@ -1,0 +1,99 @@
+{
+  "inbox": {
+    "title": "Announcements",
+    "description": "Messages from the school for you.",
+    "unreadOnly": "Show unread only",
+    "empty": {
+      "title": "No announcements yet",
+      "description": "New announcements for you will appear here and in your notifications."
+    },
+    "emptyUnread": {
+      "title": "You have read everything",
+      "description": "There are no unread announcements."
+    },
+    "unread": "Unread",
+    "caption": "Your announcements",
+    "error": "Announcements could not be loaded."
+  },
+  "detail": {
+    "back": "All announcements",
+    "published": "Published {{date}}",
+    "error": "This announcement could not be found. It may not be meant for you."
+  },
+  "manage": {
+    "title": "Manage announcements",
+    "description": "Write announcements for roles or classrooms. Publishing notifies everybody in the audience.",
+    "new": "New announcement",
+    "caption": "Announcements",
+    "columns": {
+      "title": "Title",
+      "status": "Status",
+      "audience": "Audience",
+      "published": "Published",
+      "actions": "Actions"
+    },
+    "status": { "Draft": "Draft", "Published": "Published" },
+    "filter": { "all": "All statuses", "search": "Search by title" },
+    "public": "Public",
+    "empty": {
+      "title": "No announcements",
+      "description": "Create the first announcement for your school."
+    },
+    "publish": "Publish",
+    "delete": "Delete",
+    "edit": "Edit",
+    "error": "Announcements could not be loaded."
+  },
+  "audience": {
+    "all": "Everybody in the school",
+    "roles": "{{roles}}",
+    "classrooms": "Students, parents and homeroom teachers of {{count}} classroom(s)",
+    "rolesInClassrooms": "{{roles}} of {{count}} classroom(s)",
+    "list": "{{list}}"
+  },
+  "form": {
+    "newTitle": "New announcement",
+    "editTitle": "Edit announcement",
+    "title": "Title",
+    "body": "Message",
+    "bodyLabel": "Announcement message",
+    "audienceTitle": "Who is it for?",
+    "rolesLegend": "Roles",
+    "rolesHint": "Leave all unchecked to send it to everybody in the school (applicants are not included).",
+    "classroomsLegend": "Classrooms",
+    "classroomsHint": "Leave all unchecked for no restriction by classroom. A classroom reaches its students, their parents and its homeroom teacher.",
+    "classroomsEmpty": "There are no classrooms in the current academic year.",
+    "public": "Also show on the public pages",
+    "publicHint": "Guests can read it without signing in. Only mark an announcement public when it is meant for everyone.",
+    "summary": "This announcement is for: {{audience}}",
+    "locked": "This announcement is published, so its audience can no longer change (the notifications have been sent). You can still correct the text and the image.",
+    "saveDraft": "Save draft",
+    "save": "Save changes",
+    "publish": "Publish",
+    "publishTitle": "Publish this announcement?",
+    "publishBody": "Everybody in the audience gets a notification right away, and the audience can no longer change.",
+    "published": "Published. {{count}} people were notified.",
+    "saved": "Saved.",
+    "conflict": "Somebody else changed this announcement while you were editing it.",
+    "reload": "Load the latest version",
+    "loadError": "The announcement could not be loaded.",
+    "classroomsLoadError": "The classrooms could not be loaded."
+  },
+  "delete": {
+    "title": "Delete this announcement?",
+    "body": "“{{title}}” disappears for everybody, including its notifications.",
+    "confirm": "Delete announcement",
+    "done": "The announcement was deleted."
+  },
+  "public": {
+    "title": "Announcements",
+    "empty": "There are no public announcements at the moment.",
+    "latest": "Announcements",
+    "back": "Back to home",
+    "published": "Published {{date}}",
+    "notFound": {
+      "title": "Announcement not found",
+      "body": "This announcement does not exist or is not public."
+    }
+  }
+}

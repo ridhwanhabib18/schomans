@@ -38,6 +38,12 @@ public sealed class SyncUserHandler(IAppDbContext db)
 
     private async Task<Result<SyncedUserDto>?> TrySync(SyncUserCommand command, UserRole role, CancellationToken ct)
     {
+        // A person whose record was deleted (for example a student who left) must not come back by logging in again.
+        if (await db.Users.IgnoreQueryFilters().AnyAsync(u => u.KeycloakId == command.Sub && u.IsDeleted, ct))
+        {
+            return Error.Forbidden("auth.account_deactivated", "This account has been deactivated.");
+        }
+
         var user = await db.Users.FirstOrDefaultAsync(u => u.KeycloakId == command.Sub, ct);
 
         if (user is null)

@@ -3,6 +3,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { restoreSession } from '@/features/auth/api/authService'
 import { isDark, selectTheme, useUiStore } from '@/stores/useUiStore'
 import { useAuthStore } from '@/stores/useAuthStore'
+import { RealtimeBridge } from './RealtimeBridge'
 
 /** Applies the theme preference (light, dark, system) as the `dark` class on <html>. */
 function useThemeClass() {
@@ -40,5 +41,10 @@ export function AppProviders({ children }: { children: ReactNode }) {
     })
   }, [queryClient])
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  return (
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <RealtimeBridge />
+    </QueryClientProvider>
+  )
 }
