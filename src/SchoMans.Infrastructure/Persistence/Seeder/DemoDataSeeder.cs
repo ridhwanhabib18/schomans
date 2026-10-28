@@ -8,7 +8,7 @@ namespace SchoMans.Infrastructure.Persistence.Seeder;
 
 /// <summary>
 /// Fills an empty database with one fictional school: one academic year, 5 classrooms, 15 teachers, 150 students and
-/// 8 subjects, one login-ready account per role, and some news and announcements. Every name and number is made up;
+/// 8 subjects with a weekly timetable, one login-ready account per role, and some news and announcements. Every name and number is made up;
 /// nothing here is real personal data. Each part is seeded only when its tables are empty, so running it again (or on
 /// a database that already holds an earlier part) never duplicates anything.
 /// The demo accounts have no Keycloak id yet; the first login links them by email (see SyncUserHandler).
@@ -44,6 +44,7 @@ public sealed class DemoDataSeeder(AppDbContext db, TimeProvider timeProvider, I
     {
         await SeedSchoolAsync(ct);
         await SeedSubjectsAsync(ct);
+        await SeedSchedulesAsync(ct);
         await SeedCommunicationAsync(ct);
     }
 
@@ -98,6 +99,57 @@ public sealed class DemoDataSeeder(AppDbContext db, TimeProvider timeProvider, I
         db.Subjects.AddRange(Subjects.Select(s => Subject.Create(s.Name, s.MinimumPassingScore)));
         await db.SaveChangesAsync(ct);
         logger.LogInformation("Seeded {Count} subjects", Subjects.Length);
+    }
+
+    /// <summary>
+    /// A Monday to Friday timetable for every classroom of the current year: four lessons a day. Each subject has one
+    /// teacher (the demo teacher teaches Mathematics), and at any time the classrooms have different subjects, so no
+    /// teacher is ever in two places at once.
+    /// </summary>
+    private async Task SeedSchedulesAsync(CancellationToken ct)
+    {
+        if (await db.Schedules.IgnoreQueryFilters().AnyAsync(ct))
+        {
+            return;
+        }
+
+        var classrooms = await db.Classrooms.Where(c => c.AcademicYear!.IsActive).OrderBy(c => c.Name).ToListAsync(ct);
+        var teachers = await db.Teachers.OrderBy(t => t.Nip).ToListAsync(ct);
+        var subjectIds = await db.Subjects.ToDictionaryAsync(s => s.Name, s => s.Id, ct);
+        if (classrooms.Count == 0 || teachers.Count < Subjects.Length || subjectIds.Count < Subjects.Length)
+        {
+            return;
+        }
+
+        (TimeOnly Start, TimeOnly End)[] slots =
+        [
+            (new TimeOnly(7, 0), new TimeOnly(8, 30)),
+            (new TimeOnly(8, 30), new TimeOnly(10, 0)),
+            (new TimeOnly(10, 15), new TimeOnly(11, 45)),
+            (new TimeOnly(12, 30), new TimeOnly(14, 0)),
+        ];
+        DayOfWeek[] days = [DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday];
+
+        for (var d = 0; d < days.Length; d++)
+        {
+            for (var s = 0; s < slots.Length; s++)
+            {
+                for (var c = 0; c < classrooms.Count; c++)
+                {
+                    var subject = (s + c + d) % Subjects.Length;
+                    db.Schedules.Add(Schedule.Create(
+                        classrooms[c].Id,
+                        subjectIds[Subjects[subject].Name],
+                        teachers[subject].Id,
+                        days[d],
+                        slots[s].Start,
+                        slots[s].End));
+                }
+            }
+        }
+
+        await db.SaveChangesAsync(ct);
+        logger.LogInformation("Seeded the timetable of {Classrooms} classrooms", classrooms.Count);
     }
 
     private async Task SeedCommunicationAsync(CancellationToken ct)
