@@ -51,6 +51,10 @@ public sealed class ApiFixture : IAsyncLifetime
     public ApiFactory CreateFactory(IReadOnlyDictionary<string, string> settings, string environment = "Testing") =>
         new(ConnectionString, environment, settings);
 
+    /// <summary>A second host on the same database whose clock the test sets (QR expiry, forgotten sessions, reminders).</summary>
+    public ApiFactory CreateFactory(TestClock clock, IReadOnlyDictionary<string, string>? settings = null) =>
+        new(ConnectionString, "Testing", settings, Storage, clock);
+
     public async Task DisposeAsync()
     {
         if (Factory is not null)

@@ -17,7 +17,8 @@ public sealed class ApiFactory(
     string connectionString,
     string environment = "Testing",
     IReadOnlyDictionary<string, string>? settings = null,
-    InMemoryFileStorage? storage = null) : WebApplicationFactory<Program>
+    InMemoryFileStorage? storage = null,
+    TimeProvider? timeProvider = null) : WebApplicationFactory<Program>
 {
     public InMemoryFileStorage Storage { get; } = storage ?? new InMemoryFileStorage();
 
@@ -54,6 +55,12 @@ public sealed class ApiFactory(
 
             services.RemoveAll<IFileStorage>();
             services.AddSingleton<IFileStorage>(Storage);
+
+            if (timeProvider is not null)
+            {
+                services.RemoveAll<TimeProvider>();
+                services.AddSingleton(timeProvider);
+            }
         });
     }
 }
