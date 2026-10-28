@@ -121,6 +121,7 @@ export function SubmissionPanel({ assignment }: { assignment: AssignmentDto }) {
         <Alert tone="info" message={t('submit.graded')} />
       ) : (
         <form
+          noValidate
           className="flex flex-col gap-4 border-t border-border pt-4"
           onSubmit={(event) => {
             event.preventDefault()

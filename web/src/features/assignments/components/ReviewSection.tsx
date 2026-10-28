@@ -60,6 +60,7 @@ function ReviewDialog({ row, canScore, onClose }: { row: SubmissionRowDto; canSc
             {!data.textBody && !data.hasFile && <p className="text-sm text-muted-foreground">{t('review.noText')}</p>}
             {canScore && (
               <form
+                noValidate
                 className="flex flex-col gap-4 border-t border-border pt-4"
                 onSubmit={(event) => {
                   event.preventDefault()

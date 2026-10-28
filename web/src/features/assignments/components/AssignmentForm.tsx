@@ -61,8 +61,10 @@ export function AssignmentForm({ assignment, options, onReload }: AssignmentForm
 
   async function addFiles(files: FileList | null) {
     setFileError(undefined)
+    // Counted here, not read from state: several files picked at once are handled before the state updates.
+    let count = kept.length + added.length
     for (const file of Array.from(files ?? [])) {
-      if (kept.length + added.length >= MAX_ATTACHMENTS) {
+      if (count >= MAX_ATTACHMENTS) {
         setFileError(t('form.tooMany'))
         return
       }
@@ -75,6 +77,7 @@ export function AssignmentForm({ assignment, options, onReload }: AssignmentForm
 
       try {
         const attachment = await upload.mutateAsync(file)
+        count++
         setAdded((current) => [...current, attachment])
       } catch {
         setFileError(t('form.uploadFailed', { name: file.name }))
@@ -116,6 +119,7 @@ export function AssignmentForm({ assignment, options, onReload }: AssignmentForm
 
   return (
     <form
+      noValidate
       className="flex max-w-3xl flex-col gap-5"
       onSubmit={(event) => {
         event.preventDefault()
