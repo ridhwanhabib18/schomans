@@ -8,38 +8,63 @@ import type {
   AcademicYearDto,
   AnnouncementDto,
   AnnouncementReaderDto,
+  AssignmentDto,
+  AttendanceSessionDto,
+  ChildDto,
+  ClassroomAttendanceSummaryDto,
   ClassroomDto,
   CreateAcademicYearCommand,
   CreateAnnouncementCommand,
+  CreateAssignmentCommand,
+  CreateAttachmentUploadUrlCommand,
   CreateClassroomCommand,
   CreateNewsCommand,
+  CreateScheduleCommand,
   CreateStudentCommand,
   CreateSubjectCommand,
+  CreateSubmissionUploadUrlCommand,
   CreateTeacherCommand,
   CreateUploadUrlCommand,
   DashboardDto,
+  DownloadUrlDto,
+  ExportClassroomAttendanceSummaryParams,
+  GetAssignmentAttachmentUrlParams,
+  GetAssignmentParams,
+  GetClassroomAttendanceSummaryParams,
+  GetMyAttendanceParams,
+  GetStudentAttendanceParams,
+  GradeSubmissionCommand,
   ImportStudentsBody,
   ImportStudentsSummary,
   ListAcademicYearsParams,
   ListAnnouncementsParams,
+  ListAssignmentsParams,
+  ListChildAssignmentsParams,
   ListClassroomsParams,
   ListMyAnnouncementsParams,
+  ListMyAssignmentsParams,
   ListMyNotificationsParams,
   ListNewsParams,
   ListPublicAnnouncementsParams,
   ListPublicNewsParams,
+  ListSchedulesParams,
   ListStudentsParams,
   ListSubjectsParams,
   ListTeachersParams,
+  MarkAttendanceCommand,
   MeDto,
   NewsDto,
+  OpenSessionCommand,
   PagedResultOfAcademicYearDto,
   PagedResultOfAnnouncementDto,
   PagedResultOfAnnouncementSummaryDto,
+  PagedResultOfAssignmentListItemDto,
   PagedResultOfClassroomDto,
   PagedResultOfNewsDto,
   PagedResultOfNotificationDto,
   PagedResultOfPublicNewsSummaryDto,
+  PagedResultOfScheduleDto,
+  PagedResultOfStudentAssignmentDto,
   PagedResultOfStudentDto,
   PagedResultOfSubjectDto,
   PagedResultOfTeacherDto,
@@ -47,14 +72,27 @@ import type {
   PublishAnnouncementSummary,
   RolloverAcademicYearCommand,
   RolloverResult,
+  ScanQrCommand,
+  ScanResultDto,
+  ScanSettingsDto,
+  ScheduleDto,
+  SessionStudentDto,
+  StudentAttendanceDto,
   StudentDto,
   SubjectDto,
+  SubmissionDto,
+  SubmissionRowDto,
+  SubmitAssignmentCommand,
   TeacherDto,
+  TeachingOptionDto,
+  TodayLessonDto,
   UnreadNotificationCountDto,
   UpdateAcademicYearCommand,
   UpdateAnnouncementCommand,
+  UpdateAssignmentCommand,
   UpdateClassroomCommand,
   UpdateNewsCommand,
+  UpdateScheduleCommand,
   UpdateStudentCommand,
   UpdateSubjectCommand,
   UpdateTeacherCommand,
@@ -79,6 +117,15 @@ export const getCurrentUser = (
  options?: SecondParameter<typeof customInstance<MeDto>>,) => {
       return customInstance<MeDto>(
       {url: `/api/v1/users/me`, method: 'GET'
+    },
+      options);
+    }
+
+export const listMyChildren = (
+
+ options?: SecondParameter<typeof customInstance<ChildDto[]>>,) => {
+      return customInstance<ChildDto[]>(
+      {url: `/api/v1/users/me/children`, method: 'GET'
     },
       options);
     }
@@ -371,6 +418,331 @@ export const rolloverAcademicYear = (
       options);
     }
 
+export const listSchedules = (
+    params?: ListSchedulesParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfScheduleDto>>,) => {
+      return customInstance<PagedResultOfScheduleDto>(
+      {url: `/api/v1/schedules`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createSchedule = (
+    createScheduleCommand: CreateScheduleCommand,
+ options?: SecondParameter<typeof customInstance<ScheduleDto>>,) => {
+      return customInstance<ScheduleDto>(
+      {url: `/api/v1/schedules`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createScheduleCommand
+    },
+      options);
+    }
+
+export const updateSchedule = (
+    id: string,
+    updateScheduleCommand: UpdateScheduleCommand,
+ options?: SecondParameter<typeof customInstance<ScheduleDto>>,) => {
+      return customInstance<ScheduleDto>(
+      {url: `/api/v1/schedules/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateScheduleCommand
+    },
+      options);
+    }
+
+export const deleteSchedule = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/schedules/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const listTodayLessons = (
+
+ options?: SecondParameter<typeof customInstance<TodayLessonDto[]>>,) => {
+      return customInstance<TodayLessonDto[]>(
+      {url: `/api/v1/attendance/today`, method: 'GET'
+    },
+      options);
+    }
+
+export const openAttendanceSession = (
+    openSessionCommand: OpenSessionCommand,
+ options?: SecondParameter<typeof customInstance<AttendanceSessionDto>>,) => {
+      return customInstance<AttendanceSessionDto>(
+      {url: `/api/v1/attendance/sessions`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: openSessionCommand
+    },
+      options);
+    }
+
+export const getAttendanceSession = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<AttendanceSessionDto>>,) => {
+      return customInstance<AttendanceSessionDto>(
+      {url: `/api/v1/attendance/sessions/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const closeAttendanceSession = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<AttendanceSessionDto>>,) => {
+      return customInstance<AttendanceSessionDto>(
+      {url: `/api/v1/attendance/sessions/${id}/close`, method: 'POST'
+    },
+      options);
+    }
+
+export const markAttendance = (
+    sessionId: string,
+    studentId: string,
+    markAttendanceCommand: MarkAttendanceCommand,
+ options?: SecondParameter<typeof customInstance<SessionStudentDto>>,) => {
+      return customInstance<SessionStudentDto>(
+      {url: `/api/v1/attendance/sessions/${sessionId}/students/${studentId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: markAttendanceCommand
+    },
+      options);
+    }
+
+export const scanAttendanceQr = (
+    scanQrCommand: ScanQrCommand,
+ options?: SecondParameter<typeof customInstance<ScanResultDto>>,) => {
+      return customInstance<ScanResultDto>(
+      {url: `/api/v1/attendance/scans`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: scanQrCommand
+    },
+      options);
+    }
+
+export const getAttendanceScanSettings = (
+
+ options?: SecondParameter<typeof customInstance<ScanSettingsDto>>,) => {
+      return customInstance<ScanSettingsDto>(
+      {url: `/api/v1/attendance/scan-settings`, method: 'GET'
+    },
+      options);
+    }
+
+export const getClassroomAttendanceSummary = (
+    classroomId: string,
+    params: GetClassroomAttendanceSummaryParams,
+ options?: SecondParameter<typeof customInstance<ClassroomAttendanceSummaryDto>>,) => {
+      return customInstance<ClassroomAttendanceSummaryDto>(
+      {url: `/api/v1/attendance/classrooms/${classroomId}/summary`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const exportClassroomAttendanceSummary = (
+    classroomId: string,
+    params: ExportClassroomAttendanceSummaryParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/attendance/classrooms/${classroomId}/summary/export`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const getMyAttendance = (
+    params: GetMyAttendanceParams,
+ options?: SecondParameter<typeof customInstance<StudentAttendanceDto>>,) => {
+      return customInstance<StudentAttendanceDto>(
+      {url: `/api/v1/attendance/students/me`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const getStudentAttendance = (
+    studentId: string,
+    params: GetStudentAttendanceParams,
+ options?: SecondParameter<typeof customInstance<StudentAttendanceDto>>,) => {
+      return customInstance<StudentAttendanceDto>(
+      {url: `/api/v1/attendance/students/${studentId}`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const listAssignments = (
+    params?: ListAssignmentsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfAssignmentListItemDto>>,) => {
+      return customInstance<PagedResultOfAssignmentListItemDto>(
+      {url: `/api/v1/assignments`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createAssignment = (
+    createAssignmentCommand: CreateAssignmentCommand,
+ options?: SecondParameter<typeof customInstance<AssignmentDto>>,) => {
+      return customInstance<AssignmentDto>(
+      {url: `/api/v1/assignments`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAssignmentCommand
+    },
+      options);
+    }
+
+export const listTeachingOptions = (
+
+ options?: SecondParameter<typeof customInstance<TeachingOptionDto[]>>,) => {
+      return customInstance<TeachingOptionDto[]>(
+      {url: `/api/v1/assignments/teaching-options`, method: 'GET'
+    },
+      options);
+    }
+
+export const createAssignmentAttachmentUploadUrl = (
+    createAttachmentUploadUrlCommand: CreateAttachmentUploadUrlCommand,
+ options?: SecondParameter<typeof customInstance<UploadUrlDto>>,) => {
+      return customInstance<UploadUrlDto>(
+      {url: `/api/v1/assignments/attachments/upload-url`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAttachmentUploadUrlCommand
+    },
+      options);
+    }
+
+export const listMyAssignments = (
+    params?: ListMyAssignmentsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfStudentAssignmentDto>>,) => {
+      return customInstance<PagedResultOfStudentAssignmentDto>(
+      {url: `/api/v1/assignments/mine`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const listChildAssignments = (
+    studentId: string,
+    params?: ListChildAssignmentsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfStudentAssignmentDto>>,) => {
+      return customInstance<PagedResultOfStudentAssignmentDto>(
+      {url: `/api/v1/assignments/children/${studentId}`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const getAssignment = (
+    id: string,
+    params?: GetAssignmentParams,
+ options?: SecondParameter<typeof customInstance<AssignmentDto>>,) => {
+      return customInstance<AssignmentDto>(
+      {url: `/api/v1/assignments/${id}`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const updateAssignment = (
+    id: string,
+    updateAssignmentCommand: UpdateAssignmentCommand,
+ options?: SecondParameter<typeof customInstance<AssignmentDto>>,) => {
+      return customInstance<AssignmentDto>(
+      {url: `/api/v1/assignments/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAssignmentCommand
+    },
+      options);
+    }
+
+export const deleteAssignment = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/assignments/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const getAssignmentAttachmentUrl = (
+    id: string,
+    attachmentId: string,
+    params?: GetAssignmentAttachmentUrlParams,
+ options?: SecondParameter<typeof customInstance<DownloadUrlDto>>,) => {
+      return customInstance<DownloadUrlDto>(
+      {url: `/api/v1/assignments/${id}/attachments/${attachmentId}/download-url`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createSubmissionUploadUrl = (
+    id: string,
+    createSubmissionUploadUrlCommand: CreateSubmissionUploadUrlCommand,
+ options?: SecondParameter<typeof customInstance<UploadUrlDto>>,) => {
+      return customInstance<UploadUrlDto>(
+      {url: `/api/v1/assignments/${id}/submission/upload-url`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createSubmissionUploadUrlCommand
+    },
+      options);
+    }
+
+export const submitAssignment = (
+    id: string,
+    submitAssignmentCommand: SubmitAssignmentCommand,
+ options?: SecondParameter<typeof customInstance<SubmissionDto>>,) => {
+      return customInstance<SubmissionDto>(
+      {url: `/api/v1/assignments/${id}/submission`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: submitAssignmentCommand
+    },
+      options);
+    }
+
+export const listSubmissions = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<SubmissionRowDto[]>>,) => {
+      return customInstance<SubmissionRowDto[]>(
+      {url: `/api/v1/assignments/${id}/submissions`, method: 'GET'
+    },
+      options);
+    }
+
+export const getSubmission = (
+    submissionId: string,
+ options?: SecondParameter<typeof customInstance<SubmissionDto>>,) => {
+      return customInstance<SubmissionDto>(
+      {url: `/api/v1/assignments/submissions/${submissionId}`, method: 'GET'
+    },
+      options);
+    }
+
+export const getSubmissionFileUrl = (
+    submissionId: string,
+ options?: SecondParameter<typeof customInstance<DownloadUrlDto>>,) => {
+      return customInstance<DownloadUrlDto>(
+      {url: `/api/v1/assignments/submissions/${submissionId}/download-url`, method: 'GET'
+    },
+      options);
+    }
+
+export const gradeSubmission = (
+    submissionId: string,
+    gradeSubmissionCommand: GradeSubmissionCommand,
+ options?: SecondParameter<typeof customInstance<SubmissionDto>>,) => {
+      return customInstance<SubmissionDto>(
+      {url: `/api/v1/assignments/submissions/${submissionId}/score`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: gradeSubmissionCommand
+    },
+      options);
+    }
+
 export const listPublicNews = (
     params?: ListPublicNewsParams,
  options?: SecondParameter<typeof customInstance<PagedResultOfPublicNewsSummaryDto>>,) => {
@@ -616,6 +988,7 @@ export const createUploadUrl = (
 
 export type GetDashboardResult = NonNullable<Awaited<ReturnType<typeof getDashboard>>>
 export type GetCurrentUserResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
+export type ListMyChildrenResult = NonNullable<Awaited<ReturnType<typeof listMyChildren>>>
 export type ListStudentsResult = NonNullable<Awaited<ReturnType<typeof listStudents>>>
 export type CreateStudentResult = NonNullable<Awaited<ReturnType<typeof createStudent>>>
 export type GetStudentResult = NonNullable<Awaited<ReturnType<typeof getStudent>>>
@@ -644,6 +1017,37 @@ export type GetAcademicYearResult = NonNullable<Awaited<ReturnType<typeof getAca
 export type UpdateAcademicYearResult = NonNullable<Awaited<ReturnType<typeof updateAcademicYear>>>
 export type ActivateAcademicYearResult = NonNullable<Awaited<ReturnType<typeof activateAcademicYear>>>
 export type RolloverAcademicYearResult = NonNullable<Awaited<ReturnType<typeof rolloverAcademicYear>>>
+export type ListSchedulesResult = NonNullable<Awaited<ReturnType<typeof listSchedules>>>
+export type CreateScheduleResult = NonNullable<Awaited<ReturnType<typeof createSchedule>>>
+export type UpdateScheduleResult = NonNullable<Awaited<ReturnType<typeof updateSchedule>>>
+export type DeleteScheduleResult = NonNullable<Awaited<ReturnType<typeof deleteSchedule>>>
+export type ListTodayLessonsResult = NonNullable<Awaited<ReturnType<typeof listTodayLessons>>>
+export type OpenAttendanceSessionResult = NonNullable<Awaited<ReturnType<typeof openAttendanceSession>>>
+export type GetAttendanceSessionResult = NonNullable<Awaited<ReturnType<typeof getAttendanceSession>>>
+export type CloseAttendanceSessionResult = NonNullable<Awaited<ReturnType<typeof closeAttendanceSession>>>
+export type MarkAttendanceResult = NonNullable<Awaited<ReturnType<typeof markAttendance>>>
+export type ScanAttendanceQrResult = NonNullable<Awaited<ReturnType<typeof scanAttendanceQr>>>
+export type GetAttendanceScanSettingsResult = NonNullable<Awaited<ReturnType<typeof getAttendanceScanSettings>>>
+export type GetClassroomAttendanceSummaryResult = NonNullable<Awaited<ReturnType<typeof getClassroomAttendanceSummary>>>
+export type ExportClassroomAttendanceSummaryResult = NonNullable<Awaited<ReturnType<typeof exportClassroomAttendanceSummary>>>
+export type GetMyAttendanceResult = NonNullable<Awaited<ReturnType<typeof getMyAttendance>>>
+export type GetStudentAttendanceResult = NonNullable<Awaited<ReturnType<typeof getStudentAttendance>>>
+export type ListAssignmentsResult = NonNullable<Awaited<ReturnType<typeof listAssignments>>>
+export type CreateAssignmentResult = NonNullable<Awaited<ReturnType<typeof createAssignment>>>
+export type ListTeachingOptionsResult = NonNullable<Awaited<ReturnType<typeof listTeachingOptions>>>
+export type CreateAssignmentAttachmentUploadUrlResult = NonNullable<Awaited<ReturnType<typeof createAssignmentAttachmentUploadUrl>>>
+export type ListMyAssignmentsResult = NonNullable<Awaited<ReturnType<typeof listMyAssignments>>>
+export type ListChildAssignmentsResult = NonNullable<Awaited<ReturnType<typeof listChildAssignments>>>
+export type GetAssignmentResult = NonNullable<Awaited<ReturnType<typeof getAssignment>>>
+export type UpdateAssignmentResult = NonNullable<Awaited<ReturnType<typeof updateAssignment>>>
+export type DeleteAssignmentResult = NonNullable<Awaited<ReturnType<typeof deleteAssignment>>>
+export type GetAssignmentAttachmentUrlResult = NonNullable<Awaited<ReturnType<typeof getAssignmentAttachmentUrl>>>
+export type CreateSubmissionUploadUrlResult = NonNullable<Awaited<ReturnType<typeof createSubmissionUploadUrl>>>
+export type SubmitAssignmentResult = NonNullable<Awaited<ReturnType<typeof submitAssignment>>>
+export type ListSubmissionsResult = NonNullable<Awaited<ReturnType<typeof listSubmissions>>>
+export type GetSubmissionResult = NonNullable<Awaited<ReturnType<typeof getSubmission>>>
+export type GetSubmissionFileUrlResult = NonNullable<Awaited<ReturnType<typeof getSubmissionFileUrl>>>
+export type GradeSubmissionResult = NonNullable<Awaited<ReturnType<typeof gradeSubmission>>>
 export type ListPublicNewsResult = NonNullable<Awaited<ReturnType<typeof listPublicNews>>>
 export type GetPublicNewsResult = NonNullable<Awaited<ReturnType<typeof getPublicNews>>>
 export type ListNewsResult = NonNullable<Awaited<ReturnType<typeof listNews>>>

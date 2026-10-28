@@ -16,11 +16,17 @@ public sealed class HubTestClient : IAsyncDisposable
 
     private readonly WebSocket _socket;
     private readonly StringBuilder _buffer = new();
+    private readonly Queue<JsonElement> _received = new();
+    private int _invocationId;
 
     private HubTestClient(WebSocket socket) => _socket = socket;
 
     /// <summary>Connects as the given Keycloak user. Throws when the server refuses the connection (for example 401).</summary>
-    public static async Task<HubTestClient> ConnectAsync(ApiFactory factory, string email, string name, string sub, params string[] roles)
+    public static Task<HubTestClient> ConnectAsync(ApiFactory factory, string email, string name, string sub, params string[] roles) =>
+        ConnectToAsync(factory, NotificationHub.Path, email, name, sub, roles);
+
+    /// <summary>Connects to the hub at <paramref name="path"/> as the given Keycloak user.</summary>
+    public static async Task<HubTestClient> ConnectToAsync(ApiFactory factory, string path, string email, string name, string sub, params string[] roles)
     {
         var client = factory.Server.CreateWebSocketClient();
         client.ConfigureRequest = request =>
@@ -31,15 +37,15 @@ public sealed class HubTestClient : IAsyncDisposable
             request.Headers[TestAuthHandler.RolesHeader] = string.Join(',', roles);
         };
 
-        return await ConnectAsync(client, factory);
+        return await ConnectAsync(client, factory, path);
     }
 
     public static async Task<HubTestClient> ConnectAnonymouslyAsync(ApiFactory factory) =>
-        await ConnectAsync(factory.Server.CreateWebSocketClient(), factory);
+        await ConnectAsync(factory.Server.CreateWebSocketClient(), factory, NotificationHub.Path);
 
-    private static async Task<HubTestClient> ConnectAsync(Microsoft.AspNetCore.TestHost.WebSocketClient client, ApiFactory factory)
+    private static async Task<HubTestClient> ConnectAsync(Microsoft.AspNetCore.TestHost.WebSocketClient client, ApiFactory factory, string path)
     {
-        var uri = new UriBuilder(factory.Server.BaseAddress) { Scheme = "ws", Path = NotificationHub.Path }.Uri;
+        var uri = new UriBuilder(factory.Server.BaseAddress) { Scheme = "ws", Path = path }.Uri;
         var socket = await client.ConnectAsync(uri, CancellationToken.None);
         var hub = new HubTestClient(socket);
 
@@ -53,13 +59,43 @@ public sealed class HubTestClient : IAsyncDisposable
         return hub;
     }
 
+    /// <summary>
+    /// Calls a hub method and waits for its completion. Returns the error the server sent (for example a HubException
+    /// message), or null when the call succeeded. Server pushes that arrive meanwhile are kept for <see cref="WaitForInvocationAsync"/>.
+    /// </summary>
+    public async Task<string?> InvokeAsync(string target, params object[] arguments)
+    {
+        var id = (++_invocationId).ToString(System.Globalization.CultureInfo.InvariantCulture);
+        await SendAsync(JsonSerializer.Serialize(new { type = 1, invocationId = id, target, arguments }));
+
+        var deadline = DateTime.UtcNow + TimeSpan.FromSeconds(10);
+        while (DateTime.UtcNow < deadline)
+        {
+            var message = await ReadMessageAsync(deadline - DateTime.UtcNow);
+            if (message is null)
+            {
+                break;
+            }
+
+            var json = message.Value;
+            if (json.GetProperty("type").GetInt32() == 3 && json.GetProperty("invocationId").GetString() == id)
+            {
+                return json.TryGetProperty("error", out var error) ? error.GetString() : null;
+            }
+
+            _received.Enqueue(json);
+        }
+
+        throw new TimeoutException($"The hub did not complete {target}.");
+    }
+
     /// <summary>Waits for the server to invoke <paramref name="target"/> and returns its first argument, or null on timeout.</summary>
     public async Task<JsonElement?> WaitForInvocationAsync(string target, TimeSpan timeout)
     {
         var deadline = DateTime.UtcNow + timeout;
         while (DateTime.UtcNow < deadline)
         {
-            var message = await ReadMessageAsync(deadline - DateTime.UtcNow);
+            var message = _received.Count > 0 ? _received.Dequeue() : await ReadMessageAsync(deadline - DateTime.UtcNow);
             if (message is null)
             {
                 return null;

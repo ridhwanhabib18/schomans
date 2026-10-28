@@ -20,6 +20,11 @@ public sealed class DeleteClassroomHandler(IAppDbContext db)
             return Error.Conflict("classrooms.has_students", "This classroom still has students. Move them to another classroom first.");
         }
 
+        if (await db.Schedules.AnyAsync(s => s.ClassroomId == classroom.Id, ct))
+        {
+            return Error.Conflict("classrooms.has_lessons", "This classroom has lessons in the timetable. Remove them first.");
+        }
+
         db.Classrooms.Remove(classroom);
         await db.SaveChangesAsync(ct);
         return new Unit();

@@ -97,6 +97,8 @@ export function RichTextEditor({ value, onChange, label, invalid, disabled }: Ri
     extensions: [StarterKit.configure({ link: { openOnClick: false, autolink: true } })],
     content: value,
     editable: !disabled,
+    // The toolbar shows which formats are on at the cursor; without this it only re-renders when the text changes.
+    shouldRerenderOnTransaction: true,
     editorProps: {
       attributes: { role: 'textbox', 'aria-multiline': 'true', 'aria-label': label, class: 'rich-text min-h-48 px-3 py-2 focus:outline-none' },
     },

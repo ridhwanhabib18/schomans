@@ -17,7 +17,8 @@ public sealed class ApiFactory(
     string connectionString,
     string environment = "Testing",
     IReadOnlyDictionary<string, string>? settings = null,
-    InMemoryFileStorage? storage = null) : WebApplicationFactory<Program>
+    InMemoryFileStorage? storage = null,
+    TimeProvider? timeProvider = null) : WebApplicationFactory<Program>
 {
     public InMemoryFileStorage Storage { get; } = storage ?? new InMemoryFileStorage();
 
@@ -29,6 +30,9 @@ public sealed class ApiFactory(
         builder.UseSetting("Database:SeedDemoData", "true");
         builder.UseSetting("Cors:AllowedOrigins:0", "http://localhost:5173");
         builder.UseSetting("Site:PublicBaseUrl", "https://school.test");
+
+        // No Hangfire server in tests: they call the job handlers directly, with a clock they control.
+        builder.UseSetting("Jobs:Enabled", "false");
 
         // Never contacted: the test auth scheme replaces JWT validation, so no metadata is fetched.
         builder.UseSetting("Keycloak:Authority", "http://keycloak.invalid/realms/schomans");
@@ -51,6 +55,12 @@ public sealed class ApiFactory(
 
             services.RemoveAll<IFileStorage>();
             services.AddSingleton<IFileStorage>(Storage);
+
+            if (timeProvider is not null)
+            {
+                services.RemoveAll<TimeProvider>();
+                services.AddSingleton(timeProvider);
+            }
         });
     }
 }

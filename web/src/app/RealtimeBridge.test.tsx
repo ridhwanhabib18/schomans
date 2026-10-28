@@ -86,7 +86,7 @@ describe('RealtimeBridge', () => {
 
     act(() => hub.handlers.get('NotificationCreated')?.({ title: 'New announcement', body: 'School is closed.', linkUrl: '/announcements/a1' }))
 
-    expect(invalidate.mock.calls.map(([filter]) => filter?.queryKey?.[0]).sort()).toEqual(['announcements', 'notifications'])
+    expect(invalidate.mock.calls.map(([filter]) => filter?.queryKey?.[0]).sort()).toEqual(['announcements', 'assignments', 'notifications'])
     expect(useToastStore.getState().toasts).toMatchObject([{ kind: 'info', title: 'New announcement', body: 'School is closed.', linkUrl: '/announcements/a1' }])
   })
 
@@ -96,7 +96,7 @@ describe('RealtimeBridge', () => {
 
     act(() => hub.reconnected?.())
 
-    expect(invalidate).toHaveBeenCalledTimes(2)
+    expect(invalidate).toHaveBeenCalledTimes(3)
     expect(useToastStore.getState().toasts).toEqual([])
   })
 

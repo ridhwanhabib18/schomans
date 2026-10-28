@@ -18,4 +18,7 @@ public static class Policies
 
     /// <summary>Staff who may read master data: admin, principal and teachers (a teacher only sees their own classes, enforced in Application).</summary>
     public const string StaffRead = nameof(StaffRead);
+
+    /// <summary>The people who give or oversee assignments: teachers and the principal.</summary>
+    public const string TeachingStaff = nameof(TeachingStaff);
 }

@@ -22,7 +22,8 @@ export function RequireAuth() {
   }
 
   if (status === 'anonymous') {
-    return <Navigate to="/login" replace state={{ from: location.pathname }} />
+    // The query string comes along: a check-in address carries its code in it (/attend?t=...).
+    return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />
   }
 
   return <Outlet />

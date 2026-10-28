@@ -24,3 +24,19 @@ export function createNotificationConnection(getToken: () => string | null): Hub
     .configureLogging(LogLevel.Warning)
     .build()
 }
+
+/** Events of the attendance hub, pushed to the screen of a session the user joined. */
+export const ATTENDANCE_EVENTS = {
+  studentCheckedIn: 'StudentCheckedIn',
+  qrRotated: 'QrRotated',
+  sessionClosed: 'SessionClosed',
+} as const
+
+/** The SignalR connection of the attendance hub. After connecting, call `JoinSession(sessionId)` to receive its events. */
+export function createAttendanceConnection(getToken: () => string | null): HubConnection {
+  return new HubConnectionBuilder()
+    .withUrl(`${config.apiUrl}/hubs/attendance`, { accessTokenFactory: () => getToken() ?? '' })
+    .withAutomaticReconnect()
+    .configureLogging(LogLevel.Warning)
+    .build()
+}

@@ -136,7 +136,8 @@
     "errors": {
       "teachers": {
         "nip_taken": "Another teacher already has this NIP.",
-        "is_homeroom": "This teacher is the homeroom teacher of a classroom. Appoint another teacher there first."
+        "is_homeroom": "This teacher is the homeroom teacher of a classroom. Appoint another teacher there first.",
+        "has_lessons": "This teacher has lessons in the timetable or assignments. Give the lessons to another teacher first."
       },
       "users": {
         "email_taken": "Another account already uses this email.",
@@ -181,7 +182,8 @@
     "errors": {
       "classrooms": {
         "name_taken": "This academic year already has a classroom with this name.",
-        "has_students": "This classroom still has students. Move them to another classroom first."
+        "has_students": "This classroom still has students. Move them to another classroom first.",
+        "has_lessons": "This classroom has lessons in the timetable. Remove them first."
       },
       "teachers": {
         "not_found": "That teacher no longer exists."
@@ -221,7 +223,8 @@
     },
     "errors": {
       "subjects": {
-        "name_taken": "A subject with this name already exists."
+        "name_taken": "A subject with this name already exists.",
+        "in_use": "This subject is in the timetable or has assignments, so it cannot be deleted."
       }
     }
   },
@@ -343,6 +346,48 @@
       "classroomName": "Name the new classroom of {{from}}.",
       "teacher": "Choose a homeroom teacher for the new classroom of {{from}}.",
       "teacherSame": "The classrooms that move into {{to}} need the same homeroom teacher."
+    }
+  },
+  "schedules": {
+    "title": "Timetable",
+    "description": "The weekly lessons of each classroom: which subject, which teacher, when.",
+    "add": "Add lesson",
+    "classroom": "Classroom",
+    "free": "No lessons",
+    "noClassrooms": "There are no classrooms in the current academic year.",
+    "form": {
+      "newTitle": "Add lesson",
+      "editTitle": "Edit lesson",
+      "classroom": "Classroom {{name}}",
+      "day": "Day",
+      "start": "Starts at",
+      "end": "Ends at",
+      "subject": "Subject",
+      "subjectPlaceholder": "Choose a subject",
+      "teacher": "Teacher",
+      "teacherPlaceholder": "Choose a teacher"
+    },
+    "delete": {
+      "title": "Delete this lesson?",
+      "body": "{{subject}} on {{day}} at {{time}} is removed from the timetable.",
+      "confirm": "Delete lesson"
+    },
+    "errors": {
+      "schedules": {
+        "classroom_busy": "The classroom already has a lesson at this time.",
+        "teacher_busy": "The teacher already teaches another lesson at this time.",
+        "has_sessions": "Attendance was already taken for this lesson, so it cannot be deleted. Change its time instead.",
+        "not_found": "The lesson no longer exists."
+      },
+      "classrooms": {
+        "not_found": "That classroom no longer exists."
+      },
+      "subjects": {
+        "not_found": "That subject no longer exists."
+      },
+      "teachers": {
+        "not_found": "That teacher no longer exists."
+      }
     }
   }
 }

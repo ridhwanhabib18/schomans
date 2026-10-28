@@ -50,6 +50,10 @@ Keycloak at http://localhost:8080 and the S3 endpoint of SeaweedFS at http://loc
 | `cd web && npm run test:e2e` | End-to-end tests (Playwright); needs the containers from step 1 |
 | `cd web && npm run api:generate` | Regenerates the TypeScript API client (the API must be running) |
 
+Background jobs (QR code rotation every minute, closing forgotten attendance sessions, the assignment reminders) run in the
+API with Hangfire; admin staff can watch them from the "Background jobs" link of the app, which opens `/hangfire`. Set
+`Jobs:Enabled` to `false` to run the API without them.
+
 If Docker is only reachable from WSL, the integration tests can use an already running SQL Server instead of
 Testcontainers: set `SCHOMANS_TEST_SQL` to its connection string without a database name, for example
 `Server=127.0.0.1,1433;User Id=sa;Password=...;TrustServerCertificate=True;Encrypt=False`, and `SCHOMANS_TEST_S3` to

@@ -2,12 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SchoMans.Application.Common.Interfaces;
+using SchoMans.Application.Features.Attendance;
 using SchoMans.Infrastructure.Content;
 using SchoMans.Infrastructure.Excel;
 using SchoMans.Infrastructure.Identity;
+using SchoMans.Infrastructure.Jobs;
 using SchoMans.Infrastructure.Persistence;
 using SchoMans.Infrastructure.Persistence.Seeder;
 using SchoMans.Infrastructure.Storage;
+using SchoMans.Infrastructure.Time;
 
 namespace SchoMans.Infrastructure;
 
@@ -39,6 +42,12 @@ public static class DependencyInjection
         services.AddSingleton<IHtmlContentSanitizer, HtmlContentSanitizer>();
         services.AddSingleton<IStudentImportParser, StudentImportParser>();
         services.AddSingleton<IStudentTemplateWriter, StudentTemplateWriter>();
+        services.AddSingleton<IAttendanceExport, AttendanceExcelWriter>();
+
+        services.Configure<SchoolOptions>(configuration.GetSection(SchoolOptions.SectionName));
+        services.AddSingleton<ISchoolClock, SchoolClock>();
+        services.Configure<AttendanceOptions>(configuration.GetSection(AttendanceOptions.SectionName));
+        services.AddSchoolJobs(configuration, connectionString);
 
         services.AddScoped<DemoDataSeeder>();
         return services;

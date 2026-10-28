@@ -10,6 +10,7 @@ const api = vi.hoisted(() => ({
   listPublicAnnouncements: vi.fn(),
   getUnreadNotificationCount: vi.fn(),
   listMyNotifications: vi.fn(),
+  listMyChildren: vi.fn(),
 }))
 const { getDashboard, listPublicNews, listPublicAnnouncements } = api
 
@@ -81,6 +82,13 @@ describe('app routes', () => {
     ['Student', '/manage/students'],
     ['Parent', '/manage/academic-years'],
     ['Principal', '/manage/academic-years/rollover'],
+    ['Student', '/attendance'],
+    ['Teacher', '/attendance/scan'],
+    ['Parent', '/attendance/reports'],
+    ['Admin', '/assignments'],
+    ['Student', '/assignments/new'],
+    ['Teacher', '/my-children/assignments'],
+    ['Student', '/manage/schedules'],
   ])('tells a %s who opens %s that the page is not for their role', async (role, path) => {
     useAuthStore.getState().setSession(makeToken({ roles: [role] }))
 
@@ -99,6 +107,32 @@ describe('app routes', () => {
     for (const name of ['Students', 'Teachers', 'Classrooms', 'Subjects', 'Academic years', 'Announcements', 'Manage announcements']) {
       expect(screen.getAllByRole('link', { name }).length).toBeGreaterThan(0)
     }
+  })
+
+  it.each([
+    ['Teacher', ['Attendance', 'Attendance reports', 'Assignments', 'Timetable']],
+    ['Student', ['Scan QR', 'My attendance', 'Assignments']],
+    ['Parent', ['Attendance', 'Assignments']],
+    ['Principal', ['Attendance reports', 'Assignments', 'Timetable']],
+  ])('shows a %s the classroom entries of their role', async (role, names) => {
+    useAuthStore.getState().setSession(makeToken({ roles: [role] }))
+    getDashboard.mockResolvedValue({ role, fullName: 'Rina Putri', sections: [] })
+
+    renderRoutes(routes, '/dashboard')
+
+    await waitFor(() => expect(screen.getAllByRole('link', { name: 'Announcements' }).length).toBeGreaterThan(0))
+    for (const name of names) {
+      expect(screen.getAllByRole('link', { name }).length, name).toBeGreaterThan(0)
+    }
+  })
+
+  it('keeps the attendance code through the sign-in of a student who scanned it before logging in', async () => {
+    useAuthStore.setState({ status: 'anonymous' })
+
+    const { router } = renderRoutes(routes, '/attend?t=0123456789abcdef0123456789abcdef.abc')
+
+    expect(router.state.location.pathname).toBe('/login')
+    expect(router.state.location.state).toEqual({ from: '/attend?t=0123456789abcdef0123456789abcdef.abc' })
   })
 
   it('shows a student only the dashboard and the announcements', async () => {

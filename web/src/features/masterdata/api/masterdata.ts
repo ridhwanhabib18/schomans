@@ -3,22 +3,26 @@ import {
   activateAcademicYear,
   createAcademicYear,
   createClassroom,
+  createSchedule,
   createStudent,
   createSubject,
   createTeacher,
   deleteClassroom,
+  deleteSchedule,
   deleteStudent,
   deleteSubject,
   deleteTeacher,
   importStudents,
   listAcademicYears,
   listClassrooms,
+  listSchedules,
   listStudents,
   listSubjects,
   listTeachers,
   rolloverAcademicYear,
   updateAcademicYear,
   updateClassroom,
+  updateSchedule,
   updateStudent,
   updateSubject,
   updateTeacher,
@@ -26,16 +30,19 @@ import {
 import type {
   CreateAcademicYearCommand,
   CreateClassroomCommand,
+  CreateScheduleCommand,
   CreateStudentCommand,
   CreateSubjectCommand,
   CreateTeacherCommand,
   ListClassroomsParams,
+  ListSchedulesParams,
   ListStudentsParams,
   ListSubjectsParams,
   ListTeachersParams,
   RolloverAcademicYearCommand,
   UpdateAcademicYearCommand,
   UpdateClassroomCommand,
+  UpdateScheduleCommand,
   UpdateStudentCommand,
   UpdateSubjectCommand,
   UpdateTeacherCommand,
@@ -54,6 +61,7 @@ export const masterdataKeys = {
   years: () => [...masterdataKeys.all, 'academic-years'] as const,
   activeClassrooms: () => [...masterdataKeys.all, 'active-classrooms'] as const,
   teacherOptions: () => [...masterdataKeys.all, 'teacher-options'] as const,
+  schedules: (params: ListSchedulesParams) => [...masterdataKeys.all, 'schedules', params] as const,
 }
 
 function useInvalidateMasterdata() {
@@ -214,4 +222,28 @@ export function useActivateAcademicYear() {
 export function useRolloverAcademicYear() {
   const invalidate = useInvalidateMasterdata()
   return useMutation({ mutationFn: (command: RolloverAcademicYearCommand) => rolloverAcademicYear(command), onSuccess: invalidate })
+}
+
+// ---- timetable ----
+
+export function useSchedules(params: ListSchedulesParams, enabled = true) {
+  return useQuery({ queryKey: masterdataKeys.schedules(params), queryFn: () => listSchedules(params), enabled })
+}
+
+export function useCreateSchedule() {
+  const invalidate = useInvalidateMasterdata()
+  return useMutation({ mutationFn: (command: CreateScheduleCommand) => createSchedule(command), onSuccess: invalidate })
+}
+
+export function useUpdateSchedule() {
+  const invalidate = useInvalidateMasterdata()
+  return useMutation({
+    mutationFn: ({ id, command }: { id: string; command: UpdateScheduleCommand }) => updateSchedule(id, command),
+    onSuccess: invalidate,
+  })
+}
+
+export function useDeleteSchedule() {
+  const invalidate = useInvalidateMasterdata()
+  return useMutation({ mutationFn: (id: string) => deleteSchedule(id), onSuccess: invalidate })
 }

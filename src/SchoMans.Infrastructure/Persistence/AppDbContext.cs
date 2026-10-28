@@ -1,6 +1,8 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using SchoMans.Application.Common.Interfaces;
+using SchoMans.Domain.Assignments;
+using SchoMans.Domain.Attendance;
 using SchoMans.Domain.Common;
 using SchoMans.Domain.Communication;
 using SchoMans.Domain.Students;
@@ -24,6 +26,16 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<Classroom> Classrooms => Set<Classroom>();
 
     public DbSet<Subject> Subjects => Set<Subject>();
+
+    public DbSet<Schedule> Schedules => Set<Schedule>();
+
+    public DbSet<AttendanceSession> AttendanceSessions => Set<AttendanceSession>();
+
+    public DbSet<AttendanceRecord> AttendanceRecords => Set<AttendanceRecord>();
+
+    public DbSet<Assignment> Assignments => Set<Assignment>();
+
+    public DbSet<Submission> Submissions => Set<Submission>();
 
     public DbSet<NewsArticle> NewsArticles => Set<NewsArticle>();
 

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using SchoMans.Api.Extensions;
 using SchoMans.Domain.Students;
 
 namespace SchoMans.Api.Auth;
@@ -48,7 +49,8 @@ public static class AuthExtensions
             .AddPolicy(Policies.Applicant, p => p.RequireRole(nameof(UserRole.Applicant)))
             .AddPolicy(Policies.AnyRole, p => p.RequireRole(Enum.GetNames<UserRole>()))
             .AddPolicy(Policies.Editors, p => p.RequireRole(nameof(UserRole.Admin), nameof(UserRole.Principal)))
-            .AddPolicy(Policies.StaffRead, p => p.RequireRole(nameof(UserRole.Admin), nameof(UserRole.Principal), nameof(UserRole.Teacher)));
+            .AddPolicy(Policies.StaffRead, p => p.RequireRole(nameof(UserRole.Admin), nameof(UserRole.Principal), nameof(UserRole.Teacher)))
+            .AddPolicy(Policies.TeachingStaff, p => p.RequireRole(nameof(UserRole.Teacher), nameof(UserRole.Principal)));
 
         return services;
     }
@@ -60,6 +62,13 @@ public static class AuthExtensions
         if (!string.IsNullOrEmpty(token) && context.HttpContext.Request.Path.StartsWithSegments(HubPathPrefix))
         {
             context.Token = token;
+        }
+
+        // The jobs dashboard is opened as a page, without an Authorization header: the token comes once in the query
+        // string and is then kept in a cookie that only the dashboard path receives (see JobsDashboard).
+        if (context.HttpContext.Request.Path.StartsWithSegments(JobsDashboard.Path))
+        {
+            context.Token = string.IsNullOrEmpty(token) ? context.Request.Cookies[JobsDashboard.CookieName] : token.ToString();
         }
 
         return Task.CompletedTask;
