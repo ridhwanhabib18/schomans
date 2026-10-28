@@ -43,6 +43,7 @@ public static class ServiceCollectionExtensions
 
         services.AddSignalR().AddJsonProtocol(options => options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
         services.AddSingleton<INotificationService, SignalRNotificationService>();
+        services.AddSingleton<IAttendanceRealtime, SignalRAttendanceRealtime>();
         services.AddSchoMansRateLimiting(configuration);
 
         services.AddOpenApi(options => options.AddDocumentTransformer<KeycloakSecuritySchemeTransformer>());

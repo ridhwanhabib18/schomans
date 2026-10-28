@@ -30,6 +30,9 @@ public sealed class ApiFactory(
         builder.UseSetting("Cors:AllowedOrigins:0", "http://localhost:5173");
         builder.UseSetting("Site:PublicBaseUrl", "https://school.test");
 
+        // No Hangfire server in tests: they call the job handlers directly, with a clock they control.
+        builder.UseSetting("Jobs:Enabled", "false");
+
         // Never contacted: the test auth scheme replaces JWT validation, so no metadata is fetched.
         builder.UseSetting("Keycloak:Authority", "http://keycloak.invalid/realms/schomans");
 

@@ -6,6 +6,7 @@ using SchoMans.Api.Hubs;
 using SchoMans.Api.Middleware;
 using SchoMans.Application.Common;
 using SchoMans.Infrastructure;
+using SchoMans.Infrastructure.Jobs;
 using SchoMans.Infrastructure.Persistence;
 using SchoMans.Infrastructure.Storage;
 using Serilog;
@@ -43,6 +44,9 @@ app.MapTeacherEndpoints();
 app.MapClassroomEndpoints();
 app.MapSubjectEndpoints();
 app.MapAcademicYearEndpoints();
+app.MapScheduleEndpoints();
+app.MapAttendanceEndpoints();
+app.MapAssignmentEndpoints();
 app.MapNewsEndpoints();
 app.MapAnnouncementEndpoints();
 app.MapNotificationEndpoints();
@@ -50,6 +54,8 @@ app.MapFileEndpoints();
 app.MapSitemapEndpoints();
 app.MapHealthEndpoints();
 app.MapHub<NotificationHub>(NotificationHub.Path);
+app.MapHub<AttendanceHub>(AttendanceHub.Path);
+app.MapJobsDashboard();
 
 // The API docs are not public in production.
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Demo"))
@@ -60,6 +66,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Demo"))
 
 await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
 await StorageInitializer.InitializeAsync(app.Services);
+JobsSetup.RegisterRecurringJobs(app.Services);
 await app.RunAsync();
 
 // Makes the entry point visible to WebApplicationFactory in the integration tests.
