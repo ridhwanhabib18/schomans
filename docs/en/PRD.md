@@ -154,7 +154,8 @@ Edge cases: a student scans twice → recorded once; a phone without a camera �
 **F-05: Grading & report cards** (US-03, US-09)
 
 - [ ] Teachers enter grades per component (assignments, quizzes, midterm, final) with weights configurable per subject
-- [ ] Final grade and grade band are calculated automatically
+- [ ] Final grade and grade band are calculated automatically; a component without scores yet is left out and its weight is shared over the others
+- [ ] The admin configures the school's grade bands (default A from 90, B from 80, C from 70, D from 60, E below 60)
 - [ ] Term report cards are generated as print-ready PDFs with the school letterhead
 - [ ] Parents and students see grades after the homeroom teacher publishes them
 
@@ -414,7 +415,8 @@ GradeComponent (enum): Assignment | Quiz | Midterm | Final
 GradeWeight: Id, SubjectId → Subject, Component (GradeComponent), WeightPercent   ← weights per subject add up to 100
 LearningObjective: Id, SubjectId → Subject, Code, Description
 Grade: Id, StudentId, SubjectId, TermId → Term, Component (GradeComponent), LearningObjectiveId → LearningObjective (optional), SubmissionId → Submission (optional, set when the score flows in from an assignment), Score
-GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, PublishedById → User   ← grades are visible to students and parents only after this exists
+GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, PublishedById → User   ← grades are visible to students and parents only after this exists, and locked while it exists
+GradeBand: Id, Label, MinScore   ← the school's band scale, set by the admin; one band starts at 0
 ReportCard: Id, StudentId, TermId, Status (Draft|Published), PdfKey, GeneratedAt
 AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status (Draft|Accepted), IsAiDrafted
 ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt

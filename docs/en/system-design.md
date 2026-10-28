@@ -347,6 +347,11 @@ erDiagram
     guid SubmissionId FK
     decimal Score
   }
+  GradeBand {
+    guid Id PK
+    string Label
+    decimal MinScore
+  }
   GradePublication {
     guid Id PK
     guid ClassroomId FK
@@ -381,7 +386,7 @@ erDiagram
   }
 ```
 
-Grade weights are per subject and component and add up to 100. A GradePublication row per classroom and term is what makes grades visible to students and parents. A graded submission creates its Grade row automatically (Grade.SubmissionId).
+Grade weights are per subject and component and add up to 100. A GradePublication row per classroom and term is what makes grades visible to students and parents. A graded submission creates its Grade row automatically (Grade.SubmissionId). GradeBand is a standalone table: the admin sets the school's scale, and the band of a final grade is the one with the highest MinScore it reaches.
 
 ```mermaid
 %% Source: diagrams/erd.mmd (admissions & approvals)
@@ -544,6 +549,7 @@ NewsArticle is public (landing page and a source for the AI-08 chatbot); Announc
 | Term | Index (AcademicYearId, IsActive) | Current term lookups |
 | GradeWeight | Unique (SubjectId, Component) | One weight per component per subject |
 | GradePublication | Unique (ClassroomId, TermId) | Grades published once per classroom and term |
+| GradeBand | Unique Label; unique MinScore | One band per label and per starting score |
 | ReportCard | Unique (StudentId, TermId) | One report card per student and term |
 | Grade | Unique SubmissionId (where not null) | An assignment score feeds one grade row |
 | NewsArticle | Unique Slug | SEO-friendly URLs |

@@ -229,6 +229,11 @@ erDiagram
     guid SubmissionId FK
     decimal Score
   }
+  GradeBand {
+    guid Id PK
+    string Label
+    decimal MinScore
+  }
   GradePublication {
     guid Id PK
     guid ClassroomId FK
