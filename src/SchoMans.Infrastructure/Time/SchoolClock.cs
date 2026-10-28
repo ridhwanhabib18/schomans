@@ -10,6 +10,13 @@ public sealed class SchoolOptions
 
     /// <summary>IANA time zone of the school, for example Asia/Jakarta (WIB).</summary>
     public string TimeZone { get; set; } = "Asia/Jakarta";
+
+    /// <summary>Letterhead of the report cards. A fictional school: the demo uses no real school data.</summary>
+    public string Name { get; set; } = "SchoMans Demo School";
+
+    public string Address { get; set; } = "Jl. Pendidikan No. 1, Jakarta";
+
+    public string Contact { get; set; } = "demo@schomans.example";
 }
 
 /// <summary>The school's local time from <see cref="TimeProvider"/> and the configured time zone.</summary>
