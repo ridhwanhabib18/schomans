@@ -23,7 +23,7 @@ jobs:
           global-json-file: global.json
       - run: dotnet restore SchoMans.sln
       - run: dotnet build SchoMans.sln --no-restore --configuration Release
-      # Integration tests start SQL Server with Testcontainers; the runner provides Docker.
+      # Integration tests start SQL Server and SeaweedFS with Testcontainers; the runner provides Docker.
       - name: Test with coverage
         run: >
           dotnet test SchoMans.sln --no-build --configuration Release
@@ -75,7 +75,7 @@ jobs:
           node-version: 24
           cache: npm
           cache-dependency-path: web/package-lock.json
-      - name: Start SQL Server and Keycloak
+      - name: Start SQL Server, Keycloak and SeaweedFS
         run: |
           cp infra/.env.example infra/.env
           docker compose -f infra/docker-compose.yml --env-file infra/.env up -d --wait --wait-timeout 300
