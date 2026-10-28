@@ -58,7 +58,9 @@ public sealed class DemoDataSeeder(AppDbContext db, TimeProvider timeProvider, I
     /// </summary>
     private async Task SeedGradesAsync(CancellationToken ct)
     {
-        if (await db.Grades.IgnoreQueryFilters().AnyAsync(ct))
+        // Grades of scored assignments do not count: the AddGrading migration creates them from earlier work, and that
+        // must not keep an existing demo database from getting its demo grades.
+        if (await db.Grades.IgnoreQueryFilters().AnyAsync(g => g.SubmissionId == null, ct))
         {
             return;
         }
