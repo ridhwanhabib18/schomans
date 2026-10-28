@@ -1,5 +1,15 @@
 import type { ReactNode } from 'react'
 import { createBrowserRouter, type RouteObject } from 'react-router'
+import { AssignmentDetailPage } from '@/features/assignments/pages/AssignmentDetailPage'
+import { AssignmentEditorPage } from '@/features/assignments/pages/AssignmentEditorPage'
+import { AssignmentsHomePage } from '@/features/assignments/pages/AssignmentsHomePage'
+import { ChildAssignmentsPage } from '@/features/assignments/pages/StudentAssignmentsPage'
+import { AttendanceReportPage } from '@/features/attendance/pages/AttendanceReportPage'
+import { CheckInPage } from '@/features/attendance/pages/CheckInPage'
+import { ChildAttendancePage, MyAttendancePage } from '@/features/attendance/pages/MyAttendancePage'
+import { ScanPage } from '@/features/attendance/pages/ScanPage'
+import { SessionPage } from '@/features/attendance/pages/SessionPage'
+import { TodayLessonsPage } from '@/features/attendance/pages/TodayLessonsPage'
 import { AnnouncementDetailPage } from '@/features/announcements/pages/AnnouncementDetailPage'
 import { AnnouncementEditPage } from '@/features/announcements/pages/AnnouncementEditPage'
 import { AnnouncementsInboxPage } from '@/features/announcements/pages/AnnouncementsInboxPage'
@@ -13,6 +23,7 @@ import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { AcademicYearsPage } from '@/features/masterdata/pages/AcademicYearsPage'
 import { ClassroomsPage } from '@/features/masterdata/pages/ClassroomsPage'
 import { RolloverPage } from '@/features/masterdata/pages/RolloverPage'
+import { SchedulesPage } from '@/features/masterdata/pages/SchedulesPage'
 import { StudentsPage } from '@/features/masterdata/pages/StudentsPage'
 import { SubjectsPage } from '@/features/masterdata/pages/SubjectsPage'
 import { TeachersPage } from '@/features/masterdata/pages/TeachersPage'
@@ -31,6 +42,11 @@ import { NotFoundPage } from './NotFoundPage'
 const ADMIN: readonly AppRole[] = ['Admin']
 const EDITORS: readonly AppRole[] = ['Admin', 'Principal']
 const STAFF: readonly AppRole[] = ['Admin', 'Principal', 'Teacher']
+const TEACHER: readonly AppRole[] = ['Teacher']
+const STUDENT: readonly AppRole[] = ['Student']
+const PARENT: readonly AppRole[] = ['Parent']
+// Admin staff do not work with assignments (authorization matrix).
+const ASSIGNMENT_READERS: readonly AppRole[] = ['Teacher', 'Principal', 'Student', 'Parent']
 
 const guarded = (roles: readonly AppRole[], page: ReactNode) => <RequireRole roles={roles}>{page}</RequireRole>
 
@@ -68,6 +84,21 @@ export const routes: RouteObject[] = [
           { path: '/manage/subjects', element: guarded(STAFF, <SubjectsPage />) },
           { path: '/manage/academic-years', element: guarded(STAFF, <AcademicYearsPage />) },
           { path: '/manage/academic-years/rollover', element: guarded(ADMIN, <RolloverPage />) },
+          { path: '/manage/schedules', element: guarded(STAFF, <SchedulesPage />) },
+
+          { path: '/attendance', element: guarded(TEACHER, <TodayLessonsPage />) },
+          { path: '/attendance/sessions/:id', element: guarded(STAFF, <SessionPage />) },
+          { path: '/attendance/reports', element: guarded(STAFF, <AttendanceReportPage />) },
+          { path: '/attendance/scan', element: guarded(STUDENT, <ScanPage />) },
+          { path: '/attendance/me', element: guarded(STUDENT, <MyAttendancePage />) },
+          { path: '/attend', element: guarded(STUDENT, <CheckInPage />) },
+          { path: '/my-children/attendance', element: guarded(PARENT, <ChildAttendancePage />) },
+
+          { path: '/assignments', element: guarded(ASSIGNMENT_READERS, <AssignmentsHomePage />) },
+          { path: '/assignments/new', element: guarded(TEACHER, <AssignmentEditorPage />) },
+          { path: '/assignments/:id', element: guarded(ASSIGNMENT_READERS, <AssignmentDetailPage />) },
+          { path: '/assignments/:id/edit', element: guarded(TEACHER, <AssignmentEditorPage />) },
+          { path: '/my-children/assignments', element: guarded(PARENT, <ChildAssignmentsPage />) },
 
           { path: '/manage/news', element: guarded(EDITORS, <NewsManagePage />) },
           { path: '/manage/news/new', element: guarded(EDITORS, <NewsEditPage />) },

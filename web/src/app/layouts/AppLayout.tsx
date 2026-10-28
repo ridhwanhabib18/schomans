@@ -7,6 +7,7 @@ import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
 import { selectAuthRole, selectAuthUser, useAuthStore } from '@/stores/useAuthStore'
 import { navItemsFor, navSectionsFor } from './navigation'
+import { JobsDashboardLink } from './JobsDashboardLink'
 import { ThemeToggle } from './ThemeToggle'
 
 /** Shell of every signed-in page: sidebar on desktop, bottom navigation on phones, header with the bell and the user. */
@@ -36,10 +37,11 @@ export function AppLayout() {
                 {section !== 'main' && (
                   <p className="px-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t(`nav.sections.${section}`)}</p>
                 )}
-                {sectionItems.map(({ to, labelKey, icon: Icon }) => (
+                {sectionItems.map(({ to, labelKey, icon: Icon, end }) => (
                   <NavLink
                     key={to}
                     to={to}
+                    end={end}
                     className={({ isActive }) =>
                       cn(
                         'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-muted',
@@ -54,6 +56,7 @@ export function AppLayout() {
               </div>
             ))}
           </nav>
+          {role === 'Admin' && <JobsDashboardLink />}
         </div>
       </aside>
 
@@ -84,10 +87,11 @@ export function AppLayout() {
         aria-label={t('nav.main')}
         className="fixed inset-x-0 bottom-0 z-40 flex overflow-x-auto border-t border-border bg-card md:hidden"
       >
-        {items.map(({ to, labelKey, icon: Icon }) => (
+        {items.map(({ to, labelKey, icon: Icon, end }) => (
           <NavLink
             key={to}
             to={to}
+            end={end}
             className={({ isActive }) =>
               cn(
                 'flex min-w-20 flex-1 shrink-0 flex-col items-center gap-1 px-2 py-2 text-xs font-medium',

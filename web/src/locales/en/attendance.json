@@ -1,0 +1,150 @@
+{
+  "status": {
+    "Present": "Present",
+    "Excused": "Excused",
+    "Sick": "Sick",
+    "Absent": "Absent",
+    "waiting": "Not scanned yet"
+  },
+  "today": {
+    "title": "Attendance",
+    "description": "Your lessons today. Open a lesson to show its QR code; students scan it with their phones.",
+    "empty": {
+      "title": "No lessons today",
+      "description": "Your timetable has no lessons today."
+    },
+    "notStarted": "Not opened",
+    "open": "Open: {{present}} of {{total}} present",
+    "closed": "Closed: {{present}} of {{total}} present",
+    "start": "Open attendance",
+    "continue": "Continue",
+    "view": "View",
+    "error": "Today's lessons could not be loaded.",
+    "students": "{{count}} students"
+  },
+  "session": {
+    "title": "{{subject}}, {{classroom}}",
+    "subtitle": "{{date}}, {{start}} to {{end}}",
+    "back": "Today's lessons",
+    "error": "This attendance session could not be loaded.",
+    "qrAlt": "QR code to check in to this lesson",
+    "qrHint": "Students scan this code with their phone camera or the Scan page of SchoMans.",
+    "nextCode": "New code in {{seconds}} s",
+    "newCodeSoon": "New code any moment",
+    "present": "Show full screen",
+    "exitPresent": "Exit full screen",
+    "closedNote": "Attendance is closed. Students who did not scan were marked absent; you can still change a status.",
+    "close": "Close attendance",
+    "closeTitle": "Close attendance for this lesson?",
+    "closeBody": "The QR code stops working and the {{count}} student(s) who have not scanned are marked absent. You can still change statuses afterwards.",
+    "closed": "Attendance closed.",
+    "live": "Live",
+    "connecting": "Connecting…",
+    "offline": "Not live: the list refreshes when you reload",
+    "counts": "{{present}} present, {{waiting}} not scanned",
+    "listLabel": "Students of this lesson",
+    "scannedAt": "Scanned {{time}}",
+    "manual": "Set by the teacher",
+    "change": "Change",
+    "changeFor": "Change status of {{name}}",
+    "readOnly": "You are viewing this session. Only the teacher of the lesson can change it."
+  },
+  "mark": {
+    "title": "Attendance of {{name}}",
+    "status": "Status",
+    "note": "Note",
+    "noteHint": "Optional, for example \"Letter from home\".",
+    "save": "Save",
+    "saved": "Status saved."
+  },
+  "scan": {
+    "title": "Scan the attendance code",
+    "description": "Point your camera at the QR code on the classroom screen.",
+    "cameraStarting": "Starting the camera…",
+    "noCamera": "Your phone's camera cannot be used here. Open your camera app and scan the code, or ask your teacher to mark you present.",
+    "cameraDenied": "Allow camera access to scan the code, or scan it with your camera app instead.",
+    "notACode": "That QR code is not a SchoMans attendance code.",
+    "again": "Scan again"
+  },
+  "checkIn": {
+    "title": "Check in",
+    "working": "Checking you in…",
+    "locating": "Finding your location…",
+    "success": "You are checked in",
+    "already": "You were already checked in",
+    "recorded": "{{subject}}, {{classroom}}: {{status}}",
+    "missingCode": "There is no attendance code in this address. Scan the code on the classroom screen.",
+    "locationDenied": "Allow location access to check in: attendance only counts at school.",
+    "failed": "You could not be checked in",
+    "toAttendance": "See my attendance",
+    "scanAgain": "Scan again"
+  },
+  "errors": {
+    "attendance": {
+      "qr_expired": "This code has expired. Scan the code that is on the screen now.",
+      "qr_invalid": "This is not a SchoMans attendance code.",
+      "session_closed": "Attendance for this lesson is already closed. Ask your teacher.",
+      "not_in_classroom": "This attendance code is for another classroom.",
+      "location_required": "Allow location access to check in: attendance only counts at school.",
+      "outside_school": "You are not at school. Check in from the classroom.",
+      "not_a_student": "Only students check in.",
+      "not_today": "This lesson is not on today's timetable.",
+      "not_your_lesson": "This is not your lesson.",
+      "session_already_closed": "Attendance for this lesson was already closed today. Open the session to change statuses.",
+      "session_not_found": "This attendance session does not exist.",
+      "student_not_in_session": "This student is not in the lesson.",
+      "not_your_classroom": "You can only see attendance of classrooms you work in.",
+      "not_your_student": "You cannot see this student's attendance."
+    }
+  },
+  "mine": {
+    "title": "My attendance",
+    "description": "Your attendance lesson by lesson."
+  },
+  "child": {
+    "title": "Attendance",
+    "description": "Your child's attendance lesson by lesson."
+  },
+  "student": {
+    "caption": "Attendance per lesson",
+    "columns": {
+      "date": "Date",
+      "lesson": "Lesson",
+      "time": "Time",
+      "status": "Status",
+      "note": "Note"
+    },
+    "empty": "No attendance was taken in this month.",
+    "error": "The attendance could not be loaded.",
+    "rate": "{{percent}}% present"
+  },
+  "counts": {
+    "present": "Present",
+    "excused": "Excused",
+    "sick": "Sick",
+    "absent": "Absent",
+    "lessons": "Lessons"
+  },
+  "report": {
+    "title": "Attendance reports",
+    "description": "The attendance of a classroom in a month, per student. Export it to Excel for the school records.",
+    "classroom": "Classroom",
+    "caption": "Attendance per student",
+    "columns": {
+      "name": "Name",
+      "nisn": "NISN",
+      "present": "Present",
+      "excused": "Excused",
+      "sick": "Sick",
+      "absent": "Absent",
+      "rate": "Present %"
+    },
+    "lessons": "{{count}} lesson(s) with attendance this month",
+    "export": "Export to Excel",
+    "exporting": "Exporting…",
+    "exportFailed": "The export failed. Please try again.",
+    "empty": "No students in this classroom.",
+    "error": "The report could not be loaded.",
+    "lowAttendance": "Below 80%"
+  }
+}

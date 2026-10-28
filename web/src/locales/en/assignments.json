@@ -1,0 +1,160 @@
+{
+  "status": {
+    "NotSubmitted": "Not submitted",
+    "Submitted": "Submitted",
+    "Late": "Late",
+    "overdue": "Overdue",
+    "scored": "Score {{score}}"
+  },
+  "teacher": {
+    "title": "Assignments",
+    "description": "The work you gave your classrooms, and how far the students are.",
+    "descriptionPrincipal": "The assignments of every teacher.",
+    "new": "New assignment",
+    "search": "Search by title",
+    "caption": "Assignments",
+    "columns": {
+      "title": "Title",
+      "subject": "Subject",
+      "classrooms": "Classrooms",
+      "due": "Due",
+      "progress": "Handed in",
+      "graded": "Scored"
+    },
+    "progress": "{{submitted}} of {{total}}",
+    "empty": {
+      "title": "No assignments yet",
+      "description": "Give your classrooms their first assignment."
+    },
+    "error": "The assignments could not be loaded."
+  },
+  "student": {
+    "title": "Assignments",
+    "description": "Your assignments, the nearest due date first.",
+    "due": "Due {{date}}",
+    "by": "{{subject}}, {{teacher}}",
+    "empty": {
+      "title": "No assignments",
+      "description": "New assignments from your teachers will appear here and in your notifications."
+    },
+    "error": "Your assignments could not be loaded.",
+    "caption": "Your assignments"
+  },
+  "child": {
+    "title": "Assignments",
+    "description": "Your child's assignments and scores."
+  },
+  "form": {
+    "newTitle": "New assignment",
+    "editTitle": "Edit assignment",
+    "back": "Assignments",
+    "title": "Title",
+    "description": "Instructions",
+    "descriptionHint": "What the students should do, and how to hand it in.",
+    "subject": "Subject",
+    "subjectPlaceholder": "Choose a subject",
+    "classrooms": "Classrooms",
+    "classroomsHint": "The classrooms you teach this subject in.",
+    "classroomsLocked": "Students already handed in work, so the classrooms can no longer change.",
+    "due": "Due date (WIB)",
+    "attachments": "Attachments",
+    "attachmentsHint": "PDF, images, Word, Excel or PowerPoint; up to 5 files of at most 10 MB each.",
+    "addFile": "Add a file",
+    "uploading": "Uploading {{name}}…",
+    "removeFile": "Remove {{name}}",
+    "wrongType": "{{name}} is not a PDF, an image or an Office file.",
+    "wrongSize": "{{name}} is larger than 10 MB.",
+    "tooMany": "An assignment has at most 5 attachments.",
+    "uploadFailed": "{{name}} could not be uploaded. Please try again.",
+    "noOptions": "You have no lessons in the timetable yet, so there is nothing to give assignments for. Ask the admin staff.",
+    "create": "Give assignment",
+    "save": "Save changes",
+    "created": "Assignment given. The students were notified.",
+    "saved": "Saved.",
+    "conflict": "Somebody else changed this assignment while you were editing it.",
+    "reload": "Load the latest version"
+  },
+  "detail": {
+    "error": "This assignment could not be found. It may not be for you.",
+    "subject": "Subject",
+    "teacher": "Teacher",
+    "due": "Due",
+    "classrooms": "Classrooms",
+    "term": "Term",
+    "instructions": "Instructions",
+    "noInstructions": "No further instructions.",
+    "attachments": "Attachments",
+    "download": "Open {{name}}",
+    "downloadFailed": "The file could not be opened.",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteTitle": "Delete this assignment?",
+    "deleteBody": "“{{title}}” disappears for the students. Work they handed in is kept.",
+    "deleted": "The assignment was deleted."
+  },
+  "submit": {
+    "title": "Your work",
+    "titleChild": "Work of your child",
+    "notYet": "Not handed in yet.",
+    "submittedAt": "Handed in {{date}}",
+    "late": "Late",
+    "file": "File",
+    "openFile": "Open the file",
+    "text": "Answer",
+    "score": "Score",
+    "feedback": "Feedback from the teacher",
+    "graded": "Your work is scored, so it can no longer be changed.",
+    "pickFile": "File (PDF or image, at most 10 MB)",
+    "keepFile": "Keep {{name}}",
+    "removeFile": "Remove the file",
+    "textLabel": "Or type your answer",
+    "send": "Hand in",
+    "replace": "Hand in again",
+    "sending": "Handing in…",
+    "sent": "Your work was handed in.",
+    "sentLate": "Your work was handed in after the due date and is marked late.",
+    "nothing": "Choose a file or type your answer.",
+    "wrongType": "Hand in a PDF or an image (JPEG, PNG, WebP).",
+    "wrongSize": "The file must be at most 10 MB.",
+    "replaceHint": "You can hand in again until your teacher scores the work. The new work replaces the old."
+  },
+  "review": {
+    "title": "Handed-in work",
+    "caption": "Students and their work",
+    "columns": {
+      "student": "Student",
+      "classroom": "Classroom",
+      "status": "Status",
+      "submitted": "Handed in",
+      "score": "Score"
+    },
+    "review": "Review",
+    "reviewFor": "Review the work of {{name}}",
+    "summary": "{{submitted}} of {{total}} handed in, {{graded}} scored",
+    "dialogTitle": "Work of {{name}}",
+    "noText": "No typed answer.",
+    "score": "Score (0 to 100)",
+    "feedback": "Feedback",
+    "save": "Save score",
+    "saved": "Score saved. The student was notified.",
+    "error": "The handed-in work could not be loaded."
+  },
+  "errors": {
+    "assignments": {
+      "not_your_class": "You can only give assignments for subjects you teach in those classrooms.",
+      "no_active_term": "There is no current term. Ask the admin staff to set one.",
+      "has_submissions": "Students already handed in work, so the classrooms can no longer change.",
+      "has_scores": "Some work is already scored, so the assignment cannot be deleted.",
+      "already_graded": "Your work is already scored and cannot be replaced.",
+      "not_yours": "This assignment is not for you.",
+      "not_found": "The assignment no longer exists.",
+      "due_in_past": "The new due date must be in the future.",
+      "submit_conflict": "Your work was handed in from another device at the same time. Reload and check."
+    },
+    "files": {
+      "invalid_key": "A file does not belong to this assignment. Upload it again.",
+      "not_uploaded": "A file was not uploaded completely. Upload it again.",
+      "invalid_file": "A file type or size is not accepted."
+    }
+  }
+}
