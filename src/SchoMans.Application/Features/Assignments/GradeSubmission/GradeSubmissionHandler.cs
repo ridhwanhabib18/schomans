@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using SchoMans.Application.Common;
 using SchoMans.Application.Common.Errors;
 using SchoMans.Application.Common.Interfaces;
+using SchoMans.Application.Features.Grading;
 using SchoMans.Domain.Communication;
 
 namespace SchoMans.Application.Features.Assignments.GradeSubmission;
 
 /// <summary>
 /// The teacher of the assignment scores a piece of work and gives feedback; the student is notified. Scoring makes the
-/// work final for the student. The score stays on the submission; Phase 4 turns it into a grade of the subject.
+/// work final for the student. The score stays on the submission and also becomes a grade of the subject, unless the term's grades are published.
 /// </summary>
 public sealed class GradeSubmissionHandler(IAppDbContext db, ICurrentUser currentUser, INotificationService notifications, ISchoolClock clock)
 {
@@ -26,8 +27,14 @@ public sealed class GradeSubmissionHandler(IAppDbContext db, ICurrentUser curren
             return Error.Forbidden("assignments.not_yours", "Only the teacher who gave the assignment can score the work.");
         }
 
+        if (await GradeBook.IsStudentLockedAsync(db, submission.StudentId, submission.Assignment.TermId, ct))
+        {
+            return Error.Conflict("grades.published", "The grades of this term are published; unpublish them before changing a score.");
+        }
+
         var firstTime = !submission.IsGraded;
         submission.Grade(command.Score, command.Feedback, currentUser.UserId, clock.UtcNow);
+        await GradeBook.SyncSubmissionGradeAsync(db, submission, submission.Assignment, ct);
         await db.SaveChangesAsync(ct);
 
         var studentUserId = await db.Students.Where(s => s.Id == submission.StudentId).Select(s => s.UserId).FirstAsync(ct);
