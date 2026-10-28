@@ -23,6 +23,7 @@ import { PublicNewsListPage } from '@/features/news/pages/PublicNewsListPage'
 import { APP_ROLES, type AppRole } from '@/shared/lib/roles'
 import { AppLayout } from './layouts/AppLayout'
 import { PublicLayout } from './layouts/PublicLayout'
+import { RootLayout } from './layouts/RootLayout'
 import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './NotFoundPage'
 
@@ -35,6 +36,9 @@ const guarded = (roles: readonly AppRole[], page: ReactNode) => <RequireRole rol
 
 /** Routes are exported separately so tests can mount them in a memory router. */
 export const routes: RouteObject[] = [
+  {
+    element: <RootLayout />,
+    children: [
   {
     // Open to everybody, signed in or not.
     element: <PublicLayout />,
@@ -76,6 +80,8 @@ export const routes: RouteObject[] = [
     ],
   },
   { path: '*', element: <NotFoundPage /> },
+    ],
+  },
 ]
 
 export const createAppRouter = () => createBrowserRouter(routes)

@@ -57,37 +57,36 @@ export function NewsForm({ article, onReload }: NewsFormProps) {
     const fields = { title, body, category, metaDescription: meta.trim() || null }
 
     if (!article) {
-      create.mutate(fields, {
-        onSuccess: (created) => {
+      // mutateAsync, not mutate with callbacks: saving changes the row version, which remounts this form, and callbacks
+      // passed to mutate are dropped once the component that called it is gone.
+      create.mutateAsync(fields).then(
+        (created) => {
           showToast({ kind: 'success', title: t('form.saved') })
           void navigate(`/manage/news/${created.id}`, { replace: true })
         },
-        onError: (error) => setProblem(parseProblem(error)),
-      })
+        (error: unknown) => setProblem(parseProblem(error)),
+      )
       return
     }
 
-    update.mutate(
-      { id: article.id, command: { ...fields, id: article.id, coverImageKey: coverKey, rowVersion: article.rowVersion } },
-      {
-        onSuccess: () => showToast({ kind: 'success', title: t('form.saved') }),
-        onError: (error) => setProblem(parseProblem(error)),
-      },
+    update.mutateAsync({ id: article.id, command: { ...fields, id: article.id, coverImageKey: coverKey, rowVersion: article.rowVersion } }).then(
+      () => showToast({ kind: 'success', title: t('form.saved') }),
+      (error: unknown) => setProblem(parseProblem(error)),
     )
   }
 
   function changePublication(action: 'publish' | 'unpublish') {
     const mutation = action === 'publish' ? publish : unpublish
-    mutation.mutate(article!.id, {
-      onSuccess: () => {
+    mutation.mutateAsync(article!.id).then(
+      () => {
         setConfirm(null)
         showToast({ kind: 'success', title: t(action === 'publish' ? 'form.published' : 'form.unpublished') })
       },
-      onError: (error) => {
+      (error: unknown) => {
         setConfirm(null)
         setProblem(parseProblem(error))
       },
-    })
+    )
   }
 
   const generalError = problem && Object.keys(problem.fieldErrors).length === 0 && !isConcurrencyConflict(problem)

@@ -60,22 +60,21 @@ export function AnnouncementForm({ announcement, onReload }: AnnouncementFormPro
     const fields = { title, body, isPublic, targetRoles: roles, targetClassroomIds: classroomIds }
 
     if (!announcement) {
-      create.mutate(fields, {
-        onSuccess: (created) => {
+      // mutateAsync, not mutate with callbacks: saving changes the row version, which remounts this form, and callbacks
+      // passed to mutate are dropped once the component that called it is gone.
+      create.mutateAsync(fields).then(
+        (created) => {
           showToast({ kind: 'success', title: t('form.saved') })
           void navigate(`/manage/announcements/${created.id}`, { replace: true })
         },
-        onError: (error) => setProblem(parseProblem(error)),
-      })
+        (error: unknown) => setProblem(parseProblem(error)),
+      )
       return
     }
 
-    update.mutate(
-      { id: announcement.id, command: { ...fields, id: announcement.id, coverImageKey: coverKey, rowVersion: announcement.rowVersion } },
-      {
-        onSuccess: () => showToast({ kind: 'success', title: t('form.saved') }),
-        onError: (error) => setProblem(parseProblem(error)),
-      },
+    update.mutateAsync({ id: announcement.id, command: { ...fields, id: announcement.id, coverImageKey: coverKey, rowVersion: announcement.rowVersion } }).then(
+      () => showToast({ kind: 'success', title: t('form.saved') }),
+      (error: unknown) => setProblem(parseProblem(error)),
     )
   }
 
@@ -172,17 +171,17 @@ export function AnnouncementForm({ announcement, onReload }: AnnouncementFormPro
         confirmLabel={t('form.publish')}
         pending={publish.isPending}
         onConfirm={() =>
-          publish.mutate(announcement!.id, {
-            onSuccess: (result) => {
+          publish.mutateAsync(announcement!.id).then(
+            (result) => {
               setConfirmPublish(false)
               showToast({ kind: 'success', title: t('form.published', { count: result.notifiedUsers }) })
               void navigate('/manage/announcements')
             },
-            onError: (error) => {
+            (error: unknown) => {
               setConfirmPublish(false)
               setProblem(parseProblem(error))
             },
-          })
+          )
         }
       />
     </form>

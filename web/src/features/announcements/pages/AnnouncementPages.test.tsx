@@ -354,6 +354,16 @@ describe('AnnouncementEditPage', () => {
     expect(toasts()).toEqual(['success:Published. 12 people were notified.'])
   })
 
+  it('still confirms and moves on when publishing changes the row version and the form is rebuilt', async () => {
+    api.getAnnouncement.mockResolvedValueOnce(announcement()).mockResolvedValue(announcement({ status: 'Published', rowVersion: 'rv2' }))
+    renderEdit()
+    fireEvent.click(await screen.findByRole('button', { name: 'Publish' }))
+    fireEvent.click(within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Publish' }))
+
+    expect(await screen.findByText('Announcements list')).toBeTruthy()
+    expect(toasts()).toEqual(['success:Published. 12 people were notified.'])
+  })
+
   it('does not let unsaved changes be published', async () => {
     renderEdit()
     fireEvent.change(await screen.findByLabelText(/^Title/), { target: { value: 'Changed' } })
