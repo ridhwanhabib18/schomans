@@ -19,6 +19,9 @@ public interface IFileStorage
     /// <summary>A presigned PUT URL: the browser uploads straight to storage so the API carries no file traffic.</summary>
     Task<PresignedUpload> CreateUploadUrlAsync(FileBucket bucket, string key, string contentType, TimeSpan lifetime, CancellationToken ct);
 
+    /// <summary>Stores a file the server made itself (a report-card PDF), as opposed to one the browser uploads.</summary>
+    Task UploadAsync(FileBucket bucket, string key, byte[] content, string contentType, CancellationToken ct);
+
     /// <summary>A presigned GET URL for an object of the private bucket.</summary>
     string CreateDownloadUrl(string key, TimeSpan lifetime);
 
