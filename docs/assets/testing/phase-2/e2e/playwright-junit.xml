@@ -1,0 +1,257 @@
+<testsuites id="" name="" tests="31" failures="0" skipped="0" errors="0" time="301.60171399999996">
+<testsuite name="announcements.spec.ts" timestamp="2026-10-28T00:11:57.540Z" hostname="desktop" tests="2" failures="0" skipped="0" time="48.287" errors="0">
+<testcase name="a published announcement reaches its audience at once, and only its audience" classname="announcements.spec.ts" time="26.079">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|announcements-a-published--3af77--once-and-only-its-audience-desktop\test-finished-1.png]]
+
+[[ATTACHMENT|announcements-a-published--3af77--once-and-only-its-audience-desktop\test-finished-2.png]]
+
+[[ATTACHMENT|announcements-a-published--3af77--once-and-only-its-audience-desktop\test-finished-3.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="an announcement marked public is readable by a guest, a private one is not" classname="announcements.spec.ts" time="22.208">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|announcements-an-announcem-39797--guest-a-private-one-is-not-desktop\test-finished-2.png]]
+
+[[ATTACHMENT|announcements-an-announcem-39797--guest-a-private-one-is-not-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="demo-login.spec.ts" timestamp="2026-10-28T00:11:57.540Z" hostname="desktop" tests="11" failures="0" skipped="0" time="72.385" errors="0">
+<testcase name="demo login: every role sees its own empty dashboard › Principal" classname="demo-login.spec.ts" time="5.844">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-demo-login-ever-6b7f1-n-empty-dashboard-Principal-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="demo login: every role sees its own empty dashboard › Teacher" classname="demo-login.spec.ts" time="8.592">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-demo-login-ever-2d488-own-empty-dashboard-Teacher-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="demo login: every role sees its own empty dashboard › Student" classname="demo-login.spec.ts" time="5.602">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-demo-login-ever-fa42c-own-empty-dashboard-Student-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="demo login: every role sees its own empty dashboard › Parent" classname="demo-login.spec.ts" time="4.986">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-demo-login-ever-fc963--own-empty-dashboard-Parent-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="demo login: every role sees its own empty dashboard › Admin" classname="demo-login.spec.ts" time="6.044">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-demo-login-ever-e0a03-s-own-empty-dashboard-Admin-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="demo login: every role sees its own empty dashboard › Applicant" classname="demo-login.spec.ts" time="5.974">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-demo-login-ever-20609-n-empty-dashboard-Applicant-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="demo login: every role sees its own empty dashboard › signing out returns to the login page and protects the dashboard again" classname="demo-login.spec.ts" time="10.313">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-demo-login-ever-5faac-rotects-the-dashboard-again-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="guests and protected pages › an anonymous visitor who opens the dashboard is sent to the login page" classname="demo-login.spec.ts" time="7.439">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-guests-and-prot-3af26-d-is-sent-to-the-login-page-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="guests and protected pages › a guest can browse the public page without an account" classname="demo-login.spec.ts" time="7.526">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-guests-and-prot-dd0dc-lic-page-without-an-account-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="guests and protected pages › an unknown address shows the not-found page" classname="demo-login.spec.ts" time="3.953">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-guests-and-prot-b9934-ss-shows-the-not-found-page-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="guests and protected pages › a demo user opening the login page again is taken to the dashboard" classname="demo-login.spec.ts" time="6.112">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|demo-login-guests-and-prot-678b8-n-is-taken-to-the-dashboard-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="keycloak-login.spec.ts" timestamp="2026-10-28T00:11:57.540Z" hostname="desktop" tests="4" failures="0" skipped="0" time="37.337" errors="0">
+<testcase name="Keycloak login (OIDC + PKCE) › a student signs in with email and password, survives a reload, and signs out" classname="keycloak-login.spec.ts" time="14.04">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|keycloak-login-Keycloak-lo-c627b-ives-a-reload-and-signs-out-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Keycloak login (OIDC + PKCE) › a wrong password is rejected by Keycloak" classname="keycloak-login.spec.ts" time="6.229">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|keycloak-login-Keycloak-lo-1be8c-ord-is-rejected-by-Keycloak-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Keycloak login (OIDC + PKCE) › opening a protected page first brings the user back to it after login" classname="keycloak-login.spec.ts" time="8.958">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|keycloak-login-Keycloak-lo-4d03c-user-back-to-it-after-login-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Self-registration creates an Applicant › a guest registers on the Keycloak page and lands on the Applicant dashboard" classname="keycloak-login.spec.ts" time="8.11">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|keycloak-login-Self-regist-6c2f2--on-the-Applicant-dashboard-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="layout.spec.ts" timestamp="2026-10-28T00:11:57.540Z" hostname="desktop" tests="2" failures="0" skipped="0" time="14.56" errors="0">
+<testcase name="the app shell adapts to the screen size" classname="layout.spec.ts" time="7.332">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|layout-the-app-shell-adapts-to-the-screen-size-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="the theme can be switched to dark and back" classname="layout.spec.ts" time="7.228">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|layout-the-theme-can-be-switched-to-dark-and-back-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="masterdata.spec.ts" timestamp="2026-10-28T00:11:57.540Z" hostname="desktop" tests="8" failures="0" skipped="0" time="66.844" errors="0">
+<testcase name="master data › the admin adds a teacher, a subject and a classroom" classname="masterdata.spec.ts" time="9.294">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|masterdata-master-data-the-24f0d-r-a-subject-and-a-classroom-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="master data › the admin adds, finds, edits a student, and the form explains a duplicate NISN" classname="masterdata.spec.ts" time="9.738">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|masterdata-master-data-the-f3d7f-m-explains-a-duplicate-NISN-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="master data › the admin imports students from an Excel file, and the failed rows are listed" classname="masterdata.spec.ts" time="8.935">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|masterdata-master-data-the-49884--the-failed-rows-are-listed-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="master data › the admin deletes what was added, and a classroom with students cannot be deleted" classname="masterdata.spec.ts" time="11.056">
+<properties>
+<property name="serial" value="">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|masterdata-master-data-the-6941b--students-cannot-be-deleted-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="who may see and change master data › a teacher sees the students, without any button to change them, and not the teachers page" classname="masterdata.spec.ts" time="6.861">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|masterdata-who-may-see-and-be4d1-m-and-not-the-teachers-page-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="who may see and change master data › the principal sees everything and can change nothing" classname="masterdata.spec.ts" time="6.835">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|masterdata-who-may-see-and-dc7e2-hing-and-can-change-nothing-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="who may see and change master data › a student has no management pages" classname="masterdata.spec.ts" time="6.107">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|masterdata-who-may-see-and-888d0-ent-has-no-management-pages-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="who may see and change master data › the academic year page lists the current year with its terms; rollover is not run here" classname="masterdata.spec.ts" time="8.018">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|masterdata-who-may-see-and-03327-ms-rollover-is-not-run-here-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="news.spec.ts" timestamp="2026-10-28T00:11:57.540Z" hostname="desktop" tests="2" failures="0" skipped="0" time="30.987" errors="0">
+<testcase name="an admin writes, illustrates and publishes an article, and a guest reads it" classname="news.spec.ts" time="23.715">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|news-an-admin-writes-illus-63bf8-rticle-and-a-guest-reads-it-desktop\test-finished-1.png]]
+
+[[ATTACHMENT|news-an-admin-writes-illus-63bf8-rticle-and-a-guest-reads-it-desktop\test-finished-2.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="a teacher cannot manage news, and the page says why" classname="news.spec.ts" time="7.272">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|news-a-teacher-cannot-manage-news-and-the-page-says-why-desktop\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="layout.spec.ts" timestamp="2026-10-28T00:11:57.540Z" hostname="mobile" tests="2" failures="0" skipped="0" time="18.245" errors="0">
+<testcase name="the app shell adapts to the screen size" classname="layout.spec.ts" time="10.5">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|layout-the-app-shell-adapts-to-the-screen-size-mobile\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+<testcase name="the theme can be switched to dark and back" classname="layout.spec.ts" time="7.745">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|layout-the-theme-can-be-switched-to-dark-and-back-mobile\test-finished-1.png]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>
