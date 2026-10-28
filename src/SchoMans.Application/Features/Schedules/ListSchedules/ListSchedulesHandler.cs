@@ -32,9 +32,15 @@ public sealed class ListSchedulesHandler(IAppDbContext db, ICurrentUser currentU
             schedules = schedules.Where(s => s.DayOfWeek == day);
         }
 
-        // Monday first: the school week. Sunday (0 in .NET) goes last.
+        // Monday first: the school week. The day is stored as its name, so the order is spelled out (Sunday last).
         var page = await schedules
-            .OrderBy(s => s.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)s.DayOfWeek)
+            .OrderBy(s => s.DayOfWeek == DayOfWeek.Monday ? 1
+                : s.DayOfWeek == DayOfWeek.Tuesday ? 2
+                : s.DayOfWeek == DayOfWeek.Wednesday ? 3
+                : s.DayOfWeek == DayOfWeek.Thursday ? 4
+                : s.DayOfWeek == DayOfWeek.Friday ? 5
+                : s.DayOfWeek == DayOfWeek.Saturday ? 6
+                : 7)
             .ThenBy(s => s.StartTime)
             .ThenBy(s => s.Classroom!.Name)
             .ThenBy(s => s.Id)
