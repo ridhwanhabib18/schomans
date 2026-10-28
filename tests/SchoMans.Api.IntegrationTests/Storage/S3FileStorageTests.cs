@@ -196,6 +196,8 @@ public class S3FileStorageTests(SeaweedFixture seaweed) : IClassFixture<SeaweedF
         var upload = await seaweed.Storage.CreateUploadUrlAsync(FileBucket.Public, NewKey(), "image/png", TimeSpan.FromMinutes(5), CancellationToken.None);
 
         Assert.InRange(upload.ExpiresAt, before.AddMinutes(4.9), before.AddMinutes(5.1));
-        Assert.Contains("X-Amz-Expires=300", upload.Url, StringComparison.Ordinal);
+        // The SDK works out the seconds from its own clock to the absolute expiry and rounds them, so it may say 299 to 301.
+        var seconds = int.Parse(System.Text.RegularExpressions.Regex.Match(upload.Url, "X-Amz-Expires=([0-9]+)").Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
+        Assert.InRange(seconds, 295, 305);
     }
 }
