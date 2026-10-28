@@ -24,10 +24,16 @@ function currentPosition(): Promise<GeolocationPosition> {
  * straight away (with the location first, when the school requires it) and shows the result.
  */
 export function CheckInPage() {
-  const { t } = useTranslation('attendance')
-  const { t: tCommon } = useTranslation()
   const [params] = useSearchParams()
   const token = params.get('t')
+
+  // Keyed by the code: a different code is a new check-in with its own state, even on the same page.
+  return <CheckIn key={token ?? ''} token={token} />
+}
+
+function CheckIn({ token }: { token: string | null }) {
+  const { t } = useTranslation('attendance')
+  const { t: tCommon } = useTranslation()
   const settings = useScanSettings()
   const scan = useScan()
   const [locating, setLocating] = useState(false)
@@ -61,7 +67,9 @@ export function CheckInPage() {
         }
       }
 
-      scan.mutate({ token: token!, ...coordinates }, { onSuccess: (result) => setOutcome({ kind: 'done', result }), onError: fail })
+      // mutateAsync, not mutate with callbacks: React may unmount and remount this page's effects once in development,
+      // and callbacks passed to mutate are dropped when that happens.
+      scan.mutateAsync({ token: token!, ...coordinates }).then((result) => setOutcome({ kind: 'done', result }), fail)
     }
 
     void checkIn()

@@ -85,7 +85,8 @@ export function useUploadAttachment() {
 }
 
 export function useSubmissions(assignmentId: string, enabled = true) {
-  return useQuery({ queryKey: assignmentKeys.submissions(assignmentId), queryFn: () => listSubmissions(assignmentId), enabled })
+  // Always fresh on opening: students hand in while the teacher is elsewhere, and a stale count would mislead the review.
+  return useQuery({ queryKey: assignmentKeys.submissions(assignmentId), queryFn: () => listSubmissions(assignmentId), enabled, staleTime: 0 })
 }
 
 export function useSubmission(submissionId: string | null) {
