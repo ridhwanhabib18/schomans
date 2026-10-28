@@ -16,6 +16,7 @@ public sealed record GradeBookDto(
 
 /// <param name="FinalGrade">Null while the student has no score at all.</param>
 /// <param name="Band">The letter of the final grade; null without a final grade.</param>
+/// <param name="Description">The achievement description the teacher wrote for the report card, if any.</param>
 public sealed record GradeBookRowDto(
     Guid StudentId,
     string StudentName,
@@ -23,7 +24,8 @@ public sealed record GradeBookRowDto(
     List<ComponentScoreDto> Components,
     decimal? FinalGrade,
     string? Band,
-    bool? IsPassing);
+    bool? IsPassing,
+    string? Description);
 
 /// <param name="Average">Null when the student has no score in this component yet.</param>
 public sealed record ComponentScoreDto(GradeComponent Component, decimal? Average, int Count);

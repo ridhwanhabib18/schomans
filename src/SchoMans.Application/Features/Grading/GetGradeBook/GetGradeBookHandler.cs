@@ -50,6 +50,12 @@ public sealed class GetGradeBookHandler(IAppDbContext db, ICurrentUser currentUs
             .ToListAsync(ct);
         var scoresByStudent = scores.ToLookup(g => g.StudentId);
 
+        var descriptions = (await db.ReportCards.AsNoTracking()
+                .Where(r => r.TermId == query.TermId && studentIds.Contains(r.StudentId))
+                .SelectMany(r => r.Descriptions.Where(d => d.SubjectId == query.SubjectId).Select(d => new { r.StudentId, d.Body }))
+                .ToListAsync(ct))
+            .ToDictionary(d => d.StudentId, d => d.Body);
+
         var weights = await GradeWeightsLoader.LoadAsync(db, query.SubjectId, ct);
         var weightMap = weights.Weights.ToDictionary(w => w.Component, w => w.WeightPercent);
         var bands = await db.GradeBands.AsNoTracking().ToListAsync(ct);
@@ -71,7 +77,8 @@ public sealed class GetGradeBookHandler(IAppDbContext db, ICurrentUser currentUs
                 components,
                 final,
                 final is null ? null : GradeBand.LabelFor(final.Value, bands),
-                final is null ? null : final >= subject.MinimumPassingScore);
+                final is null ? null : final >= subject.MinimumPassingScore,
+                descriptions.GetValueOrDefault(student.Id));
         }).ToList();
 
         var published = await GradeBook.IsPublishedAsync(db, query.ClassroomId, query.TermId, ct);

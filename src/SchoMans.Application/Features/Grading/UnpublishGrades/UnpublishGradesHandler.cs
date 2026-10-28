@@ -29,6 +29,13 @@ public sealed class UnpublishGradesHandler(IAppDbContext db, ICurrentUser curren
         }
 
         db.GradePublications.Remove(publication);
+
+        // Without a publication the families no longer see the report cards either; generating again republishes them.
+        foreach (var reportCard in await db.ReportCards.Where(r => r.TermId == command.TermId && r.Student!.ClassroomId == command.ClassroomId).ToListAsync(ct))
+        {
+            reportCard.Unpublish();
+        }
+
         await db.SaveChangesAsync(ct);
         return new Unit();
     }
