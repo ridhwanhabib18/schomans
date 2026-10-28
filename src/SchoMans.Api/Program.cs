@@ -50,6 +50,8 @@ app.MapAcademicYearEndpoints();
 app.MapScheduleEndpoints();
 app.MapAttendanceEndpoints();
 app.MapAssignmentEndpoints();
+app.MapGradeBandEndpoints();
+app.MapGradeWeightEndpoints();
 app.MapNewsEndpoints();
 app.MapAnnouncementEndpoints();
 app.MapNotificationEndpoints();
