@@ -28,10 +28,21 @@
     "sections": {
       "school": "School",
       "communication": "Communication",
-      "manage": "Manage"
+      "manage": "Manage",
+      "classroom": "Classroom",
+      "children": "My children"
     },
     "publicMain": "Public navigation",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "timetable": "Timetable",
+    "attendance": "Attendance",
+    "attendanceReports": "Attendance reports",
+    "scanQr": "Scan QR",
+    "myAttendance": "My attendance",
+    "assignments": "Assignments",
+    "childAttendance": "Attendance",
+    "childAssignments": "Assignments",
+    "jobs": "Background jobs"
   },
   "actions": {
     "signIn": "Sign in",
@@ -114,5 +125,24 @@
     "wrongType": "Only JPEG, PNG and WebP images can be used.",
     "wrongSize": "The image must be at most 5 MB.",
     "failed": "The image could not be uploaded. Please try again."
+  },
+  "days": {
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday",
+    "Sunday": "Sunday"
+  },
+  "children": {
+    "label": "Child",
+    "option": "{{name}} ({{classroom}})",
+    "none": "No children are linked to your account. Ask the school to link them."
+  },
+  "month": {
+    "label": "Month",
+    "previous": "Previous month",
+    "next": "Next month"
   }
 }

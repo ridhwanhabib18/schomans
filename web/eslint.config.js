@@ -3,7 +3,7 @@ import tseslint from 'typescript-eslint'
 // Architecture rules from CLAUDE.md, enforced by the linter:
 //  - features never import from each other (shared code goes to src/shared)
 //  - axios is only used in src/shared/lib and in features/*/api; components go through TanStack Query hooks
-const features = ['auth', 'dashboard', 'landing', 'masterdata', 'news', 'announcements', 'notifications']
+const features = ['auth', 'dashboard', 'landing', 'masterdata', 'news', 'announcements', 'notifications', 'attendance', 'assignments']
 
 const otherFeatures = (feature) =>
   features.filter((f) => f !== feature).map((f) => `@/features/${f}`)
