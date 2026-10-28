@@ -19,6 +19,9 @@ import { CallbackPage } from '@/features/auth/pages/CallbackPage'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { RequireAuth } from '@/features/auth/components/RequireAuth'
 import { RequireRole } from '@/features/auth/components/RequireRole'
+import { ChildGradesPage, MyGradesPage } from '@/features/reportcards/pages/GradesPages'
+import { GradeBandsPage } from '@/features/grading/pages/GradeBandsPage'
+import { GradeBookPage } from '@/features/grading/pages/GradeBookPage'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { AcademicYearsPage } from '@/features/masterdata/pages/AcademicYearsPage'
 import { ClassroomsPage } from '@/features/masterdata/pages/ClassroomsPage'
@@ -99,6 +102,11 @@ export const routes: RouteObject[] = [
           { path: '/assignments/:id', element: guarded(ASSIGNMENT_READERS, <AssignmentDetailPage />) },
           { path: '/assignments/:id/edit', element: guarded(TEACHER, <AssignmentEditorPage />) },
           { path: '/my-children/assignments', element: guarded(PARENT, <ChildAssignmentsPage />) },
+
+          { path: '/grades/me', element: guarded(STUDENT, <MyGradesPage />) },
+          { path: '/my-children/grades', element: guarded(PARENT, <ChildGradesPage />) },
+          { path: '/grading', element: guarded(TEACHER, <GradeBookPage />) },
+          { path: '/manage/grade-bands', element: guarded(ADMIN, <GradeBandsPage />) },
 
           { path: '/manage/news', element: guarded(EDITORS, <NewsManagePage />) },
           { path: '/manage/news/new', element: guarded(EDITORS, <NewsEditPage />) },
