@@ -19,6 +19,8 @@ public sealed record GeneratedReportCardsDto(Guid ClassroomId, Guid TermId, int 
 /// </summary>
 public sealed class GenerateReportCardsHandler(IAppDbContext db, ICurrentUser currentUser, IReportCardPdf pdf, IFileStorage storage, ISchoolClock clock)
 {
+    private const int MaxParallelRenders = 4;
+
     public async Task<Result<GeneratedReportCardsDto>> Handle(GenerateReportCardsCommand command, CancellationToken ct)
     {
         var classroom = await db.Classrooms.AsNoTracking().Where(c => c.Id == command.ClassroomId)
@@ -48,6 +50,7 @@ public sealed class GenerateReportCardsHandler(IAppDbContext db, ICurrentUser cu
             .ToListAsync(ct);
 
         var now = clock.UtcNow;
+        var pending = new List<(ReportCard Card, string Key, ReportCardDocument Document)>(students.Count);
         foreach (var student in students)
         {
             var results = await Transcript.BuildAsync(db, student.Id, command.TermId, ct);
@@ -74,11 +77,20 @@ public sealed class GenerateReportCardsHandler(IAppDbContext db, ICurrentUser cu
                 await AttendanceOfAsync(student.Id, term.StartDate, term.EndDate, ct),
                 lines);
 
-            var key = ReportCardAccess.PdfKey(command.TermId, student.Id);
-            await storage.UploadAsync(FileBucket.Private, key, pdf.Render(document), "application/pdf", ct);
+            pending.Add((reportCard, ReportCardAccess.PdfKey(command.TermId, student.Id), document));
+        }
 
-            reportCard.AttachPdf(key, now);
-            reportCard.Publish();
+        // The data is gathered one student at a time (a DbContext is not thread-safe); drawing and uploading the PDFs
+        // needs no database, so a class of 30 does not wait for 30 renders in a row.
+        await Parallel.ForEachAsync(
+            pending,
+            new ParallelOptions { MaxDegreeOfParallelism = MaxParallelRenders, CancellationToken = ct },
+            async (item, token) => await storage.UploadAsync(FileBucket.Private, item.Key, pdf.Render(item.Document), "application/pdf", token));
+
+        foreach (var (card, key, _) in pending)
+        {
+            card.AttachPdf(key, now);
+            card.Publish();
         }
 
         await db.SaveChangesAsync(ct);
