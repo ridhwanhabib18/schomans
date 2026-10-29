@@ -66,12 +66,16 @@ test('a teacher publishes grades and report cards, and student and parent see th
     await student.getByRole('link', { name: 'My grades', exact: true }).first().click()
     await expect(student.getByRole('cell', { name: 'Mathematics' })).toBeVisible()
     await expect(student.getByText('Works carefully and explains the steps of a solution.')).toBeVisible()
-    const popup = student.waitForEvent('popup')
+    // The PDF opens in a new tab; headless Chromium turns it into a download, so the request to the storage is what
+    // is checked: the address must be a signed one of the private bucket.
+    const pdfRequest = studentContext.waitForEvent('request', (request) => /\/schomans-private\/report-cards\/.+\.pdf\?/.test(request.url()))
     await student.getByRole('button', { name: 'Download report card (PDF)' }).click()
-    const pdf = await popup
-    expect(pdf.url()).toMatch(/\/schomans-private\/report-cards\/.+\.pdf\?/)
-    expect(pdf.url()).toContain('X-Amz-Signature=')
-    await pdf.close()
+    expect((await pdfRequest).url()).toContain('X-Amz-Signature=')
+    for (const page of studentContext.pages()) {
+      if (page !== student) {
+        await page.close()
+      }
+    }
     await student.screenshot({ path: 'test-results/screens/student-grades.png', fullPage: true })
 
     // The parent follows the same on the pages of the child.
