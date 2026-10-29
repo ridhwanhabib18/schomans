@@ -1,6 +1,8 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using SchoMans.Application.Common.Interfaces;
+using SchoMans.Domain.Admissions;
+using SchoMans.Domain.Approvals;
 using SchoMans.Domain.Assignments;
 using SchoMans.Domain.Attendance;
 using SchoMans.Domain.Common;
@@ -49,6 +51,20 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<AchievementDescription> AchievementDescriptions => Set<AchievementDescription>();
 
     public DbSet<GradeBand> GradeBands => Set<GradeBand>();
+
+    public DbSet<AdmissionPeriod> AdmissionPeriods => Set<AdmissionPeriod>();
+
+    public DbSet<Applicant> Applicants => Set<Applicant>();
+
+    public DbSet<ApplicantDocument> ApplicantDocuments => Set<ApplicantDocument>();
+
+    public DbSet<ApprovalChainStep> ApprovalChainSteps => Set<ApprovalChainStep>();
+
+    public DbSet<Request> Requests => Set<Request>();
+
+    public DbSet<Approval> Approvals => Set<Approval>();
+
+    public DbSet<Letter> Letters => Set<Letter>();
 
     public DbSet<NewsArticle> NewsArticles => Set<NewsArticle>();
 
