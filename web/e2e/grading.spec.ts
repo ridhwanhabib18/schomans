@@ -31,8 +31,9 @@ test('a teacher publishes grades and report cards, and student and parent see th
       await expect(teacher.getByText('Grades unpublished')).toBeVisible()
     }
 
+    // The demo data already holds a midterm score for every student; a typed score only saves when it differs from it.
     const midterm = teacher.getByLabel('Midterm score of Rina Putri')
-    await midterm.fill('92')
+    await midterm.fill((await midterm.inputValue()) === '92' ? '91' : '92')
     await midterm.blur()
     await expect(teacher.getByText('Score saved')).toBeVisible()
 
