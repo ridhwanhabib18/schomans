@@ -2,5 +2,27 @@
   "hero": {
     "title": "School management in one place",
     "body": "Grading, attendance, assignments, admissions, announcements, and approvals for teachers, students, parents, and school staff."
+  },
+  "profile": {
+    "title": "About SchoMans Demo School",
+    "body": "SchoMans Demo School is a fictional school of 150 students in five classes, made to show how a school can run its attendance, grades, assignments, admissions and announcements in one place. Every name and number on this site is made up.",
+    "facts": {
+      "students": {
+        "value": "150",
+        "label": "students"
+      },
+      "classes": {
+        "value": "5",
+        "label": "classes"
+      },
+      "teachers": {
+        "value": "15",
+        "label": "teachers"
+      },
+      "subjects": {
+        "value": "8",
+        "label": "subjects"
+      }
+    }
   }
 }
