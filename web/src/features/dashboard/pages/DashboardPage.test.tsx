@@ -155,6 +155,61 @@ describe('DashboardPage', () => {
     expect(within(second).queryByText('Low attendance')).toBeNull()
   })
 
+  it('shows the total, the ten most urgent students first, and lets the teacher show all or fewer', async () => {
+    getDashboard.mockResolvedValue({ role: 'Teacher', fullName: 'Budi Santoso', sections: [] })
+    // 25 students: one reason each with falling attendance, plus one with three reasons that is listed last in the data.
+    const flagged = [
+      ...Array.from({ length: 24 }, (_, i) => ({
+        studentId: `s${i}`,
+        studentName: `Student ${String(i).padStart(2, '0')}`,
+        classroomName: 'Class A',
+        attendanceRate: 50 + i,
+        lowAttendance: true,
+        belowPassingSubjects: [] as string[],
+      })),
+      { studentId: 'urgent', studentName: 'Zed Urgent', classroomName: 'Class B', attendanceRate: 90, lowAttendance: false, belowPassingSubjects: ['Maths', 'Art', 'Music'] },
+    ]
+    http.customInstance.mockResolvedValue(analytics({ role: 'Teacher', teacher: { attendanceThreshold: 80, flagged } }))
+
+    renderWithQuery(<DashboardPage />)
+
+    const table = await screen.findByRole('table', { name: 'Students who need attention' })
+    expect(screen.getByTestId('attention-total').textContent).toContain('25 students in total')
+    expect(screen.getByTestId('attention-total').textContent).toContain('Showing 10 of 25, the most urgent first.')
+    const names = () => within(table).getAllByRole('row').slice(1).map((row) => within(row).getAllByRole('cell')[0]!.textContent)
+    expect(names()).toHaveLength(10)
+    // Most reasons first, then the lowest attendance.
+    expect(names().slice(0, 3)).toEqual(['Zed Urgent', 'Student 00', 'Student 01'])
+
+    const toggle = screen.getByRole('button', { name: 'Show all (25)' })
+    expect(toggle.getAttribute('aria-expanded')).toBe('false')
+    fireEvent.click(toggle)
+
+    expect(names()).toHaveLength(25)
+    expect(screen.getByRole('button', { name: 'Show fewer' }).getAttribute('aria-expanded')).toBe('true')
+    fireEvent.click(screen.getByRole('button', { name: 'Show fewer' }))
+    expect(names()).toHaveLength(10)
+  })
+
+  it('has no toggle when ten students or fewer need attention', async () => {
+    getDashboard.mockResolvedValue({ role: 'Teacher', fullName: 'Budi Santoso', sections: [] })
+    const flagged = Array.from({ length: 10 }, (_, i) => ({
+      studentId: `s${i}`,
+      studentName: `Student ${i}`,
+      classroomName: 'Class A',
+      attendanceRate: 60,
+      lowAttendance: true,
+      belowPassingSubjects: [] as string[],
+    }))
+    http.customInstance.mockResolvedValue(analytics({ role: 'Teacher', teacher: { attendanceThreshold: 80, flagged } }))
+
+    renderWithQuery(<DashboardPage />)
+
+    await screen.findByRole('table', { name: 'Students who need attention' })
+    expect(screen.getByTestId('attention-total').textContent).toBe('10 students in total')
+    expect(screen.queryByRole('button', { name: /Show all|Show fewer/ })).toBeNull()
+  })
+
   it('says so when no student needs attention', async () => {
     getDashboard.mockResolvedValue({ role: 'Teacher', fullName: 'Budi Santoso', sections: [] })
     http.customInstance.mockResolvedValue(analytics({ role: 'Teacher', teacher: { attendanceThreshold: 80, flagged: [] } }))
