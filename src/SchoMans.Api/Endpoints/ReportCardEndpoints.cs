@@ -6,6 +6,7 @@ using SchoMans.Application.Features.ReportCards;
 using SchoMans.Application.Features.ReportCards.GenerateReportCards;
 using SchoMans.Application.Features.ReportCards.GetReportCardUrl;
 using SchoMans.Application.Features.ReportCards.GetStudentGrades;
+using SchoMans.Application.Features.ReportCards.ListStudentTerms;
 using SchoMans.Application.Features.ReportCards.WriteAchievementDescription;
 
 namespace SchoMans.Api.Endpoints;
@@ -24,6 +25,9 @@ public static class ReportCardEndpoints
         group.MapGet("/grades", GetStudentGrades)
             .WithName("GetStudentGrades");
 
+        group.MapGet("/terms", ListStudentTerms)
+            .WithName("ListStudentTerms");
+
         group.MapGet("/url", GetReportCardUrl)
             .WithName("GetReportCardUrl");
 
@@ -41,6 +45,10 @@ public static class ReportCardEndpoints
 
     private static async Task<Results<Ok<StudentGradesDto>, ProblemHttpResult>> GetStudentGrades(
         [AsParameters] GetStudentGradesQuery query, GetStudentGradesHandler handler, CancellationToken ct)
+        => (await handler.Handle(query, ct)).ToHttpResult();
+
+    private static async Task<Results<Ok<List<StudentTermDto>>, ProblemHttpResult>> ListStudentTerms(
+        [AsParameters] ListStudentTermsQuery query, ListStudentTermsHandler handler, CancellationToken ct)
         => (await handler.Handle(query, ct)).ToHttpResult();
 
     private static async Task<Results<Ok<ReportCardUrlDto>, ProblemHttpResult>> GetReportCardUrl(
