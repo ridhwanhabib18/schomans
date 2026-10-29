@@ -5,6 +5,7 @@ using SchoMans.Api.IntegrationTests.Infrastructure;
 using SchoMans.Application.Common.Interfaces;
 using SchoMans.Application.Features.ReportCards;
 using SchoMans.Application.Features.ReportCards.GenerateReportCards;
+using SchoMans.Application.Features.ReportCards.ListStudentTerms;
 using SchoMans.Application.Features.ReportCards.WriteAchievementDescription;
 using SchoMans.Domain.Grading;
 using SchoMans.Domain.Students;
@@ -77,6 +78,42 @@ public class ReportCardEndpointTests(ApiFixture fixture)
         Assert.Equal(HttpStatusCode.OK, own.StatusCode);
         Assert.Equal(HttpStatusCode.Forbidden, other.StatusCode);
         Assert.Equal("grades.not_yours", await notMine.ProblemCodeAsync());
+    }
+
+    [Fact]
+    public async Task A_student_lists_the_terms_of_their_year_without_access_to_the_academic_years()
+    {
+        var (scenario, termId) = await GradedClassAsync(2);
+        using var teacher = scenario.TeacherClient();
+        using var student = scenario.StudentClient(0);
+        var termsUrl = $"{Url}/terms?studentId={scenario.Students[0].Id}";
+
+        var academicYears = await student.GetAsync("/api/v1/academic-years");
+        var before = await (await student.GetAsync(termsUrl)).ReadAsync<List<StudentTermDto>>();
+        (await GradeEndpointTests.PublishAsync(teacher, scenario, termId)).EnsureSuccessStatusCode();
+        var after = await (await student.GetAsync(termsUrl)).ReadAsync<List<StudentTermDto>>();
+        var classmate = await student.GetAsync($"{Url}/terms?studentId={scenario.Students[1].Id}");
+
+        Assert.Equal(HttpStatusCode.Forbidden, academicYears.StatusCode);
+        Assert.Equal(["Term 1", "Term 2"], before.Select(t => t.Name));
+        Assert.All(before, t => Assert.Equal("2026/2027", t.AcademicYearName));
+        Assert.Equal(termId, Assert.Single(before, t => t.IsActive).Id);
+        Assert.All(before, t => Assert.False(t.IsPublished));
+        Assert.Equal([true, false], after.Select(t => t.IsPublished));
+        Assert.Equal("grades.not_yours", await classmate.ProblemCodeAsync());
+    }
+
+    [Theory]
+    [InlineData("Teacher")]
+    [InlineData("Principal")]
+    [InlineData("Admin")]
+    public async Task Staff_have_no_family_term_list(string role)
+    {
+        using var client = fixture.AsNewUser(role);
+
+        var response = await client.GetAsync($"{Url}/terms?studentId={Guid.NewGuid()}");
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
 
     [Theory]
