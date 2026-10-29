@@ -57,7 +57,8 @@ test('a teacher publishes grades and report cards, and student and parent see th
     await expect(teacher.getByLabel('Midterm score of Rina Putri')).toBeDisabled()
     await teacher.getByRole('button', { name: 'Generate report cards' }).click()
     await teacher.getByRole('alertdialog').getByRole('button', { name: 'Generate the report cards?' }).click()
-    await expect(teacher.getByText(/report cards? generated/)).toBeVisible()
+    // A PDF per student of the class is drawn and stored, which takes a few seconds.
+    await expect(teacher.getByText(/report cards? generated/)).toBeVisible({ timeout: 45_000 })
 
     // The student sees the grades and the report text, and opens the PDF through a short-lived storage address.
     await student.reload()
