@@ -1,5 +1,9 @@
-import { expect, test } from '@playwright/test'
+import { expect as baseExpect, test } from '@playwright/test'
 import { loginAs } from './support/helpers.ts'
+
+// The grade pages load their data in a chain of requests (who am I, the terms, the grades), and the first call after the
+// API starts is slow, so the default 5 seconds of an assertion is too tight here.
+const expect = baseExpect.configure({ timeout: 20_000 })
 
 // Phase 4 exit criterion: report-card PDFs generate and the charts show per role. The teacher enters a score and a report
 // text, publishes the grades of Class A and generates the report cards; the student and the parent then see the grades
