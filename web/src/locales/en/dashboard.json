@@ -45,7 +45,12 @@
       "lowAttendance": "Low attendance",
       "below": "Below minimum: {{subjects}}",
       "empty": "No student needs attention right now.",
-      "noRecords": "No records"
+      "noRecords": "No records",
+      "total_one": "{{count}} student in total",
+      "total_other": "{{count}} students in total",
+      "showAll": "Show all ({{count}})",
+      "showFewer": "Show fewer",
+      "shown": "Showing {{shown}} of {{count}}, the most urgent first."
     },
     "child": {
       "title": "Progress of {{name}}",

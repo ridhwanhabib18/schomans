@@ -37,7 +37,7 @@ export function DescriptionDialog({ studentId, studentName, subjectId, termId, i
       { studentId, subjectId, termId, body: body.trim() },
       {
         onSuccess: () => {
-          showToast({ kind: 'success', title: t('book.description.saved') })
+          showToast({ kind: 'success', title: t('book.textDialog.saved') })
           onClose()
         },
         onError: (e) => setError(gradingErrorText(e, t, tCommon('errors.generic'))),
@@ -49,7 +49,7 @@ export function DescriptionDialog({ studentId, studentName, subjectId, termId, i
     <Dialog open onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-xl">
         <DialogHeader>
-          <DialogTitle>{t('book.description.title', { name: studentName })}</DialogTitle>
+          <DialogTitle>{t('book.textDialog.title', { name: studentName })}</DialogTitle>
         </DialogHeader>
         <form
           noValidate
@@ -61,7 +61,7 @@ export function DescriptionDialog({ studentId, studentName, subjectId, termId, i
         >
           {locked && <Alert tone="info" message={t('book.lockedNote')} />}
           {error && <Alert tone="error" message={error} />}
-          <FormField label={t('book.description.label')} hint={t('book.description.help')}>
+          <FormField label={t('book.textDialog.label')} hint={t('book.textDialog.help')}>
             <Textarea rows={5} maxLength={MAX_LENGTH} value={body} disabled={locked} onChange={(event) => setBody(event.target.value)} />
           </FormField>
           <DialogFooter>
@@ -69,7 +69,7 @@ export function DescriptionDialog({ studentId, studentName, subjectId, termId, i
               {tCommon('actions.cancel')}
             </Button>
             <Button type="submit" disabled={locked || write.isPending || body.trim() === ''}>
-              {write.isPending ? tCommon('actions.saving') : t('book.description.save')}
+              {write.isPending ? tCommon('actions.saving') : t('book.textDialog.save')}
             </Button>
           </DialogFooter>
         </form>

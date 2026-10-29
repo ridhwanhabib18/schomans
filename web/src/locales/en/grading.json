@@ -60,7 +60,7 @@
       "done_one": "{{count}} report card generated",
       "done_other": "{{count}} report cards generated"
     },
-    "description": {
+    "textDialog": {
       "title": "Report text for {{name}}",
       "label": "What the student achieved in this subject",
       "help": "This text is printed on the report card.",

@@ -6,13 +6,15 @@ interface ChartCardProps {
   description?: string
   /** What the chart says, in words, for people who cannot see it. */
   summary: string
+  /** Height of the drawing in pixels; a chart with many bars needs more than the default. */
+  height?: number
   /** The same numbers as a table: read by screen readers instead of the drawing. */
   table: ReactNode
   children: ReactNode
 }
 
 /** A titled card around a chart. The drawing is hidden from assistive technology; the table next to it carries the data. */
-export function ChartCard({ title, description, summary, table, children }: ChartCardProps) {
+export function ChartCard({ title, description, summary, height = 288, table, children }: ChartCardProps) {
   return (
     <Card className="min-w-0">
       <CardHeader>
@@ -20,7 +22,7 @@ export function ChartCard({ title, description, summary, table, children }: Char
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent>
-        <div role="img" aria-label={summary} className="h-72 w-full min-w-0 overflow-hidden">
+        <div role="img" aria-label={summary} style={{ height }} className="w-full min-w-0 overflow-hidden">
           {children}
         </div>
         {table}
