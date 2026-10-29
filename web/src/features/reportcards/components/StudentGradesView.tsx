@@ -58,7 +58,7 @@ function GradesForTerm({ studentId, termId }: { studentId: string; termId: strin
   const described = data.subjects.filter((s) => s.description)
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-w-0 flex-col gap-4">
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-sm text-muted-foreground">{t('published', { date: formatDate(data.publishedAt) })}</span>
         {data.hasReportCard && (
@@ -125,7 +125,7 @@ export function StudentGradesView({ studentId }: { studentId: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-w-0 flex-col gap-6">
       <label className="flex max-w-xs flex-col gap-1.5 text-sm font-medium">
         {t('term')}
         <Select value={termId} onChange={(event) => setChosen(event.target.value)}>

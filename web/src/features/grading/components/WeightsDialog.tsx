@@ -53,7 +53,7 @@ function WeightsForm({ subjectId, weights, onClose }: { subjectId: string; weigh
       {error && <Alert tone="error" message={error} />}
       <div className="grid grid-cols-2 gap-4">
         {GRADE_COMPONENTS.map((component) => (
-          <FormField key={component} label={t(`components.${component}`)}>
+          <FormField key={component} label={t(`components.${component}`)} className="min-w-0">
             <Input
               type="number"
               min={0}

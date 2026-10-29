@@ -70,11 +70,11 @@ function BandsEditor({ bands }: { bands: GradeBand[] }) {
       <ul className="flex flex-col gap-3">
         {drafts.map((draft) => (
           <li key={draft.key} className="flex items-end gap-3">
-            <label className="flex flex-1 flex-col gap-1.5 text-sm font-medium">
+            <label className="flex min-w-0 flex-1 flex-col gap-1.5 text-sm font-medium">
               {t('bands.label')}
               <Input maxLength={10} value={draft.label} onChange={(event) => update(draft.key, { label: event.target.value })} />
             </label>
-            <label className="flex flex-1 flex-col gap-1.5 text-sm font-medium">
+            <label className="flex min-w-0 flex-1 flex-col gap-1.5 text-sm font-medium">
               {t('bands.minScore')}
               <Input
                 type="number"

@@ -15,7 +15,7 @@ export function AnalyticsSection() {
 
   if (isPending) {
     return (
-      <div role="status" aria-busy="true" className="grid gap-6 lg:grid-cols-2">
+      <div role="status" aria-busy="true" className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
         <Skeleton className="h-80" />
         <Skeleton className="h-80" />
         <span className="sr-only">{t('analytics.loading')}</span>
@@ -28,7 +28,7 @@ export function AnalyticsSection() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
       {data.principal && (
         <>
           <AttendanceTrendChart trend={data.principal.attendanceTrend} />
@@ -36,7 +36,7 @@ export function AnalyticsSection() {
         </>
       )}
       {data.teacher && (
-        <div className="lg:col-span-2">
+        <div className="min-w-0 lg:col-span-2">
           <AttentionList analytics={data.teacher} />
         </div>
       )}

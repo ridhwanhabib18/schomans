@@ -30,7 +30,7 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-w-0 flex-col gap-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">{t(`title.${data.role}`)}</h1>
         <p className="text-muted-foreground">{t('welcome', { name: data.fullName })}</p>

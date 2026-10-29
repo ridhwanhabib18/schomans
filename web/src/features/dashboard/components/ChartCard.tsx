@@ -14,13 +14,13 @@ interface ChartCardProps {
 /** A titled card around a chart. The drawing is hidden from assistive technology; the table next to it carries the data. */
 export function ChartCard({ title, description, summary, table, children }: ChartCardProps) {
   return (
-    <Card>
+    <Card className="min-w-0">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent>
-        <div role="img" aria-label={summary} className="h-72 w-full">
+        <div role="img" aria-label={summary} className="h-72 w-full min-w-0 overflow-hidden">
           {children}
         </div>
         {table}
@@ -29,29 +29,34 @@ export function ChartCard({ title, description, summary, table, children }: Char
   )
 }
 
-/** A data table that only screen readers see. */
+/**
+ * A data table that only screen readers see. The hiding class sits on a wrapper, not on the table: a table ignores a
+ * 1px width and overflow, keeps its full width, and would widen the page on a phone.
+ */
 export function DataTableForReaders({ caption, headers, rows }: { caption: string; headers: string[]; rows: ReactNode[][] }) {
   return (
-    <table className="sr-only">
-      <caption>{caption}</caption>
-      <thead>
-        <tr>
-          {headers.map((header) => (
-            <th key={header} scope="col">
-              {header}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, index) => (
-          <tr key={index}>
-            {row.map((cell, cellIndex) => (
-              <td key={cellIndex}>{cell}</td>
+    <div className="sr-only">
+      <table>
+        <caption>{caption}</caption>
+        <thead>
+          <tr>
+            {headers.map((header) => (
+              <th key={header} scope="col">
+                {header}
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              {row.map((cell, cellIndex) => (
+                <td key={cellIndex}>{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }

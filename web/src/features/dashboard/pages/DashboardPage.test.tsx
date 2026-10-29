@@ -103,6 +103,19 @@ describe('DashboardPage', () => {
     expect(within(averages).getByRole('row', { name: /Mathematics/ }).textContent).toBe('Mathematics82.530')
   })
 
+  it('hides the reader tables with a wrapper, so a wide table cannot widen the page on a phone', async () => {
+    getDashboard.mockResolvedValue({ role: 'Principal', fullName: 'Hendra Wijaya', sections: [] })
+    http.customInstance.mockResolvedValue(
+      analytics({ principal: { attendanceTrend: [{ classroomId: 'c1', classroomName: 'Class A', months: months.map((month) => ({ month, rate: 90 })) }], subjectAverages: [] } }),
+    )
+
+    renderWithQuery(<DashboardPage />)
+
+    const table = await screen.findByRole('table', { name: 'Attendance rate per class and month' })
+    expect(table.className).not.toContain('sr-only')
+    expect(table.parentElement?.className).toContain('sr-only')
+  })
+
   it('tells the principal when there is no data to draw yet', async () => {
     getDashboard.mockResolvedValue({ role: 'Principal', fullName: 'Hendra Wijaya', sections: [] })
     http.customInstance.mockResolvedValue(analytics({ principal: { attendanceTrend: [], subjectAverages: [] } }))

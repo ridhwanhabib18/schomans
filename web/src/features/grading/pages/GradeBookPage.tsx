@@ -111,7 +111,7 @@ function GradeBookView({ book }: { book: GradeBook }) {
   const confirmCopy = action ? t(`book.${action}.title`) : ''
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex min-w-0 flex-col gap-4">
       <div className="flex flex-wrap items-center gap-3">
         <Badge variant={book.isPublished ? 'success' : 'muted'}>{book.isPublished ? t('book.published') : t('book.draft')}</Badge>
         <span className="text-sm text-muted-foreground">{t('book.minimum', { score: book.minimumPassingScore })}</span>
@@ -201,7 +201,7 @@ export function GradeBookPage() {
   const book = useGradeBook(params)
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-w-0 flex-col gap-6">
       <PageHeader title={t('book.title')} description={t('book.description')} />
 
       {options.isPending || terms.isPending ? (
@@ -212,7 +212,7 @@ export function GradeBookPage() {
         <EmptyState title={t('book.pick.none')} />
       ) : (
         <div className="flex flex-wrap gap-4">
-          <label className="flex min-w-64 flex-col gap-1.5 text-sm font-medium">
+          <label className="flex min-w-0 flex-col sm:min-w-64 gap-1.5 text-sm font-medium">
             {t('book.pick.classAndSubject')}
             <Select value={choice} onChange={(event) => setChoice(event.target.value)}>
               <option value="">{t('book.pick.choose')}</option>
