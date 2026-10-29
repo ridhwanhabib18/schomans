@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="0.1469" branch-rate="0.1081" version="1.9" timestamp="1793179610" lines-covered="766" lines-valid="5213" branches-covered="156" branches-valid="1442">
+<coverage line-rate="0.1461" branch-rate="0.10769999999999999" version="1.9" timestamp="1793243526" lines-covered="766" lines-valid="5242" branches-covered="156" branches-valid="1448">
   <sources>
     <source>C:/Users/iei22120006/Downloads/schomans-starter/schomans/src/</source>
   </sources>
   <packages>
-    <package name="SchoMans.Application" line-rate="0.1592" branch-rate="0.1155" complexity="2134">
+    <package name="SchoMans.Application" line-rate="0.15810000000000002" branch-rate="0.1149" complexity="2145">
       <classes>
         <class name="System.Text.RegularExpressions.Generated.&lt;RegexGenerator_g&gt;F6A0BBD3567F9B432F39E267250777C9F9565F423AE7573B9427E27F8161E1908__NisnPattern_0" filename="SchoMans.Application/obj/Debug/net10.0/System.Text.RegularExpressions.Generator/System.Text.RegularExpressions.Generator.RegexGenerator/RegexGenerator.g.cs" line-rate="1" branch-rate="1" complexity="2">
           <methods>
@@ -4814,6 +4814,110 @@
             <line number="11" hits="1" branch="False" />
           </lines>
         </class>
+        <class name="SchoMans.Application.Features.ReportCards.ListStudentTerms.ListStudentTermsQuery" filename="SchoMans.Application/Features/ReportCards/ListStudentTerms/ListStudentTermsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_StudentId" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="7" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="7" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.ReportCards.ListStudentTerms.StudentTermDto" filename="SchoMans.Application/Features/ReportCards/ListStudentTerms/ListStudentTermsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="get_Id" signature="()" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="10" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="10" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.ReportCards.ListStudentTerms.ListStudentTermsHandler" filename="SchoMans.Application/Features/ReportCards/ListStudentTerms/ListStudentTermsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name=".ctor" signature="(SchoMans.Application.Common.Interfaces.IAppDbContext,SchoMans.Application.Common.Interfaces.ICurrentUser)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="16" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="16" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.ReportCards.ListStudentTerms.ListStudentTermsHandler/&lt;&gt;c__DisplayClass3_0" filename="SchoMans.Application/Features/ReportCards/ListStudentTerms/ListStudentTermsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="&lt;Handle&gt;b__0" signature="(&lt;&gt;f__AnonymousType54`3&lt;System.Guid,System.String,System.Boolean&gt;)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="40" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="40" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.ReportCards.ListStudentTerms.ListStudentTermsHandler/&lt;Handle&gt;d__3" filename="SchoMans.Application/Features/ReportCards/ListStudentTerms/ListStudentTermsHandler.cs" line-rate="0" branch-rate="0" complexity="4">
+          <methods>
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="4">
+              <lines>
+                <line number="19" hits="0" branch="False" />
+                <line number="20" hits="0" branch="True" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="128" type="jump" coverage="0%" />
+                    <condition number="301" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="21" hits="0" branch="False" />
+                <line number="22" hits="0" branch="False" />
+                <line number="25" hits="0" branch="False" />
+                <line number="26" hits="0" branch="False" />
+                <line number="27" hits="0" branch="False" />
+                <line number="28" hits="0" branch="False" />
+                <line number="29" hits="0" branch="False" />
+                <line number="30" hits="0" branch="False" />
+                <line number="31" hits="0" branch="False" />
+                <line number="32" hits="0" branch="False" />
+                <line number="34" hits="0" branch="False" />
+                <line number="35" hits="0" branch="False" />
+                <line number="36" hits="0" branch="False" />
+                <line number="37" hits="0" branch="False" />
+                <line number="38" hits="0" branch="False" />
+                <line number="41" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="19" hits="0" branch="False" />
+            <line number="20" hits="0" branch="True" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="128" type="jump" coverage="0%" />
+                <condition number="301" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="21" hits="0" branch="False" />
+            <line number="22" hits="0" branch="False" />
+            <line number="25" hits="0" branch="False" />
+            <line number="26" hits="0" branch="False" />
+            <line number="27" hits="0" branch="False" />
+            <line number="28" hits="0" branch="False" />
+            <line number="29" hits="0" branch="False" />
+            <line number="30" hits="0" branch="False" />
+            <line number="31" hits="0" branch="False" />
+            <line number="32" hits="0" branch="False" />
+            <line number="34" hits="0" branch="False" />
+            <line number="35" hits="0" branch="False" />
+            <line number="36" hits="0" branch="False" />
+            <line number="37" hits="0" branch="False" />
+            <line number="38" hits="0" branch="False" />
+            <line number="41" hits="0" branch="False" />
+          </lines>
+        </class>
         <class name="SchoMans.Application.Features.ReportCards.GetStudentGrades.GetStudentGradesQuery" filename="SchoMans.Application/Features/ReportCards/GetStudentGrades/GetStudentGradesHandler.cs" line-rate="0" branch-rate="1" complexity="1">
           <methods>
             <method name="get_StudentId" signature="()" line-rate="0" branch-rate="1" complexity="1">
@@ -5098,35 +5202,47 @@
         </class>
         <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;&gt;c" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
           <methods>
-            <method name="&lt;Handle&gt;b__6_7" signature="(SchoMans.Domain.Grading.AchievementDescription)" line-rate="0" branch-rate="1" complexity="1">
+            <method name="&lt;Handle&gt;b__7_8" signature="(SchoMans.Domain.Grading.AchievementDescription)" line-rate="0" branch-rate="1" complexity="1">
               <lines>
-                <line number="62" hits="0" branch="False" />
+                <line number="65" hits="0" branch="False" />
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="62" hits="0" branch="False" />
+            <line number="65" hits="0" branch="False" />
           </lines>
         </class>
-        <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;&gt;c__DisplayClass6_2" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+        <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;&gt;c__DisplayClass7_0/&lt;&lt;Handle&gt;b__0&gt;d" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
           <methods>
-            <method name="&lt;Handle&gt;b__10" signature="(SchoMans.Application.Features.Grading.SubjectResult)" line-rate="0" branch-rate="1" complexity="1">
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="1" complexity="1">
               <lines>
-                <line number="63" hits="0" branch="False" />
-                <line number="64" hits="0" branch="False" />
+                <line number="88" hits="0" branch="False" />
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="63" hits="0" branch="False" />
-            <line number="64" hits="0" branch="False" />
+            <line number="88" hits="0" branch="False" />
           </lines>
         </class>
-        <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;&gt;c__DisplayClass7_0" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="0" complexity="2">
+        <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;&gt;c__DisplayClass7_2" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+          <methods>
+            <method name="&lt;Handle&gt;b__11" signature="(SchoMans.Application.Features.Grading.SubjectResult)" line-rate="0" branch-rate="1" complexity="1">
+              <lines>
+                <line number="66" hits="0" branch="False" />
+                <line number="67" hits="0" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="66" hits="0" branch="False" />
+            <line number="67" hits="0" branch="False" />
+          </lines>
+        </class>
+        <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;&gt;c__DisplayClass8_0" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="0" complexity="2">
           <methods>
             <method name="&lt;AttendanceOfAsync&gt;g__Of|0" signature="(SchoMans.Domain.Attendance.AttendanceStatus)" line-rate="0" branch-rate="0" complexity="2">
               <lines>
-                <line number="96" hits="0" branch="True" condition-coverage="0% (0/2)">
+                <line number="108" hits="0" branch="True" condition-coverage="0% (0/2)">
                   <conditions>
                     <condition number="37" type="jump" coverage="0%" />
                   </conditions>
@@ -5135,99 +5251,97 @@
             </method>
           </methods>
           <lines>
-            <line number="96" hits="0" branch="True" condition-coverage="0% (0/2)">
+            <line number="108" hits="0" branch="True" condition-coverage="0% (0/2)">
               <conditions>
                 <condition number="37" type="jump" coverage="0%" />
               </conditions>
             </line>
           </lines>
         </class>
-        <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;AttendanceOfAsync&gt;d__7" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
+        <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;AttendanceOfAsync&gt;d__8" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="1" complexity="1">
           <methods>
             <method name="MoveNext" signature="()" line-rate="0" branch-rate="1" complexity="1">
               <lines>
-                <line number="89" hits="0" branch="False" />
-                <line number="90" hits="0" branch="False" />
-                <line number="91" hits="0" branch="False" />
-                <line number="92" hits="0" branch="False" />
-                <line number="93" hits="0" branch="False" />
-                <line number="94" hits="0" branch="False" />
-                <line number="97" hits="0" branch="False" />
-                <line number="98" hits="0" branch="False" />
+                <line number="101" hits="0" branch="False" />
+                <line number="102" hits="0" branch="False" />
+                <line number="103" hits="0" branch="False" />
+                <line number="104" hits="0" branch="False" />
+                <line number="105" hits="0" branch="False" />
+                <line number="106" hits="0" branch="False" />
+                <line number="109" hits="0" branch="False" />
+                <line number="110" hits="0" branch="False" />
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="89" hits="0" branch="False" />
-            <line number="90" hits="0" branch="False" />
-            <line number="91" hits="0" branch="False" />
-            <line number="92" hits="0" branch="False" />
-            <line number="93" hits="0" branch="False" />
-            <line number="94" hits="0" branch="False" />
-            <line number="97" hits="0" branch="False" />
-            <line number="98" hits="0" branch="False" />
+            <line number="101" hits="0" branch="False" />
+            <line number="102" hits="0" branch="False" />
+            <line number="103" hits="0" branch="False" />
+            <line number="104" hits="0" branch="False" />
+            <line number="105" hits="0" branch="False" />
+            <line number="106" hits="0" branch="False" />
+            <line number="109" hits="0" branch="False" />
+            <line number="110" hits="0" branch="False" />
           </lines>
         </class>
-        <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;Handle&gt;d__6" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="0" complexity="14">
+        <class name="SchoMans.Application.Features.ReportCards.GenerateReportCards.GenerateReportCardsHandler/&lt;Handle&gt;d__7" filename="SchoMans.Application/Features/ReportCards/GenerateReportCards/GenerateReportCardsHandler.cs" line-rate="0" branch-rate="0" complexity="16">
           <methods>
-            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="14">
+            <method name="MoveNext" signature="()" line-rate="0" branch-rate="0" complexity="16">
               <lines>
-                <line number="23" hits="0" branch="False" />
-                <line number="24" hits="0" branch="False" />
                 <line number="25" hits="0" branch="False" />
                 <line number="26" hits="0" branch="False" />
                 <line number="27" hits="0" branch="False" />
                 <line number="28" hits="0" branch="False" />
-                <line number="29" hits="0" branch="True" condition-coverage="0% (0/4)">
-                  <conditions>
-                    <condition number="1245" type="jump" coverage="0%" />
-                    <condition number="1263" type="jump" coverage="0%" />
-                  </conditions>
-                </line>
+                <line number="29" hits="0" branch="False" />
                 <line number="30" hits="0" branch="False" />
-                <line number="31" hits="0" branch="False" />
-                <line number="34" hits="0" branch="True" condition-coverage="0% (0/4)">
+                <line number="31" hits="0" branch="True" condition-coverage="0% (0/4)">
                   <conditions>
-                    <condition number="1464" type="jump" coverage="0%" />
-                    <condition number="1495" type="jump" coverage="0%" />
+                    <condition number="1267" type="jump" coverage="0%" />
+                    <condition number="1285" type="jump" coverage="0%" />
                   </conditions>
                 </line>
-                <line number="35" hits="0" branch="False" />
-                <line number="36" hits="0" branch="False" />
-                <line number="39" hits="0" branch="True" condition-coverage="0% (0/2)">
+                <line number="32" hits="0" branch="False" />
+                <line number="33" hits="0" branch="False" />
+                <line number="36" hits="0" branch="True" condition-coverage="0% (0/4)">
                   <conditions>
-                    <condition number="1690" type="jump" coverage="0%" />
+                    <condition number="1486" type="jump" coverage="0%" />
+                    <condition number="1517" type="jump" coverage="0%" />
                   </conditions>
                 </line>
-                <line number="40" hits="0" branch="False" />
-                <line number="41" hits="0" branch="False" />
-                <line number="44" hits="0" branch="False" />
-                <line number="45" hits="0" branch="False" />
+                <line number="37" hits="0" branch="False" />
+                <line number="38" hits="0" branch="False" />
+                <line number="41" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="1712" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="42" hits="0" branch="False" />
+                <line number="43" hits="0" branch="False" />
                 <line number="46" hits="0" branch="False" />
                 <line number="47" hits="0" branch="False" />
                 <line number="48" hits="0" branch="False" />
+                <line number="49" hits="0" branch="False" />
                 <line number="50" hits="0" branch="False" />
-                <line number="51" hits="0" branch="True" condition-coverage="0% (0/2)">
-                  <conditions>
-                    <condition number="4145" type="jump" coverage="0%" />
-                  </conditions>
-                </line>
                 <line number="52" hits="0" branch="False" />
                 <line number="53" hits="0" branch="False" />
-                <line number="54" hits="0" branch="False" />
-                <line number="55" hits="0" branch="False" />
-                <line number="56" hits="0" branch="True" condition-coverage="0% (0/2)">
+                <line number="54" hits="0" branch="True" condition-coverage="0% (0/2)">
                   <conditions>
-                    <condition number="3204" type="jump" coverage="0%" />
+                    <condition number="4010" type="jump" coverage="0%" />
                   </conditions>
                 </line>
+                <line number="55" hits="0" branch="False" />
+                <line number="56" hits="0" branch="False" />
                 <line number="57" hits="0" branch="False" />
                 <line number="58" hits="0" branch="False" />
-                <line number="59" hits="0" branch="False" />
+                <line number="59" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="3239" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
                 <line number="60" hits="0" branch="False" />
-                <line number="66" hits="0" branch="False" />
-                <line number="67" hits="0" branch="False" />
-                <line number="68" hits="0" branch="False" />
+                <line number="61" hits="0" branch="False" />
+                <line number="62" hits="0" branch="False" />
+                <line number="63" hits="0" branch="False" />
                 <line number="69" hits="0" branch="False" />
                 <line number="70" hits="0" branch="False" />
                 <line number="71" hits="0" branch="False" />
@@ -5235,74 +5349,84 @@
                 <line number="73" hits="0" branch="False" />
                 <line number="74" hits="0" branch="False" />
                 <line number="75" hits="0" branch="False" />
+                <line number="76" hits="0" branch="False" />
                 <line number="77" hits="0" branch="False" />
                 <line number="78" hits="0" branch="False" />
                 <line number="80" hits="0" branch="False" />
                 <line number="81" hits="0" branch="False" />
-                <line number="82" hits="0" branch="False" />
-                <line number="84" hits="0" branch="False" />
                 <line number="85" hits="0" branch="False" />
                 <line number="86" hits="0" branch="False" />
+                <line number="87" hits="0" branch="False" />
+                <line number="90" hits="0" branch="True" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="4322" type="jump" coverage="0%" />
+                  </conditions>
+                </line>
+                <line number="91" hits="0" branch="False" />
+                <line number="92" hits="0" branch="False" />
+                <line number="93" hits="0" branch="False" />
+                <line number="94" hits="0" branch="False" />
+                <line number="96" hits="0" branch="False" />
+                <line number="97" hits="0" branch="False" />
+                <line number="98" hits="0" branch="False" />
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="23" hits="0" branch="False" />
-            <line number="24" hits="0" branch="False" />
             <line number="25" hits="0" branch="False" />
             <line number="26" hits="0" branch="False" />
             <line number="27" hits="0" branch="False" />
             <line number="28" hits="0" branch="False" />
-            <line number="29" hits="0" branch="True" condition-coverage="0% (0/4)">
-              <conditions>
-                <condition number="1245" type="jump" coverage="0%" />
-                <condition number="1263" type="jump" coverage="0%" />
-              </conditions>
-            </line>
+            <line number="29" hits="0" branch="False" />
             <line number="30" hits="0" branch="False" />
-            <line number="31" hits="0" branch="False" />
-            <line number="34" hits="0" branch="True" condition-coverage="0% (0/4)">
+            <line number="31" hits="0" branch="True" condition-coverage="0% (0/4)">
               <conditions>
-                <condition number="1464" type="jump" coverage="0%" />
-                <condition number="1495" type="jump" coverage="0%" />
+                <condition number="1267" type="jump" coverage="0%" />
+                <condition number="1285" type="jump" coverage="0%" />
               </conditions>
             </line>
-            <line number="35" hits="0" branch="False" />
-            <line number="36" hits="0" branch="False" />
-            <line number="39" hits="0" branch="True" condition-coverage="0% (0/2)">
+            <line number="32" hits="0" branch="False" />
+            <line number="33" hits="0" branch="False" />
+            <line number="36" hits="0" branch="True" condition-coverage="0% (0/4)">
               <conditions>
-                <condition number="1690" type="jump" coverage="0%" />
+                <condition number="1486" type="jump" coverage="0%" />
+                <condition number="1517" type="jump" coverage="0%" />
               </conditions>
             </line>
-            <line number="40" hits="0" branch="False" />
-            <line number="41" hits="0" branch="False" />
-            <line number="44" hits="0" branch="False" />
-            <line number="45" hits="0" branch="False" />
+            <line number="37" hits="0" branch="False" />
+            <line number="38" hits="0" branch="False" />
+            <line number="41" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="1712" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="42" hits="0" branch="False" />
+            <line number="43" hits="0" branch="False" />
             <line number="46" hits="0" branch="False" />
             <line number="47" hits="0" branch="False" />
             <line number="48" hits="0" branch="False" />
+            <line number="49" hits="0" branch="False" />
             <line number="50" hits="0" branch="False" />
-            <line number="51" hits="0" branch="True" condition-coverage="0% (0/2)">
-              <conditions>
-                <condition number="4145" type="jump" coverage="0%" />
-              </conditions>
-            </line>
             <line number="52" hits="0" branch="False" />
             <line number="53" hits="0" branch="False" />
-            <line number="54" hits="0" branch="False" />
-            <line number="55" hits="0" branch="False" />
-            <line number="56" hits="0" branch="True" condition-coverage="0% (0/2)">
+            <line number="54" hits="0" branch="True" condition-coverage="0% (0/2)">
               <conditions>
-                <condition number="3204" type="jump" coverage="0%" />
+                <condition number="4010" type="jump" coverage="0%" />
               </conditions>
             </line>
+            <line number="55" hits="0" branch="False" />
+            <line number="56" hits="0" branch="False" />
             <line number="57" hits="0" branch="False" />
             <line number="58" hits="0" branch="False" />
-            <line number="59" hits="0" branch="False" />
+            <line number="59" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="3239" type="jump" coverage="0%" />
+              </conditions>
+            </line>
             <line number="60" hits="0" branch="False" />
-            <line number="66" hits="0" branch="False" />
-            <line number="67" hits="0" branch="False" />
-            <line number="68" hits="0" branch="False" />
+            <line number="61" hits="0" branch="False" />
+            <line number="62" hits="0" branch="False" />
+            <line number="63" hits="0" branch="False" />
             <line number="69" hits="0" branch="False" />
             <line number="70" hits="0" branch="False" />
             <line number="71" hits="0" branch="False" />
@@ -5310,14 +5434,26 @@
             <line number="73" hits="0" branch="False" />
             <line number="74" hits="0" branch="False" />
             <line number="75" hits="0" branch="False" />
+            <line number="76" hits="0" branch="False" />
             <line number="77" hits="0" branch="False" />
             <line number="78" hits="0" branch="False" />
             <line number="80" hits="0" branch="False" />
             <line number="81" hits="0" branch="False" />
-            <line number="82" hits="0" branch="False" />
-            <line number="84" hits="0" branch="False" />
             <line number="85" hits="0" branch="False" />
             <line number="86" hits="0" branch="False" />
+            <line number="87" hits="0" branch="False" />
+            <line number="90" hits="0" branch="True" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="4322" type="jump" coverage="0%" />
+              </conditions>
+            </line>
+            <line number="91" hits="0" branch="False" />
+            <line number="92" hits="0" branch="False" />
+            <line number="93" hits="0" branch="False" />
+            <line number="94" hits="0" branch="False" />
+            <line number="96" hits="0" branch="False" />
+            <line number="97" hits="0" branch="False" />
+            <line number="98" hits="0" branch="False" />
           </lines>
         </class>
         <class name="SchoMans.Application.Features.Notifications.NotificationDto" filename="SchoMans.Application/Features/Notifications/NotificationDto.cs" line-rate="0" branch-rate="1" complexity="1">
@@ -19740,13 +19876,13 @@
               <lines>
                 <line number="10" hits="2" branch="False" />
                 <line number="11" hits="2" branch="False" />
-                <line number="13" hits="3634" branch="True" condition-coverage="100% (2/2)">
+                <line number="13" hits="3670" branch="True" condition-coverage="100% (2/2)">
                   <conditions>
                     <condition number="98" type="jump" coverage="100%" />
                   </conditions>
                 </line>
-                <line number="14" hits="1814" branch="False" />
-                <line number="15" hits="1814" branch="True" condition-coverage="100% (8/8)">
+                <line number="14" hits="1832" branch="False" />
+                <line number="15" hits="1832" branch="True" condition-coverage="100% (8/8)">
                   <conditions>
                     <condition number="35" type="jump" coverage="100%" />
                     <condition number="43" type="jump" coverage="100%" />
@@ -19754,10 +19890,10 @@
                     <condition number="77" type="jump" coverage="100%" />
                   </conditions>
                 </line>
-                <line number="16" hits="206" branch="False" />
-                <line number="17" hits="206" branch="False" />
-                <line number="18" hits="206" branch="False" />
-                <line number="19" hits="1814" branch="False" />
+                <line number="16" hits="208" branch="False" />
+                <line number="17" hits="208" branch="False" />
+                <line number="18" hits="208" branch="False" />
+                <line number="19" hits="1832" branch="False" />
                 <line number="21" hits="2" branch="False" />
                 <line number="22" hits="2" branch="False" />
                 <line number="23" hits="2" branch="False" />
@@ -19767,13 +19903,13 @@
           <lines>
             <line number="10" hits="2" branch="False" />
             <line number="11" hits="2" branch="False" />
-            <line number="13" hits="3634" branch="True" condition-coverage="100% (2/2)">
+            <line number="13" hits="3670" branch="True" condition-coverage="100% (2/2)">
               <conditions>
                 <condition number="98" type="jump" coverage="100%" />
               </conditions>
             </line>
-            <line number="14" hits="1814" branch="False" />
-            <line number="15" hits="1814" branch="True" condition-coverage="100% (8/8)">
+            <line number="14" hits="1832" branch="False" />
+            <line number="15" hits="1832" branch="True" condition-coverage="100% (8/8)">
               <conditions>
                 <condition number="35" type="jump" coverage="100%" />
                 <condition number="43" type="jump" coverage="100%" />
@@ -19781,10 +19917,10 @@
                 <condition number="77" type="jump" coverage="100%" />
               </conditions>
             </line>
-            <line number="16" hits="206" branch="False" />
-            <line number="17" hits="206" branch="False" />
-            <line number="18" hits="206" branch="False" />
-            <line number="19" hits="1814" branch="False" />
+            <line number="16" hits="208" branch="False" />
+            <line number="17" hits="208" branch="False" />
+            <line number="18" hits="208" branch="False" />
+            <line number="19" hits="1832" branch="False" />
             <line number="21" hits="2" branch="False" />
             <line number="22" hits="2" branch="False" />
             <line number="23" hits="2" branch="False" />
