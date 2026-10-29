@@ -6,6 +6,8 @@
  */
 import type {
   AcademicYearDto,
+  AchievementDescriptionDto,
+  AnalyticsDto,
   AnnouncementDto,
   AnnouncementReaderDto,
   AssignmentDto,
@@ -27,13 +29,24 @@ import type {
   CreateUploadUrlCommand,
   DashboardDto,
   DownloadUrlDto,
+  EnterGradeCommand,
+  EnteredGradeDto,
   ExportClassroomAttendanceSummaryParams,
+  GenerateReportCardsCommand,
+  GeneratedReportCardsDto,
   GetAssignmentAttachmentUrlParams,
   GetAssignmentParams,
   GetClassroomAttendanceSummaryParams,
+  GetGradeBookParams,
   GetMyAttendanceParams,
+  GetReportCardUrlParams,
   GetStudentAttendanceParams,
+  GetStudentGradesParams,
+  GradeBandDto,
+  GradeBookDto,
+  GradePublicationDto,
   GradeSubmissionCommand,
+  GradeWeightsDto,
   ImportStudentsBody,
   ImportStudentsSummary,
   ListAcademicYearsParams,
@@ -48,6 +61,7 @@ import type {
   ListPublicAnnouncementsParams,
   ListPublicNewsParams,
   ListSchedulesParams,
+  ListStudentTermsParams,
   ListStudentsParams,
   ListSubjectsParams,
   ListTeachersParams,
@@ -70,6 +84,9 @@ import type {
   PagedResultOfTeacherDto,
   PublicNewsDto,
   PublishAnnouncementSummary,
+  PublishGradesCommand,
+  ReplaceGradeBandsCommand,
+  ReportCardUrlDto,
   RolloverAcademicYearCommand,
   RolloverResult,
   ScanQrCommand,
@@ -77,8 +94,11 @@ import type {
   ScanSettingsDto,
   ScheduleDto,
   SessionStudentDto,
+  SetGradeWeightsCommand,
   StudentAttendanceDto,
   StudentDto,
+  StudentGradesDto,
+  StudentTermDto,
   SubjectDto,
   SubmissionDto,
   SubmissionRowDto,
@@ -86,6 +106,7 @@ import type {
   TeacherDto,
   TeachingOptionDto,
   TodayLessonDto,
+  UnpublishGradesParams,
   UnreadNotificationCountDto,
   UpdateAcademicYearCommand,
   UpdateAnnouncementCommand,
@@ -96,7 +117,8 @@ import type {
   UpdateStudentCommand,
   UpdateSubjectCommand,
   UpdateTeacherCommand,
-  UploadUrlDto
+  UploadUrlDto,
+  WriteAchievementDescriptionCommand
 } from './model';
 
 import { customInstance } from '../../shared/lib/http';
@@ -108,6 +130,15 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  options?: SecondParameter<typeof customInstance<DashboardDto>>,) => {
       return customInstance<DashboardDto>(
       {url: `/api/v1/dashboard`, method: 'GET'
+    },
+      options);
+    }
+
+export const getDashboardAnalytics = (
+
+ options?: SecondParameter<typeof customInstance<AnalyticsDto>>,) => {
+      return customInstance<AnalyticsDto>(
+      {url: `/api/v1/dashboard/analytics`, method: 'GET'
     },
       options);
     }
@@ -743,6 +774,141 @@ export const gradeSubmission = (
       options);
     }
 
+export const getGradeBook = (
+    params: GetGradeBookParams,
+ options?: SecondParameter<typeof customInstance<GradeBookDto>>,) => {
+      return customInstance<GradeBookDto>(
+      {url: `/api/v1/grades/book`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const enterGrade = (
+    enterGradeCommand: EnterGradeCommand,
+ options?: SecondParameter<typeof customInstance<EnteredGradeDto>>,) => {
+      return customInstance<EnteredGradeDto>(
+      {url: `/api/v1/grades`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: enterGradeCommand
+    },
+      options);
+    }
+
+export const publishGrades = (
+    publishGradesCommand: PublishGradesCommand,
+ options?: SecondParameter<typeof customInstance<GradePublicationDto>>,) => {
+      return customInstance<GradePublicationDto>(
+      {url: `/api/v1/grades/publications`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: publishGradesCommand
+    },
+      options);
+    }
+
+export const unpublishGrades = (
+    params: UnpublishGradesParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/grades/publications`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+export const getStudentGrades = (
+    params: GetStudentGradesParams,
+ options?: SecondParameter<typeof customInstance<StudentGradesDto>>,) => {
+      return customInstance<StudentGradesDto>(
+      {url: `/api/v1/report-cards/grades`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const listStudentTerms = (
+    params: ListStudentTermsParams,
+ options?: SecondParameter<typeof customInstance<StudentTermDto[]>>,) => {
+      return customInstance<StudentTermDto[]>(
+      {url: `/api/v1/report-cards/terms`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const getReportCardUrl = (
+    params: GetReportCardUrlParams,
+ options?: SecondParameter<typeof customInstance<ReportCardUrlDto>>,) => {
+      return customInstance<ReportCardUrlDto>(
+      {url: `/api/v1/report-cards/url`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const writeAchievementDescription = (
+    writeAchievementDescriptionCommand: WriteAchievementDescriptionCommand,
+ options?: SecondParameter<typeof customInstance<AchievementDescriptionDto>>,) => {
+      return customInstance<AchievementDescriptionDto>(
+      {url: `/api/v1/report-cards/descriptions`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: writeAchievementDescriptionCommand
+    },
+      options);
+    }
+
+export const generateReportCards = (
+    generateReportCardsCommand: GenerateReportCardsCommand,
+ options?: SecondParameter<typeof customInstance<GeneratedReportCardsDto>>,) => {
+      return customInstance<GeneratedReportCardsDto>(
+      {url: `/api/v1/report-cards/generate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: generateReportCardsCommand
+    },
+      options);
+    }
+
+export const listGradeBands = (
+
+ options?: SecondParameter<typeof customInstance<GradeBandDto[]>>,) => {
+      return customInstance<GradeBandDto[]>(
+      {url: `/api/v1/grade-bands`, method: 'GET'
+    },
+      options);
+    }
+
+export const replaceGradeBands = (
+    replaceGradeBandsCommand: ReplaceGradeBandsCommand,
+ options?: SecondParameter<typeof customInstance<GradeBandDto[]>>,) => {
+      return customInstance<GradeBandDto[]>(
+      {url: `/api/v1/grade-bands`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: replaceGradeBandsCommand
+    },
+      options);
+    }
+
+export const getGradeWeights = (
+    subjectId: string,
+ options?: SecondParameter<typeof customInstance<GradeWeightsDto>>,) => {
+      return customInstance<GradeWeightsDto>(
+      {url: `/api/v1/grade-weights/${subjectId}`, method: 'GET'
+    },
+      options);
+    }
+
+export const setGradeWeights = (
+    subjectId: string,
+    setGradeWeightsCommand: SetGradeWeightsCommand,
+ options?: SecondParameter<typeof customInstance<GradeWeightsDto>>,) => {
+      return customInstance<GradeWeightsDto>(
+      {url: `/api/v1/grade-weights/${subjectId}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: setGradeWeightsCommand
+    },
+      options);
+    }
+
 export const listPublicNews = (
     params?: ListPublicNewsParams,
  options?: SecondParameter<typeof customInstance<PagedResultOfPublicNewsSummaryDto>>,) => {
@@ -987,6 +1153,7 @@ export const createUploadUrl = (
     }
 
 export type GetDashboardResult = NonNullable<Awaited<ReturnType<typeof getDashboard>>>
+export type GetDashboardAnalyticsResult = NonNullable<Awaited<ReturnType<typeof getDashboardAnalytics>>>
 export type GetCurrentUserResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
 export type ListMyChildrenResult = NonNullable<Awaited<ReturnType<typeof listMyChildren>>>
 export type ListStudentsResult = NonNullable<Awaited<ReturnType<typeof listStudents>>>
@@ -1048,6 +1215,19 @@ export type ListSubmissionsResult = NonNullable<Awaited<ReturnType<typeof listSu
 export type GetSubmissionResult = NonNullable<Awaited<ReturnType<typeof getSubmission>>>
 export type GetSubmissionFileUrlResult = NonNullable<Awaited<ReturnType<typeof getSubmissionFileUrl>>>
 export type GradeSubmissionResult = NonNullable<Awaited<ReturnType<typeof gradeSubmission>>>
+export type GetGradeBookResult = NonNullable<Awaited<ReturnType<typeof getGradeBook>>>
+export type EnterGradeResult = NonNullable<Awaited<ReturnType<typeof enterGrade>>>
+export type PublishGradesResult = NonNullable<Awaited<ReturnType<typeof publishGrades>>>
+export type UnpublishGradesResult = NonNullable<Awaited<ReturnType<typeof unpublishGrades>>>
+export type GetStudentGradesResult = NonNullable<Awaited<ReturnType<typeof getStudentGrades>>>
+export type ListStudentTermsResult = NonNullable<Awaited<ReturnType<typeof listStudentTerms>>>
+export type GetReportCardUrlResult = NonNullable<Awaited<ReturnType<typeof getReportCardUrl>>>
+export type WriteAchievementDescriptionResult = NonNullable<Awaited<ReturnType<typeof writeAchievementDescription>>>
+export type GenerateReportCardsResult = NonNullable<Awaited<ReturnType<typeof generateReportCards>>>
+export type ListGradeBandsResult = NonNullable<Awaited<ReturnType<typeof listGradeBands>>>
+export type ReplaceGradeBandsResult = NonNullable<Awaited<ReturnType<typeof replaceGradeBands>>>
+export type GetGradeWeightsResult = NonNullable<Awaited<ReturnType<typeof getGradeWeights>>>
+export type SetGradeWeightsResult = NonNullable<Awaited<ReturnType<typeof setGradeWeights>>>
 export type ListPublicNewsResult = NonNullable<Awaited<ReturnType<typeof listPublicNews>>>
 export type GetPublicNewsResult = NonNullable<Awaited<ReturnType<typeof getPublicNews>>>
 export type ListNewsResult = NonNullable<Awaited<ReturnType<typeof listNews>>>
