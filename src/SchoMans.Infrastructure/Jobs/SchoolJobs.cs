@@ -1,4 +1,5 @@
 using Hangfire;
+using SchoMans.Application.Features.Admissions.AnnounceResults;
 using SchoMans.Application.Features.Assignments.SendDueReminders;
 using SchoMans.Application.Features.Attendance.CloseStaleSessions;
 using SchoMans.Application.Features.Attendance.RotateQrCodes;
@@ -25,6 +26,13 @@ public sealed class CloseStaleSessionsJob(CloseStaleSessionsHandler handler)
 /// <summary>Every morning at 07:00 school time: remind students of assignments due tomorrow.</summary>
 [DisableConcurrentExecution(timeoutInSeconds: 600)]
 public sealed class AssignmentDueReminderJob(SendDueRemindersHandler handler)
+{
+    public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
+}
+
+/// <summary>Every 5 minutes: tell the applicants of a period that the results are out, once its announcement moment has come.</summary>
+[DisableConcurrentExecution(timeoutInSeconds: 240)]
+public sealed class AdmissionResultsJob(AnnounceAdmissionResultsHandler handler)
 {
     public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
 }

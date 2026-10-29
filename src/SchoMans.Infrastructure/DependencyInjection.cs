@@ -46,6 +46,9 @@ public static class DependencyInjection
         services.AddSingleton<IAttendanceExport, AttendanceExcelWriter>();
         services.AddSingleton<IReportCardPdf, ReportCardPdfRenderer>();
 
+        services.Configure<KeycloakAdminOptions>(configuration.GetSection(KeycloakAdminOptions.SectionName));
+        services.AddHttpClient<IIdentityProvisioner, KeycloakIdentityProvisioner>(client => client.Timeout = TimeSpan.FromSeconds(10));
+
         services.Configure<SchoolOptions>(configuration.GetSection(SchoolOptions.SectionName));
         services.AddSingleton<ISchoolClock, SchoolClock>();
         services.Configure<AttendanceOptions>(configuration.GetSection(AttendanceOptions.SectionName));
