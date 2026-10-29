@@ -34,6 +34,15 @@ export interface StudentGrades {
   subjects: SubjectGrade[]
 }
 
+/** A term of the academic year of the student's classroom, for the term picker of the family pages. */
+export interface StudentTerm {
+  id: string
+  name: string
+  academicYearName: string
+  isActive: boolean
+  isPublished: boolean
+}
+
 interface ReportCardUrl {
   url: string
   expiresAt: string
@@ -42,11 +51,15 @@ interface ReportCardUrl {
 export const reportCardKeys = {
   all: ['report-cards'] as const,
   ownStudent: () => [...reportCardKeys.all, 'own-student'] as const,
+  terms: (studentId: string) => [...reportCardKeys.all, 'terms', studentId] as const,
   grades: (studentId: string, termId: string) => [...reportCardKeys.all, 'grades', studentId, termId] as const,
 }
 
 const getStudentGrades = (studentId: string, termId: string) =>
   customInstance<StudentGrades>({ url: '/api/v1/report-cards/grades', method: 'GET', params: { studentId, termId } })
+
+const getStudentTerms = (studentId: string) =>
+  customInstance<StudentTerm[]>({ url: '/api/v1/report-cards/terms', method: 'GET', params: { studentId } })
 
 const getReportCardUrl = (studentId: string, termId: string) =>
   customInstance<ReportCardUrl>({ url: '/api/v1/report-cards/url', method: 'GET', params: { studentId, termId } })
@@ -61,6 +74,16 @@ export function useOwnStudentId(enabled = true) {
     queryFn: async () => (await getMyAttendance({ Month: currentMonth() })).studentId,
     enabled,
     staleTime: 30 * 60_000,
+  })
+}
+
+/** The terms of the student's academic year. Students and parents may not read the academic years themselves, so they ask here. */
+export function useStudentTerms(studentId: string) {
+  return useQuery({
+    queryKey: reportCardKeys.terms(studentId),
+    queryFn: () => getStudentTerms(studentId),
+    enabled: studentId !== '',
+    staleTime: 5 * 60_000,
   })
 }
 

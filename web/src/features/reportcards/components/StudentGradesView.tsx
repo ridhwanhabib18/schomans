@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useTermOptions } from '@/shared/hooks/useTermOptions'
 import { formatDate } from '@/shared/lib/format'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
@@ -9,7 +8,7 @@ import { Select } from '@/shared/ui/form-controls'
 import { EmptyState, ErrorNotice } from '@/shared/ui/page-parts'
 import { Skeleton } from '@/shared/ui/skeleton'
 import { selectShowToast, useToastStore } from '@/stores/useToastStore'
-import { isNotPublished, useOpenReportCard, useStudentGrades, type GradeComponent, type SubjectGrade } from '../api/reportCards'
+import { isNotPublished, useOpenReportCard, useStudentGrades, useStudentTerms, type GradeComponent, type SubjectGrade } from '../api/reportCards'
 import '../i18n'
 
 const COMPONENTS: readonly GradeComponent[] = ['Assignment', 'Quiz', 'Midterm', 'Final']
@@ -109,7 +108,7 @@ function GradesForTerm({ studentId, termId }: { studentId: string; termId: strin
 /** The published grades of one student with a term picker (the current term first). */
 export function StudentGradesView({ studentId }: { studentId: string }) {
   const { t } = useTranslation('reportcards')
-  const terms = useTermOptions()
+  const terms = useStudentTerms(studentId)
   const [chosen, setChosen] = useState<string>()
 
   if (terms.isPending) {
@@ -132,7 +131,7 @@ export function StudentGradesView({ studentId }: { studentId: string }) {
         <Select value={termId} onChange={(event) => setChosen(event.target.value)}>
           {terms.data.map((term) => (
             <option key={term.id} value={term.id}>
-              {term.label}
+              {term.academicYearName} - {term.name}
             </option>
           ))}
         </Select>
