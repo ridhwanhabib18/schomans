@@ -13,6 +13,7 @@
     "body": "Your {{role}} dashboard fills up as school modules are added."
   },
   "error": "The dashboard could not be loaded.",
+  "applicant": { "open": "Open my application" },
   "analytics": {
     "error": "The charts could not be loaded.",
     "loading": "Loading the charts…",

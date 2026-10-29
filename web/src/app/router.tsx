@@ -10,6 +10,10 @@ import { ChildAttendancePage, MyAttendancePage } from '@/features/attendance/pag
 import { ScanPage } from '@/features/attendance/pages/ScanPage'
 import { SessionPage } from '@/features/attendance/pages/SessionPage'
 import { TodayLessonsPage } from '@/features/attendance/pages/TodayLessonsPage'
+import { AdmissionPeriodsPage } from '@/features/admissions/pages/AdmissionPeriodsPage'
+import { ApplicantDetailPage } from '@/features/admissions/pages/ApplicantDetailPage'
+import { ApplicantsPage } from '@/features/admissions/pages/ApplicantsPage'
+import { MyApplicationPage } from '@/features/admissions/pages/MyApplicationPage'
 import { AnnouncementDetailPage } from '@/features/announcements/pages/AnnouncementDetailPage'
 import { AnnouncementEditPage } from '@/features/announcements/pages/AnnouncementEditPage'
 import { AnnouncementsInboxPage } from '@/features/announcements/pages/AnnouncementsInboxPage'
@@ -48,6 +52,7 @@ const STAFF: readonly AppRole[] = ['Admin', 'Principal', 'Teacher']
 const TEACHER: readonly AppRole[] = ['Teacher']
 const STUDENT: readonly AppRole[] = ['Student']
 const PARENT: readonly AppRole[] = ['Parent']
+const APPLICANT: readonly AppRole[] = ['Applicant']
 // Admin staff do not work with assignments (authorization matrix).
 const ASSIGNMENT_READERS: readonly AppRole[] = ['Teacher', 'Principal', 'Student', 'Parent']
 
@@ -107,6 +112,11 @@ export const routes: RouteObject[] = [
           { path: '/my-children/grades', element: guarded(PARENT, <ChildGradesPage />) },
           { path: '/grading', element: guarded(TEACHER, <GradeBookPage />) },
           { path: '/manage/grade-bands', element: guarded(ADMIN, <GradeBandsPage />) },
+
+          { path: '/admissions', element: guarded(APPLICANT, <MyApplicationPage />) },
+          { path: '/manage/admissions', element: guarded(ADMIN, <ApplicantsPage />) },
+          { path: '/manage/admissions/:id', element: guarded(ADMIN, <ApplicantDetailPage />) },
+          { path: '/manage/admission-periods', element: guarded(ADMIN, <AdmissionPeriodsPage />) },
 
           { path: '/manage/news', element: guarded(EDITORS, <NewsManagePage />) },
           { path: '/manage/news/new', element: guarded(EDITORS, <NewsEditPage />) },

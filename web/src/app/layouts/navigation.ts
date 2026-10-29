@@ -4,12 +4,14 @@ import {
   CalendarClock,
   CalendarRange,
   ClipboardCheck,
+  ClipboardList,
   GraduationCap,
   LayoutDashboard,
   Award,
   Megaphone,
   Newspaper,
   NotebookPen,
+  UserPlus,
   ScanLine,
   School,
   Users,
@@ -39,6 +41,7 @@ const EDITORS: readonly AppRole[] = ['Admin', 'Principal']
  */
 export const navItems: readonly NavItem[] = [
   { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard, roles: APP_ROLES, section: 'main' },
+  { to: '/admissions', labelKey: 'nav.myApplication', icon: ClipboardList, roles: ['Applicant'], section: 'main' },
   { to: '/attendance', labelKey: 'nav.attendance', icon: ClipboardCheck, roles: ['Teacher'], section: 'classroom', end: true },
   { to: '/attendance/scan', labelKey: 'nav.scanQr', icon: ScanLine, roles: ['Student'], section: 'classroom' },
   { to: '/attendance/me', labelKey: 'nav.myAttendance', icon: ClipboardCheck, roles: ['Student'], section: 'classroom' },
@@ -57,6 +60,8 @@ export const navItems: readonly NavItem[] = [
   { to: '/manage/academic-years', labelKey: 'nav.academicYears', icon: CalendarRange, roles: STAFF, section: 'school' },
   { to: '/manage/schedules', labelKey: 'nav.timetable', icon: CalendarClock, roles: STAFF, section: 'school' },
   { to: '/manage/grade-bands', labelKey: 'nav.gradeBands', icon: Award, roles: ['Admin'], section: 'school' },
+  { to: '/manage/admissions', labelKey: 'nav.admissions', icon: UserPlus, roles: ['Admin'], section: 'school' },
+  { to: '/manage/admission-periods', labelKey: 'nav.admissionPeriods', icon: CalendarRange, roles: ['Admin'], section: 'school' },
   { to: '/manage/news', labelKey: 'nav.manageNews', icon: Newspaper, roles: EDITORS, section: 'manage' },
   { to: '/manage/announcements', labelKey: 'nav.manageAnnouncements', icon: Megaphone, roles: EDITORS, section: 'manage' },
 ]
