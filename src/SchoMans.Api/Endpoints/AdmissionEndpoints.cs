@@ -32,6 +32,7 @@ public static class AdmissionEndpoints
         // The public side: the banner of the landing page. AllowAnonymous overrides the group's policy.
         group.MapGet("/open", GetOpenAdmission)
             .AllowAnonymous()
+            .RequireRateLimiting(RateLimitPolicies.Public)
             .WithName("GetOpenAdmission");
 
         // The applicant: their own application, step by step.

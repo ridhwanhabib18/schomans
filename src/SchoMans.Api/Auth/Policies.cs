@@ -21,4 +21,10 @@ public static class Policies
 
     /// <summary>The people who give or oversee assignments: teachers and the principal.</summary>
     public const string TeachingStaff = nameof(TeachingStaff);
+
+    /// <summary>The people who make or follow requests: everybody inside the school (not applicants).</summary>
+    public const string RequestUsers = nameof(RequestUsers);
+
+    /// <summary>The people who can be an approver in a chain: admin staff, the principal and teachers (a homeroom teacher).</summary>
+    public const string Approvers = nameof(Approvers);
 }
