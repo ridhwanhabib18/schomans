@@ -1,0 +1,347 @@
+
+Running 41 tests using 1 worker
+
+  x   1 [desktop] › e2e\announcements.spec.ts:28:1 › a published announcement reaches its audience at once, and only its audience (43.6s)
+  x   2 [desktop] › e2e\announcements.spec.ts:77:1 › an announcement marked public is readable by a guest, a private one is not (34.1s)
+  ok  3 [desktop] › e2e\assignments.spec.ts:7:1 › a teacher gives an assignment, a student hands in work, and the score reaches student and parent (48.7s)
+  ok  4 [desktop] › e2e\assignments.spec.ts:105:1 › a teacher can delete an assignment nobody has handed in (11.8s)
+  ok  5 [desktop] › e2e\assignments.spec.ts:123:1 › a student cannot give assignments and sees only their own (5.9s)
+  x   6 [desktop] › e2e\attendance.spec.ts:8:1 › a teacher takes attendance with the rotating QR code and a student checks in (2.3m)
+  ok  7 [desktop] › e2e\attendance.spec.ts:119:1 › a student reaches the check-in page with a camera app after signing in with Keycloak (20.1s)
+  ok  8 [desktop] › e2e\attendance.spec.ts:135:1 › roles that do not take attendance see no attendance pages of the teacher (6.0s)
+  ok  9 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Principal (10.0s)
+  ok 10 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Teacher (12.8s)
+  ok 11 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Student (15.5s)
+  ok 12 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Parent (8.3s)
+  ok 13 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Admin (7.8s)
+  ok 14 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Applicant (7.7s)
+  ok 15 [desktop] › e2e\demo-login.spec.ts:37:3 › demo login: every role sees its own dashboard › signing out returns to the login page and protects the dashboard again (10.2s)
+  ok 16 [desktop] › e2e\demo-login.spec.ts:51:3 › guests and protected pages › an anonymous visitor who opens the dashboard is sent to the login page (8.1s)
+  ok 17 [desktop] › e2e\demo-login.spec.ts:57:3 › guests and protected pages › a guest can browse the public page without an account (4.9s)
+  ok 18 [desktop] › e2e\demo-login.spec.ts:66:3 › guests and protected pages › an unknown address shows the not-found page (5.2s)
+  ok 19 [desktop] › e2e\demo-login.spec.ts:72:3 › guests and protected pages › a demo user opening the login page again is taken to the dashboard (9.8s)
+  x  20 [desktop] › e2e\grading.spec.ts:8:1 › a teacher publishes grades and report cards, and student and parent see them (1.2m)
+  ok 21 [desktop] › e2e\grading.spec.ts:97:1 › the dashboard shows the charts of each role (41.9s)
+  ok 22 [desktop] › e2e\keycloak-login.spec.ts:8:3 › Keycloak login (OIDC + PKCE) › a student signs in with email and password, survives a reload, and signs out (22.4s)
+  ok 23 [desktop] › e2e\keycloak-login.spec.ts:36:3 › Keycloak login (OIDC + PKCE) › a wrong password is rejected by Keycloak (7.1s)
+  ok 24 [desktop] › e2e\keycloak-login.spec.ts:48:3 › Keycloak login (OIDC + PKCE) › opening a protected page first brings the user back to it after login (14.7s)
+  x  25 [desktop] › e2e\keycloak-login.spec.ts:90:3 › Self-registration creates an Applicant › a guest registers on the Keycloak page and lands on the Applicant dashboard (26.4s)
+  ok 26 [desktop] › e2e\layout.spec.ts:4:1 › the app shell adapts to the screen size (29.5s)
+  ok 27 [desktop] › e2e\layout.spec.ts:26:1 › the theme can be switched to dark and back (8.6s)
+  x  28 [desktop] › e2e\masterdata.spec.ts:49:3 › master data › the admin adds a teacher, a subject and a classroom (28.8s)
+  -  29 [desktop] › e2e\masterdata.spec.ts:87:3 › master data › the admin adds, finds, edits a student, and the form explains a duplicate NISN
+  -  30 [desktop] › e2e\masterdata.spec.ts:128:3 › master data › the admin imports students from an Excel file, and the failed rows are listed
+  -  31 [desktop] › e2e\masterdata.spec.ts:167:3 › master data › the admin deletes what was added, and a classroom with students cannot be deleted
+  ok 32 [desktop] › e2e\masterdata.spec.ts:208:3 › who may see and change master data › a teacher sees the students, without any button to change them, and not the teachers page (28.5s)
+  ok 33 [desktop] › e2e\masterdata.spec.ts:224:3 › who may see and change master data › the principal sees everything and can change nothing (16.7s)
+  ok 34 [desktop] › e2e\masterdata.spec.ts:234:3 › who may see and change master data › a student has no management pages (10.6s)
+  x  35 [desktop] › e2e\masterdata.spec.ts:243:3 › who may see and change master data › the academic year page lists the current year with its terms; rollover is not run here (1.1m)
+  ok 36 [desktop] › e2e\news.spec.ts:6:1 › an admin writes, illustrates and publishes an article, and a guest reads it (46.8s)
+  ok 37 [desktop] › e2e\news.spec.ts:89:1 › a teacher cannot manage news, and the page says why (8.4s)
+  ok 38 [desktop] › e2e\timetable.spec.ts:14:1 › the admin adds a lesson to the timetable, a clash is refused, and the lesson can be removed (11.1s)
+  ok 39 [desktop] › e2e\timetable.spec.ts:59:1 › a teacher reads the timetable without being able to change it (7.2s)
+  ok 40 [mobile] › e2e\layout.spec.ts:4:1 › the app shell adapts to the screen size (13.9s)
+  ok 41 [mobile] › e2e\layout.spec.ts:26:1 › the theme can be switched to dark and back (7.9s)
+
+
+  1) [desktop] › e2e\announcements.spec.ts:28:1 › a published announcement reaches its audience at once, and only its audience 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/manage\/announcements\/[0-9a-f-]{36}$/
+    Received string:  "http://localhost:5173/manage/announcements/new"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        13 × locator resolved to <html lang="en">…</html>
+           - unexpected value "http://localhost:5173/manage/announcements/new"
+
+
+      15 |   }
+      16 |   await page.getByRole('button', { name: 'Save draft' }).click()
+    > 17 |   await expect(page).toHaveURL(/\/manage\/announcements\/[0-9a-f-]{36}$/)
+         |                      ^
+      18 |   return /\/manage\/announcements\/([0-9a-f-]{36})$/.exec(page.url())![1]!
+      19 | }
+      20 |
+        at writeAnnouncement (C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\announcements.spec.ts:17:22)
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\announcements.spec.ts:45:10
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\announcements-a-published--3af77--once-and-only-its-audience-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\announcements-a-published--3af77--once-and-only-its-audience-desktop\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\announcements-a-published--3af77--once-and-only-its-audience-desktop\test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\announcements-a-published--3af77--once-and-only-its-audience-desktop\error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\announcements-a-published--3af77--once-and-only-its-audience-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\announcements-a-published--3af77--once-and-only-its-audience-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › e2e\announcements.spec.ts:77:1 › an announcement marked public is readable by a guest, a private one is not 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/manage\/announcements$/
+    Received string:  "http://localhost:5173/manage/announcements/01a1855f-f8b3-7a14-9387-5ecf1154b89d"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        13 × locator resolved to <html lang="en">…</html>
+           - unexpected value "http://localhost:5173/manage/announcements/01a1855f-f8b3-7a14-9387-5ecf1154b89d"
+
+
+      22 |   await page.getByRole('button', { name: 'Publish' }).click()
+      23 |   await page.getByRole('alertdialog').getByRole('button', { name: 'Publish' }).click()
+    > 24 |   await expect(page).toHaveURL(/\/manage\/announcements$/)
+         |                      ^
+      25 | }
+      26 |
+      27 | // Phase 2 exit criterion: announcements appear in real time.
+        at publish (C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\announcements.spec.ts:24:22)
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\announcements.spec.ts:88:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\announcements-an-announcem-39797--guest-a-private-one-is-not-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\announcements-an-announcem-39797--guest-a-private-one-is-not-desktop\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\announcements-an-announcem-39797--guest-a-private-one-is-not-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\announcements-an-announcem-39797--guest-a-private-one-is-not-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › e2e\attendance.spec.ts:8:1 › a teacher takes attendance with the rotating QR code and a student checks in 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/lesson\(s\) with attendance this month/)
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText(/lesson\(s\) with attendance this month/) with timeout 5000ms
+      - waiting for getByText(/lesson\(s\) with attendance this month/)
+
+
+      102 |     await teacher.getByRole('link', { name: 'Attendance reports' }).first().click()
+      103 |     await expect(teacher.getByRole('heading', { level: 1, name: 'Attendance reports' })).toBeVisible()
+    > 104 |     await expect(teacher.getByText(/lesson\(s\) with attendance this month/)).toBeVisible()
+          |                                                                               ^
+      105 |     await expect(teacher.getByRole('cell', { name: 'Rina Putri', exact: true })).toBeVisible()
+      106 |     await teacher.screenshot({ path: 'test-results/screens/attendance-report.png', fullPage: true })
+      107 |     const download = teacher.waitForEvent('download')
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\attendance.spec.ts:104:79
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\attendance-a-teacher-takes-052b9-ode-and-a-student-checks-in-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\attendance-a-teacher-takes-052b9-ode-and-a-student-checks-in-desktop\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\attendance-a-teacher-takes-052b9-ode-and-a-student-checks-in-desktop\test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\attendance-a-teacher-takes-052b9-ode-and-a-student-checks-in-desktop\error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\attendance-a-teacher-takes-052b9-ode-and-a-student-checks-in-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\attendance-a-teacher-takes-052b9-ode-and-a-student-checks-in-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [desktop] › e2e\grading.spec.ts:8:1 › a teacher publishes grades and report cards, and student and parent see them 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('row', { name: /Rina Putri/ })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('row', { name: /Rina Putri/ }) with timeout 5000ms
+      - waiting for getByRole('row', { name: /Rina Putri/ })
+
+
+      23 |     await teacher.getByLabel('Class and subject').selectOption({ label: 'Class A - Mathematics' })
+      24 |     const row = teacher.getByRole('row', { name: /Rina Putri/ })
+    > 25 |     await expect(row).toBeVisible()
+         |                       ^
+      26 |
+      27 |     // A grade book that was left published by an earlier run is opened up first.
+      28 |     if (await teacher.getByRole('button', { name: 'Unpublish grades' }).isVisible()) {
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\grading.spec.ts:25:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [desktop] › e2e\keycloak-login.spec.ts:90:3 › Self-registration creates an Applicant › a guest registers on the Keycloak page and lands on the Applicant dashboard 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /localhost:5173\/dashboard$/
+    Received string:  "http://localhost:5173/auth/callback?state=5772b933e36a42cd9da98ad7cae072f8&session_state=vvt8WpSIPcr2TFBcwcpdWMQ2&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2Fschomans&code=21b61db5-e78f-1853-e9be-a4ad78ba0a12.vvt8WpSIPcr2TFBcwcpdWMQ2.912e54ee-d5c8-432a-a0d3-0a281f5be75b"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        9 × locator resolved to <html lang="en">…</html>
+          - unexpected value "http://localhost:5173/auth/callback?state=5772b933e36a42cd9da98ad7cae072f8&session_state=vvt8WpSIPcr2TFBcwcpdWMQ2&iss=http%3A%2F%2Flocalhost%3A8080%2Frealms%2Fschomans&code=21b61db5-e78f-1853-e9be-a4ad78ba0a12.vvt8WpSIPcr2TFBcwcpdWMQ2.912e54ee-d5c8-432a-a0d3-0a281f5be75b"
+
+
+      101 |     await page.getByRole('button', { name: 'Register' }).click()
+      102 |
+    > 103 |     await expect(page).toHaveURL(/localhost:5173\/dashboard$/)
+          |                        ^
+      104 |     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Applicant dashboard')
+      105 |     await expect(page.getByText('Welcome, Gita Pratama')).toBeVisible()
+      106 |   })
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\keycloak-login.spec.ts:103:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\keycloak-login-Self-regist-6c2f2--on-the-Applicant-dashboard-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\keycloak-login-Self-regist-6c2f2--on-the-Applicant-dashboard-desktop\error-context.md
+
+    Error Context: test-results\keycloak-login-Self-regist-6c2f2--on-the-Applicant-dashboard-desktop\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\keycloak-login-Self-regist-6c2f2--on-the-Applicant-dashboard-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\keycloak-login-Self-regist-6c2f2--on-the-Applicant-dashboard-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [desktop] › e2e\masterdata.spec.ts:49:3 › master data › the admin adds a teacher, a subject and a classroom 
+
+    Error: expect(locator).toBeHidden() failed
+
+    Locator:  getByRole('dialog', { name: 'Add teacher' })
+    Expected: hidden
+    Received: visible
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeHidden" getByRole('dialog', { name: 'Add teacher' }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'Add teacher' })
+        13 × locator resolved to <div role="dialog" tabindex="-1" id="radix-_r_4_" data-state="open" aria-labelledby="radix-_r_5_" class="fixed left-1/2 top-1/2 z-50 flex max-h-[90dvh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-y-auto rounded-xl border border-border bg-card p-6 text-card-foreground shadow-lg">…</div>
+           - unexpected value "visible"
+
+
+      57 |     await form.getByLabel(/NIP/).fill(nip)
+      58 |     await form.getByRole('button', { name: 'Save' }).click()
+    > 59 |     await expect(form).toBeHidden()
+         |                        ^
+      60 |     await search(page, teacherName)
+      61 |     await expect(page.getByRole('cell', { name: teacherName, exact: true })).toBeVisible()
+      62 |
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\masterdata.spec.ts:59:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\masterdata-master-data-the-24f0d-r-a-subject-and-a-classroom-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\masterdata-master-data-the-24f0d-r-a-subject-and-a-classroom-desktop\error-context.md
+
+    Error Context: test-results\masterdata-master-data-the-24f0d-r-a-subject-and-a-classroom-desktop\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\masterdata-master-data-the-24f0d-r-a-subject-and-a-classroom-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\masterdata-master-data-the-24f0d-r-a-subject-and-a-classroom-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [desktop] › e2e\masterdata.spec.ts:243:3 › who may see and change master data › the academic year page lists the current year with its terms; rollover is not run here 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('row', { name: /2026\/2027/ })
+    Expected substring: "Current"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('row', { name: /2026\/2027/ }) with timeout 5000ms
+      - waiting for getByRole('row', { name: /2026\/2027/ })
+
+
+      245 |
+      246 |     await openFromNavigation(page, 'Academic years', 'Academic years')
+    > 247 |     await expect(page.getByRole('row', { name: /2026\/2027/ })).toContainText('Current')
+          |                                                                 ^
+      248 |     // The wizard opens and validates, but nothing is confirmed: a rollover would change the shared demo data for good.
+      249 |     await page.getByRole('link', { name: 'Start a new year' }).click()
+      250 |     await expect(page.getByRole('heading', { name: 'The new academic year' })).toBeVisible()
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\masterdata.spec.ts:247:65
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\masterdata-who-may-see-and-03327-ms-rollover-is-not-run-here-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\masterdata-who-may-see-and-03327-ms-rollover-is-not-run-here-desktop\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\masterdata-who-may-see-and-03327-ms-rollover-is-not-run-here-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\masterdata-who-may-see-and-03327-ms-rollover-is-not-run-here-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7 failed
+    [desktop] › e2e\announcements.spec.ts:28:1 › a published announcement reaches its audience at once, and only its audience 
+    [desktop] › e2e\announcements.spec.ts:77:1 › an announcement marked public is readable by a guest, a private one is not 
+    [desktop] › e2e\attendance.spec.ts:8:1 › a teacher takes attendance with the rotating QR code and a student checks in 
+    [desktop] › e2e\grading.spec.ts:8:1 › a teacher publishes grades and report cards, and student and parent see them 
+    [desktop] › e2e\keycloak-login.spec.ts:90:3 › Self-registration creates an Applicant › a guest registers on the Keycloak page and lands on the Applicant dashboard 
+    [desktop] › e2e\masterdata.spec.ts:49:3 › master data › the admin adds a teacher, a subject and a classroom 
+    [desktop] › e2e\masterdata.spec.ts:243:3 › who may see and change master data › the academic year page lists the current year with its terms; rollover is not run here 
+  3 did not run
+  31 passed (24.8m)

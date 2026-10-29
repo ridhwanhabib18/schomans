@@ -156,7 +156,8 @@ Edge case: siswa scan dua kali → dicatat sekali; HP tanpa kamera → guru bisa
 **F-05: Penilaian & rapor** (US-03, US-09)
 
 - [ ] Guru input nilai per komponen (tugas, UH, UTS, UAS) dengan bobot yang bisa diatur per mapel
-- [ ] Nilai akhir dan predikat dihitung otomatis
+- [ ] Nilai akhir dan predikat dihitung otomatis; komponen yang belum punya nilai tidak dihitung dan bobotnya dibagi ke komponen lain
+- [ ] Admin mengatur skala predikat sekolah (default A mulai 90, B mulai 80, C mulai 70, D mulai 60, E di bawah 60)
 - [ ] Rapor semester ter-generate sebagai PDF dengan kop sekolah, siap cetak
 - [ ] Orang tua dan siswa melihat nilai setelah dipublikasikan wali kelas
 
@@ -351,7 +352,8 @@ GradeComponent (enum): Assignment | Quiz | Midterm | Final
 GradeWeight: Id, SubjectId → Subject, Component (GradeComponent), WeightPercent   ← bobot per mapel berjumlah 100
 LearningObjective: Id, SubjectId → Subject, Code, Description
 Grade: Id, StudentId, SubjectId, TermId → Term, Component (GradeComponent), LearningObjectiveId → LearningObjective (opsional), SubmissionId → Submission (opsional, terisi saat nilai mengalir dari tugas), Score
-GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, PublishedById → User   ← nilai baru terlihat oleh siswa dan orang tua setelah baris ini ada
+GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, PublishedById → User   ← nilai baru terlihat oleh siswa dan orang tua setelah baris ini ada, dan terkunci selama baris ini ada
+GradeBand: Id, Label, MinScore   ← skala predikat sekolah, diatur admin; satu predikat mulai dari 0
 ReportCard: Id, StudentId, TermId, Status (Draft|Published), PdfKey, GeneratedAt
 AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status (Draft|Accepted), IsAiDrafted
 ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt

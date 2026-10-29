@@ -43,6 +43,14 @@ public sealed class S3FileStorage : IFileStorage, IDisposable
         return Task.FromResult(new PresignedUpload(url, expires));
     }
 
+    public async Task UploadAsync(FileBucket bucket, string key, byte[] content, string contentType, CancellationToken ct)
+    {
+        using var stream = new MemoryStream(content);
+        await _client.PutObjectAsync(
+            new PutObjectRequest { BucketName = BucketName(bucket), Key = key, InputStream = stream, ContentType = contentType },
+            ct);
+    }
+
     public string CreateDownloadUrl(string key, TimeSpan lifetime) =>
         _signer.GetPreSignedURL(new GetPreSignedUrlRequest
         {

@@ -24,6 +24,12 @@ public sealed class InMemoryFileStorage : IFileStorage
         return Task.FromResult(new PresignedUpload($"https://storage.test/{bucket}/{key}?signature=fake", DateTimeOffset.UtcNow.Add(lifetime)));
     }
 
+    public Task UploadAsync(FileBucket bucket, string key, byte[] content, string contentType, CancellationToken ct)
+    {
+        _objects[(bucket, key)] = new StoredObject(content.Length, contentType);
+        return Task.CompletedTask;
+    }
+
     public string CreateDownloadUrl(string key, TimeSpan lifetime) => $"https://storage.test/private/{key}?signature=fake";
 
     public string GetPublicUrl(string key) => $"https://storage.test/public/{key}";

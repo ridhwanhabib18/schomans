@@ -2,13 +2,15 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SchoMans.Domain.Communication;
+using SchoMans.Domain.Grading;
 using SchoMans.Domain.Students;
 
 namespace SchoMans.Infrastructure.Persistence.Seeder;
 
 /// <summary>
 /// Fills an empty database with one fictional school: one academic year, 5 classrooms, 15 teachers, 150 students and
-/// 8 subjects with a weekly timetable, one login-ready account per role, and some news and announcements. Every name and number is made up;
+/// 8 subjects with a weekly timetable, one login-ready account per role, some news and announcements, and unpublished
+/// grades for the active term. Every name and number is made up;
 /// nothing here is real personal data. Each part is seeded only when its tables are empty, so running it again (or on
 /// a database that already holds an earlier part) never duplicates anything.
 /// The demo accounts have no Keycloak id yet; the first login links them by email (see SyncUserHandler).
@@ -46,6 +48,48 @@ public sealed class DemoDataSeeder(AppDbContext db, TimeProvider timeProvider, I
         await SeedSubjectsAsync(ct);
         await SeedSchedulesAsync(ct);
         await SeedCommunicationAsync(ct);
+        await SeedGradesAsync(ct);
+    }
+
+    /// <summary>
+    /// A quiz and a midterm score in every subject of the timetable for each student of the active term, so the grade
+    /// book and the dashboards have something to show. A few scores fall below the minimum passing score on purpose.
+    /// Nothing is published: the homeroom teacher publishes during the demo.
+    /// </summary>
+    private async Task SeedGradesAsync(CancellationToken ct)
+    {
+        // Grades of scored assignments do not count: the AddGrading migration creates them from earlier work, and that
+        // must not keep an existing demo database from getting its demo grades.
+        if (await db.Grades.IgnoreQueryFilters().AnyAsync(g => g.SubmissionId == null, ct))
+        {
+            return;
+        }
+
+        var termId = await db.Terms.Where(t => t.IsActive).Select(t => (Guid?)t.Id).FirstOrDefaultAsync(ct);
+        if (termId is null)
+        {
+            return;
+        }
+
+        var lessons = (await db.Schedules.Select(s => new { s.ClassroomId, s.SubjectId }).Distinct().ToListAsync(ct))
+            .ToLookup(s => s.ClassroomId, s => s.SubjectId);
+        var students = await db.Students.Where(s => s.Status == StudentStatus.Active).OrderBy(s => s.Nisn).Select(s => new { s.Id, s.ClassroomId }).ToListAsync(ct);
+
+        var count = 0;
+        for (var i = 0; i < students.Count; i++)
+        {
+            var subjects = lessons[students[i].ClassroomId].Order().ToList();
+            for (var j = 0; j < subjects.Count; j++)
+            {
+                // Deterministic and spread between 55 and 99.
+                db.Grades.Add(Grade.Create(students[i].Id, subjects[j], termId.Value, GradeComponent.Quiz, 55 + ((i * 7) + (j * 11)) % 45));
+                db.Grades.Add(Grade.Create(students[i].Id, subjects[j], termId.Value, GradeComponent.Midterm, 60 + ((i * 13) + (j * 5)) % 40));
+                count += 2;
+            }
+        }
+
+        await db.SaveChangesAsync(ct);
+        logger.LogInformation("Seeded {Count} demo grades", count);
     }
 
     private async Task SeedSchoolAsync(CancellationToken ct)

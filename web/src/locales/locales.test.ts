@@ -5,6 +5,8 @@ import dashboard from '@/locales/en/dashboard.json'
 import announcements from '@/locales/en/announcements.json'
 import assignments from '@/locales/en/assignments.json'
 import attendance from '@/locales/en/attendance.json'
+import grading from '@/locales/en/grading.json'
+import reportcards from '@/locales/en/reportcards.json'
 import landing from '@/locales/en/landing.json'
 import masterdata from '@/locales/en/masterdata.json'
 import news from '@/locales/en/news.json'
@@ -31,6 +33,10 @@ describe('English locale files', () => {
     for (const code of ['not_your_class', 'has_submissions', 'has_scores', 'already_graded']) {
       expect(assignments.errors.assignments[code as keyof typeof assignments.errors.assignments], code).toBeTruthy()
     }
+    for (const code of ['published', 'not_your_class', 'not_your_subject', 'not_homeroom', 'already_published', 'not_published']) {
+      expect(grading.errors.grades[code as keyof typeof grading.errors.grades], code).toBeTruthy()
+    }
+    expect(grading.errors.report_cards.grades_not_published).toBeTruthy()
     for (const code of ['classroom_busy', 'teacher_busy', 'has_sessions']) {
       expect(masterdata.schedules.errors.schedules[code as keyof typeof masterdata.schedules.errors.schedules], code).toBeTruthy()
     }
@@ -45,7 +51,7 @@ describe('English locale files', () => {
         for (const [key, value] of Object.entries(node)) walk(value, `${path}.${key}`)
       }
     }
-    walk({ common, auth, dashboard, landing, masterdata, news, announcements, notifications, attendance, assignments }, '')
+    walk({ common, auth, dashboard, landing, masterdata, news, announcements, notifications, attendance, assignments, grading, reportcards }, '')
 
     expect(empty).toEqual([])
   })

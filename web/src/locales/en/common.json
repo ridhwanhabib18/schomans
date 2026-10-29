@@ -40,6 +40,10 @@
     "scanQr": "Scan QR",
     "myAttendance": "My attendance",
     "assignments": "Assignments",
+    "gradeBook": "Grade book",
+    "myGrades": "My grades",
+    "childGrades": "Grades",
+    "gradeBands": "Grade bands",
     "childAttendance": "Attendance",
     "childAssignments": "Assignments",
     "jobs": "Background jobs"

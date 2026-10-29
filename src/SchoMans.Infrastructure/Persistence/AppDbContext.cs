@@ -5,6 +5,7 @@ using SchoMans.Domain.Assignments;
 using SchoMans.Domain.Attendance;
 using SchoMans.Domain.Common;
 using SchoMans.Domain.Communication;
+using SchoMans.Domain.Grading;
 using SchoMans.Domain.Students;
 
 namespace SchoMans.Infrastructure.Persistence;
@@ -36,6 +37,18 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<Assignment> Assignments => Set<Assignment>();
 
     public DbSet<Submission> Submissions => Set<Submission>();
+
+    public DbSet<GradeWeight> GradeWeights => Set<GradeWeight>();
+
+    public DbSet<Grade> Grades => Set<Grade>();
+
+    public DbSet<GradePublication> GradePublications => Set<GradePublication>();
+
+    public DbSet<ReportCard> ReportCards => Set<ReportCard>();
+
+    public DbSet<AchievementDescription> AchievementDescriptions => Set<AchievementDescription>();
+
+    public DbSet<GradeBand> GradeBands => Set<GradeBand>();
 
     public DbSet<NewsArticle> NewsArticles => Set<NewsArticle>();
 

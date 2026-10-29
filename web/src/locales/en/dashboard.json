@@ -12,5 +12,55 @@
     "title": "Nothing to show yet",
     "body": "Your {{role}} dashboard fills up as school modules are added."
   },
-  "error": "The dashboard could not be loaded."
+  "error": "The dashboard could not be loaded.",
+  "analytics": {
+    "error": "The charts could not be loaded.",
+    "loading": "Loading the charts…",
+    "attendanceTrend": {
+      "title": "Attendance per class",
+      "description": "Percent of the students present, per month.",
+      "summary": "Line chart of the monthly attendance rate per class, in percent.",
+      "caption": "Attendance rate per class and month",
+      "month": "Month",
+      "empty": "There are no attendance records yet."
+    },
+    "subjectAverages": {
+      "title": "Average grade per subject",
+      "description": "Average final grade of the students in the current term.",
+      "summary": "Bar chart of the average final grade per subject, from 0 to 100.",
+      "caption": "Average final grade per subject",
+      "subject": "Subject",
+      "average": "Average",
+      "students": "Students",
+      "empty": "There are no grades in the current term yet."
+    },
+    "attention": {
+      "title": "Students who need attention",
+      "description": "Attendance below {{threshold}}% or a final grade below the minimum passing score, in the current term.",
+      "caption": "Students who need attention",
+      "student": "Student",
+      "classroom": "Class",
+      "attendance": "Attendance",
+      "reasons": "Reasons",
+      "lowAttendance": "Low attendance",
+      "below": "Below minimum: {{subjects}}",
+      "empty": "No student needs attention right now.",
+      "noRecords": "No records",
+      "total_one": "{{count}} student in total",
+      "total_other": "{{count}} students in total",
+      "showAll": "Show all ({{count}})",
+      "showFewer": "Show fewer",
+      "shown": "Showing {{shown}} of {{count}}, the most urgent first."
+    },
+    "child": {
+      "title": "Progress of {{name}}",
+      "description": "Average grade and attendance per month.",
+      "summary": "Chart of the monthly average grade and attendance rate of {{name}}, from 0 to 100.",
+      "caption": "Average grade and attendance per month for {{name}}",
+      "grade": "Average grade",
+      "attendance": "Attendance (%)",
+      "month": "Month",
+      "empty": "There is no data for this child yet."
+    }
+  }
 }

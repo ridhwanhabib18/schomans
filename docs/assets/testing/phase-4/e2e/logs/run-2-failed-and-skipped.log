@@ -1,0 +1,63 @@
+
+Running 10 tests using 1 worker
+
+  ok  1 [desktop] › e2e\announcements.spec.ts:28:1 › a published announcement reaches its audience at once, and only its audience (43.7s)
+  ok  2 [desktop] › e2e\announcements.spec.ts:77:1 › an announcement marked public is readable by a guest, a private one is not (26.6s)
+  ok  3 [desktop] › e2e\attendance.spec.ts:8:1 › a teacher takes attendance with the rotating QR code and a student checks in (1.3m)
+  x   4 [desktop] › e2e\grading.spec.ts:8:1 › a teacher publishes grades and report cards, and student and parent see them (35.8s)
+  ok  5 [desktop] › e2e\keycloak-login.spec.ts:90:3 › Self-registration creates an Applicant › a guest registers on the Keycloak page and lands on the Applicant dashboard (50.1s)
+  ok  6 [desktop] › e2e\masterdata.spec.ts:49:3 › master data › the admin adds a teacher, a subject and a classroom (17.7s)
+  ok  7 [desktop] › e2e\masterdata.spec.ts:87:3 › master data › the admin adds, finds, edits a student, and the form explains a duplicate NISN (15.6s)
+  ok  8 [desktop] › e2e\masterdata.spec.ts:128:3 › master data › the admin imports students from an Excel file, and the failed rows are listed (14.0s)
+  ok  9 [desktop] › e2e\masterdata.spec.ts:167:3 › master data › the admin deletes what was added, and a classroom with students cannot be deleted (15.4s)
+  ok 10 [desktop] › e2e\masterdata.spec.ts:243:3 › who may see and change master data › the academic year page lists the current year with its terms; rollover is not run here (11.5s)
+
+
+  1) [desktop] › e2e\grading.spec.ts:8:1 › a teacher publishes grades and report cards, and student and parent see them 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Not published yet')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Not published yet') with timeout 5000ms
+      - waiting for getByText('Not published yet')
+
+
+      48 |     await loginAs(student, 'Student')
+      49 |     await student.getByRole('link', { name: 'My grades', exact: true }).first().click()
+    > 50 |     await expect(student.getByText('Not published yet')).toBeVisible()
+         |                                                          ^
+      51 |     await expect(teacher.getByRole('button', { name: 'Generate report cards' })).toBeDisabled()
+      52 |
+      53 |     // The homeroom teacher publishes, which locks the scores, and generates the PDFs.
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\grading.spec.ts:50:58
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\test-failed-3.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\grading-a-teacher-publishe-f12d2-student-and-parent-see-them-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [desktop] › e2e\grading.spec.ts:8:1 › a teacher publishes grades and report cards, and student and parent see them 
+  9 passed (7.7m)

@@ -7,6 +7,7 @@ using SchoMans.Infrastructure.Content;
 using SchoMans.Infrastructure.Excel;
 using SchoMans.Infrastructure.Identity;
 using SchoMans.Infrastructure.Jobs;
+using SchoMans.Infrastructure.Pdf;
 using SchoMans.Infrastructure.Persistence;
 using SchoMans.Infrastructure.Persistence.Seeder;
 using SchoMans.Infrastructure.Storage;
@@ -43,6 +44,7 @@ public static class DependencyInjection
         services.AddSingleton<IStudentImportParser, StudentImportParser>();
         services.AddSingleton<IStudentTemplateWriter, StudentTemplateWriter>();
         services.AddSingleton<IAttendanceExport, AttendanceExcelWriter>();
+        services.AddSingleton<IReportCardPdf, ReportCardPdfRenderer>();
 
         services.Configure<SchoolOptions>(configuration.GetSection(SchoolOptions.SectionName));
         services.AddSingleton<ISchoolClock, SchoolClock>();

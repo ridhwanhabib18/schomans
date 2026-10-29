@@ -1,0 +1,48 @@
+{
+  "mine": {
+    "title": "My grades",
+    "description": "Your grades per subject, once your homeroom teacher has published them."
+  },
+  "child": {
+    "title": "Grades of my child",
+    "description": "The grades per subject of your child, once the homeroom teacher has published them."
+  },
+  "term": "Term",
+  "caption": "Final grades per subject",
+  "columns": {
+    "subject": "Subject",
+    "final": "Final grade",
+    "band": "Band",
+    "result": "Result",
+    "minimum": "Minimum"
+  },
+  "components": {
+    "Assignment": "Assignments",
+    "Quiz": "Quiz",
+    "Midterm": "Midterm",
+    "Final": "Final exam"
+  },
+  "passing": "Passed",
+  "below": "Below minimum",
+  "noGrade": "No scores yet",
+  "empty": "There are no grades for this term.",
+  "notPublished": {
+    "title": "Not published yet",
+    "body": "The homeroom teacher has not published the grades of this term yet."
+  },
+  "published": "Published on {{date}}",
+  "report": {
+    "download": "Download report card (PDF)",
+    "opened": "Report card opened",
+    "error": "The report card could not be opened."
+  },
+  "achievement": "What was achieved",
+  "error": "The grades could not be loaded.",
+  "noTerms": "There is no term yet.",
+  "errors": {
+    "report_cards": {
+      "not_found": "There is no report card for this term yet.",
+      "not_yours": "You may not open this report card."
+    }
+  }
+}

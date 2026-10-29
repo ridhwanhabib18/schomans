@@ -16,6 +16,9 @@ public class CoverImagesTests
         public Task<PresignedUpload> CreateUploadUrlAsync(FileBucket bucket, string key, string contentType, TimeSpan lifetime, CancellationToken ct) =>
             throw new NotSupportedException();
 
+        public Task UploadAsync(FileBucket bucket, string key, byte[] content, string contentType, CancellationToken ct) =>
+            throw new NotSupportedException();
+
         public string CreateDownloadUrl(string key, TimeSpan lifetime) => $"https://private/{key}";
 
         public string GetPublicUrl(string key) => $"https://public/{key}";
