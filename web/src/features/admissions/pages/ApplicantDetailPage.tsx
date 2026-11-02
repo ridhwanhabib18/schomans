@@ -41,7 +41,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   )
 }
 
-function EnrollForm({ applicant, onError }: { applicant: ApplicantDetail; onError: (message: string | undefined) => void }) {
+function EnrollForm({ applicant }: { applicant: ApplicantDetail }) {
   const { t } = useTranslation('admissions')
   const { t: tCommon } = useTranslation()
   const showToast = useToastStore(selectShowToast)
@@ -50,18 +50,20 @@ function EnrollForm({ applicant, onError }: { applicant: ApplicantDetail; onErro
   const [classroomId, setClassroomId] = useState('')
   const [nisn, setNisn] = useState('')
   const [touched, setTouched] = useState(false)
+  const [error, setError] = useState<string>()
   const nisnProblem = touched && !NISN.test(nisn) ? t('detail.enroll.nisnInvalid') : undefined
 
   return (
     <Section title={t('detail.enroll.title')}>
       <p className="text-sm text-muted-foreground">{t('detail.enroll.body')}</p>
+      {error && <Alert tone="error" message={error} />}
       <form
         noValidate
         className="grid min-w-0 gap-4 sm:grid-cols-2"
         onSubmit={(event) => {
           event.preventDefault()
           setTouched(true)
-          onError(undefined)
+          setError(undefined)
           if (!NISN.test(nisn) || classroomId === '') {
             return
           }
@@ -70,7 +72,7 @@ function EnrollForm({ applicant, onError }: { applicant: ApplicantDetail; onErro
             { id: applicant.id, classroomId, nisn },
             {
               onSuccess: () => showToast({ kind: 'success', title: t('detail.enroll.done') }),
-              onError: (e) => onError(admissionErrorText(e, t, tCommon('errors.generic'))),
+              onError: (e) => setError(admissionErrorText(e, t, tCommon('errors.generic'))),
             },
           )
         }}
@@ -250,7 +252,7 @@ export function ApplicantDetailPage() {
 
       {applicant.status === 'Accepted' &&
         (applicant.reregistrationConfirmedAt ? (
-          <EnrollForm applicant={applicant} onError={setError} />
+          <EnrollForm applicant={applicant} />
         ) : (
           <Alert tone="info" message={t('detail.enroll.waiting')} />
         ))}
