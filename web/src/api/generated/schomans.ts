@@ -7,20 +7,27 @@
 import type {
   AcademicYearDto,
   AchievementDescriptionDto,
+  AdmissionPeriodDto,
   AnalyticsDto,
   AnnouncementDto,
   AnnouncementReaderDto,
+  ApplicantDetailDto,
+  ApprovalChainDto,
   AssignmentDto,
+  AttachDocumentCommand,
   AttendanceSessionDto,
   ChildDto,
   ClassroomAttendanceSummaryDto,
   ClassroomDto,
   CreateAcademicYearCommand,
+  CreateAdmissionPeriodCommand,
   CreateAnnouncementCommand,
   CreateAssignmentCommand,
   CreateAttachmentUploadUrlCommand,
   CreateClassroomCommand,
+  CreateDocumentUploadUrlCommand,
   CreateNewsCommand,
+  CreateRequestCommand,
   CreateScheduleCommand,
   CreateStudentCommand,
   CreateSubjectCommand,
@@ -28,7 +35,11 @@ import type {
   CreateTeacherCommand,
   CreateUploadUrlCommand,
   DashboardDto,
+  DecideApplicantCommand,
+  DecideRequestCommand,
+  DocumentType,
   DownloadUrlDto,
+  EnrollApplicantCommand,
   EnterGradeCommand,
   EnteredGradeDto,
   ExportClassroomAttendanceSummaryParams,
@@ -49,17 +60,23 @@ import type {
   GradeWeightsDto,
   ImportStudentsBody,
   ImportStudentsSummary,
+  LetterUrlDto,
+  LetterVerificationDto,
   ListAcademicYearsParams,
+  ListAllRequestsParams,
   ListAnnouncementsParams,
+  ListApplicantsParams,
   ListAssignmentsParams,
   ListChildAssignmentsParams,
   ListClassroomsParams,
   ListMyAnnouncementsParams,
   ListMyAssignmentsParams,
   ListMyNotificationsParams,
+  ListMyRequestsParams,
   ListNewsParams,
   ListPublicAnnouncementsParams,
   ListPublicNewsParams,
+  ListRequestInboxParams,
   ListSchedulesParams,
   ListStudentTermsParams,
   ListStudentsParams,
@@ -67,16 +84,21 @@ import type {
   ListTeachersParams,
   MarkAttendanceCommand,
   MeDto,
+  MyAdmissionDto,
+  MyApplicationDto,
   NewsDto,
+  OpenAdmissionDto,
   OpenSessionCommand,
   PagedResultOfAcademicYearDto,
   PagedResultOfAnnouncementDto,
   PagedResultOfAnnouncementSummaryDto,
+  PagedResultOfApplicantListItemDto,
   PagedResultOfAssignmentListItemDto,
   PagedResultOfClassroomDto,
   PagedResultOfNewsDto,
   PagedResultOfNotificationDto,
   PagedResultOfPublicNewsSummaryDto,
+  PagedResultOfRequestListItemDto,
   PagedResultOfScheduleDto,
   PagedResultOfStudentAssignmentDto,
   PagedResultOfStudentDto,
@@ -87,13 +109,17 @@ import type {
   PublishGradesCommand,
   ReplaceGradeBandsCommand,
   ReportCardUrlDto,
+  RequestDetailDto,
+  ReviewDocumentCommand,
   RolloverAcademicYearCommand,
   RolloverResult,
+  SaveApplicantFormCommand,
   ScanQrCommand,
   ScanResultDto,
   ScanSettingsDto,
   ScheduleDto,
   SessionStudentDto,
+  SetApprovalChainCommand,
   SetGradeWeightsCommand,
   StudentAttendanceDto,
   StudentDto,
@@ -109,6 +135,7 @@ import type {
   UnpublishGradesParams,
   UnreadNotificationCountDto,
   UpdateAcademicYearCommand,
+  UpdateAdmissionPeriodCommand,
   UpdateAnnouncementCommand,
   UpdateAssignmentCommand,
   UpdateClassroomCommand,
@@ -868,6 +895,300 @@ export const generateReportCards = (
       options);
     }
 
+export const getOpenAdmission = (
+
+ options?: SecondParameter<typeof customInstance<OpenAdmissionDto>>,) => {
+      return customInstance<OpenAdmissionDto>(
+      {url: `/api/v1/admissions/open`, method: 'GET'
+    },
+      options);
+    }
+
+export const getMyAdmission = (
+
+ options?: SecondParameter<typeof customInstance<MyAdmissionDto>>,) => {
+      return customInstance<MyAdmissionDto>(
+      {url: `/api/v1/admissions/me`, method: 'GET'
+    },
+      options);
+    }
+
+export const startApplication = (
+
+ options?: SecondParameter<typeof customInstance<MyApplicationDto>>,) => {
+      return customInstance<MyApplicationDto>(
+      {url: `/api/v1/admissions/me`, method: 'POST'
+    },
+      options);
+    }
+
+export const saveApplicantForm = (
+    saveApplicantFormCommand: SaveApplicantFormCommand,
+ options?: SecondParameter<typeof customInstance<MyApplicationDto>>,) => {
+      return customInstance<MyApplicationDto>(
+      {url: `/api/v1/admissions/me/form`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: saveApplicantFormCommand
+    },
+      options);
+    }
+
+export const createApplicantDocumentUploadUrl = (
+    createDocumentUploadUrlCommand: CreateDocumentUploadUrlCommand,
+ options?: SecondParameter<typeof customInstance<UploadUrlDto>>,) => {
+      return customInstance<UploadUrlDto>(
+      {url: `/api/v1/admissions/me/documents/upload-url`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createDocumentUploadUrlCommand
+    },
+      options);
+    }
+
+export const attachApplicantDocument = (
+    attachDocumentCommand: AttachDocumentCommand,
+ options?: SecondParameter<typeof customInstance<MyApplicationDto>>,) => {
+      return customInstance<MyApplicationDto>(
+      {url: `/api/v1/admissions/me/documents`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: attachDocumentCommand
+    },
+      options);
+    }
+
+export const submitApplication = (
+
+ options?: SecondParameter<typeof customInstance<MyApplicationDto>>,) => {
+      return customInstance<MyApplicationDto>(
+      {url: `/api/v1/admissions/me/submit`, method: 'POST'
+    },
+      options);
+    }
+
+export const confirmReregistration = (
+
+ options?: SecondParameter<typeof customInstance<MyApplicationDto>>,) => {
+      return customInstance<MyApplicationDto>(
+      {url: `/api/v1/admissions/me/reregistration`, method: 'POST'
+    },
+      options);
+    }
+
+export const listAdmissionPeriods = (
+
+ options?: SecondParameter<typeof customInstance<AdmissionPeriodDto[]>>,) => {
+      return customInstance<AdmissionPeriodDto[]>(
+      {url: `/api/v1/admissions/periods`, method: 'GET'
+    },
+      options);
+    }
+
+export const createAdmissionPeriod = (
+    createAdmissionPeriodCommand: CreateAdmissionPeriodCommand,
+ options?: SecondParameter<typeof customInstance<AdmissionPeriodDto>>,) => {
+      return customInstance<AdmissionPeriodDto>(
+      {url: `/api/v1/admissions/periods`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createAdmissionPeriodCommand
+    },
+      options);
+    }
+
+export const updateAdmissionPeriod = (
+    id: string,
+    updateAdmissionPeriodCommand: UpdateAdmissionPeriodCommand,
+ options?: SecondParameter<typeof customInstance<AdmissionPeriodDto>>,) => {
+      return customInstance<AdmissionPeriodDto>(
+      {url: `/api/v1/admissions/periods/${id}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateAdmissionPeriodCommand
+    },
+      options);
+    }
+
+export const deleteAdmissionPeriod = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/api/v1/admissions/periods/${id}`, method: 'DELETE'
+    },
+      options);
+    }
+
+export const listApplicants = (
+    params?: ListApplicantsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfApplicantListItemDto>>,) => {
+      return customInstance<PagedResultOfApplicantListItemDto>(
+      {url: `/api/v1/admissions/applicants`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const getApplicant = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<ApplicantDetailDto>>,) => {
+      return customInstance<ApplicantDetailDto>(
+      {url: `/api/v1/admissions/applicants/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const getApplicantDocumentUrl = (
+    id: string,
+    type: DocumentType,
+ options?: SecondParameter<typeof customInstance<DownloadUrlDto>>,) => {
+      return customInstance<DownloadUrlDto>(
+      {url: `/api/v1/admissions/applicants/${id}/documents/${type}/url`, method: 'GET'
+    },
+      options);
+    }
+
+export const reviewApplicantDocument = (
+    id: string,
+    type: DocumentType,
+    reviewDocumentCommand: ReviewDocumentCommand,
+ options?: SecondParameter<typeof customInstance<ApplicantDetailDto>>,) => {
+      return customInstance<ApplicantDetailDto>(
+      {url: `/api/v1/admissions/applicants/${id}/documents/${type}/review`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: reviewDocumentCommand
+    },
+      options);
+    }
+
+export const decideApplicant = (
+    id: string,
+    decideApplicantCommand: DecideApplicantCommand,
+ options?: SecondParameter<typeof customInstance<ApplicantDetailDto>>,) => {
+      return customInstance<ApplicantDetailDto>(
+      {url: `/api/v1/admissions/applicants/${id}/decision`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: decideApplicantCommand
+    },
+      options);
+    }
+
+export const enrollApplicant = (
+    id: string,
+    enrollApplicantCommand: EnrollApplicantCommand,
+ options?: SecondParameter<typeof customInstance<ApplicantDetailDto>>,) => {
+      return customInstance<ApplicantDetailDto>(
+      {url: `/api/v1/admissions/applicants/${id}/enroll`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: enrollApplicantCommand
+    },
+      options);
+    }
+
+export const listMyRequests = (
+    params?: ListMyRequestsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfRequestListItemDto>>,) => {
+      return customInstance<PagedResultOfRequestListItemDto>(
+      {url: `/api/v1/requests/mine`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const listRequestInbox = (
+    params?: ListRequestInboxParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfRequestListItemDto>>,) => {
+      return customInstance<PagedResultOfRequestListItemDto>(
+      {url: `/api/v1/requests/inbox`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const listAllRequests = (
+    params?: ListAllRequestsParams,
+ options?: SecondParameter<typeof customInstance<PagedResultOfRequestListItemDto>>,) => {
+      return customInstance<PagedResultOfRequestListItemDto>(
+      {url: `/api/v1/requests`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+export const createRequest = (
+    createRequestCommand: CreateRequestCommand,
+ options?: SecondParameter<typeof customInstance<RequestDetailDto>>,) => {
+      return customInstance<RequestDetailDto>(
+      {url: `/api/v1/requests`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createRequestCommand
+    },
+      options);
+    }
+
+export const getRequest = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<RequestDetailDto>>,) => {
+      return customInstance<RequestDetailDto>(
+      {url: `/api/v1/requests/${id}`, method: 'GET'
+    },
+      options);
+    }
+
+export const decideRequest = (
+    id: string,
+    decideRequestCommand: DecideRequestCommand,
+ options?: SecondParameter<typeof customInstance<RequestDetailDto>>,) => {
+      return customInstance<RequestDetailDto>(
+      {url: `/api/v1/requests/${id}/decision`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: decideRequestCommand
+    },
+      options);
+    }
+
+export const cancelRequest = (
+    id: string,
+ options?: SecondParameter<typeof customInstance<RequestDetailDto>>,) => {
+      return customInstance<RequestDetailDto>(
+      {url: `/api/v1/requests/${id}/cancel`, method: 'POST'
+    },
+      options);
+    }
+
+export const getApprovalChains = (
+
+ options?: SecondParameter<typeof customInstance<ApprovalChainDto[]>>,) => {
+      return customInstance<ApprovalChainDto[]>(
+      {url: `/api/v1/approval-chains`, method: 'GET'
+    },
+      options);
+    }
+
+export const setApprovalChain = (
+    setApprovalChainCommand: SetApprovalChainCommand,
+ options?: SecondParameter<typeof customInstance<ApprovalChainDto[]>>,) => {
+      return customInstance<ApprovalChainDto[]>(
+      {url: `/api/v1/approval-chains`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: setApprovalChainCommand
+    },
+      options);
+    }
+
+export const verifyLetter = (
+    code: string,
+ options?: SecondParameter<typeof customInstance<LetterVerificationDto>>,) => {
+      return customInstance<LetterVerificationDto>(
+      {url: `/api/v1/letters/verify/${code}`, method: 'GET'
+    },
+      options);
+    }
+
+export const getLetterUrl = (
+    requestId: string,
+ options?: SecondParameter<typeof customInstance<LetterUrlDto>>,) => {
+      return customInstance<LetterUrlDto>(
+      {url: `/api/v1/letters/${requestId}/url`, method: 'GET'
+    },
+      options);
+    }
+
 export const listGradeBands = (
 
  options?: SecondParameter<typeof customInstance<GradeBandDto[]>>,) => {
@@ -1224,6 +1545,35 @@ export type ListStudentTermsResult = NonNullable<Awaited<ReturnType<typeof listS
 export type GetReportCardUrlResult = NonNullable<Awaited<ReturnType<typeof getReportCardUrl>>>
 export type WriteAchievementDescriptionResult = NonNullable<Awaited<ReturnType<typeof writeAchievementDescription>>>
 export type GenerateReportCardsResult = NonNullable<Awaited<ReturnType<typeof generateReportCards>>>
+export type GetOpenAdmissionResult = NonNullable<Awaited<ReturnType<typeof getOpenAdmission>>>
+export type GetMyAdmissionResult = NonNullable<Awaited<ReturnType<typeof getMyAdmission>>>
+export type StartApplicationResult = NonNullable<Awaited<ReturnType<typeof startApplication>>>
+export type SaveApplicantFormResult = NonNullable<Awaited<ReturnType<typeof saveApplicantForm>>>
+export type CreateApplicantDocumentUploadUrlResult = NonNullable<Awaited<ReturnType<typeof createApplicantDocumentUploadUrl>>>
+export type AttachApplicantDocumentResult = NonNullable<Awaited<ReturnType<typeof attachApplicantDocument>>>
+export type SubmitApplicationResult = NonNullable<Awaited<ReturnType<typeof submitApplication>>>
+export type ConfirmReregistrationResult = NonNullable<Awaited<ReturnType<typeof confirmReregistration>>>
+export type ListAdmissionPeriodsResult = NonNullable<Awaited<ReturnType<typeof listAdmissionPeriods>>>
+export type CreateAdmissionPeriodResult = NonNullable<Awaited<ReturnType<typeof createAdmissionPeriod>>>
+export type UpdateAdmissionPeriodResult = NonNullable<Awaited<ReturnType<typeof updateAdmissionPeriod>>>
+export type DeleteAdmissionPeriodResult = NonNullable<Awaited<ReturnType<typeof deleteAdmissionPeriod>>>
+export type ListApplicantsResult = NonNullable<Awaited<ReturnType<typeof listApplicants>>>
+export type GetApplicantResult = NonNullable<Awaited<ReturnType<typeof getApplicant>>>
+export type GetApplicantDocumentUrlResult = NonNullable<Awaited<ReturnType<typeof getApplicantDocumentUrl>>>
+export type ReviewApplicantDocumentResult = NonNullable<Awaited<ReturnType<typeof reviewApplicantDocument>>>
+export type DecideApplicantResult = NonNullable<Awaited<ReturnType<typeof decideApplicant>>>
+export type EnrollApplicantResult = NonNullable<Awaited<ReturnType<typeof enrollApplicant>>>
+export type ListMyRequestsResult = NonNullable<Awaited<ReturnType<typeof listMyRequests>>>
+export type ListRequestInboxResult = NonNullable<Awaited<ReturnType<typeof listRequestInbox>>>
+export type ListAllRequestsResult = NonNullable<Awaited<ReturnType<typeof listAllRequests>>>
+export type CreateRequestResult = NonNullable<Awaited<ReturnType<typeof createRequest>>>
+export type GetRequestResult = NonNullable<Awaited<ReturnType<typeof getRequest>>>
+export type DecideRequestResult = NonNullable<Awaited<ReturnType<typeof decideRequest>>>
+export type CancelRequestResult = NonNullable<Awaited<ReturnType<typeof cancelRequest>>>
+export type GetApprovalChainsResult = NonNullable<Awaited<ReturnType<typeof getApprovalChains>>>
+export type SetApprovalChainResult = NonNullable<Awaited<ReturnType<typeof setApprovalChain>>>
+export type VerifyLetterResult = NonNullable<Awaited<ReturnType<typeof verifyLetter>>>
+export type GetLetterUrlResult = NonNullable<Awaited<ReturnType<typeof getLetterUrl>>>
 export type ListGradeBandsResult = NonNullable<Awaited<ReturnType<typeof listGradeBands>>>
 export type ReplaceGradeBandsResult = NonNullable<Awaited<ReturnType<typeof replaceGradeBands>>>
 export type GetGradeWeightsResult = NonNullable<Awaited<ReturnType<typeof getGradeWeights>>>
