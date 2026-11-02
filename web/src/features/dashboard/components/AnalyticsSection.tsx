@@ -6,6 +6,7 @@ import '../i18n'
 import { AttendanceTrendChart } from './AttendanceTrendChart'
 import { AttentionList } from './AttentionList'
 import { ChildProgressChart } from './ChildProgressChart'
+import { PendingRequestsCard } from './PendingRequestsCard'
 import { SubjectAverageChart } from './SubjectAverageChart'
 
 /** The role-specific part of the dashboard (F-09): principal charts, the attention list of a teacher, the progress of a child. */
@@ -31,6 +32,7 @@ export function AnalyticsSection() {
     <div className="grid gap-6 lg:grid-cols-2 [&>*]:min-w-0">
       {data.principal && (
         <>
+          <PendingRequestsCard />
           <AttendanceTrendChart trend={data.principal.attendanceTrend} />
           <SubjectAverageChart averages={data.principal.subjectAverages} />
         </>
