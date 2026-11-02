@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SchoMans.Domain.Admissions;
 using SchoMans.Domain.Communication;
 using SchoMans.Domain.Grading;
 using SchoMans.Domain.Students;
@@ -49,6 +50,30 @@ public sealed class DemoDataSeeder(AppDbContext db, TimeProvider timeProvider, I
         await SeedSchedulesAsync(ct);
         await SeedCommunicationAsync(ct);
         await SeedGradesAsync(ct);
+        await SeedAdmissionPeriodAsync(ct);
+    }
+
+    /// <summary>
+    /// One admission period that is open when the demo is seeded, so the applicant account of the demo has something to
+    /// apply to and the landing page shows its banner. The dates follow the moment of seeding; admin staff can change them.
+    /// </summary>
+    private async Task SeedAdmissionPeriodAsync(CancellationToken ct)
+    {
+        if (await db.AdmissionPeriods.IgnoreQueryFilters().AnyAsync(ct))
+        {
+            return;
+        }
+
+        var yearId = await db.AcademicYears.Where(y => y.IsActive).Select(y => (Guid?)y.Id).FirstOrDefaultAsync(ct);
+        if (yearId is null)
+        {
+            return;
+        }
+
+        var now = timeProvider.GetUtcNow();
+        db.AdmissionPeriods.Add(AdmissionPeriod.Create(yearId.Value, "Intake next year", now.AddDays(-7), now.AddDays(30), now.AddDays(37), now.AddDays(60)));
+        await db.SaveChangesAsync(ct);
+        logger.LogInformation("Seeded an open admission period");
     }
 
     /// <summary>
