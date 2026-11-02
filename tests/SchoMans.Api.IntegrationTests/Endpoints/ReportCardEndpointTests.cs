@@ -2,7 +2,11 @@ using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SchoMans.Api.IntegrationTests.Infrastructure;
+using SchoMans.Application.Common;
 using SchoMans.Application.Common.Interfaces;
+using SchoMans.Application.Features.Grading.GetGradeBook;
+using SchoMans.Application.Features.Schedules.CreateSchedule;
+using SchoMans.Application.Features.Subjects;
 using SchoMans.Application.Features.ReportCards;
 using SchoMans.Application.Features.ReportCards.GenerateReportCards;
 using SchoMans.Application.Features.ReportCards.ListStudentTerms;
@@ -57,6 +61,32 @@ public class ReportCardEndpointTests(ApiFixture fixture)
         Assert.Equal("B", subject.Band);
         Assert.Equal("Masters fractions.", subject.Description);
         Assert.False(after.HasReportCard);
+    }
+
+    [Fact]
+    public async Task A_second_description_is_added_to_the_report_card_that_already_exists()
+    {
+        // The first description creates the report card; the second one is a new row under a parent EF already tracks.
+        var (scenario, termId) = await GradedClassAsync(1);
+        using var admin = fixture.AsAdmin();
+        var subjects = await (await admin.GetAsync("/api/v1/subjects?pageSize=100")).ReadAsync<PagedResult<SubjectDto>>();
+        var english = subjects.Items.Single(s => s.Name == "English");
+        (await admin.PostJsonAsync("/api/v1/schedules", new CreateScheduleCommand(
+            scenario.Classroom.Id, english.Id, scenario.Teacher.Id, DayOfWeek.Sunday, new TimeOnly(9, 0), new TimeOnly(10, 30)))).EnsureSuccessStatusCode();
+        using var teacher = scenario.TeacherClient();
+        var studentId = scenario.Students[0].Id;
+
+        var first = await teacher.PutJsonAsync($"{Url}/descriptions", new WriteAchievementDescriptionCommand(studentId, scenario.Subject.Id, termId, "Good in mathematics."));
+        var second = await teacher.PutJsonAsync($"{Url}/descriptions", new WriteAchievementDescriptionCommand(studentId, english.Id, termId, "Reads fluently."));
+        var edited = await teacher.PutJsonAsync($"{Url}/descriptions", new WriteAchievementDescriptionCommand(studentId, english.Id, termId, "Reads and writes fluently."));
+        var book = await (await teacher.GetAsync($"/api/v1/grades/book?classroomId={scenario.Classroom.Id}&subjectId={english.Id}&termId={termId}")).ReadAsync<GradeBookDto>();
+        var maths = await (await teacher.GetAsync($"/api/v1/grades/book?classroomId={scenario.Classroom.Id}&subjectId={scenario.Subject.Id}&termId={termId}")).ReadAsync<GradeBookDto>();
+
+        Assert.Equal(HttpStatusCode.OK, first.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, second.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, edited.StatusCode);
+        Assert.Equal("Reads and writes fluently.", Assert.Single(book.Rows).Description);
+        Assert.Equal("Good in mathematics.", Assert.Single(maths.Rows).Description);
     }
 
     [Fact]

@@ -21,6 +21,8 @@ export default defineConfig({
     baseURL: 'http://localhost:5173',
     // Visual evidence of every step, stored per phase in docs/assets/testing/phase-<n>/.
     screenshot: 'on',
+    // A click or a fill that cannot find its element fails after 30 seconds with a clear message, not when the whole test times out.
+    actionTimeout: 30_000,
     trace: 'retain-on-failure',
   },
   projects: [

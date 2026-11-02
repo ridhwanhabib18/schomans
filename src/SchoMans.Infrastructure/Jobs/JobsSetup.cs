@@ -22,6 +22,7 @@ public static class JobsSetup
     public const string RotateQrJobId = "rotate-attendance-qr";
     public const string CloseStaleSessionsJobId = "close-stale-attendance-sessions";
     public const string DueReminderJobId = "assignment-due-reminder";
+    public const string AdmissionResultsJobId = "admission-results";
 
     /// <summary>Hangfire with SQL Server storage in its own schema of the application database.</summary>
     public static IServiceCollection AddSchoolJobs(this IServiceCollection services, IConfiguration configuration, string connectionString)
@@ -49,6 +50,7 @@ public static class JobsSetup
         services.AddScoped<RotateAttendanceQrJob>();
         services.AddScoped<CloseStaleSessionsJob>();
         services.AddScoped<AssignmentDueReminderJob>();
+        services.AddScoped<AdmissionResultsJob>();
         return services;
     }
 
@@ -65,6 +67,7 @@ public static class JobsSetup
 
         jobs.AddOrUpdate<RotateAttendanceQrJob>(RotateQrJobId, job => job.RunAsync(CancellationToken.None), Cron.Minutely());
         jobs.AddOrUpdate<CloseStaleSessionsJob>(CloseStaleSessionsJobId, job => job.RunAsync(CancellationToken.None), "*/15 * * * *");
+        jobs.AddOrUpdate<AdmissionResultsJob>(AdmissionResultsJobId, job => job.RunAsync(CancellationToken.None), "*/5 * * * *");
         jobs.AddOrUpdate<AssignmentDueReminderJob>(
             DueReminderJobId,
             job => job.RunAsync(CancellationToken.None),

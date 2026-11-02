@@ -6,4 +6,9 @@ public enum NotificationType
     AssignmentCreated,
     AssignmentDueSoon,
     AssignmentGraded,
+    AdmissionSubmitted,
+    AdmissionDocumentReviewed,
+    AdmissionResult,
+    RequestAwaitingApproval,
+    RequestDecided,
 }

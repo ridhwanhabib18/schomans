@@ -22,6 +22,8 @@ public sealed class ApiFactory(
 {
     public InMemoryFileStorage Storage { get; } = storage ?? new InMemoryFileStorage();
 
+    public RecordingIdentityProvisioner Identity { get; } = new();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment(environment);
@@ -55,6 +57,10 @@ public sealed class ApiFactory(
 
             services.RemoveAll<IFileStorage>();
             services.AddSingleton<IFileStorage>(Storage);
+
+            // Keycloak is not reachable in the tests; a recording stand-in takes the place of its Admin API.
+            services.RemoveAll<IIdentityProvisioner>();
+            services.AddSingleton<IIdentityProvisioner>(Identity);
 
             if (timeProvider is not null)
             {

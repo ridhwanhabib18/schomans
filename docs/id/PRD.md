@@ -176,6 +176,8 @@ Alur: daftar → upload berkas → verifikasi TU → seleksi → pengumuman → 
 - [ ] TU memverifikasi berkas; berkas ditolak bisa diunggah ulang dengan catatan
 - [ ] Status pendaftaran terlihat di dashboard calon siswa di setiap tahap
 - [ ] Pengumuman hasil serentak pada tanggal yang ditentukan; yang diterima otomatis menjadi data siswa di F-01
+- [ ] TU membuka periode pendaftaran (tanggal buka, tutup, pengumuman hasil, dan batas daftar ulang); dua periode tidak pernah terbuka bersamaan
+- [ ] Keputusan tetap tersembunyi bagi calon siswa sampai saat pengumuman, untuk semua orang sekaligus; setelah itu calon yang diterima mengonfirmasi tempatnya sebelum batas daftar ulang dan TU mendaftarkannya (kelas dan NISN): akunnya menjadi Student di database dan di Keycloak (ADR-003)
 
 **F-08: Administrasi & approval** (US-04)
 
@@ -183,6 +185,9 @@ Alur: daftar → upload berkas → verifikasi TU → seleksi → pengumuman → 
 - [ ] Alur approval bertingkat yang bisa dikonfigurasi, misalnya wali kelas → kepala sekolah
 - [ ] Penyetuju bisa setujui/tolak dengan catatan; pengaju mendapat notifikasi
 - [ ] Surat yang disetujui ter-generate sebagai PDF dengan nomor surat otomatis dan QR verifikasi keaslian
+- [ ] Rantai default: izin siswa ke wali kelas lalu kepala sekolah; cuti guru ke kepala sekolah; surat keterangan ke TU lalu kepala sekolah. Wali kelas adalah wali kelas dari kelas siswa yang bersangkutan, bukan role Keycloak. Rantai tidak bisa diubah selama masih ada pengajuan sejenis yang menunggu keputusan
+- [ ] Orang tua mengajukan izin siswa dan surat tentang anaknya, siswa mengajukan surat tentang dirinya, guru mengajukan cuti; pengaju bisa menarik pengajuan yang masih menunggu
+- [ ] Hanya surat keterangan yang menjadi PDF (izin hanya disetujui atau ditolak); siapa pun bisa memeriksa surat di `/verify/<kode>`, alamat di QR-nya
 
 **F-09: Dashboard analitik** (US-03, US-04)
 
@@ -359,13 +364,13 @@ AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status
 ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt
 
 -- PPDB
-AdmissionPeriod: Id, AcademicYearId, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline
-Applicant: Id, UserId → User, AdmissionPeriodId, FormData, Status (Draft|Submitted|InVerification|Accepted|Rejected|Enrolled), Notes, StudentId → Student (terisi saat resmi terdaftar)
-ApplicantDocument: Id, ApplicantId → Applicant, Type (BirthCertificate|FamilyCard|ReportCard), FileKey, Status (Pending|Verified|Rejected), ReviewNote, ExtractedData (json, AI-03)
+AdmissionPeriod: Id, AcademicYearId, Name, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline, ResultsNotifiedAt   ← ResultsNotifiedAt diisi job yang memberi tahu calon siswa bahwa hasil sudah keluar
+Applicant: Id, UserId → User, AdmissionPeriodId, FormData, Status (Draft|Submitted|InVerification|Accepted|Rejected|Enrolled), Notes, SubmittedAt, DecidedAt, ReregistrationConfirmedAt, StudentId → Student (terisi saat resmi terdaftar)
+ApplicantDocument: Id, ApplicantId → Applicant, Type (BirthCertificate|FamilyCard|ReportCard), FileKey, FileName, Status (Pending|Verified|Rejected), ReviewNote, ExtractedData (json, AI-03, Phase 6)
 
 -- Administrasi & approval
-ApprovalChainStep: Id, RequestType, StepOrder, ApproverRole   ← rantai approval yang bisa dikonfigurasi per jenis pengajuan
-Request: Id, Type (StudentLeave|TeacherLeave|CertificateLetter), RequesterId → User, StudentId → Student (opsional), StartDate, EndDate, Reason, Status (Pending|Approved|Rejected|Cancelled), CurrentStep
+ApprovalChainStep: Id, RequestType, StepOrder, ApproverRole (HomeroomTeacher|Admin|Principal)   ← rantai approval yang bisa dikonfigurasi per jenis pengajuan
+Request: Id, Type (StudentLeave|TeacherLeave|CertificateLetter), RequesterId → User, StudentId → Student (opsional), StartDate, EndDate (kosong untuk surat), Reason, Status (Pending|Approved|Rejected|Cancelled), CurrentStep, DecidedAt
 Approval: Id, RequestId, ApproverId, Step, Decision, Notes, DecidedAt
 Letter: Id, RequestId → Request, LetterNumber, VerificationCode, PdfKey, IssuedAt
 

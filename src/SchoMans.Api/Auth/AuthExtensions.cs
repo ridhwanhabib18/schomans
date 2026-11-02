@@ -50,7 +50,9 @@ public static class AuthExtensions
             .AddPolicy(Policies.AnyRole, p => p.RequireRole(Enum.GetNames<UserRole>()))
             .AddPolicy(Policies.Editors, p => p.RequireRole(nameof(UserRole.Admin), nameof(UserRole.Principal)))
             .AddPolicy(Policies.StaffRead, p => p.RequireRole(nameof(UserRole.Admin), nameof(UserRole.Principal), nameof(UserRole.Teacher)))
-            .AddPolicy(Policies.TeachingStaff, p => p.RequireRole(nameof(UserRole.Teacher), nameof(UserRole.Principal)));
+            .AddPolicy(Policies.TeachingStaff, p => p.RequireRole(nameof(UserRole.Teacher), nameof(UserRole.Principal)))
+            .AddPolicy(Policies.RequestUsers, p => p.RequireRole(nameof(UserRole.Principal), nameof(UserRole.Admin), nameof(UserRole.Teacher), nameof(UserRole.Parent), nameof(UserRole.Student)))
+            .AddPolicy(Policies.Approvers, p => p.RequireRole(nameof(UserRole.Principal), nameof(UserRole.Admin), nameof(UserRole.Teacher)));
 
         return services;
     }

@@ -1,8 +1,17 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
+import { MemoryRouter } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { apiError, renderWithQuery } from '@/test/utils'
 import type { Analytics } from '../api/analyticsTypes'
 import { DashboardPage } from './DashboardPage'
+
+// The principal's card of requests links to the approvals, so the page needs a router around it.
+const renderDashboard = () =>
+  renderWithQuery(
+    <MemoryRouter>
+      <DashboardPage />
+    </MemoryRouter>,
+  )
 
 const { getDashboard } = vi.hoisted(() => ({ getDashboard: vi.fn() }))
 vi.mock('@/api/generated/schomans', () => ({ getDashboard }))
@@ -30,7 +39,7 @@ describe('DashboardPage', () => {
   it('shows a skeleton while loading', () => {
     getDashboard.mockReturnValue(new Promise(() => {}))
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     expect(screen.getByRole('status')).toHaveProperty('ariaBusy', 'true')
   })
@@ -45,7 +54,7 @@ describe('DashboardPage', () => {
   ])('shows the title and the welcome line of the %s dashboard', async (role, title) => {
     getDashboard.mockResolvedValue({ role, fullName: 'Rina Putri', sections: [] })
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     expect((await screen.findByRole('heading', { level: 1 })).textContent).toBe(title)
     expect(screen.getByText('Welcome, Rina Putri')).toBeTruthy()
@@ -54,7 +63,7 @@ describe('DashboardPage', () => {
   it.each(['Admin', 'Applicant'])('shows the empty dashboard for %s, which has no charts, and asks for no analytics', async (role) => {
     getDashboard.mockResolvedValue({ role, fullName: 'Rina Putri', sections: [] })
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     expect(await screen.findByText('Nothing to show yet')).toBeTruthy()
     expect(http.customInstance).not.toHaveBeenCalled()
@@ -64,7 +73,7 @@ describe('DashboardPage', () => {
     getDashboard.mockRejectedValueOnce(new Error('boom'))
     getDashboard.mockResolvedValueOnce({ role: 'Teacher', fullName: 'Budi Santoso', sections: [] })
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     expect((await screen.findByRole('alert')).textContent).toContain('The dashboard could not be loaded.')
     fireEvent.click(screen.getByRole('button', { name: 'Try again' }))
@@ -89,7 +98,7 @@ describe('DashboardPage', () => {
       }),
     )
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     expect(await screen.findByRole('heading', { name: 'Attendance per class' })).toBeTruthy()
     expect(screen.getByRole('heading', { name: 'Average grade per subject' })).toBeTruthy()
@@ -109,7 +118,7 @@ describe('DashboardPage', () => {
       analytics({ principal: { attendanceTrend: [{ classroomId: 'c1', classroomName: 'Class A', months: months.map((month) => ({ month, rate: 90 })) }], subjectAverages: [] } }),
     )
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     const table = await screen.findByRole('table', { name: 'Attendance rate per class and month' })
     expect(table.className).not.toContain('sr-only')
@@ -120,7 +129,7 @@ describe('DashboardPage', () => {
     getDashboard.mockResolvedValue({ role: 'Principal', fullName: 'Hendra Wijaya', sections: [] })
     http.customInstance.mockResolvedValue(analytics({ principal: { attendanceTrend: [], subjectAverages: [] } }))
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     expect(await screen.findByText('There are no attendance records yet.')).toBeTruthy()
     expect(screen.getByText('There are no grades in the current term yet.')).toBeTruthy()
@@ -141,7 +150,7 @@ describe('DashboardPage', () => {
       }),
     )
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     const table = await screen.findByRole('table', { name: 'Students who need attention' })
     expect(screen.getByText('Attendance below 80% or a final grade below the minimum passing score, in the current term.')).toBeTruthy()
@@ -171,7 +180,7 @@ describe('DashboardPage', () => {
     ]
     http.customInstance.mockResolvedValue(analytics({ role: 'Teacher', teacher: { attendanceThreshold: 80, flagged } }))
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     const table = await screen.findByRole('table', { name: 'Students who need attention' })
     expect(screen.getByTestId('attention-total').textContent).toContain('25 students in total')
@@ -203,7 +212,7 @@ describe('DashboardPage', () => {
     }))
     http.customInstance.mockResolvedValue(analytics({ role: 'Teacher', teacher: { attendanceThreshold: 80, flagged } }))
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     await screen.findByRole('table', { name: 'Students who need attention' })
     expect(screen.getByTestId('attention-total').textContent).toBe('10 students in total')
@@ -214,7 +223,7 @@ describe('DashboardPage', () => {
     getDashboard.mockResolvedValue({ role: 'Teacher', fullName: 'Budi Santoso', sections: [] })
     http.customInstance.mockResolvedValue(analytics({ role: 'Teacher', teacher: { attendanceThreshold: 80, flagged: [] } }))
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     expect(await screen.findByText('No student needs attention right now.')).toBeTruthy()
   })
@@ -238,7 +247,7 @@ describe('DashboardPage', () => {
       }),
     )
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     expect(await screen.findByRole('heading', { name: 'Progress of Rina Putri' })).toBeTruthy()
     const table = screen.getByRole('table', { name: 'Average grade and attendance per month for Rina Putri' })
@@ -255,12 +264,49 @@ describe('DashboardPage', () => {
       analytics({ role: 'Student', children: [{ studentId: 's1', studentName: 'Rina Putri', months: [{ month: '2026-10', averageGrade: 80, attendanceRate: 90 }] }] }),
     )
 
-    renderWithQuery(<DashboardPage />)
+    renderDashboard()
 
     expect((await screen.findByRole('alert')).textContent).toContain('The charts could not be loaded.')
     expect(screen.getByRole('heading', { level: 1 }).textContent).toBe('Student dashboard')
     fireEvent.click(screen.getByRole('button', { name: 'Try again' }))
 
     expect(await screen.findByRole('heading', { name: 'Progress of Rina Putri' })).toBeTruthy()
+  })
+
+  it('shows the principal how many requests wait for a decision, with a link to the approvals', async () => {
+    getDashboard.mockResolvedValue({ role: 'Principal', fullName: 'Hendra Wijaya', sections: [] })
+    http.customInstance.mockImplementation(async ({ url }: { url: string }) =>
+      url === '/api/v1/requests/inbox' ? { items: [], page: 1, pageSize: 1, totalCount: 3 } : analytics({ principal: { attendanceTrend: [], subjectAverages: [] } }),
+    )
+
+    renderDashboard()
+
+    expect(await screen.findByRole('heading', { name: 'Requests awaiting approval' })).toBeTruthy()
+    expect(await screen.findByText('3 requests')).toBeTruthy()
+    expect(screen.getByRole('link', { name: 'Open the approvals' }).getAttribute('href')).toBe('/requests/inbox')
+    expect(http.customInstance).toHaveBeenCalledWith({ url: '/api/v1/requests/inbox', method: 'GET', params: { page: 1, pageSize: 1 } })
+  })
+
+  it('keeps the page and says so when the requests count fails', async () => {
+    getDashboard.mockResolvedValue({ role: 'Principal', fullName: 'Hendra Wijaya', sections: [] })
+    http.customInstance.mockImplementation(async ({ url }: { url: string }) => {
+      if (url === '/api/v1/requests/inbox') throw apiError(500)
+      return analytics({ principal: { attendanceTrend: [], subjectAverages: [] } })
+    })
+
+    renderDashboard()
+
+    expect((await screen.findByText('The requests could not be counted.')).textContent).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Attendance per class' })).toBeTruthy()
+  })
+
+  it('does not ask a teacher or a family for the requests count', async () => {
+    getDashboard.mockResolvedValue({ role: 'Teacher', fullName: 'Budi Santoso', sections: [] })
+    http.customInstance.mockResolvedValue(analytics({ role: 'Teacher', teacher: { attendanceThreshold: 80, flagged: [] } }))
+
+    renderDashboard()
+
+    await screen.findByText('No student needs attention right now.')
+    expect(http.customInstance.mock.calls.some(([call]) => call.url === '/api/v1/requests/inbox')).toBe(false)
   })
 })

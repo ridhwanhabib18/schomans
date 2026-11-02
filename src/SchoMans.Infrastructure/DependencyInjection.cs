@@ -45,6 +45,12 @@ public static class DependencyInjection
         services.AddSingleton<IStudentTemplateWriter, StudentTemplateWriter>();
         services.AddSingleton<IAttendanceExport, AttendanceExcelWriter>();
         services.AddSingleton<IReportCardPdf, ReportCardPdfRenderer>();
+        services.AddSingleton<ILetterPdf, LetterPdfRenderer>();
+        services.AddSingleton<IQrCodeGenerator, QrCoderGenerator>();
+        services.AddSingleton<ISiteLinks, SiteLinks>();
+
+        services.Configure<KeycloakAdminOptions>(configuration.GetSection(KeycloakAdminOptions.SectionName));
+        services.AddHttpClient<IIdentityProvisioner, KeycloakIdentityProvisioner>(client => client.Timeout = TimeSpan.FromSeconds(10));
 
         services.Configure<SchoolOptions>(configuration.GetSection(SchoolOptions.SectionName));
         services.AddSingleton<ISchoolClock, SchoolClock>();

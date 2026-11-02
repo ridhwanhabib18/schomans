@@ -174,6 +174,8 @@ Flow: register → upload documents → staff verification → selection → ann
 - [ ] Staff verify documents; rejected documents can be re-uploaded with a note
 - [ ] Registration status is visible on the applicant's dashboard at every stage
 - [ ] Results are announced simultaneously on a set date; accepted applicants automatically become students in F-01
+- [ ] The admin staff open an admission period (dates of opening, closing, announcing the results and the re-registration deadline); two periods are never open at once
+- [ ] A decision stays hidden from the applicant until the announcement moment, for everybody at once; then an accepted applicant confirms the place before the re-registration deadline and the admin staff enroll them (classroom and NISN): the account becomes a Student in the database and in Keycloak (ADR-003)
 
 **F-08: Administration & approvals** (US-04)
 
@@ -181,6 +183,9 @@ Flow: register → upload documents → staff verification → selection → ann
 - [ ] Configurable multi-level approval chain, for example homeroom teacher → principal
 - [ ] Approvers approve or reject with a note; requesters are notified
 - [ ] Approved letters are generated as PDFs with an automatic letter number and a QR code for authenticity checks
+- [ ] Default chains: student leave goes to the homeroom teacher and then the principal; teacher leave to the principal; a certificate letter to the admin staff and then the principal. The homeroom teacher is the homeroom teacher of the student's classroom, not a Keycloak role. A chain cannot change while requests of its kind wait for a decision
+- [ ] Parents ask for a student's leave and for letters about their child, students ask for a letter about themselves, teachers ask for leave; the requester can withdraw a pending request
+- [ ] Only a certificate letter becomes a PDF (a leave is approved or rejected); anybody can check a letter at `/verify/<code>`, the address in its QR code
 
 **F-09: Analytics dashboard** (US-03, US-04)
 
@@ -422,13 +427,13 @@ AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status
 ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt
 
 -- Admissions
-AdmissionPeriod: Id, AcademicYearId, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline
-Applicant: Id, UserId → User, AdmissionPeriodId, FormData, Status (Draft|Submitted|InVerification|Accepted|Rejected|Enrolled), Notes, StudentId → Student (set on enrollment)
-ApplicantDocument: Id, ApplicantId → Applicant, Type (BirthCertificate|FamilyCard|ReportCard), FileKey, Status (Pending|Verified|Rejected), ReviewNote, ExtractedData (json, AI-03)
+AdmissionPeriod: Id, AcademicYearId, Name, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline, ResultsNotifiedAt   ← ResultsNotifiedAt is set by the job that told the applicants the results are out
+Applicant: Id, UserId → User, AdmissionPeriodId, FormData, Status (Draft|Submitted|InVerification|Accepted|Rejected|Enrolled), Notes, SubmittedAt, DecidedAt, ReregistrationConfirmedAt, StudentId → Student (set on enrollment)
+ApplicantDocument: Id, ApplicantId → Applicant, Type (BirthCertificate|FamilyCard|ReportCard), FileKey, FileName, Status (Pending|Verified|Rejected), ReviewNote, ExtractedData (json, AI-03, Phase 6)
 
 -- Administration & approvals
-ApprovalChainStep: Id, RequestType, StepOrder, ApproverRole   ← configurable chain per request type
-Request: Id, Type (StudentLeave|TeacherLeave|CertificateLetter), RequesterId → User, StudentId → Student (optional), StartDate, EndDate, Reason, Status (Pending|Approved|Rejected|Cancelled), CurrentStep
+ApprovalChainStep: Id, RequestType, StepOrder, ApproverRole (HomeroomTeacher|Admin|Principal)   ← configurable chain per request type
+Request: Id, Type (StudentLeave|TeacherLeave|CertificateLetter), RequesterId → User, StudentId → Student (optional), StartDate, EndDate (empty for a letter), Reason, Status (Pending|Approved|Rejected|Cancelled), CurrentStep, DecidedAt
 Approval: Id, RequestId, ApproverId, Step, Decision, Notes, DecidedAt
 Letter: Id, RequestId → Request, LetterNumber, VerificationCode, PdfKey, IssuedAt
 

@@ -10,6 +10,10 @@ import { ChildAttendancePage, MyAttendancePage } from '@/features/attendance/pag
 import { ScanPage } from '@/features/attendance/pages/ScanPage'
 import { SessionPage } from '@/features/attendance/pages/SessionPage'
 import { TodayLessonsPage } from '@/features/attendance/pages/TodayLessonsPage'
+import { AdmissionPeriodsPage } from '@/features/admissions/pages/AdmissionPeriodsPage'
+import { ApplicantDetailPage } from '@/features/admissions/pages/ApplicantDetailPage'
+import { ApplicantsPage } from '@/features/admissions/pages/ApplicantsPage'
+import { MyApplicationPage } from '@/features/admissions/pages/MyApplicationPage'
 import { AnnouncementDetailPage } from '@/features/announcements/pages/AnnouncementDetailPage'
 import { AnnouncementEditPage } from '@/features/announcements/pages/AnnouncementEditPage'
 import { AnnouncementsInboxPage } from '@/features/announcements/pages/AnnouncementsInboxPage'
@@ -20,6 +24,11 @@ import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { RequireAuth } from '@/features/auth/components/RequireAuth'
 import { RequireRole } from '@/features/auth/components/RequireRole'
 import { ChildGradesPage, MyGradesPage } from '@/features/reportcards/pages/GradesPages'
+import { ApprovalChainsPage } from '@/features/requests/pages/ApprovalChainsPage'
+import { AllRequestsPage, MyRequestsPage, RequestInboxPage } from '@/features/requests/pages/ListPages'
+import { NewRequestPage } from '@/features/requests/pages/NewRequestPage'
+import { RequestDetailPage } from '@/features/requests/pages/RequestDetailPage'
+import { VerifyLetterPage } from '@/features/requests/pages/VerifyLetterPage'
 import { GradeBandsPage } from '@/features/grading/pages/GradeBandsPage'
 import { GradeBookPage } from '@/features/grading/pages/GradeBookPage'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
@@ -48,8 +57,13 @@ const STAFF: readonly AppRole[] = ['Admin', 'Principal', 'Teacher']
 const TEACHER: readonly AppRole[] = ['Teacher']
 const STUDENT: readonly AppRole[] = ['Student']
 const PARENT: readonly AppRole[] = ['Parent']
+const APPLICANT: readonly AppRole[] = ['Applicant']
 // Admin staff do not work with assignments (authorization matrix).
 const ASSIGNMENT_READERS: readonly AppRole[] = ['Teacher', 'Principal', 'Student', 'Parent']
+
+// Requests: parents, students and teachers make them; staff and the principal oversee them (everybody inside the school except applicants).
+const REQUEST_MAKERS: readonly AppRole[] = ['Parent', 'Student', 'Teacher']
+const REQUEST_VIEWERS: readonly AppRole[] = ['Admin', 'Principal', 'Teacher', 'Parent', 'Student']
 
 const guarded = (roles: readonly AppRole[], page: ReactNode) => <RequireRole roles={roles}>{page}</RequireRole>
 
@@ -66,6 +80,7 @@ export const routes: RouteObject[] = [
       { path: '/news', element: <PublicNewsListPage /> },
       { path: '/news/:slug', element: <PublicNewsArticlePage /> },
       { path: '/announcements/public/:id', element: <PublicAnnouncementPage /> },
+      { path: '/verify/:code', element: <VerifyLetterPage /> },
     ],
   },
   { path: '/login', element: <LoginPage /> },
@@ -107,6 +122,18 @@ export const routes: RouteObject[] = [
           { path: '/my-children/grades', element: guarded(PARENT, <ChildGradesPage />) },
           { path: '/grading', element: guarded(TEACHER, <GradeBookPage />) },
           { path: '/manage/grade-bands', element: guarded(ADMIN, <GradeBandsPage />) },
+
+          { path: '/admissions', element: guarded(APPLICANT, <MyApplicationPage />) },
+          { path: '/manage/admissions', element: guarded(ADMIN, <ApplicantsPage />) },
+          { path: '/manage/admissions/:id', element: guarded(ADMIN, <ApplicantDetailPage />) },
+          { path: '/manage/admission-periods', element: guarded(ADMIN, <AdmissionPeriodsPage />) },
+
+          { path: '/requests', element: guarded(REQUEST_MAKERS, <MyRequestsPage />) },
+          { path: '/requests/new', element: guarded(REQUEST_MAKERS, <NewRequestPage />) },
+          { path: '/requests/inbox', element: guarded(STAFF, <RequestInboxPage />) },
+          { path: '/requests/:id', element: guarded(REQUEST_VIEWERS, <RequestDetailPage />) },
+          { path: '/manage/requests', element: guarded(EDITORS, <AllRequestsPage />) },
+          { path: '/manage/approval-chains', element: guarded(EDITORS, <ApprovalChainsPage />) },
 
           { path: '/manage/news', element: guarded(EDITORS, <NewsManagePage />) },
           { path: '/manage/news/new', element: guarded(EDITORS, <NewsEditPage />) },

@@ -17,8 +17,6 @@ public sealed class ReportCardPdfRenderer : IReportCardPdf
     private const string Line = "#d1d5db";
     private const string Warning = "#b91c1c";
 
-    private static readonly string LogoSvg = LoadLogo();
-
     private readonly SchoolOptions _school;
 
     static ReportCardPdfRenderer() => QuestPDF.Settings.License = LicenseType.Community;
@@ -32,7 +30,7 @@ public sealed class ReportCardPdfRenderer : IReportCardPdf
             page.Margin(36);
             page.DefaultTextStyle(text => text.FontSize(10).FontColor(Ink));
 
-            page.Header().Element(header => Letterhead(header, document));
+            page.Header().Element(header => SchoolLetterhead.Compose(header, _school));
             page.Content().PaddingVertical(12).Element(content => Body(content, document));
             page.Footer().AlignCenter().Text(text =>
             {
@@ -43,22 +41,6 @@ public sealed class ReportCardPdfRenderer : IReportCardPdf
                 text.TotalPages();
             });
         })).GeneratePdf();
-
-    private void Letterhead(IContainer container, ReportCardDocument document) =>
-        container.Column(column =>
-        {
-            column.Item().Row(row =>
-            {
-                row.ConstantItem(56).Height(56).Svg(LogoSvg);
-                row.RelativeItem().PaddingLeft(12).Column(text =>
-                {
-                    text.Item().Text(_school.Name).FontSize(16).Bold().FontColor(Accent);
-                    text.Item().Text(_school.Address).FontSize(9).FontColor(Muted);
-                    text.Item().Text(_school.Contact).FontSize(9).FontColor(Muted);
-                });
-            });
-            column.Item().PaddingTop(6).LineHorizontal(1.5f).LineColor(Accent);
-        });
 
     private static void Body(IContainer container, ReportCardDocument document) =>
         container.Column(column =>
@@ -156,12 +138,4 @@ public sealed class ReportCardPdfRenderer : IReportCardPdf
     }
 
     private static string Format(decimal value) => value.ToString("0.##", CultureInfo.InvariantCulture);
-
-    private static string LoadLogo()
-    {
-        var assembly = typeof(ReportCardPdfRenderer).Assembly;
-        var name = assembly.GetManifestResourceNames().Single(n => n.EndsWith("school-logo.svg", StringComparison.Ordinal));
-        using var reader = new StreamReader(assembly.GetManifestResourceStream(name)!);
-        return reader.ReadToEnd();
-    }
 }

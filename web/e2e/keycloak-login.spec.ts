@@ -1,4 +1,8 @@
-import { expect, test, type APIRequestContext } from '@playwright/test'
+import { expect as baseExpect, test, type APIRequestContext } from '@playwright/test'
+
+// Resuming a session silently loads the whole app a second time in a hidden frame (about 2.3 s each in the Vite dev server),
+// so "anonymous" and "signed in again after a reload" are known after about 5 s: more than the default of an assertion.
+const expect = baseExpect.configure({ timeout: 20_000 })
 
 const keycloak = process.env.KEYCLOAK_URL ?? 'http://localhost:8080'
 const realm = 'schomans'

@@ -1,4 +1,8 @@
-import { expect, test } from '@playwright/test'
+import { expect as baseExpect, test } from '@playwright/test'
+
+// Resuming a session silently loads the whole app a second time in a hidden frame (about 2.3 s each in the Vite dev server),
+// so "anonymous" and "signed in again after a reload" are known after about 5 s: more than the default of an assertion.
+const expect = baseExpect.configure({ timeout: 20_000 })
 
 // The six demo accounts of the seeded fictional school (infra/keycloak/realm-schomans.json).
 const demoUsers = [

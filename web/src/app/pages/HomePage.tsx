@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next'
+import { AdmissionsBanner } from '@/features/admissions/components/AdmissionsBanner'
 import { PublicAnnouncementsSection } from '@/features/announcements/components/PublicAnnouncementsSection'
 import { LandingHero } from '@/features/landing/components/LandingHero'
+import { LandingProfile } from '@/features/landing/components/LandingProfile'
+import { AwardsSection } from '@/features/news/components/AwardsSection'
 import { LatestNews } from '@/features/news/components/LatestNews'
 import { useDocumentMeta } from '@/shared/hooks/useDocumentMeta'
 import '@/features/landing/i18n'
@@ -14,7 +17,10 @@ export function HomePage() {
   return (
     <div className="flex flex-col gap-12">
       <LandingHero />
+      <AdmissionsBanner />
+      <LandingProfile />
       <LatestNews />
+      <AwardsSection />
       <PublicAnnouncementsSection />
     </div>
   )

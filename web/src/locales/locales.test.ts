@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import admissions from '@/locales/en/admissions.json'
 import auth from '@/locales/en/auth.json'
 import common from '@/locales/en/common.json'
 import dashboard from '@/locales/en/dashboard.json'
@@ -7,6 +8,7 @@ import assignments from '@/locales/en/assignments.json'
 import attendance from '@/locales/en/attendance.json'
 import grading from '@/locales/en/grading.json'
 import reportcards from '@/locales/en/reportcards.json'
+import requests from '@/locales/en/requests.json'
 import landing from '@/locales/en/landing.json'
 import masterdata from '@/locales/en/masterdata.json'
 import news from '@/locales/en/news.json'
@@ -42,6 +44,25 @@ describe('English locale files', () => {
     }
   })
 
+  it('have a text for every business error code of the request features', () => {
+    for (const code of ['too_early', 'no_chain', 'not_allowed', 'not_your_student', 'not_pending', 'not_your_turn', 'chain_changed', 'chain_in_use', 'letter_conflict', 'not_yours', 'not_found']) {
+      expect(requests.errors.requests[code as keyof typeof requests.errors.requests], code).toBeTruthy()
+    }
+    expect(requests.errors.letters.not_found).toBeTruthy()
+  })
+
+  it('have a text for every business error code of the admissions features', () => {
+    for (const code of [
+      'not_open', 'no_application', 'not_editable', 'document_locked', 'form_incomplete', 'documents_missing', 'not_accepted', 'reregistration_closed',
+      'already_confirmed', 'period_overlaps', 'period_in_use', 'period_not_found', 'applicant_not_found', 'document_not_found', 'not_in_review',
+      'documents_not_verified', 'not_confirmed', 'cannot_enroll', 'identity_not_configured', 'identity_failed',
+    ]) {
+      expect(admissions.errors.admissions[code as keyof typeof admissions.errors.admissions], code).toBeTruthy()
+    }
+    expect(admissions.errors.students.nisn_taken).toBeTruthy()
+    expect(admissions.errors.files.invalid_file).toBeTruthy()
+  })
+
   it('have no empty texts', () => {
     const empty: string[] = []
     const walk = (node: unknown, path: string) => {
@@ -51,7 +72,7 @@ describe('English locale files', () => {
         for (const [key, value] of Object.entries(node)) walk(value, `${path}.${key}`)
       }
     }
-    walk({ common, auth, dashboard, landing, masterdata, news, announcements, notifications, attendance, assignments, grading, reportcards }, '')
+    walk({ common, auth, dashboard, landing, masterdata, news, announcements, notifications, attendance, assignments, grading, reportcards, admissions, requests }, '')
 
     expect(empty).toEqual([])
   })

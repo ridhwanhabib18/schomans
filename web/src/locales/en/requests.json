@@ -1,0 +1,189 @@
+{
+  "type": {
+    "StudentLeave": "Student leave",
+    "TeacherLeave": "Teacher leave",
+    "CertificateLetter": "Certificate letter"
+  },
+  "status": {
+    "Pending": "Waiting",
+    "Approved": "Approved",
+    "Rejected": "Rejected",
+    "Cancelled": "Withdrawn"
+  },
+  "role": {
+    "HomeroomTeacher": "Homeroom teacher",
+    "Admin": "Admin staff",
+    "Principal": "Principal"
+  },
+  "decision": {
+    "Approved": "Approved",
+    "Rejected": "Rejected"
+  },
+  "columns": {
+    "kind": "Kind",
+    "requester": "Requested by",
+    "student": "Student",
+    "days": "Days",
+    "reason": "Reason",
+    "status": "Status",
+    "waitingFor": "Waiting for",
+    "made": "Made on"
+  },
+  "waiting": "Step {{step}} of {{total}}: {{role}}",
+  "noStudent": "—",
+  "noDays": "—",
+  "days": "{{from}} to {{to}}",
+  "mine": {
+    "title": "Requests",
+    "description": "The leave and letter requests you made, or that were made about you or your child.",
+    "new": "New request",
+    "caption": "Your requests",
+    "empty": {
+      "title": "No requests yet",
+      "body": "When you make a request, you can follow its approval here."
+    },
+    "error": "The requests could not be loaded.",
+    "filter": "Status",
+    "allStatuses": "All"
+  },
+  "inbox": {
+    "title": "Approvals",
+    "description": "The requests that wait for your decision.",
+    "caption": "Requests that wait for your decision",
+    "empty": {
+      "title": "Nothing waits for you",
+      "body": "A request shows up here when it is your turn to decide."
+    },
+    "error": "The requests could not be loaded."
+  },
+  "all": {
+    "title": "All requests",
+    "description": "Every request of the school, with where it stands.",
+    "caption": "All requests",
+    "empty": {
+      "title": "No requests match",
+      "body": "Change the filters, or wait for the first request."
+    },
+    "error": "The requests could not be loaded.",
+    "status": "Status",
+    "type": "Kind",
+    "allStatuses": "All statuses",
+    "allTypes": "All kinds"
+  },
+  "new": {
+    "title": "New request",
+    "description": "Choose what you ask for. It goes through the approval chain and you are told when it is decided.",
+    "kind": "What do you ask for?",
+    "child": "Child",
+    "firstDay": "First day",
+    "lastDay": "Last day",
+    "reasonLeave": "Reason",
+    "reasonLetter": "What is the letter for?",
+    "reasonLetterHint": "For example: a scholarship application, a bank account or a visa.",
+    "submit": "Send the request",
+    "sending": "Sending…",
+    "sent": "Request sent",
+    "needDays": "Give the first and the last day.",
+    "needReason": "Say what the request is for.",
+    "order": "The last day is not before the first day.",
+    "studentError": "Your student record could not be found.",
+    "kindHint": {
+      "StudentLeave": "Tell the school your child will be away.",
+      "TeacherLeave": "Ask for leave for yourself.",
+      "CertificateLetter": "A letter that says the student is enrolled, with a code to check it."
+    }
+  },
+  "detail": {
+    "back": "Back to the requests",
+    "error": "The request could not be loaded.",
+    "requester": "Requested by",
+    "student": "Student",
+    "class": "Class",
+    "days": "Days",
+    "reason": "Reason",
+    "made": "Made on",
+    "chain": "Approval chain",
+    "chainStep": "Step {{step}}: {{role}}",
+    "current": "Waiting now",
+    "done": "Decided",
+    "decisions": "Decisions",
+    "noDecisions": "Nobody has decided yet.",
+    "decisionLine": "{{role}}: {{name}}",
+    "letter": "Letter",
+    "letterNumber": "Letter number {{number}}",
+    "download": "Download letter (PDF)",
+    "opening": "Opening…",
+    "downloadError": "The letter could not be opened.",
+    "yourTurn": "This request waits for your decision.",
+    "approve": "Approve",
+    "reject": "Reject",
+    "withdraw": "Withdraw the request",
+    "decide": {
+      "approveTitle": "Approve this request?",
+      "approveBody": "Your approval moves the request to the next step, or approves it if you are the last one.",
+      "approveConfirm": "Approve",
+      "rejectTitle": "Reject this request?",
+      "rejectBody": "A rejection ends the request at once. Tell the requester why.",
+      "rejectConfirm": "Reject",
+      "note": "Note",
+      "noteOptional": "Note (optional)",
+      "noteNeeded": "Give the reason for the rejection.",
+      "done": "Your decision is saved"
+    },
+    "cancel": {
+      "title": "Withdraw this request?",
+      "body": "Nobody will decide on it any more.",
+      "confirm": "Withdraw",
+      "done": "The request is withdrawn"
+    }
+  },
+  "chains": {
+    "title": "Approval chains",
+    "description": "Who decides, and in which order, for each kind of request.",
+    "readOnly": "You can read the chains; only the admin staff change them.",
+    "step": "Step {{step}}",
+    "role": "Who decides at step {{step}}",
+    "add": "Add a step",
+    "remove": "Remove step {{step}}",
+    "up": "Move step {{step}} up",
+    "down": "Move step {{step}} down",
+    "save": "Save the chain",
+    "saved": "The chain is saved",
+    "pending": "Requests of this kind are waiting for a decision, so the chain cannot change now.",
+    "tooMany": "A chain has at most 5 steps.",
+    "none": "A chain has at least one step.",
+    "noHomeroom": "A teacher's leave is not about a student, so it has no homeroom teacher step.",
+    "error": "The chains could not be loaded.",
+    "listLabel": "Steps of the chain of {{type}}"
+  },
+  "verify": {
+    "title": "Check a letter",
+    "checking": "Checking the letter…",
+    "validTitle": "This letter is real",
+    "validBody": "The school issued this letter. Check that the details below match the paper.",
+    "number": "Letter number",
+    "student": "Student",
+    "issued": "Issued on",
+    "invalidTitle": "No letter with this code",
+    "invalidBody": "The code is not known. The letter may be a copy that was changed, or the code was typed wrong.",
+    "error": "The letter could not be checked. Try again."
+  },
+  "errors": {
+    "requests": {
+      "too_early": "A leave cannot start more than a week in the past.",
+      "no_chain": "There is no approval chain for this kind of request yet. Ask the admin staff.",
+      "not_allowed": "Your role cannot make this kind of request.",
+      "not_your_student": "You can only make requests about yourself or your own child.",
+      "not_pending": "The request is already decided or withdrawn.",
+      "not_your_turn": "This request does not wait for your decision.",
+      "chain_changed": "The approval chain changed under this request. Ask the admin staff.",
+      "chain_in_use": "Requests of this kind are waiting for a decision, so the chain cannot change now.",
+      "letter_conflict": "The letter could not be numbered. Try again.",
+      "not_yours": "You may not open this request.",
+      "not_found": "The request does not exist."
+    },
+    "letters": {
+      "not_found": "There is no letter for this request."
+    }
+  }
+}

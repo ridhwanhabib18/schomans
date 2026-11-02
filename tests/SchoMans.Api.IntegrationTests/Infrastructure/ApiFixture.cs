@@ -27,6 +27,8 @@ public sealed class ApiFixture : IAsyncLifetime
 
     public InMemoryFileStorage Storage => Factory.Storage;
 
+    public RecordingIdentityProvisioner Identity => Factory.Identity;
+
     public async Task InitializeAsync()
     {
         _serverConnectionString = await AcquireServerAsync();

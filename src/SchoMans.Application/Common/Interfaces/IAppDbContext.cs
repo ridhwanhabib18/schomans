@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using SchoMans.Domain.Admissions;
+using SchoMans.Domain.Approvals;
 using SchoMans.Domain.Assignments;
 using SchoMans.Domain.Attendance;
 using SchoMans.Domain.Common;
@@ -50,6 +52,20 @@ public interface IAppDbContext
     DbSet<AchievementDescription> AchievementDescriptions { get; }
 
     DbSet<GradeBand> GradeBands { get; }
+
+    DbSet<AdmissionPeriod> AdmissionPeriods { get; }
+
+    DbSet<Applicant> Applicants { get; }
+
+    DbSet<ApplicantDocument> ApplicantDocuments { get; }
+
+    DbSet<ApprovalChainStep> ApprovalChainSteps { get; }
+
+    DbSet<Request> Requests { get; }
+
+    DbSet<Approval> Approvals { get; }
+
+    DbSet<Letter> Letters { get; }
 
     DbSet<NewsArticle> NewsArticles { get; }
 

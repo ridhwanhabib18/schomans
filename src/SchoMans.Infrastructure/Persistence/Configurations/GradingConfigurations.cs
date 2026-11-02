@@ -71,6 +71,10 @@ internal sealed class AchievementDescriptionConfiguration : IEntityTypeConfigura
 {
     public void Configure(EntityTypeBuilder<AchievementDescription> builder)
     {
+        // Added to the collection of a parent that is already tracked, the child has its key set by the domain: without this EF
+        // takes it for an existing row and updates it (0 rows). The same rule as AssignmentAttachment.
+        builder.Property(d => d.Id).ValueGeneratedNever();
+
         builder.Property(d => d.Body).HasMaxLength(AchievementDescription.BodyMaxLength).IsRequired();
         builder.Property(d => d.Status).HasConversion<string>().HasMaxLength(20);
 

@@ -12,6 +12,7 @@
     "empty": "There is no news in this category yet.",
     "error": "The news could not be loaded.",
     "readMore": "Read more",
+    "awards": { "title": "Awards", "viewAll": "All news" },
     "publishedOn": "Published {{date}}",
     "back": "All news",
     "notFound": {

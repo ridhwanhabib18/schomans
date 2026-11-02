@@ -269,10 +269,12 @@ erDiagram
   AdmissionPeriod {
     guid Id PK
     guid AcademicYearId FK
+    string Name
     datetime OpensAt
     datetime ClosesAt
     datetime ResultsAnnouncedAt
-    string ReregistrationDeadline
+    datetime ReregistrationDeadline
+    datetime ResultsNotifiedAt
   }
   Applicant {
     guid Id PK
@@ -281,6 +283,9 @@ erDiagram
     json FormData
     string Status
     string Notes
+    datetime SubmittedAt
+    datetime DecidedAt
+    datetime ReregistrationConfirmedAt
     guid StudentId FK
   }
   ApplicantDocument {
@@ -288,6 +293,7 @@ erDiagram
     guid ApplicantId FK
     string Type
     string FileKey
+    string FileName
     string Status
     string ReviewNote
     json ExtractedData
@@ -308,6 +314,7 @@ erDiagram
     string Reason
     string Status
     int CurrentStep
+    datetime DecidedAt
   }
   Approval {
     guid Id PK
@@ -324,7 +331,7 @@ erDiagram
     string LetterNumber UK
     string VerificationCode UK
     string PdfKey
-    bool IssuedAt
+    datetime IssuedAt
   }
   NewsArticle {
     guid Id PK

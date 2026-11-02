@@ -1,0 +1,249 @@
+{
+  "status": {
+    "Draft": "Draft",
+    "Submitted": "Handed in",
+    "InVerification": "In verification",
+    "Accepted": "Accepted",
+    "Rejected": "Rejected",
+    "Enrolled": "Enrolled"
+  },
+  "statusHelp": {
+    "Draft": "Fill in the form, upload the three documents and hand the application in.",
+    "Submitted": "Your application is handed in. The admin staff will look at it soon.",
+    "InVerification": "The admin staff are verifying your documents. The result is announced on the date below.",
+    "Accepted": "Congratulations, you are accepted. Confirm your place before the deadline.",
+    "Rejected": "Your application was not accepted this time.",
+    "Enrolled": "You are enrolled as a student. Sign in again to see your pages."
+  },
+  "docStatus": {
+    "Pending": "Waiting for review",
+    "Verified": "Verified",
+    "Rejected": "Needs a new upload"
+  },
+  "docTypes": {
+    "BirthCertificate": "Birth certificate",
+    "FamilyCard": "Family card",
+    "ReportCard": "Latest report card"
+  },
+  "period": {
+    "title": "Admission period",
+    "opens": "Applications open",
+    "closes": "Applications close",
+    "results": "Results announced",
+    "deadline": "Re-registration deadline"
+  },
+  "mine": {
+    "title": "My application",
+    "description": "Apply for a place in three steps: the form, the documents, and handing it in.",
+    "error": "Your application could not be loaded.",
+    "noPeriod": {
+      "title": "No admissions are open",
+      "body": "There is no admission period at the moment. Watch the news for the next one."
+    },
+    "start": {
+      "title": "Apply for a place",
+      "body": "Applications are open. Start your application: you can save the form as a draft and come back before it closes.",
+      "button": "Start application",
+      "failed": "The application could not be started."
+    },
+    "tracker": "Where your application stands",
+    "note": "Message from the school",
+    "closedDraft": "The application period has closed, so this draft can no longer be handed in.",
+    "steps": {
+      "form": "1. The form",
+      "documents": "2. The documents",
+      "submit": "3. Hand it in"
+    }
+  },
+  "form": {
+    "fullName": "Full name",
+    "dateOfBirth": "Date of birth",
+    "placeOfBirth": "Place of birth",
+    "address": "Address",
+    "guardianName": "Parent or guardian",
+    "guardianPhone": "Phone number of the parent or guardian",
+    "previousSchool": "Previous school",
+    "save": "Save draft",
+    "saved": "Draft saved",
+    "readOnly": "The form is handed in and can no longer be changed."
+  },
+  "documents": {
+    "hint": "PDF or an image (JPEG, PNG, WebP), at most 10 MB each.",
+    "missing": "Not uploaded yet",
+    "upload": "Upload",
+    "replace": "Upload again",
+    "uploaded": "Document uploaded",
+    "wrongType": "Upload a PDF or an image (JPEG, PNG, WebP).",
+    "wrongSize": "The file must be larger than 0 and at most 10 MB.",
+    "note": "Note from the staff: {{note}}",
+    "fileLabel": "{{type}}: choose a file"
+  },
+  "submit": {
+    "button": "Hand in the application",
+    "confirmTitle": "Hand in the application?",
+    "confirmBody": "After this you can no longer change the form or the documents, except a document that the staff send back.",
+    "confirm": "Hand in",
+    "done": "Application handed in",
+    "saveFirst": "Save the draft first: the form has changes that are not saved.",
+    "needForm": "Fill in every field of the form first.",
+    "needDocuments": "Upload all three documents first."
+  },
+  "reregistration": {
+    "title": "Confirm your place",
+    "body": "Confirm that you take the place before the deadline. The admin staff then enroll you as a student.",
+    "button": "Confirm my place",
+    "done": "Your place is confirmed",
+    "confirmed": "You confirmed your place. The admin staff will enroll you as a student."
+  },
+  "staff": {
+    "title": "Admissions",
+    "description": "Applications to verify, decide and enroll.",
+    "caption": "Applications",
+    "error": "The applications could not be loaded.",
+    "search": "Search by name or email",
+    "allStatuses": "All statuses",
+    "filterStatus": "Status",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "status": "Status",
+      "documents": "Documents verified",
+      "submitted": "Handed in",
+      "period": "Period"
+    },
+    "documentsOf": "{{verified}} of {{total}}",
+    "open": "Open",
+    "empty": {
+      "title": "No applications",
+      "description": "Applications that are handed in show up here."
+    }
+  },
+  "detail": {
+    "back": "All applications",
+    "error": "The application could not be loaded.",
+    "applicant": "Applicant",
+    "form": "Registration form",
+    "documents": "Documents",
+    "notUploaded": "Not uploaded",
+    "view": "Open the file",
+    "verify": "Verify",
+    "reject": "Reject",
+    "verified": "Document verified",
+    "rejected": "Document sent back",
+    "rejectTitle": "Send the document back",
+    "rejectBody": "Tell the applicant what is wrong. They can upload the document again.",
+    "rejectNote": "What is wrong with the document",
+    "rejectConfirm": "Send back",
+    "decision": "Decision",
+    "decisionHint": "The applicant sees the decision only when the results are announced.",
+    "accept": "Accept",
+    "rejectApplicant": "Reject application",
+    "acceptTitle": "Accept this applicant?",
+    "acceptBody": "All three documents are verified. The applicant is told when the results are announced.",
+    "rejectApplicantTitle": "Reject this application?",
+    "rejectApplicantBody": "Give the reason; the applicant reads it when the results are announced.",
+    "note": "Note for the applicant",
+    "decided": "Decision saved",
+    "decidedAt": "Decided on {{date}}",
+    "staffNote": "Note",
+    "enroll": {
+      "title": "Enroll as a student",
+      "body": "The applicant confirmed the place. Choose the classroom and give the NISN: a student account is made and the role in Keycloak changes.",
+      "classroom": "Classroom",
+      "choose": "Choose a classroom",
+      "nisn": "NISN",
+      "nisnHint": "Exactly 10 digits.",
+      "nisnInvalid": "The NISN must be exactly 10 digits.",
+      "button": "Enroll",
+      "done": "Applicant enrolled as a student",
+      "waiting": "The applicant has not confirmed the place yet.",
+      "enrolled": "Enrolled as a student."
+    }
+  },
+  "periods": {
+    "title": "Admission periods",
+    "description": "When applications open and close, when the results come, and the re-registration deadline.",
+    "caption": "Admission periods",
+    "error": "The admission periods could not be loaded.",
+    "add": "New period",
+    "edit": "Edit",
+    "delete": "Delete",
+    "columns": {
+      "name": "Name",
+      "year": "Academic year",
+      "window": "Applications",
+      "results": "Results",
+      "deadline": "Re-registration",
+      "applicants": "Applications",
+      "actions": "Actions"
+    },
+    "empty": {
+      "title": "No admission periods",
+      "description": "Add a period so that applicants can apply."
+    },
+    "form": {
+      "newTitle": "New admission period",
+      "editTitle": "Edit admission period",
+      "name": "Name",
+      "year": "Academic year",
+      "chooseYear": "Choose an academic year",
+      "opensAt": "Applications open",
+      "closesAt": "Applications close",
+      "resultsAt": "Results announced",
+      "deadline": "Re-registration deadline",
+      "hint": "Times are in school time (WIB). The dates run in order.",
+      "order": "The dates must run in order: opens, closes, results announced, re-registration deadline.",
+      "save": "Save"
+    },
+    "saved": "Period saved",
+    "deleted": "Period deleted",
+    "deleteTitle": "Delete {{name}}?",
+    "deleteBody": "The period is removed. This only works while it has no applications."
+  },
+  "banner": {
+    "title": "Admissions",
+    "open": "Applications are open until {{date}}.",
+    "soon": "Applications open on {{date}}.",
+    "apply": "Apply now",
+    "info": "Admission information"
+  },
+  "errors": {
+    "admissions": {
+      "not_open": "There is no admission period open at the moment.",
+      "no_application": "You have not started an application.",
+      "not_editable": "The application can no longer be changed.",
+      "document_locked": "This document can no longer be changed.",
+      "form_incomplete": "Fill in every field of the form first.",
+      "documents_missing": "Upload the birth certificate, the family card and the report card first.",
+      "not_accepted": "Only an accepted applicant confirms the place.",
+      "reregistration_closed": "The re-registration deadline has passed.",
+      "already_confirmed": "You have already confirmed your place.",
+      "period_overlaps": "Another admission period is open at the same time.",
+      "period_in_use": "This period has applications, so it cannot be deleted.",
+      "period_not_found": "The admission period does not exist.",
+      "applicant_not_found": "The application does not exist.",
+      "document_not_found": "The document was not uploaded.",
+      "not_in_review": "Only an application in verification can be decided or reviewed.",
+      "documents_not_verified": "Verify all three documents before accepting.",
+      "not_confirmed": "Only an accepted applicant who confirmed the place can be enrolled.",
+      "cannot_enroll": "The applicant has no date of birth or has not signed in yet.",
+      "identity_not_configured": "The identity provider is not set up to change roles.",
+      "identity_failed": "The account could not be changed to a student in the identity provider. Try again."
+    },
+    "files": {
+      "not_uploaded": "The file was not uploaded. Upload it first.",
+      "invalid_file": "The file type or size is not accepted.",
+      "invalid_key": "The file does not belong to this document."
+    },
+    "students": {
+      "nisn_taken": "Another student already has this NISN.",
+      "duplicate": "A student with this NISN or account was just created."
+    },
+    "classrooms": {
+      "not_found": "The classroom does not exist."
+    },
+    "academic_years": {
+      "not_found": "The academic year does not exist."
+    }
+  }
+}

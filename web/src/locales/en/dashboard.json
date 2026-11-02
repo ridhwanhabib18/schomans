@@ -13,6 +13,7 @@
     "body": "Your {{role}} dashboard fills up as school modules are added."
   },
   "error": "The dashboard could not be loaded.",
+  "applicant": { "open": "Open my application" },
   "analytics": {
     "error": "The charts could not be loaded.",
     "loading": "Loading the charts…",
@@ -51,6 +52,15 @@
       "showAll": "Show all ({{count}})",
       "showFewer": "Show fewer",
       "shown": "Showing {{shown}} of {{count}}, the most urgent first."
+    },
+    "requests": {
+      "title": "Requests awaiting approval",
+      "description": "Leave and letter requests that wait for your decision.",
+      "count_one": "{{count}} request",
+      "count_other": "{{count}} requests",
+      "open": "Open the approvals",
+      "loading": "Loading the requests…",
+      "error": "The requests could not be counted."
     },
     "child": {
       "title": "Progress of {{name}}",
