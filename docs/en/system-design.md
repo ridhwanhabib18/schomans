@@ -405,10 +405,12 @@ erDiagram
   AdmissionPeriod {
     guid Id PK
     guid AcademicYearId FK
+    string Name
     datetime OpensAt
     datetime ClosesAt
     datetime ResultsAnnouncedAt
-    string ReregistrationDeadline
+    datetime ReregistrationDeadline
+    datetime ResultsNotifiedAt
   }
   Applicant {
     guid Id PK
@@ -417,6 +419,9 @@ erDiagram
     json FormData
     string Status
     string Notes
+    datetime SubmittedAt
+    datetime DecidedAt
+    datetime ReregistrationConfirmedAt
     guid StudentId FK
   }
   ApplicantDocument {
@@ -424,6 +429,7 @@ erDiagram
     guid ApplicantId FK
     string Type
     string FileKey
+    string FileName
     string Status
     string ReviewNote
     json ExtractedData
@@ -444,6 +450,7 @@ erDiagram
     string Reason
     string Status
     int CurrentStep
+    datetime DecidedAt
   }
   Approval {
     guid Id PK
@@ -460,11 +467,11 @@ erDiagram
     string LetterNumber UK
     string VerificationCode UK
     string PdfKey
-    bool IssuedAt
+    datetime IssuedAt
   }
 ```
 
-ApprovalChainStep holds the configurable chain per request type (for example homeroom teacher, then principal); Request.CurrentStep points at the step awaiting a decision. When an accepted applicant is enrolled, a Student is created and Applicant.StudentId is set.
+ApprovalChainStep holds the configurable chain per request type (for example homeroom teacher, then principal); Request.CurrentStep points at the step awaiting a decision. The homeroom teacher of a step is the homeroom teacher of the classroom of Request.StudentId; the chain of a type cannot change while requests of that type are pending. Only a certificate request gets a Letter (number `001/SK/SCHOMANS/X/2026`, verification code, PDF). When an accepted applicant is enrolled, a Student is created, Applicant.StudentId is set and the account's realm role changes from Applicant to Student through the Keycloak Admin API (ADR-003). A decision on an application is stored when staff decide but shown to the applicant only from AdmissionPeriod.ResultsAnnouncedAt, so everybody sees the results at the same moment.
 
 ```mermaid
 %% Source: diagrams/erd.mmd (news, announcements, notifications, audit & AI)
