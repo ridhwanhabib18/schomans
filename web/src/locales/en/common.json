@@ -47,6 +47,10 @@
     "myApplication": "My application",
     "admissions": "Admissions",
     "admissionPeriods": "Admission periods",
+    "requests": "Requests",
+    "approvals": "Approvals",
+    "allRequests": "All requests",
+    "approvalChains": "Approval chains",
     "childAttendance": "Attendance",
     "childAssignments": "Assignments",
     "jobs": "Background jobs"
