@@ -61,20 +61,26 @@ function useInvalidateRequests() {
   return () => queryClient.invalidateQueries({ queryKey: requestKeys.all })
 }
 
+/**
+ * The lists and the detail of a request are read again every time they are opened: other people decide on them (the
+ * approvers) or make them (the family), so a copy of half a minute ago can show a request as waiting that is decided.
+ */
+const ALWAYS_FRESH = { staleTime: 0 } as const
+
 export function useMyRequests(status: RequestStatus | undefined, page: number) {
-  return useQuery({ queryKey: requestKeys.mine(status, page), queryFn: () => listMine(status, page) })
+  return useQuery({ queryKey: requestKeys.mine(status, page), queryFn: () => listMine(status, page), ...ALWAYS_FRESH })
 }
 
 export function useRequestInbox(page: number) {
-  return useQuery({ queryKey: requestKeys.inbox(page), queryFn: () => listInbox(page) })
+  return useQuery({ queryKey: requestKeys.inbox(page), queryFn: () => listInbox(page), ...ALWAYS_FRESH })
 }
 
 export function useAllRequests(status: RequestStatus | undefined, type: RequestType | undefined, page: number) {
-  return useQuery({ queryKey: requestKeys.list(status, type, page), queryFn: () => listAll(status, type, page) })
+  return useQuery({ queryKey: requestKeys.list(status, type, page), queryFn: () => listAll(status, type, page), ...ALWAYS_FRESH })
 }
 
 export function useRequest(id: string) {
-  return useQuery({ queryKey: requestKeys.detail(id), queryFn: () => getRequest(id), enabled: id !== '' })
+  return useQuery({ queryKey: requestKeys.detail(id), queryFn: () => getRequest(id), enabled: id !== '', ...ALWAYS_FRESH })
 }
 
 export function useCreateRequest() {
