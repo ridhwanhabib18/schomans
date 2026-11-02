@@ -1,0 +1,20 @@
+
+Running 15 tests using 1 worker
+
+  ok  1 [desktop] › e2e\demo-login.spec.ts:20:5 › demo login: every role sees its own dashboard › Principal (29.3s)
+  ok  2 [desktop] › e2e\demo-login.spec.ts:20:5 › demo login: every role sees its own dashboard › Teacher (16.9s)
+  ok  3 [desktop] › e2e\demo-login.spec.ts:20:5 › demo login: every role sees its own dashboard › Student (16.6s)
+  ok  4 [desktop] › e2e\demo-login.spec.ts:20:5 › demo login: every role sees its own dashboard › Parent (17.5s)
+  ok  5 [desktop] › e2e\demo-login.spec.ts:20:5 › demo login: every role sees its own dashboard › Admin (16.4s)
+  ok  6 [desktop] › e2e\demo-login.spec.ts:20:5 › demo login: every role sees its own dashboard › Applicant (16.6s)
+  ok  7 [desktop] › e2e\demo-login.spec.ts:41:3 › demo login: every role sees its own dashboard › signing out returns to the login page and protects the dashboard again (25.4s)
+  ok  8 [desktop] › e2e\demo-login.spec.ts:55:3 › guests and protected pages › an anonymous visitor who opens the dashboard is sent to the login page (15.3s)
+  ok  9 [desktop] › e2e\demo-login.spec.ts:61:3 › guests and protected pages › a guest can browse the public page without an account (11.7s)
+  ok 10 [desktop] › e2e\demo-login.spec.ts:70:3 › guests and protected pages › an unknown address shows the not-found page (14.1s)
+  ok 11 [desktop] › e2e\demo-login.spec.ts:76:3 › guests and protected pages › a demo user opening the login page again is taken to the dashboard (17.8s)
+  ok 12 [desktop] › e2e\keycloak-login.spec.ts:12:3 › Keycloak login (OIDC + PKCE) › a student signs in with email and password, survives a reload, and signs out (37.9s)
+  ok 13 [desktop] › e2e\keycloak-login.spec.ts:40:3 › Keycloak login (OIDC + PKCE) › a wrong password is rejected by Keycloak (12.5s)
+  ok 14 [desktop] › e2e\keycloak-login.spec.ts:52:3 › Keycloak login (OIDC + PKCE) › opening a protected page first brings the user back to it after login (20.2s)
+  ok 15 [desktop] › e2e\keycloak-login.spec.ts:94:3 › Self-registration creates an Applicant › a guest registers on the Keycloak page and lands on the Applicant dashboard (18.6s)
+
+  15 passed (5.0m)

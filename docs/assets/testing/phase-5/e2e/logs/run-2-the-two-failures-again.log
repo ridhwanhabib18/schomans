@@ -1,0 +1,84 @@
+
+Running 2 tests using 1 worker
+
+  x  1 [desktop] › e2e\demo-login.spec.ts:51:3 › guests and protected pages › an anonymous visitor who opens the dashboard is sent to the login page (24.4s)
+  x  2 [desktop] › e2e\keycloak-login.spec.ts:8:3 › Keycloak login (OIDC + PKCE) › a student signs in with email and password, survives a reload, and signs out (38.7s)
+
+
+  1) [desktop] › e2e\demo-login.spec.ts:51:3 › guests and protected pages › an anonymous visitor who opens the dashboard is sent to the login page 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/login$/
+    Received string:  "http://localhost:5173/dashboard"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        7 × locator resolved to <html lang="en">…</html>
+          - unexpected value "http://localhost:5173/dashboard"
+
+
+      52 |     await page.goto('/dashboard')
+      53 |
+    > 54 |     await expect(page).toHaveURL(/\/login$/)
+         |                        ^
+      55 |   })
+      56 |
+      57 |   test('a guest can browse the public page without an account', async ({ page }) => {
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\demo-login.spec.ts:54:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\demo-login-guests-and-prot-3af26-d-is-sent-to-the-login-page-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\demo-login-guests-and-prot-3af26-d-is-sent-to-the-login-page-desktop\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\demo-login-guests-and-prot-3af26-d-is-sent-to-the-login-page-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\demo-login-guests-and-prot-3af26-d-is-sent-to-the-login-page-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › e2e\keycloak-login.spec.ts:8:3 › Keycloak login (OIDC + PKCE) › a student signs in with email and password, survives a reload, and signs out 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('heading', { level: 1 })
+    Expected: "Student dashboard"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveText" getByRole('heading', { level: 1 }) with timeout 5000ms
+      - waiting for getByRole('heading', { level: 1 })
+
+
+      24 |     // Tokens live in memory only, so a reload must resume the session from the Keycloak cookie (silent sign-in).
+      25 |     await page.reload()
+    > 26 |     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Student dashboard')
+         |                                                           ^
+      27 |
+      28 |     await page.getByRole('button', { name: 'Sign out' }).click()
+      29 |     await expect(page).toHaveURL(/localhost:5173\/login$/)
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\keycloak-login.spec.ts:26:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\keycloak-login-Keycloak-lo-c627b-ives-a-reload-and-signs-out-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\keycloak-login-Keycloak-lo-c627b-ives-a-reload-and-signs-out-desktop\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\keycloak-login-Keycloak-lo-c627b-ives-a-reload-and-signs-out-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\keycloak-login-Keycloak-lo-c627b-ives-a-reload-and-signs-out-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › e2e\demo-login.spec.ts:51:3 › guests and protected pages › an anonymous visitor who opens the dashboard is sent to the login page 
+    [desktop] › e2e\keycloak-login.spec.ts:8:3 › Keycloak login (OIDC + PKCE) › a student signs in with email and password, survives a reload, and signs out 

@@ -1,0 +1,132 @@
+
+Running 49 tests using 1 worker
+
+  ok  1 [desktop] › e2e\admissions.spec.ts:82:3 › Admissions › an applicant is accepted, confirms the place and is enrolled as a student (1.3m)
+  ok  2 [desktop] › e2e\admissions.spec.ts:198:3 › Admissions › the landing page announces the open admission period to guests (13.3s)
+  ok  3 [desktop] › e2e\admissions.spec.ts:208:3 › Admissions › an admin cannot open a second period while one is open (14.9s)
+  ok  4 [desktop] › e2e\announcements.spec.ts:28:1 › a published announcement reaches its audience at once, and only its audience (47.3s)
+  ok  5 [desktop] › e2e\announcements.spec.ts:77:1 › an announcement marked public is readable by a guest, a private one is not (39.2s)
+  ok  6 [desktop] › e2e\assignments.spec.ts:7:1 › a teacher gives an assignment, a student hands in work, and the score reaches student and parent (53.8s)
+  ok  7 [desktop] › e2e\assignments.spec.ts:105:1 › a teacher can delete an assignment nobody has handed in (15.8s)
+  ok  8 [desktop] › e2e\assignments.spec.ts:123:1 › a student cannot give assignments and sees only their own (13.6s)
+  ok  9 [desktop] › e2e\attendance.spec.ts:8:1 › a teacher takes attendance with the rotating QR code and a student checks in (1.9m)
+  ok 10 [desktop] › e2e\attendance.spec.ts:119:1 › a student reaches the check-in page with a camera app after signing in with Keycloak (16.0s)
+  ok 11 [desktop] › e2e\attendance.spec.ts:135:1 › roles that do not take attendance see no attendance pages of the teacher (12.9s)
+  ok 12 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Principal (14.7s)
+  ok 13 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Teacher (12.3s)
+  ok 14 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Student (13.0s)
+  ok 15 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Parent (13.1s)
+  ok 16 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Admin (13.1s)
+  ok 17 [desktop] › e2e\demo-login.spec.ts:16:5 › demo login: every role sees its own dashboard › Applicant (12.3s)
+  ok 18 [desktop] › e2e\demo-login.spec.ts:37:3 › demo login: every role sees its own dashboard › signing out returns to the login page and protects the dashboard again (20.1s)
+  x  19 [desktop] › e2e\demo-login.spec.ts:51:3 › guests and protected pages › an anonymous visitor who opens the dashboard is sent to the login page (13.5s)
+  ok 20 [desktop] › e2e\demo-login.spec.ts:57:3 › guests and protected pages › a guest can browse the public page without an account (21.2s)
+  ok 21 [desktop] › e2e\demo-login.spec.ts:66:3 › guests and protected pages › an unknown address shows the not-found page (9.9s)
+  ok 22 [desktop] › e2e\demo-login.spec.ts:72:3 › guests and protected pages › a demo user opening the login page again is taken to the dashboard (13.1s)
+  ok 23 [desktop] › e2e\grading.spec.ts:12:1 › a teacher publishes grades and report cards, and student and parent see them (1.2m)
+  ok 24 [desktop] › e2e\grading.spec.ts:101:1 › the dashboard shows the charts of each role (44.2s)
+  x  25 [desktop] › e2e\keycloak-login.spec.ts:8:3 › Keycloak login (OIDC + PKCE) › a student signs in with email and password, survives a reload, and signs out (24.0s)
+  ok 26 [desktop] › e2e\keycloak-login.spec.ts:36:3 › Keycloak login (OIDC + PKCE) › a wrong password is rejected by Keycloak (20.8s)
+  ok 27 [desktop] › e2e\keycloak-login.spec.ts:48:3 › Keycloak login (OIDC + PKCE) › opening a protected page first brings the user back to it after login (16.9s)
+  ok 28 [desktop] › e2e\keycloak-login.spec.ts:90:3 › Self-registration creates an Applicant › a guest registers on the Keycloak page and lands on the Applicant dashboard (13.5s)
+  ok 29 [desktop] › e2e\layout.spec.ts:4:1 › the app shell adapts to the screen size (13.7s)
+  ok 30 [desktop] › e2e\layout.spec.ts:26:1 › the theme can be switched to dark and back (13.6s)
+  ok 31 [desktop] › e2e\masterdata.spec.ts:49:3 › master data › the admin adds a teacher, a subject and a classroom (17.5s)
+  ok 32 [desktop] › e2e\masterdata.spec.ts:87:3 › master data › the admin adds, finds, edits a student, and the form explains a duplicate NISN (17.5s)
+  ok 33 [desktop] › e2e\masterdata.spec.ts:128:3 › master data › the admin imports students from an Excel file, and the failed rows are listed (16.6s)
+  ok 34 [desktop] › e2e\masterdata.spec.ts:167:3 › master data › the admin deletes what was added, and a classroom with students cannot be deleted (19.6s)
+  ok 35 [desktop] › e2e\masterdata.spec.ts:208:3 › who may see and change master data › a teacher sees the students, without any button to change them, and not the teachers page (12.9s)
+  ok 36 [desktop] › e2e\masterdata.spec.ts:224:3 › who may see and change master data › the principal sees everything and can change nothing (14.5s)
+  ok 37 [desktop] › e2e\masterdata.spec.ts:234:3 › who may see and change master data › a student has no management pages (12.9s)
+  ok 38 [desktop] › e2e\masterdata.spec.ts:243:3 › who may see and change master data › the academic year page lists the current year with its terms; rollover is not run here (13.0s)
+  ok 39 [desktop] › e2e\news.spec.ts:6:1 › an admin writes, illustrates and publishes an article, and a guest reads it (56.9s)
+  ok 40 [desktop] › e2e\news.spec.ts:89:1 › a teacher cannot manage news, and the page says why (12.7s)
+  ok 41 [desktop] › e2e\requests.spec.ts:49:1 › a leave goes to the homeroom teacher and then the principal, and the parent sees it approved (44.4s)
+  ok 42 [desktop] › e2e\requests.spec.ts:87:1 › a rejection needs a note and ends the request (27.1s)
+  ok 43 [desktop] › e2e\requests.spec.ts:119:1 › a certificate letter is approved by the admin staff and the principal and downloaded from the storage (46.6s)
+  ok 44 [desktop] › e2e\requests.spec.ts:153:1 › anybody can check a letter by its code, and an unknown code is not valid (9.5s)
+  ok 45 [desktop] › e2e\requests.spec.ts:160:1 › the principal reads the approval chains and only the admin staff change them (25.0s)
+  ok 46 [desktop] › e2e\timetable.spec.ts:14:1 › the admin adds a lesson to the timetable, a clash is refused, and the lesson can be removed (17.0s)
+  ok 47 [desktop] › e2e\timetable.spec.ts:59:1 › a teacher reads the timetable without being able to change it (12.6s)
+  ok 48 [mobile] › e2e\layout.spec.ts:4:1 › the app shell adapts to the screen size (22.9s)
+  ok 49 [mobile] › e2e\layout.spec.ts:26:1 › the theme can be switched to dark and back (14.0s)
+
+
+  1) [desktop] › e2e\demo-login.spec.ts:51:3 › guests and protected pages › an anonymous visitor who opens the dashboard is sent to the login page 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/login$/
+    Received string:  "http://localhost:5173/dashboard"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        7 × locator resolved to <html lang="en">…</html>
+          - unexpected value "http://localhost:5173/dashboard"
+
+
+      52 |     await page.goto('/dashboard')
+      53 |
+    > 54 |     await expect(page).toHaveURL(/\/login$/)
+         |                        ^
+      55 |   })
+      56 |
+      57 |   test('a guest can browse the public page without an account', async ({ page }) => {
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\demo-login.spec.ts:54:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\demo-login-guests-and-prot-3af26-d-is-sent-to-the-login-page-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\demo-login-guests-and-prot-3af26-d-is-sent-to-the-login-page-desktop\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\demo-login-guests-and-prot-3af26-d-is-sent-to-the-login-page-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\demo-login-guests-and-prot-3af26-d-is-sent-to-the-login-page-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [desktop] › e2e\keycloak-login.spec.ts:8:3 › Keycloak login (OIDC + PKCE) › a student signs in with email and password, survives a reload, and signs out 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('heading', { level: 1 })
+    Expected: "Student dashboard"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveText" getByRole('heading', { level: 1 }) with timeout 5000ms
+      - waiting for getByRole('heading', { level: 1 })
+
+
+      24 |     // Tokens live in memory only, so a reload must resume the session from the Keycloak cookie (silent sign-in).
+      25 |     await page.reload()
+    > 26 |     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Student dashboard')
+         |                                                           ^
+      27 |
+      28 |     await page.getByRole('button', { name: 'Sign out' }).click()
+      29 |     await expect(page).toHaveURL(/localhost:5173\/login$/)
+        at C:\Users\iei22120006\Downloads\schomans-starter\schomans\web\e2e\keycloak-login.spec.ts:26:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\keycloak-login-Keycloak-lo-c627b-ives-a-reload-and-signs-out-desktop\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\keycloak-login-Keycloak-lo-c627b-ives-a-reload-and-signs-out-desktop\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\keycloak-login-Keycloak-lo-c627b-ives-a-reload-and-signs-out-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\keycloak-login-Keycloak-lo-c627b-ives-a-reload-and-signs-out-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › e2e\demo-login.spec.ts:51:3 › guests and protected pages › an anonymous visitor who opens the dashboard is sent to the login page 
+    [desktop] › e2e\keycloak-login.spec.ts:8:3 › Keycloak login (OIDC + PKCE) › a student signs in with email and password, survives a reload, and signs out 
+  47 passed (20.8m)
