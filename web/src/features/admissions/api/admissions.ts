@@ -232,6 +232,8 @@ export function useApplicant(id: string) {
   return useQuery({
     queryKey: admissionKeys.applicant(id),
     queryFn: () => customInstance<ApplicantDetail>({ url: `${base}/applicants/${id}`, method: 'GET' }),
+    // The applicant changes the case too (confirms the place); the staff must not look at a copy of half a minute ago.
+    staleTime: 0,
   })
 }
 
