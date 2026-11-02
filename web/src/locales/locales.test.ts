@@ -8,6 +8,7 @@ import assignments from '@/locales/en/assignments.json'
 import attendance from '@/locales/en/attendance.json'
 import grading from '@/locales/en/grading.json'
 import reportcards from '@/locales/en/reportcards.json'
+import requests from '@/locales/en/requests.json'
 import landing from '@/locales/en/landing.json'
 import masterdata from '@/locales/en/masterdata.json'
 import news from '@/locales/en/news.json'
@@ -43,6 +44,13 @@ describe('English locale files', () => {
     }
   })
 
+  it('have a text for every business error code of the request features', () => {
+    for (const code of ['too_early', 'no_chain', 'not_allowed', 'not_your_student', 'not_pending', 'not_your_turn', 'chain_changed', 'chain_in_use', 'letter_conflict', 'not_yours', 'not_found']) {
+      expect(requests.errors.requests[code as keyof typeof requests.errors.requests], code).toBeTruthy()
+    }
+    expect(requests.errors.letters.not_found).toBeTruthy()
+  })
+
   it('have a text for every business error code of the admissions features', () => {
     for (const code of [
       'not_open', 'no_application', 'not_editable', 'document_locked', 'form_incomplete', 'documents_missing', 'not_accepted', 'reregistration_closed',
@@ -64,7 +72,7 @@ describe('English locale files', () => {
         for (const [key, value] of Object.entries(node)) walk(value, `${path}.${key}`)
       }
     }
-    walk({ common, auth, dashboard, landing, masterdata, news, announcements, notifications, attendance, assignments, grading, reportcards, admissions }, '')
+    walk({ common, auth, dashboard, landing, masterdata, news, announcements, notifications, attendance, assignments, grading, reportcards, admissions, requests }, '')
 
     expect(empty).toEqual([])
   })

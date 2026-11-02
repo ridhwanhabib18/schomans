@@ -6,13 +6,14 @@ import '@/features/grading/i18n'
 import '@/features/landing/i18n'
 import '@/features/news/i18n'
 import '@/features/reportcards/i18n'
+import '@/features/requests/i18n'
 import i18n from '@/shared/lib/i18n'
 
 // A key that is missing, or that names a whole group instead of a text, shows the reader "key 'x' returned an object
 // instead of string" in the page. This test reads every t() call of the Phase 4 and 5 features (and the awards section of
 // the landing page) and the navigation labels and checks that each key leads to a text.
 
-const sources = import.meta.glob(['/src/features/{grading,reportcards,dashboard,admissions,landing}/**/*.{ts,tsx}', '/src/features/news/components/AwardsSection.tsx'], {
+const sources = import.meta.glob(['/src/features/{grading,reportcards,dashboard,admissions,landing,requests}/**/*.{ts,tsx}', '/src/features/news/components/AwardsSection.tsx'], {
   query: '?raw',
   import: 'default',
   eager: true,
