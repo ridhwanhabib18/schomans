@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import admissions from '@/locales/en/admissions.json'
 import auth from '@/locales/en/auth.json'
 import common from '@/locales/en/common.json'
 import dashboard from '@/locales/en/dashboard.json'
@@ -42,6 +43,18 @@ describe('English locale files', () => {
     }
   })
 
+  it('have a text for every business error code of the admissions features', () => {
+    for (const code of [
+      'not_open', 'no_application', 'not_editable', 'document_locked', 'form_incomplete', 'documents_missing', 'not_accepted', 'reregistration_closed',
+      'already_confirmed', 'period_overlaps', 'period_in_use', 'period_not_found', 'applicant_not_found', 'document_not_found', 'not_in_review',
+      'documents_not_verified', 'not_confirmed', 'cannot_enroll', 'identity_not_configured', 'identity_failed',
+    ]) {
+      expect(admissions.errors.admissions[code as keyof typeof admissions.errors.admissions], code).toBeTruthy()
+    }
+    expect(admissions.errors.students.nisn_taken).toBeTruthy()
+    expect(admissions.errors.files.invalid_file).toBeTruthy()
+  })
+
   it('have no empty texts', () => {
     const empty: string[] = []
     const walk = (node: unknown, path: string) => {
@@ -51,7 +64,7 @@ describe('English locale files', () => {
         for (const [key, value] of Object.entries(node)) walk(value, `${path}.${key}`)
       }
     }
-    walk({ common, auth, dashboard, landing, masterdata, news, announcements, notifications, attendance, assignments, grading, reportcards }, '')
+    walk({ common, auth, dashboard, landing, masterdata, news, announcements, notifications, attendance, assignments, grading, reportcards, admissions }, '')
 
     expect(empty).toEqual([])
   })
