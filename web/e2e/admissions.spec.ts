@@ -202,6 +202,7 @@ test.describe('Admissions', () => {
     await expect(page.getByRole('heading', { name: period.name })).toBeVisible()
     await expect(page.getByText(/Applications are open until/)).toBeVisible()
     await expect(page.getByRole('link', { name: 'Apply now' })).toBeVisible()
+    await page.waitForLoadState('networkidle') // the news and the announcements have arrived
     await page.screenshot({ path: 'test-results/screens/landing-admissions-banner.png', fullPage: true })
   })
 
