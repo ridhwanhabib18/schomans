@@ -8,6 +8,9 @@ public enum ErrorType
     Forbidden,
     NotFound,
     Conflict,
+
+    /// <summary>A service the system depends on (the identity provider) did not answer or refused; not the caller's fault.</summary>
+    Unavailable,
 }
 
 /// <summary>A business error. The <see cref="Code"/> is stable (for example <c>users.not_found</c>) and ends up in ProblemDetails.</summary>
@@ -24,4 +27,6 @@ public sealed record Error(string Code, string Message, ErrorType Type)
     public static Error NotFound(string code, string message) => new(code, message, ErrorType.NotFound);
 
     public static Error Conflict(string code, string message) => new(code, message, ErrorType.Conflict);
+
+    public static Error Unavailable(string code, string message) => new(code, message, ErrorType.Unavailable);
 }

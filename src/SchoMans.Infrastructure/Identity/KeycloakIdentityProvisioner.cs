@@ -41,7 +41,7 @@ public sealed class KeycloakIdentityProvisioner(HttpClient http, IOptions<Keyclo
     {
         if (!_options.IsConfigured)
         {
-            return Error.Failure("admissions.identity_not_configured", "The identity provider is not set up to change roles (KeycloakAdmin settings).");
+            return Error.Unavailable("admissions.identity_not_configured", "The identity provider is not set up to change roles (KeycloakAdmin settings).");
         }
 
         try
@@ -58,7 +58,7 @@ public sealed class KeycloakIdentityProvisioner(HttpClient http, IOptions<Keyclo
         catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException or JsonException or InvalidOperationException)
         {
             logger.LogError(exception, "Changing the realm role of Keycloak user {UserId} failed", keycloakUserId);
-            return Error.Failure("admissions.identity_failed", "The account could not be changed to a student in the identity provider. Try again.");
+            return Error.Unavailable("admissions.identity_failed", "The account could not be changed to a student in the identity provider. Try again.");
         }
     }
 
