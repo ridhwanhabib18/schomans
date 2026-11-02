@@ -143,12 +143,11 @@ test.describe('Admissions', () => {
       await expect(admin.getByRole('heading', { level: 1 })).toBeVisible()
 
       for (let i = 0; i < 3; i++) {
-        await admin.getByRole('button', { name: 'Verify', exact: true }).nth(i).click()
+        await admin.getByRole('button', { name: /^Verify/ }).nth(i).click()
         await expect(admin.getByText('Document verified').first()).toBeVisible()
       }
 
       await admin.getByRole('button', { name: 'Accept', exact: true }).click()
-      await admin.getByRole('alertdialog').getByLabel('Note for the applicant').fill('Welcome to the school.')
       await admin.getByRole('alertdialog').getByRole('button', { name: 'Accept', exact: true }).click()
       await expect(admin.getByText('Decision saved').first()).toBeVisible()
       await admin.screenshot({ path: 'test-results/screens/admissions-staff-detail.png', fullPage: true })
@@ -156,20 +155,23 @@ test.describe('Admissions', () => {
       // 3. Until the announcement the applicant sees "in verification", nothing more.
       await applicant.reload()
       await expect(applicant.getByText('In verification', { exact: true }).first()).toBeVisible()
-      await expect(applicant.getByText('Welcome to the school.')).toHaveCount(0)
+      await expect(applicant.getByText(/Congratulations, you are accepted/)).toHaveCount(0)
       await expect(applicant.getByRole('button', { name: 'Confirm my place' })).toHaveCount(0)
 
       // 4. The announcement moment comes: the result shows, and the applicant confirms the place.
       await moveDates(request, original, { opensAt: days(-10), closesAt: days(-3), resultsAnnouncedAt: days(-1), reregistrationDeadline: days(10) })
       await applicant.reload()
       await expect(applicant.getByText('Accepted', { exact: true }).first()).toBeVisible()
-      await expect(applicant.getByText('Welcome to the school.')).toBeVisible()
+      await expect(applicant.getByText(/Congratulations, you are accepted/)).toBeVisible()
       await applicant.screenshot({ path: 'test-results/screens/admissions-applicant-accepted.png', fullPage: true })
       await applicant.getByRole('button', { name: 'Confirm my place' }).click()
       await expect(applicant.getByText('Your place is confirmed').first()).toBeVisible()
 
       // 5. The admin staff enroll the applicant; the role changes in Keycloak.
-      await admin.reload()
+      // The demo session lives in memory, so the admin goes back to the application through the list, not with a reload.
+      await admin.getByRole('link', { name: 'Admissions', exact: true }).first().click()
+      await admin.getByLabel('Search by name or email').fill(email)
+      await admin.getByRole('row', { name: new RegExp(email) }).getByRole('link', { name: 'Open' }).click()
       await admin.getByLabel('Classroom').selectOption({ label: 'Class A' })
       await admin.getByLabel('NISN').fill(nisn)
       await admin.getByRole('button', { name: 'Enroll', exact: true }).click()
