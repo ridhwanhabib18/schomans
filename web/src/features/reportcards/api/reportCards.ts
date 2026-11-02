@@ -1,9 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { getMyAttendance } from '@/api/generated/schomans'
+import { useOwnStudentId } from '@/shared/hooks/useOwnStudentId'
 import { openInNewTab } from '@/shared/lib/download'
 import { customInstance } from '@/shared/lib/http'
 import { parseProblem } from '@/shared/lib/problem'
-import { currentMonth } from '@/shared/lib/time'
 
 // Hand-written until `npm run api:generate` is run against the API with the Phase 4 endpoints.
 
@@ -50,7 +49,6 @@ interface ReportCardUrl {
 
 export const reportCardKeys = {
   all: ['report-cards'] as const,
-  ownStudent: () => [...reportCardKeys.all, 'own-student'] as const,
   terms: (studentId: string) => [...reportCardKeys.all, 'terms', studentId] as const,
   grades: (studentId: string, termId: string) => [...reportCardKeys.all, 'grades', studentId, termId] as const,
 }
@@ -63,19 +61,6 @@ const getStudentTerms = (studentId: string) =>
 
 const getReportCardUrl = (studentId: string, termId: string) =>
   customInstance<ReportCardUrl>({ url: '/api/v1/report-cards/url', method: 'GET', params: { studentId, termId } })
-
-/**
- * The student record id of the signed-in student. The API has no endpoint for it, but the attendance of the student
- * names it, so that answer is used.
- */
-export function useOwnStudentId(enabled = true) {
-  return useQuery({
-    queryKey: reportCardKeys.ownStudent(),
-    queryFn: async () => (await getMyAttendance({ Month: currentMonth() })).studentId,
-    enabled,
-    staleTime: 30 * 60_000,
-  })
-}
 
 /** The terms of the student's academic year. Students and parents may not read the academic years themselves, so they ask here. */
 export function useStudentTerms(studentId: string) {
@@ -110,3 +95,6 @@ export function useOpenReportCard() {
     },
   })
 }
+
+// The own student id is shared with other features; it stays importable from here for the pages of this one.
+export { useOwnStudentId }
