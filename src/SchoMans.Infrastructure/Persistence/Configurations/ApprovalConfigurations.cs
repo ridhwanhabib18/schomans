@@ -40,6 +40,10 @@ internal sealed class ApprovalConfiguration : IEntityTypeConfiguration<Approval>
 {
     public void Configure(EntityTypeBuilder<Approval> builder)
     {
+        // Added to the collection of a parent that is already tracked, the child has its key set by the domain: without this EF
+        // takes it for an existing row and updates it (0 rows). The same rule as AssignmentAttachment.
+        builder.Property(a => a.Id).ValueGeneratedNever();
+
         builder.Property(a => a.Decision).HasConversion<string>().HasMaxLength(20);
         builder.Property(a => a.Notes).HasMaxLength(Request.NoteMaxLength);
 

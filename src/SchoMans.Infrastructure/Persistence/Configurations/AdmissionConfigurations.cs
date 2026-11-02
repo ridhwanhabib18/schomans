@@ -46,6 +46,10 @@ internal sealed class ApplicantDocumentConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<ApplicantDocument> builder)
     {
+        // Added to the collection of a parent that is already tracked, the child has its key set by the domain: without this EF
+        // takes it for an existing row and updates it (0 rows). The same rule as AssignmentAttachment.
+        builder.Property(d => d.Id).ValueGeneratedNever();
+
         builder.Property(d => d.Type).HasConversion<string>().HasMaxLength(20);
         builder.Property(d => d.Status).HasConversion<string>().HasMaxLength(20);
         builder.Property(d => d.FileKey).HasMaxLength(300).IsRequired();

@@ -146,7 +146,6 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("SchoMans.Domain.Admissions.ApplicantDocument", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ApplicantId")
@@ -203,7 +202,6 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("SchoMans.Domain.Approvals.Approval", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ApproverId")
@@ -945,7 +943,6 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("SchoMans.Domain.Grading.AchievementDescription", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Body")
