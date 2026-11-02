@@ -21,15 +21,22 @@ public sealed class GetLetterUrlHandler(IAppDbContext db, ICurrentUser currentUs
 
     public async Task<Result<LetterUrlDto>> Handle(GetLetterUrlQuery query, CancellationToken ct)
     {
-        var letter = await db.Letters.AsNoTracking().Include(l => l.Request).FirstOrDefaultAsync(l => l.RequestId == query.RequestId, ct);
+        var request = await db.Requests.AsNoTracking().FirstOrDefaultAsync(r => r.Id == query.RequestId, ct);
+        if (request is null)
+        {
+            return Error.NotFound("requests.not_found", "The request does not exist.");
+        }
+
+        // The right to see the request comes first: a stranger learns nothing, not even whether a letter exists.
+        if (!await RequestSupport.CanViewAsync(db, currentUser, request, ct))
+        {
+            return Error.Forbidden("requests.not_yours", "You may not open this letter.");
+        }
+
+        var letter = await db.Letters.AsNoTracking().FirstOrDefaultAsync(l => l.RequestId == request.Id, ct);
         if (letter is null)
         {
             return Error.NotFound("letters.not_found", "There is no letter for this request.");
-        }
-
-        if (!await RequestSupport.CanViewAsync(db, currentUser, letter.Request!, ct))
-        {
-            return Error.Forbidden("requests.not_yours", "You may not open this letter.");
         }
 
         return new LetterUrlDto(storage.CreateDownloadUrl(letter.PdfKey, Lifetime), timeProvider.GetUtcNow() + Lifetime, letter.LetterNumber);
