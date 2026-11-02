@@ -43,6 +43,10 @@ export async function adminApi(request: APIRequestContext) {
       const response = await request.post(`${api}${path}`, { headers, data: body })
       return { status: response.status(), body: (await response.json().catch(() => null)) as T }
     },
+    async put<T>(path: string, body: unknown): Promise<{ status: number; body: T }> {
+      const response = await request.put(`${api}${path}`, { headers, data: body })
+      return { status: response.status(), body: (await response.json().catch(() => null)) as T }
+    },
     async del(path: string): Promise<void> {
       await request.delete(`${api}${path}`, { headers })
     },
