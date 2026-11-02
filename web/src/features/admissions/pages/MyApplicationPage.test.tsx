@@ -58,14 +58,20 @@ const application = (overrides: Partial<MyApplication> = {}): MyApplication => (
 
 type Handler = (config: { url: string; method: string; data?: unknown }) => unknown
 
+/** The steps that answer with the whole application: what they answer is what the next GET returns, as on the server. */
+const answersWithApplication = new Set(['POST /me', 'PUT /me/form', 'PUT /me/documents', 'POST /me/submit', 'POST /me/reregistration'])
+
 /** The API as the applicant's page sees it: one handler per `METHOD path`. */
 function serve(mine: MyAdmission, handlers: Record<string, Handler> = {}) {
+  let current = mine
   http.customInstance.mockImplementation(async (config: { url: string; method: string; data?: unknown }) => {
     const key = `${config.method} ${config.url.replace('/api/v1/admissions', '')}`
-    if (key === 'GET /me') return mine
+    if (key === 'GET /me') return current
     const handler = handlers[key]
     if (!handler) throw new Error(`unexpected request ${key}`)
-    return handler(config)
+    const result = await handler(config)
+    if (answersWithApplication.has(key)) current = { ...current, application: result as MyApplication }
+    return result
   })
 }
 
@@ -156,6 +162,29 @@ describe('MyApplicationPage', () => {
     expect(upload.put).toHaveBeenCalledWith('https://storage.test/put', expect.any(File), 'application/pdf')
     expect(calls('PUT /me/documents')[0]?.data).toEqual({ type: 'BirthCertificate', fileKey: 'admissions/a1/BirthCertificate/x.pdf', fileName: 'akta.pdf' })
     expect(await screen.findByText('BirthCertificate.pdf')).toBeTruthy()
+  })
+
+  it('keeps both documents when two uploads run side by side and the slower answer knows only its own', async () => {
+    // The server holds both documents in the end, but each PUT answers with the state of its own moment.
+    const stored: ApplicantDocument[] = []
+    http.customInstance.mockImplementation(async (config: { url: string; method: string; data?: { type?: DocumentType } }) => {
+      const key = `${config.method} ${config.url.replace('/api/v1/admissions', '')}`
+      if (key === 'GET /me') return { period, application: application({ documents: [...stored] }) }
+      if (key === 'POST /me/documents/upload-url') return { url: 'https://storage.test/put', key: `admissions/a1/${config.data?.type}/x.pdf`, contentType: 'application/pdf', expiresAt: '2026-10-29T05:00:00Z' }
+      if (key === 'PUT /me/documents') {
+        const added = doc(config.data!.type!)
+        stored.push(added)
+        return application({ documents: [added] })
+      }
+      throw new Error(`unexpected request ${key}`)
+    })
+    renderPage(<MyApplicationPage />)
+
+    fireEvent.change(await screen.findByLabelText('Birth certificate: choose a file'), { target: { files: [pdf('akta.pdf')] } })
+    fireEvent.change(await screen.findByLabelText('Family card: choose a file'), { target: { files: [pdf('kk.pdf')] } })
+
+    expect(await screen.findByText('BirthCertificate.pdf')).toBeTruthy()
+    expect(await screen.findByText('FamilyCard.pdf')).toBeTruthy()
   })
 
   it('refuses a wrong file type or a file over 10 MB before anything is sent', async () => {
