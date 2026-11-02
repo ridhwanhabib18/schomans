@@ -165,13 +165,19 @@ export function useMyAdmission() {
   })
 }
 
-/** Every step of the application answers with the whole application: the page keeps it in the cache, no second request. */
+/**
+ * Every step of the application answers with the whole application, which goes into the cache at once. The server is
+ * asked again afterwards: two uploads that run side by side each answer with the state of their own moment, and the
+ * one that arrives last must not hide the document of the other.
+ */
 function useApplicationMutation<TVariables>(mutationFn: (variables: TVariables) => Promise<MyApplication>) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn,
-    onSuccess: (application) =>
-      queryClient.setQueryData<MyAdmission>(admissionKeys.mine(), (current) => (current ? { ...current, application } : { period: null, application })),
+    onSuccess: (application) => {
+      queryClient.setQueryData<MyAdmission>(admissionKeys.mine(), (current) => (current ? { ...current, application } : { period: null, application }))
+      return queryClient.invalidateQueries({ queryKey: admissionKeys.mine() })
+    },
   })
 }
 

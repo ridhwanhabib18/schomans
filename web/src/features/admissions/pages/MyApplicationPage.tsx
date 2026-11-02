@@ -23,7 +23,10 @@ import { StatusTracker } from '../components/StatusTracker'
 import { admissionErrorText } from '../errors'
 import '../i18n'
 
-const sameForm = (a: ApplicantForm, b: ApplicantForm) => JSON.stringify(a) === JSON.stringify(b)
+const FIELDS = ['fullName', 'dateOfBirth', 'placeOfBirth', 'address', 'guardianName', 'guardianPhone', 'previousSchool'] as const
+
+/** The seven fields of the form: anything else in the object (a derived value of the API) does not make the form look changed. */
+const sameForm = (a: ApplicantForm, b: ApplicantForm) => FIELDS.every((field) => (a[field] ?? '') === (b[field] ?? ''))
 
 const formIsComplete = (form: ApplicantForm) =>
   [form.fullName, form.dateOfBirth, form.placeOfBirth, form.address, form.guardianName, form.guardianPhone, form.previousSchool].every((value) => (value ?? '').trim() !== '')
