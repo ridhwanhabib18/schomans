@@ -159,9 +159,34 @@
       "webOrigins": [
         "http://localhost:5173"
       ]
+    },
+    {
+      "clientId": "schomans-admin-api",
+      "name": "SchoMans API (role changes)",
+      "description": "Used by the API alone, with its service account, to give an enrolled applicant the realm role Student. The service account holds only manage-users and view-realm, so its token may carry all its roles (full scope). Dev secret: set a real one outside local development.",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "dev-only-change-me",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true
     }
   ],
   "users": [
+    {
+      "username": "service-account-schomans-admin-api",
+      "enabled": true,
+      "serviceAccountClientId": "schomans-admin-api",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "view-realm"
+        ]
+      }
+    },
     {
       "username": "principal@schomans.demo",
       "email": "principal@schomans.demo",
