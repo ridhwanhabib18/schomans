@@ -317,6 +317,8 @@ public class AdmissionEndpointTests(ApiFixture fixture) : IClassFixture<ApiFixtu
         await FreshOpenPeriodAsync(admin);
         using var applicant = NewApplicant(out _, out _);
 
+        var raw = await (await applicant.PostAsync($"{Url}/me", null)).Content.ReadAsStringAsync();
+        Assert.DoesNotContain("isComplete", raw, StringComparison.OrdinalIgnoreCase); // a derived value is not part of the form the client sends back
         var first = await (await applicant.PostAsync($"{Url}/me", null)).ReadAsync<MyApplicationDto>();
         var second = await (await applicant.PostAsync($"{Url}/me", null)).ReadAsync<MyApplicationDto>();
         await SubmittedApplicationAsync2(applicant);

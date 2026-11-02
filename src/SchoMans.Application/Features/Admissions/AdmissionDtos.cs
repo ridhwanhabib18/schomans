@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using SchoMans.Domain.Admissions;
 
 namespace SchoMans.Application.Features.Admissions;
@@ -27,6 +28,8 @@ public sealed record ApplicantFormDto(
 {
     public static readonly ApplicantFormDto Empty = new(string.Empty, null, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
+    /// <summary>Derived from the fields, so it is neither stored in the form JSON nor sent to the client (a stale copy of it made the web form look unsaved).</summary>
+    [JsonIgnore]
     public bool IsComplete =>
         !string.IsNullOrWhiteSpace(FullName)
         && DateOfBirth is not null
