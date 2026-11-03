@@ -22,6 +22,14 @@ public class AiGatewayTests(ApiFixture fixture) : IClassFixture<ApiFixture>
 
         public string Provider => "Scripted";
 
+        public Task<Result<AiChatReply>> ChatAsync(AiChatRequest request, CancellationToken ct)
+        {
+            Calls++;
+            return Task.FromResult<Result<AiChatReply>>(fail
+                ? Error.Unavailable("ai.provider_failed", "down")
+                : new AiChatReply("ok", [], Provider, "scripted-1", 100, cost));
+        }
+
         public Task<Result<AiCompletion>> CompleteAsync(AiRequest request, CancellationToken ct)
         {
             Calls++;

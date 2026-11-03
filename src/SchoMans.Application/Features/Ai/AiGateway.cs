@@ -36,6 +36,39 @@ public sealed class AiGateway(IAppDbContext db, IAiService ai, ISchoolClock cloc
     /// </param>
     public async Task<Result<AiCompletion>> RunAsync(Guid? userId, AiRequest request, CancellationToken ct, bool bulk = false)
     {
+        if (await RefusalAsync(userId, ct) is { } refusal)
+        {
+            return refusal;
+        }
+
+        var watch = Stopwatch.StartNew();
+        var result = await ai.CompleteAsync(request, ct);
+        watch.Stop();
+
+        var completion = result.IsSuccess ? result.Value : null;
+        await LogAsync(userId, request.Feature, completion?.Provider, completion?.Model, completion?.Tokens ?? 0, completion?.CostUsd ?? 0m, watch, result.IsSuccess, bulk, ct);
+        return result;
+    }
+
+    /// <summary>One step of a conversation with tools. The same limits and the same log as <see cref="RunAsync"/>; see there for <paramref name="bulk"/>.</summary>
+    public async Task<Result<AiChatReply>> ChatAsync(Guid? userId, AiChatRequest request, CancellationToken ct, bool bulk = false)
+    {
+        if (await RefusalAsync(userId, ct) is { } refusal)
+        {
+            return refusal;
+        }
+
+        var watch = Stopwatch.StartNew();
+        var result = await ai.ChatAsync(request, ct);
+        watch.Stop();
+
+        var reply = result.IsSuccess ? result.Value : null;
+        await LogAsync(userId, request.Feature, reply?.Provider, reply?.Model, reply?.Tokens ?? 0, reply?.CostUsd ?? 0m, watch, result.IsSuccess, bulk, ct);
+        return result;
+    }
+
+    private async Task<Error?> RefusalAsync(Guid? userId, CancellationToken ct)
+    {
         if (await SpentThisMonthAsync(ct) >= _options.MonthlyBudgetUsd)
         {
             return Error.TooManyRequests("ai.budget_exhausted", "The AI budget of this month is used up. The AI features are switched off until next month.");
@@ -46,24 +79,13 @@ public sealed class AiGateway(IAppDbContext db, IAiService ai, ISchoolClock cloc
             return Error.TooManyRequests("ai.daily_limit", $"You have used your {_options.DailyCallsPerUser} AI calls of today. Try again tomorrow.");
         }
 
-        var watch = Stopwatch.StartNew();
-        var result = await ai.CompleteAsync(request, ct);
-        watch.Stop();
+        return null;
+    }
 
-        var completion = result.IsSuccess ? result.Value : null;
-        db.AiUsageLogs.Add(AiUsageLog.Create(
-            userId,
-            request.Feature,
-            completion?.Provider ?? ai.Provider,
-            completion?.Model ?? string.Empty,
-            completion?.Tokens ?? 0,
-            completion?.CostUsd ?? 0m,
-            (int)watch.ElapsedMilliseconds,
-            result.IsSuccess,
-            bulk));
+    private async Task LogAsync(Guid? userId, string feature, string? provider, string? model, int tokens, decimal costUsd, Stopwatch watch, bool succeeded, bool bulk, CancellationToken ct)
+    {
+        db.AiUsageLogs.Add(AiUsageLog.Create(userId, feature, provider ?? ai.Provider, model ?? string.Empty, tokens, costUsd, (int)watch.ElapsedMilliseconds, succeeded, bulk));
         await db.SaveChangesAsync(ct);
-
-        return result;
     }
 
     private Task<int> CallsTodayAsync(Guid userId, CancellationToken ct)

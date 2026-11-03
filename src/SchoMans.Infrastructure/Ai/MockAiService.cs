@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using SchoMans.Application.Common.Errors;
 using SchoMans.Application.Common.Interfaces;
 using SchoMans.Application.Features.Ai;
+using SchoMans.Application.Features.PrincipalAssistant;
 
 namespace SchoMans.Infrastructure.Ai;
 
@@ -27,6 +28,94 @@ public sealed class MockAiService : IAiService
         // The mock "reads" the prompt so its token counts move with the input, like a real provider's would.
         var tokens = (request.SystemPrompt.Length + request.UserPrompt.Length + text.Length) / 4;
         return Task.FromResult<Result<AiCompletion>>(new AiCompletion(text, Provider, "mock", tokens, 0m));
+    }
+
+    /// <summary>
+    /// AI-04: the mock "understands" a question by its keywords and asks for the matching functions; once their results are in, it
+    /// answers with their summaries. A real model decides this itself; the use case behaves the same either way.
+    /// </summary>
+    public Task<Result<AiChatReply>> ChatAsync(AiChatRequest request, CancellationToken ct)
+    {
+        var last = request.Turns.LastOrDefault();
+        var calls = new List<AiToolCall>();
+        string text;
+        if (last?.Role == "tool")
+        {
+            var summaries = (last.ToolResults ?? []).Select(r => Summary(r.Content)).Where(t => t.Length > 0).ToList();
+            text = summaries.Count == 0 ? "I could not find an answer in the data." : "Here is what I found. " + string.Join(" ", summaries);
+        }
+        else
+        {
+            var question = (last?.Text ?? string.Empty).ToLowerInvariant();
+            var classroom = Regex.Match(question, @"\bclass(?:room)?\s+([a-z0-9-]+)");
+            var args = classroom.Success ? JsonSerializer.Serialize(new { classroom = classroom.Groups[1].Value }) : "{}";
+
+            void Ask(string name, string arguments) => calls.Add(new AiToolCall($"mock-call-{calls.Count + 1}", name, arguments));
+            if (Regex.IsMatch(question, "trend|weekly|per week"))
+            {
+                Ask(AssistantToolNames.AttendanceTrend, args);
+            }
+            else if (Regex.IsMatch(question, "low attendance|at risk|below|worried|struggling"))
+            {
+                Ask(AssistantToolNames.StudentsLowAttendance, args);
+            }
+            else if (Regex.IsMatch(question, "attendance|absent|absence|present"))
+            {
+                Ask(AssistantToolNames.AttendanceByClassroom, args);
+            }
+
+            if (Regex.IsMatch(question, "grade|score|average|subject"))
+            {
+                Ask(AssistantToolNames.AverageGradesBySubject, args);
+            }
+
+            if (Regex.IsMatch(question, "request|approval|pending|leave|letter"))
+            {
+                Ask(AssistantToolNames.PendingRequests, "{}");
+            }
+
+            if (Regex.IsMatch(question, "applicant|admission|ppdb|enrol"))
+            {
+                Ask(AssistantToolNames.AdmissionApplicants, "{}");
+            }
+
+            if (Regex.IsMatch(question, "assignment|homework|submission|hand(?:ed)? in"))
+            {
+                Ask(AssistantToolNames.AssignmentSummary, args);
+            }
+
+            if (calls.Count == 0 && Regex.IsMatch(question, "classrooms|classes|how many students"))
+            {
+                Ask(AssistantToolNames.ListClassrooms, "{}");
+            }
+
+            text = calls.Count == 0
+                ? "I can answer questions about attendance, grades, pending requests, admissions, assignments and the classrooms of the school."
+                : string.Empty;
+        }
+
+        var tokens = (request.SystemPrompt.Length + request.Turns.Sum(t => t.Text.Length + (t.ToolResults?.Sum(r => r.Content.Length) ?? 0)) + text.Length) / 4;
+        return Task.FromResult<Result<AiChatReply>>(new AiChatReply(text, calls, Provider, "mock", tokens, 0m));
+    }
+
+    private static string Summary(string content)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(content);
+            foreach (var name in new[] { "summary", "error" })
+            {
+                if (document.RootElement.TryGetProperty(name, out var value) && value.ValueKind == JsonValueKind.String)
+                {
+                    return value.GetString() ?? string.Empty;
+                }
+            }
+        }
+        catch (JsonException)
+        {
+        }
+
+        return string.Empty;
     }
 
     private static readonly string[] HomeSuggestions =
