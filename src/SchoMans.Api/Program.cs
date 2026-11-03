@@ -61,6 +61,8 @@ app.MapGradeWeightEndpoints();
 app.MapNewsEndpoints();
 app.MapAnnouncementEndpoints();
 app.MapNotificationEndpoints();
+app.MapProgressSummaryEndpoints();
+app.MapTeacherNoteEndpoints();
 app.MapFileEndpoints();
 app.MapSitemapEndpoints();
 app.MapHealthEndpoints();

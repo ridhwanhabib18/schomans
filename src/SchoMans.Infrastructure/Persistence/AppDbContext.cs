@@ -77,6 +77,10 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     public DbSet<AiUsageLog> AiUsageLogs => Set<AiUsageLog>();
 
+    public DbSet<TeacherNote> TeacherNotes => Set<TeacherNote>();
+
+    public DbSet<ProgressSummary> ProgressSummaries => Set<ProgressSummary>();
+
     public void SetExpectedRowVersion(BaseEntity entity, byte[] rowVersion)
     {
         var entry = Entry(entity);

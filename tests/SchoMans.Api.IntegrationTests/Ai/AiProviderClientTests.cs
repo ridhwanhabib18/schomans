@@ -162,11 +162,12 @@ public class AiProviderClientTests
     public async Task The_mock_answers_without_a_network_and_its_tokens_follow_the_prompt()
     {
         IAiService mock = new MockAiService();
+        var generic = Ask with { Feature = "Test" };
 
-        var short_ = await mock.CompleteAsync(Ask, CancellationToken.None);
-        var long_ = await mock.CompleteAsync(Ask with { UserPrompt = new string('x', 4000) }, CancellationToken.None);
+        var short_ = await mock.CompleteAsync(generic, CancellationToken.None);
+        var long_ = await mock.CompleteAsync(generic with { UserPrompt = new string('x', 4000) }, CancellationToken.None);
 
         Assert.True(long_.Value.Tokens > short_.Value.Tokens);
-        Assert.Equal("This is an answer of the mock AI.", (await mock.CompleteAsync(Ask with { JsonOutput = false }, CancellationToken.None)).Value.Text);
+        Assert.Equal("This is an answer of the mock AI.", (await mock.CompleteAsync(generic with { JsonOutput = false }, CancellationToken.None)).Value.Text);
     }
 }

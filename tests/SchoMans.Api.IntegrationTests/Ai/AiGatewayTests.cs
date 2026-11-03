@@ -159,7 +159,7 @@ public class AiGatewayTests(ApiFixture fixture) : IClassFixture<ApiFixture>
         await using var scope = fixture.Factory.Services.CreateAsyncScope();
 
         var ai = scope.ServiceProvider.GetRequiredService<IAiService>();
-        var result = await ai.CompleteAsync(Ask, CancellationToken.None);
+        var result = await ai.CompleteAsync(Ask with { Feature = "Test" }, CancellationToken.None);
 
         Assert.IsType<MockAiService>(ai);
         Assert.Equal(0m, result.Value.CostUsd);

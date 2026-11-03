@@ -3,6 +3,7 @@ using SchoMans.Application.Features.Admissions.AnnounceResults;
 using SchoMans.Application.Features.Assignments.SendDueReminders;
 using SchoMans.Application.Features.Attendance.CloseStaleSessions;
 using SchoMans.Application.Features.Attendance.RotateQrCodes;
+using SchoMans.Application.Features.ProgressSummaries.DraftProgressSummaries;
 
 namespace SchoMans.Infrastructure.Jobs;
 
@@ -26,6 +27,16 @@ public sealed class CloseStaleSessionsJob(CloseStaleSessionsHandler handler)
 /// <summary>Every morning at 07:00 school time: remind students of assignments due tomorrow.</summary>
 [DisableConcurrentExecution(timeoutInSeconds: 600)]
 public sealed class AssignmentDueReminderJob(SendDueRemindersHandler handler)
+{
+    public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
+}
+
+/// <summary>
+/// 06:00 school time on the 1st to the 3rd of each month (AI-01): draft the summaries of the previous month. Each run only
+/// drafts the students that still have none, so the later days make up for a provider that was down.
+/// </summary>
+[DisableConcurrentExecution(timeoutInSeconds: 3_000)]
+public sealed class ProgressSummaryDraftJob(DraftProgressSummariesHandler handler)
 {
     public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
 }

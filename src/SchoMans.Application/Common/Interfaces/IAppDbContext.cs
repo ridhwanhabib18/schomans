@@ -78,6 +78,10 @@ public interface IAppDbContext
 
     DbSet<AiUsageLog> AiUsageLogs { get; }
 
+    DbSet<TeacherNote> TeacherNotes { get; }
+
+    DbSet<ProgressSummary> ProgressSummaries { get; }
+
     ChangeTracker ChangeTracker { get; }
 
     /// <summary>Needed for explicit transactions (through an execution strategy, because SQL Server retries are enabled).</summary>
