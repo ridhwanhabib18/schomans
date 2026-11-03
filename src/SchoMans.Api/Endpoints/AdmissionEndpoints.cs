@@ -6,6 +6,7 @@ using SchoMans.Application.Common;
 using SchoMans.Application.Features.Admissions;
 using SchoMans.Application.Features.Admissions.ApplicantDocuments;
 using SchoMans.Application.Features.Admissions.ConfirmReregistration;
+using SchoMans.Application.Features.Admissions.ExtractDocuments;
 using SchoMans.Application.Features.Admissions.GetMyAdmission;
 using SchoMans.Application.Features.Admissions.GetOpenAdmission;
 using SchoMans.Application.Features.Admissions.Periods;
@@ -59,6 +60,15 @@ public static class AdmissionEndpoints
             .WithValidation<AttachDocumentCommand>()
             .WithName("AttachApplicantDocument");
 
+        // AI-03: the AI reads a photo of a document; what it finds is a suggestion the applicant confirms and staff compare.
+        group.MapPost("/me/documents/{type}/extract", ExtractMyDocument)
+            .RequireAuthorization(Policies.Applicant)
+            .WithName("ExtractMyDocument");
+
+        group.MapGet("/me/extractions", GetMyExtractions)
+            .RequireAuthorization(Policies.Applicant)
+            .WithName("GetMyExtractions");
+
         group.MapPost("/me/submit", SubmitApplication)
             .RequireAuthorization(Policies.Applicant)
             .WithName("SubmitApplication");
@@ -98,6 +108,14 @@ public static class AdmissionEndpoints
         group.MapGet("/applicants/{id:guid}/documents/{type}/url", GetApplicantDocumentUrl)
             .RequireAuthorization(Policies.Admin)
             .WithName("GetApplicantDocumentUrl");
+
+        group.MapPost("/applicants/{id:guid}/documents/{type}/extract", ExtractApplicantDocument)
+            .RequireAuthorization(Policies.Admin)
+            .WithName("ExtractApplicantDocument");
+
+        group.MapGet("/applicants/{id:guid}/extractions", GetApplicantExtractions)
+            .RequireAuthorization(Policies.Admin)
+            .WithName("GetApplicantExtractions");
 
         group.MapPut("/applicants/{id:guid}/documents/{type}/review", ReviewDocument)
             .RequireAuthorization(Policies.Admin)
@@ -140,6 +158,22 @@ public static class AdmissionEndpoints
     private static async Task<Results<Ok<MyApplicationDto>, ProblemHttpResult>> AttachDocument(
         [FromBody] AttachDocumentCommand command, AttachDocumentHandler handler, CancellationToken ct)
         => (await handler.Handle(command, ct)).ToHttpResult();
+
+    private static async Task<Results<Ok<DocumentExtractionDto>, ProblemHttpResult>> ExtractMyDocument(
+        [FromRoute] DocumentType type, ExtractMyDocumentHandler handler, CancellationToken ct)
+        => (await handler.Handle(new ExtractMyDocumentCommand(type), ct)).ToHttpResult();
+
+    private static async Task<Results<Ok<ApplicantExtractionsDto>, ProblemHttpResult>> GetMyExtractions(
+        GetMyExtractionsHandler handler, CancellationToken ct)
+        => (await handler.Handle(ct)).ToHttpResult();
+
+    private static async Task<Results<Ok<DocumentExtractionDto>, ProblemHttpResult>> ExtractApplicantDocument(
+        [FromRoute] Guid id, [FromRoute] DocumentType type, ExtractApplicantDocumentHandler handler, CancellationToken ct)
+        => (await handler.Handle(new ExtractApplicantDocumentCommand(id, type), ct)).ToHttpResult();
+
+    private static async Task<Results<Ok<ApplicantExtractionsDto>, ProblemHttpResult>> GetApplicantExtractions(
+        [FromRoute] Guid id, GetApplicantExtractionsHandler handler, CancellationToken ct)
+        => (await handler.Handle(new GetApplicantExtractionsQuery(id), ct)).ToHttpResult();
 
     private static async Task<Results<Ok<MyApplicationDto>, ProblemHttpResult>> SubmitApplication(
         SubmitApplicationHandler handler, CancellationToken ct)

@@ -22,6 +22,7 @@ public sealed class MockAiService : IAiService
         {
             AiFeatures.ProgressSummary => MockProgressSummary(request.UserPrompt),
             AiFeatures.AchievementDescription => MockAchievementDescription(request.UserPrompt),
+            AiFeatures.DocumentExtraction => MockDocumentExtraction(request),
             _ => request.JsonOutput ? "{\"mock\":true}" : "This is an answer of the mock AI.",
         };
 
@@ -174,6 +175,33 @@ public sealed class MockAiService : IAiService
         "{0} needs a little more support to master {1}.",
         "Further attention to {1} will help {0} move forward.",
     ];
+
+    /// <summary>
+    /// AI-03: the mock cannot read a photo, so it gives the same fictional child for every document, as a consistent family would
+    /// have. A file whose name contains "mismatch" gets another date of birth, to show the flag for documents that disagree.
+    /// </summary>
+    private static string MockDocumentExtraction(AiRequest request)
+    {
+        var type = Regex.Match(request.UserPrompt, @"Document type: (birth certificate|family card|school report card)").Groups[1].Value;
+        var mismatch = request.Images?.Any(i => i.Name.Contains("mismatch", StringComparison.OrdinalIgnoreCase)) == true;
+
+        object? grades = type == "school report card"
+            ? new[] { new { subject = "Mathematics", score = 82 }, new { subject = "English", score = 78 }, new { subject = "Natural Sciences", score = 85 } }
+            : Array.Empty<object>();
+        var fields = new
+        {
+            fullName = "Rina Putri Lestari",
+            nik = type == "school report card" ? null : "3201014505140001",
+            dateOfBirth = mismatch ? "2014-06-17" : "2014-05-05",
+            placeOfBirth = "Bandung",
+            address = type == "family card" ? "Jl. Merdeka No. 10, Bandung" : null,
+            fatherName = type == "school report card" ? null : "Budi Santoso",
+            motherName = type == "school report card" ? null : "Sari Lestari",
+            guardianName = type == "family card" ? "Budi Santoso" : null,
+            grades,
+        };
+        return JsonSerializer.Serialize(fields);
+    }
 
     private static readonly string[] Closings =
     [

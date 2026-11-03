@@ -55,6 +55,7 @@ internal sealed class ApplicantDocumentConfiguration : IEntityTypeConfiguration<
         builder.Property(d => d.FileKey).HasMaxLength(300).IsRequired();
         builder.Property(d => d.FileName).HasMaxLength(ApplicantDocument.FileNameMaxLength).IsRequired();
         builder.Property(d => d.ReviewNote).HasMaxLength(ApplicantDocument.NoteMaxLength);
+        builder.Property(d => d.ExtractedData).HasMaxLength(ApplicantDocument.ExtractedDataMaxLength);
 
         // One file per kind of document and applicant; uploading again replaces it.
         builder.HasIndex(d => new { d.ApplicantId, d.Type }).IsUnique().HasFilter("[IsDeleted] = 0");

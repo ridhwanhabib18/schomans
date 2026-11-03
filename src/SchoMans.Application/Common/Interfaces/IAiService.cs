@@ -2,10 +2,14 @@ using SchoMans.Application.Common.Errors;
 
 namespace SchoMans.Application.Common.Interfaces;
 
+/// <summary>An image the model is shown (AI-03 reads photos of documents). <paramref name="Name"/> is for the mock and the log only; a provider never gets it.</summary>
+public sealed record AiImage(string MediaType, byte[] Data, string Name = "");
+
 /// <summary>What is asked of the model. The system prompt is the long, stable part (cacheable); the user prompt changes per call.</summary>
 /// <param name="Feature">The feature asking (see <c>AiFeatures</c>); the mock answers per feature.</param>
 /// <param name="JsonOutput">The answer must be a single JSON object. The caller still validates it before use.</param>
-public sealed record AiRequest(string Feature, string SystemPrompt, string UserPrompt, bool JsonOutput = false);
+/// <param name="Images">Images shown with the user prompt; the provider must be able to read images.</param>
+public sealed record AiRequest(string Feature, string SystemPrompt, string UserPrompt, bool JsonOutput = false, IReadOnlyList<AiImage>? Images = null);
 
 public sealed record AiCompletion(string Text, string Provider, string Model, int Tokens, decimal CostUsd);
 

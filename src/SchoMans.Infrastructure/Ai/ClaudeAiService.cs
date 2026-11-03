@@ -36,7 +36,7 @@ public sealed class ClaudeAiService(HttpClient http, IOptions<AiOptions> options
             model = _options.Model,
             max_tokens = _options.MaxTokens,
             system = new[] { new { type = "text", text = system, cache_control = new { type = "ephemeral" } } },
-            messages = new[] { new { role = "user", content = request.UserPrompt } },
+            messages = new[] { new { role = "user", content = UserContent(request) } },
             output_config = new { effort = "low" },
         };
 
@@ -166,6 +166,13 @@ public sealed class ClaudeAiService(HttpClient http, IOptions<AiOptions> options
             return Error.Unavailable("ai.provider_failed", "The AI model did not answer. Try again in a moment.");
         }
     }
+
+    /// <summary>The user prompt as text, or as image blocks followed by the text when the request shows images.</summary>
+    private static object UserContent(AiRequest request) =>
+        request.Images is { Count: > 0 } images
+            ? images.Select(i => (object)new { type = "image", source = new { type = "base64", media_type = i.MediaType, data = Convert.ToBase64String(i.Data) } })
+                .Append(new { type = "text", text = request.UserPrompt }).ToList()
+            : request.UserPrompt;
 
     private static int Count(JsonElement usage, string name) => usage.TryGetProperty(name, out var value) && value.TryGetInt32(out var count) ? count : 0;
 }

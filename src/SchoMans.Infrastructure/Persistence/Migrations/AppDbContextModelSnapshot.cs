@@ -154,6 +154,13 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<DateTimeOffset?>("ExtractedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("ExtractedData")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
                     b.Property<string>("FileKey")
                         .IsRequired()
                         .HasMaxLength(300)

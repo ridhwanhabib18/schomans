@@ -31,5 +31,8 @@ public interface IFileStorage
     /// <summary>Looks the object up after an upload, so a key is only saved when the file really exists.</summary>
     Task<StoredObject?> GetObjectInfoAsync(FileBucket bucket, string key, CancellationToken ct);
 
+    /// <summary>The content of an object, or null when it does not exist. For files the server has to read itself (AI-03 reads document photos).</summary>
+    Task<byte[]?> DownloadAsync(FileBucket bucket, string key, CancellationToken ct);
+
     Task DeleteAsync(FileBucket bucket, string key, CancellationToken ct);
 }

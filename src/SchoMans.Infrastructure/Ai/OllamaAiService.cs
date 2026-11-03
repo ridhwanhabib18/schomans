@@ -21,10 +21,10 @@ public sealed class OllamaAiService(HttpClient http, IOptions<AiOptions> options
         {
             ["model"] = _options.Model,
             ["stream"] = false,
-            ["messages"] = new[]
+            ["messages"] = new object[]
             {
                 new { role = "system", content = request.SystemPrompt },
-                new { role = "user", content = request.UserPrompt },
+                new { role = "user", content = request.UserPrompt, images = (request.Images ?? []).Select(i => Convert.ToBase64String(i.Data)).ToList() },
             },
         };
         if (request.JsonOutput)

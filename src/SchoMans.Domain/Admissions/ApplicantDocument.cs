@@ -7,6 +7,7 @@ public sealed class ApplicantDocument : BaseEntity
 {
     public const int FileNameMaxLength = 200;
     public const int NoteMaxLength = 500;
+    public const int ExtractedDataMaxLength = 4000;
 
     private ApplicantDocument()
     {
@@ -24,6 +25,11 @@ public sealed class ApplicantDocument : BaseEntity
 
     public string? ReviewNote { get; private set; }
 
+    /// <summary>What the AI read from the photo (AI-03) as JSON. A suggestion: the applicant confirms it and staff compare it with the other documents.</summary>
+    public string? ExtractedData { get; private set; }
+
+    public DateTimeOffset? ExtractedAt { get; private set; }
+
     public static ApplicantDocument Create(Guid applicantId, DocumentType type, string fileKey, string fileName)
     {
         var document = new ApplicantDocument { ApplicantId = applicantId, Type = type };
@@ -37,6 +43,22 @@ public sealed class ApplicantDocument : BaseEntity
         SetFile(fileKey, fileName);
         Status = DocumentStatus.Pending;
         ReviewNote = null;
+        ExtractedData = null;
+        ExtractedAt = null;
+    }
+
+    /// <summary>Keeps what the AI read from the current file; a new file clears it.</summary>
+    public void SetExtraction(string json, DateTimeOffset now)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(json);
+
+        if (json.Length > ExtractedDataMaxLength)
+        {
+            throw new ArgumentException($"The extracted data is at most {ExtractedDataMaxLength} characters.", nameof(json));
+        }
+
+        ExtractedData = json;
+        ExtractedAt = now;
     }
 
     public void Verify()
