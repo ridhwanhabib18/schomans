@@ -45,6 +45,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     public DbSet<Grade> Grades => Set<Grade>();
 
+    public DbSet<LearningObjective> LearningObjectives => Set<LearningObjective>();
+
     public DbSet<GradePublication> GradePublications => Set<GradePublication>();
 
     public DbSet<ReportCard> ReportCards => Set<ReportCard>();

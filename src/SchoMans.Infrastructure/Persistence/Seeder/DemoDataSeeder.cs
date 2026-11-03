@@ -50,6 +50,7 @@ public sealed class DemoDataSeeder(AppDbContext db, TimeProvider timeProvider, I
         await SeedSchedulesAsync(ct);
         await SeedCommunicationAsync(ct);
         await SeedGradesAsync(ct);
+        await SeedLearningObjectivesAsync(ct);
         await SeedAdmissionPeriodAsync(ct);
     }
 
@@ -116,6 +117,67 @@ public sealed class DemoDataSeeder(AppDbContext db, TimeProvider timeProvider, I
         await db.SaveChangesAsync(ct);
         logger.LogInformation("Seeded {Count} demo grades", count);
     }
+
+    /// <summary>
+    /// Three learning objectives per subject, and a quiz score per objective for each student, so the AI drafts of the report-card
+    /// descriptions (AI-02) have something to describe. The scores are deterministic and spread between 50 and 99.
+    /// </summary>
+    private async Task SeedLearningObjectivesAsync(CancellationToken ct)
+    {
+        if (await db.LearningObjectives.IgnoreQueryFilters().AnyAsync(ct))
+        {
+            return;
+        }
+
+        var subjects = await db.Subjects.OrderBy(s => s.Name).Select(s => new { s.Id, s.Name }).ToListAsync(ct);
+        if (subjects.Count == 0)
+        {
+            return;
+        }
+
+        var objectives = new Dictionary<Guid, List<Guid>>();
+        foreach (var subject in subjects)
+        {
+            var list = new List<LearningObjective>();
+            for (var n = 1; n <= 3; n++)
+            {
+                list.Add(LearningObjective.Create(subject.Id, $"{n}.{n}", ObjectiveText(subject.Name, n)));
+            }
+
+            db.LearningObjectives.AddRange(list);
+            objectives[subject.Id] = list.Select(o => o.Id).ToList();
+        }
+
+        var termId = await db.Terms.Where(t => t.IsActive).Select(t => (Guid?)t.Id).FirstOrDefaultAsync(ct);
+        if (termId is not null)
+        {
+            var lessons = (await db.Schedules.Select(s => new { s.ClassroomId, s.SubjectId }).Distinct().ToListAsync(ct))
+                .ToLookup(s => s.ClassroomId, s => s.SubjectId);
+            var students = await db.Students.Where(s => s.Status == StudentStatus.Active).OrderBy(s => s.Nisn).Select(s => new { s.Id, s.ClassroomId }).ToListAsync(ct);
+            for (var i = 0; i < students.Count; i++)
+            {
+                foreach (var subjectId in lessons[students[i].ClassroomId].Order())
+                {
+                    var ids = objectives[subjectId];
+                    for (var k = 0; k < ids.Count; k++)
+                    {
+                        db.Grades.Add(Grade.Create(
+                            students[i].Id, subjectId, termId.Value, GradeComponent.Quiz, 50 + ((i * 11) + (k * 17)) % 50, learningObjectiveId: ids[k]));
+                    }
+                }
+            }
+        }
+
+        await db.SaveChangesAsync(ct);
+        logger.LogInformation("Seeded learning objectives for {Count} subjects", subjects.Count);
+    }
+
+    private static string ObjectiveText(string subject, int number) => number switch
+    {
+        1 => $"Understands the basic concepts of {subject.ToLowerInvariant()}",
+        2 => $"Applies {subject.ToLowerInvariant()} to everyday situations",
+        _ => $"Explains and reasons about {subject.ToLowerInvariant()} with confidence",
+    };
 
     private async Task SeedSchoolAsync(CancellationToken ct)
     {

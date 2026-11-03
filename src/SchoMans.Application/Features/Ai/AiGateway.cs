@@ -30,7 +30,11 @@ public sealed class AiGateway(IAppDbContext db, IAiService ai, ISchoolClock cloc
     }
 
     /// <param name="userId">The person asking, or null when the system asks (a job); then only the budget applies.</param>
-    public async Task<Result<AiCompletion>> RunAsync(Guid? userId, AiRequest request, CancellationToken ct)
+    /// <param name="bulk">
+    /// A further call of one bulk run (the first call of the run is an ordinary one). It still needs the user to be within the
+    /// daily limit and counts toward the budget, but it does not use up another of the user's daily calls.
+    /// </param>
+    public async Task<Result<AiCompletion>> RunAsync(Guid? userId, AiRequest request, CancellationToken ct, bool bulk = false)
     {
         if (await SpentThisMonthAsync(ct) >= _options.MonthlyBudgetUsd)
         {
@@ -55,7 +59,8 @@ public sealed class AiGateway(IAppDbContext db, IAiService ai, ISchoolClock cloc
             completion?.Tokens ?? 0,
             completion?.CostUsd ?? 0m,
             (int)watch.ElapsedMilliseconds,
-            result.IsSuccess));
+            result.IsSuccess,
+            bulk));
         await db.SaveChangesAsync(ct);
 
         return result;
@@ -64,7 +69,7 @@ public sealed class AiGateway(IAppDbContext db, IAiService ai, ISchoolClock cloc
     private Task<int> CallsTodayAsync(Guid userId, CancellationToken ct)
     {
         var from = clock.ToUtc(clock.Today, TimeOnly.MinValue);
-        return db.AiUsageLogs.CountAsync(l => l.UserId == userId && l.CreatedAt >= from, ct);
+        return db.AiUsageLogs.CountAsync(l => l.UserId == userId && !l.IsBulk && l.CreatedAt >= from, ct);
     }
 
     private async Task<decimal> SpentThisMonthAsync(CancellationToken ct)

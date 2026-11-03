@@ -26,7 +26,11 @@ public sealed class AiUsageLog : BaseEntity
 
     public bool Succeeded { get; private set; }
 
-    public static AiUsageLog Create(Guid? userId, string feature, string provider, string model, int tokens, decimal costUsd, int durationMs, bool succeeded)
+    /// <summary>A further call of a bulk run (one student of a whole classroom): it counts toward the budget, not toward the user's daily calls.</summary>
+    public bool IsBulk { get; private set; }
+
+    public static AiUsageLog Create(
+        Guid? userId, string feature, string provider, string model, int tokens, decimal costUsd, int durationMs, bool succeeded, bool isBulk = false)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(feature);
         ArgumentOutOfRangeException.ThrowIfNegative(tokens);
@@ -42,6 +46,7 @@ public sealed class AiUsageLog : BaseEntity
             CostUsd = costUsd,
             DurationMs = durationMs,
             Succeeded = succeeded,
+            IsBulk = isBulk,
         };
     }
 }

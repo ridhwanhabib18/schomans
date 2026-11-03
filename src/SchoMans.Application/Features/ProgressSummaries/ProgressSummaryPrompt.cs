@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 using FluentValidation;
 using SchoMans.Application.Common.Errors;
 using SchoMans.Application.Common.Interfaces;
@@ -17,21 +16,13 @@ internal sealed class ProgressSummaryDraftValidator : AbstractValidator<Progress
     public const int ParagraphMaxLength = 900;
     public const int PointMaxLength = 600;
 
-    // Words a letter to parents must never use about a child. A draft with one of them is refused, not repaired.
-    private static readonly Regex NegativeLabels = new(
-        @"\b(lazy|stupid|dumb|naughty|troublemaker|hopeless|problem child|bad student|malas|bodoh|nakal)\b",
-        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant,
-        TimeSpan.FromSeconds(1));
-
     public ProgressSummaryDraftValidator()
     {
-        RuleFor(x => x.Paragraph).NotEmpty().MaximumLength(ParagraphMaxLength).Must(NoNegativeLabel).WithMessage("The text labels the child negatively.");
-        RuleFor(x => x.GoingWell).NotEmpty().MaximumLength(PointMaxLength).Must(NoNegativeLabel).WithMessage("The text labels the child negatively.");
-        RuleFor(x => x.NeedsAttention).NotEmpty().MaximumLength(PointMaxLength).Must(NoNegativeLabel).WithMessage("The text labels the child negatively.");
-        RuleFor(x => x.HomeSuggestion).NotEmpty().MaximumLength(PointMaxLength).Must(NoNegativeLabel).WithMessage("The text labels the child negatively.");
+        RuleFor(x => x.Paragraph).NotEmpty().MaximumLength(ParagraphMaxLength).Must(NegativeLabels.IsClean).WithMessage("The text labels the child negatively.");
+        RuleFor(x => x.GoingWell).NotEmpty().MaximumLength(PointMaxLength).Must(NegativeLabels.IsClean).WithMessage("The text labels the child negatively.");
+        RuleFor(x => x.NeedsAttention).NotEmpty().MaximumLength(PointMaxLength).Must(NegativeLabels.IsClean).WithMessage("The text labels the child negatively.");
+        RuleFor(x => x.HomeSuggestion).NotEmpty().MaximumLength(PointMaxLength).Must(NegativeLabels.IsClean).WithMessage("The text labels the child negatively.");
     }
-
-    private static bool NoNegativeLabel(string? text) => text is null || !NegativeLabels.IsMatch(text);
 }
 
 /// <summary>AI-01: what the AI is told, and how its answer is checked and turned into the text of a summary.</summary>

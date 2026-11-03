@@ -220,6 +220,9 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
 
+                    b.Property<bool>("IsBulk")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -1129,6 +1132,9 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<Guid?>("LearningObjectiveId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .IsRequired()
@@ -1155,6 +1161,8 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LearningObjectiveId");
 
                     b.HasIndex("SubjectId");
 
@@ -1298,6 +1306,49 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                         .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("GradeWeights");
+                });
+
+            modelBuilder.Entity("SchoMans.Domain.Grading.LearningObjective", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubjectId", "Code")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("LearningObjectives");
                 });
 
             modelBuilder.Entity("SchoMans.Domain.Grading.ReportCard", b =>
@@ -2097,6 +2148,11 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SchoMans.Domain.Grading.Grade", b =>
                 {
+                    b.HasOne("SchoMans.Domain.Grading.LearningObjective", "LearningObjective")
+                        .WithMany()
+                        .HasForeignKey("LearningObjectiveId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("SchoMans.Domain.Students.Student", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
@@ -2119,6 +2175,8 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                         .HasForeignKey("TermId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("LearningObjective");
 
                     b.Navigation("Student");
 
@@ -2155,6 +2213,17 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                 });
 
             modelBuilder.Entity("SchoMans.Domain.Grading.GradeWeight", b =>
+                {
+                    b.HasOne("SchoMans.Domain.Students.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("SchoMans.Domain.Grading.LearningObjective", b =>
                 {
                     b.HasOne("SchoMans.Domain.Students.Subject", "Subject")
                         .WithMany()

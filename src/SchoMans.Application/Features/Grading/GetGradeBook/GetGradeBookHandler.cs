@@ -46,15 +46,15 @@ public sealed class GetGradeBookHandler(IAppDbContext db, ICurrentUser currentUs
         var studentIds = students.Select(s => s.Id).ToList();
         var scores = await db.Grades.AsNoTracking()
             .Where(g => g.SubjectId == query.SubjectId && g.TermId == query.TermId && studentIds.Contains(g.StudentId))
-            .Select(g => new { g.StudentId, g.Component, g.Score })
+            .Select(g => new { g.StudentId, g.Component, g.Score, g.LearningObjectiveId })
             .ToListAsync(ct);
         var scoresByStudent = scores.ToLookup(g => g.StudentId);
 
         var descriptions = (await db.ReportCards.AsNoTracking()
                 .Where(r => r.TermId == query.TermId && studentIds.Contains(r.StudentId))
-                .SelectMany(r => r.Descriptions.Where(d => d.SubjectId == query.SubjectId).Select(d => new { r.StudentId, d.Body }))
+                .SelectMany(r => r.Descriptions.Where(d => d.SubjectId == query.SubjectId).Select(d => new { r.StudentId, d.Body, d.Status, d.IsAiDrafted }))
                 .ToListAsync(ct))
-            .ToDictionary(d => d.StudentId, d => d.Body);
+            .ToDictionary(d => d.StudentId);
 
         var weights = await GradeWeightsLoader.LoadAsync(db, query.SubjectId, ct);
         var weightMap = weights.Weights.ToDictionary(w => w.Component, w => w.WeightPercent);
@@ -65,7 +65,7 @@ public sealed class GetGradeBookHandler(IAppDbContext db, ICurrentUser currentUs
             var own = scoresByStudent[student.Id].ToList();
             var components = Enum.GetValues<GradeComponent>().Select(component =>
             {
-                var ofComponent = own.Where(g => g.Component == component).ToList();
+                var ofComponent = own.Where(g => g.Component == component && (query.LearningObjectiveId is null || g.LearningObjectiveId == query.LearningObjectiveId)).ToList();
                 return new ComponentScoreDto(component, ofComponent.Count == 0 ? null : decimal.Round(ofComponent.Average(g => g.Score), 2), ofComponent.Count);
             }).ToList();
 
@@ -78,7 +78,9 @@ public sealed class GetGradeBookHandler(IAppDbContext db, ICurrentUser currentUs
                 final,
                 final is null ? null : GradeBand.LabelFor(final.Value, bands),
                 final is null ? null : final >= subject.MinimumPassingScore,
-                descriptions.GetValueOrDefault(student.Id));
+                descriptions.GetValueOrDefault(student.Id)?.Body,
+                descriptions.GetValueOrDefault(student.Id)?.Status,
+                descriptions.GetValueOrDefault(student.Id)?.IsAiDrafted ?? false);
         }).ToList();
 
         var published = await GradeBook.IsPublishedAsync(db, query.ClassroomId, query.TermId, ct);

@@ -384,6 +384,7 @@ The stack is fixed: .NET 10 backend (latest LTS, supported until November 2028),
 | Surat | Letter |
 | Bank soal | QuestionBank |
 | Ringkasan perkembangan | ProgressSummary |
+| Catatan guru | TeacherNote |
 | Jejak audit | AuditLog |
 
 **Data model** (main entities):
@@ -424,7 +425,8 @@ GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, P
 GradeBand: Id, Label, MinScore   ← the school's band scale, set by the admin; one band starts at 0
 ReportCard: Id, StudentId, TermId, Status (Draft|Published), PdfKey, GeneratedAt
 AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status (Draft|Accepted), IsAiDrafted
-ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt
+ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), IsAiDrafted, ApprovedById → User, SentAt
+TeacherNote: Id, StudentId, AuthorId → User, Date, Body   ← private teacher observations; read by AI-01 and AI-02, never shown to families
 
 -- Admissions
 AdmissionPeriod: Id, AcademicYearId, Name, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline, ResultsNotifiedAt   ← ResultsNotifiedAt is set by the job that told the applicants the results are out
@@ -445,7 +447,7 @@ Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← in-a
 
 -- Audit & AI
 AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
-AiUsageLog: Id, UserId → User, Feature, Model, Tokens, CostUsd, DurationMs, CreatedAt
+AiUsageLog: Id, UserId → User (empty when a job asked), Feature, Provider, Model, Tokens, CostUsd, DurationMs, Succeeded, IsBulk, CreatedAt   ← IsBulk: a further call of a bulk run; it counts toward the budget, not toward the user's daily calls
 
 Every entity: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (EF Core concurrency)
 ```

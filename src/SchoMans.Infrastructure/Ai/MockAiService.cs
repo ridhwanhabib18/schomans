@@ -20,6 +20,7 @@ public sealed class MockAiService : IAiService
         var text = request.Feature switch
         {
             AiFeatures.ProgressSummary => MockProgressSummary(request.UserPrompt),
+            AiFeatures.AchievementDescription => MockAchievementDescription(request.UserPrompt),
             _ => request.JsonOutput ? "{\"mock\":true}" : "This is an answer of the mock AI.",
         };
 
@@ -67,6 +68,67 @@ public sealed class MockAiService : IAiService
             homeSuggestion = string.Format(CultureInfo.InvariantCulture, HomeSuggestions[(Number(alias, @"S(\d+)") + absent) % HomeSuggestions.Length], alias),
         };
         return JsonSerializer.Serialize(draft);
+    }
+
+    private static readonly string[] AchievedOpeners =
+    [
+        "{0} has shown a good grasp of {1}.",
+        "{0} reached the expected level in {1}.",
+        "In {1}, {0} met the goals with growing confidence.",
+        "{0} worked steadily and did well in {1}.",
+    ];
+
+    private static readonly string[] SupportOpeners =
+    [
+        "{0} will benefit from more practice in {1}.",
+        "To strengthen {1}, {0} is encouraged to review the material regularly.",
+        "{0} needs a little more support to master {1}.",
+        "Further attention to {1} will help {0} move forward.",
+    ];
+
+    private static readonly string[] Closings =
+    [
+        "The teachers will keep following this closely.",
+        "Steady practice at home will help.",
+        "The next term is a good time to build on this.",
+        "Regular review will make the difference.",
+        "Encouragement from home will support this progress.",
+    ];
+
+    /// <summary>
+    /// AI-02: a description built from the facts in the prompt: the objectives with the highest and the lowest score (or the subject
+    /// itself when no objective was assessed). The wording is picked from a hash of the facts, so students with different scores get different texts.
+    /// </summary>
+    private static string MockAchievementDescription(string prompt)
+    {
+        var alias = Regex.Match(prompt, @"Student: (S\d+)").Groups[1].Value;
+        if (alias.Length == 0)
+        {
+            alias = "S1";
+        }
+
+        var subject = Regex.Match(prompt, @"Subject: (.+)").Groups[1].Value.Trim();
+        var assessed = Regex.Matches(prompt, @"^- (\S+) (.+): (\d+(?:\.\d+)?)$", RegexOptions.Multiline)
+            .Select(m => (Code: m.Groups[1].Value, Name: m.Groups[2].Value, Score: decimal.Parse(m.Groups[3].Value, CultureInfo.InvariantCulture)))
+            .ToList();
+
+        // The wording is a combination (opener, support, closing) picked by a hash of the facts. A request for "variation n" moves the
+        // pick on by n, so an answer asked for again never repeats a combination a classmate got.
+        var variation = Number(prompt, @"\(variation (\d+)\)");
+        var facts = Regex.Replace(prompt, @"^Note: your previous text.*$", string.Empty, RegexOptions.Multiline);
+        var pick = ((facts.Aggregate(0, (sum, c) => unchecked((sum * 31) + c)) & 0xFFFF) + variation) % (AchievedOpeners.Length * SupportOpeners.Length * Closings.Length);
+        var best = assessed.Count == 0 ? subject : assessed.MaxBy(a => a.Score).Name;
+        var weakest = assessed.Count < 2 ? subject : assessed.MinBy(a => a.Score).Name;
+
+        var final = Regex.Match(prompt, @"Final grade: (\d+(?:\.\d+)?)").Groups[1].Value;
+        var achieved = string.Format(CultureInfo.InvariantCulture, AchievedOpeners[pick % AchievedOpeners.Length], alias, best.ToLowerInvariant())
+            + (final.Length == 0 ? string.Empty : $" The final grade for this term is {final}.");
+        var needsSupport = assessed.Count >= 2 && assessed.Max(a => a.Score) - assessed.Min(a => a.Score) < 5
+            ? $"{alias} only needs to keep up the good work."
+            : string.Format(CultureInfo.InvariantCulture, SupportOpeners[(pick / AchievedOpeners.Length) % SupportOpeners.Length], alias, weakest.ToLowerInvariant());
+        needsSupport += " " + Closings[pick / (AchievedOpeners.Length * SupportOpeners.Length)];
+
+        return JsonSerializer.Serialize(new { achieved, needsSupport });
     }
 
     private static int Number(string text, string pattern)

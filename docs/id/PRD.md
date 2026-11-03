@@ -361,7 +361,8 @@ GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, P
 GradeBand: Id, Label, MinScore   ← skala predikat sekolah, diatur admin; satu predikat mulai dari 0
 ReportCard: Id, StudentId, TermId, Status (Draft|Published), PdfKey, GeneratedAt
 AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status (Draft|Accepted), IsAiDrafted
-ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt
+ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), IsAiDrafted, ApprovedById → User, SentAt
+TeacherNote: Id, StudentId, AuthorId → User, Date, Body   ← pengamatan pribadi guru; dibaca AI-01 dan AI-02, tidak pernah ditampilkan ke keluarga
 
 -- PPDB
 AdmissionPeriod: Id, AcademicYearId, Name, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline, ResultsNotifiedAt   ← ResultsNotifiedAt diisi job yang memberi tahu calon siswa bahwa hasil sudah keluar
@@ -382,7 +383,7 @@ Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← noti
 
 -- Audit & AI
 AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
-AiUsageLog: Id, UserId → User, Feature, Model, Tokens, CostUsd, DurationMs, CreatedAt
+AiUsageLog: Id, UserId → User (kosong bila diminta job), Feature, Provider, Model, Tokens, CostUsd, DurationMs, Succeeded, IsBulk, CreatedAt   ← IsBulk: panggilan lanjutan dari satu proses massal; dihitung ke anggaran, bukan ke jatah harian pengguna
 
 Semua entitas: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (concurrency EF Core)
 ```
@@ -452,6 +453,7 @@ Semua entitas: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (concur
 | Surat | Letter |
 | Bank soal | QuestionBank |
 | Ringkasan perkembangan | ProgressSummary |
+| Catatan guru | TeacherNote |
 | Jejak audit | AuditLog |
 
 ## 7. Arsitektur kode

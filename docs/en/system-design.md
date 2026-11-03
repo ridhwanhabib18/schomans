@@ -324,6 +324,8 @@ erDiagram
   ReportCard ||--o{ AchievementDescription : "describes"
   Subject ||--o{ AchievementDescription : "for"
   Student ||--o{ ProgressSummary : "summarized in"
+  Student ||--o{ TeacherNote : "noted in"
+  User ||--o{ TeacherNote : "writes"
 
   GradeWeight {
     guid Id PK
@@ -382,11 +384,19 @@ erDiagram
     string Body
     string Status
     guid ApprovedById FK
+    bool IsAiDrafted
     datetime SentAt
+  }
+  TeacherNote {
+    guid Id PK
+    guid StudentId FK
+    guid AuthorId FK
+    date Date
+    string Body
   }
 ```
 
-Grade weights are per subject and component and add up to 100. A GradePublication row per classroom and term is what makes grades visible to students and parents. A graded submission creates its Grade row automatically (Grade.SubmissionId). GradeBand is a standalone table: the admin sets the school's scale, and the band of a final grade is the one with the highest MinScore it reaches.
+Grade weights are per subject and component and add up to 100. A GradePublication row per classroom and term is what makes grades visible to students and parents. A graded submission creates its Grade row automatically (Grade.SubmissionId). A score can optionally be linked to a LearningObjective of the subject (Grade.LearningObjectiveId); the AI-02 drafts of the report-card texts use those scores. TeacherNote holds the short private observations of the teachers about a student; AI-01 and AI-02 read them, families never see them. An AI-02 draft is an AchievementDescription with Status Draft and IsAiDrafted; only Accepted texts reach the report card. GradeBand is a standalone table: the admin sets the school's scale, and the band of a final grade is the one with the highest MinScore it reaches.
 
 ```mermaid
 %% Source: diagrams/erd.mmd (admissions & approvals)
@@ -531,10 +541,13 @@ erDiagram
     guid Id PK
     guid UserId FK
     string Feature
+    string Provider
     string Model
     int Tokens
     decimal CostUsd
     int DurationMs
+    bool Succeeded
+    bool IsBulk
     datetime CreatedAt
   }
 ```

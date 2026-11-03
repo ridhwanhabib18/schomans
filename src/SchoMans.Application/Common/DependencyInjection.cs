@@ -20,6 +20,7 @@ public static class DependencyInjection
 
         services.AddScoped<Features.Ai.AiGateway>();
         services.AddScoped<Features.ProgressSummaries.ProgressSummaryDrafter>();
+        services.AddScoped<Features.AchievementDescriptions.AchievementDescriptionDrafter>();
         services.AddValidatorsFromAssembly(assembly, includeInternalTypes: true);
         return services;
     }

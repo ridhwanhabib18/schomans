@@ -63,6 +63,7 @@ app.MapAnnouncementEndpoints();
 app.MapNotificationEndpoints();
 app.MapProgressSummaryEndpoints();
 app.MapTeacherNoteEndpoints();
+app.MapLearningObjectiveEndpoints();
 app.MapFileEndpoints();
 app.MapSitemapEndpoints();
 app.MapHealthEndpoints();

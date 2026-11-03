@@ -44,6 +44,8 @@ erDiagram
   ReportCard ||--o{ AchievementDescription : "describes"
   Subject ||--o{ AchievementDescription : "for"
   Student ||--o{ ProgressSummary : "summarized in"
+  Student ||--o{ TeacherNote : "noted in"
+  User ||--o{ TeacherNote : "writes"
   AcademicYear ||--o{ AdmissionPeriod : "runs"
   User ||--o| Applicant : "applies as"
   AdmissionPeriod ||--o{ Applicant : "receives"
@@ -264,7 +266,15 @@ erDiagram
     string Body
     string Status
     guid ApprovedById FK
+    bool IsAiDrafted
     datetime SentAt
+  }
+  TeacherNote {
+    guid Id PK
+    guid StudentId FK
+    guid AuthorId FK
+    date Date
+    string Body
   }
   AdmissionPeriod {
     guid Id PK
@@ -382,9 +392,12 @@ erDiagram
     guid Id PK
     guid UserId FK
     string Feature
+    string Provider
     string Model
     int Tokens
     decimal CostUsd
     int DurationMs
+    bool Succeeded
+    bool IsBulk
     datetime CreatedAt
   }

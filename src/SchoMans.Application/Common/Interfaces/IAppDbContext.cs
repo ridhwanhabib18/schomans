@@ -46,6 +46,8 @@ public interface IAppDbContext
 
     DbSet<Grade> Grades { get; }
 
+    DbSet<LearningObjective> LearningObjectives { get; }
+
     DbSet<GradePublication> GradePublications { get; }
 
     DbSet<ReportCard> ReportCards { get; }

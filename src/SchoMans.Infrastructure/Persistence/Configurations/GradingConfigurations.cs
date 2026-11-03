@@ -30,6 +30,7 @@ internal sealed class GradeConfiguration : IEntityTypeConfiguration<Grade>
         builder.HasOne(g => g.Subject).WithMany().HasForeignKey(g => g.SubjectId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(g => g.Term).WithMany().HasForeignKey(g => g.TermId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(g => g.Submission).WithMany().HasForeignKey(g => g.SubmissionId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(g => g.LearningObjective).WithMany().HasForeignKey(g => g.LearningObjectiveId).OnDelete(DeleteBehavior.Restrict);
 
         // Report-card and dashboard queries.
         builder.HasIndex(g => new { g.StudentId, g.TermId });
@@ -39,7 +40,21 @@ internal sealed class GradeConfiguration : IEntityTypeConfiguration<Grade>
     }
 }
 
-internal sealed class GradePublicationConfiguration : IEntityTypeConfiguration<GradePublication>
+internal sealed class LearningObjectiveConfiguration : IEntityTypeConfiguration<LearningObjective>
+{
+    public void Configure(EntityTypeBuilder<LearningObjective> builder)
+    {
+        builder.Property(o => o.Code).HasMaxLength(LearningObjective.CodeMaxLength).IsRequired();
+        builder.Property(o => o.Description).HasMaxLength(LearningObjective.DescriptionMaxLength).IsRequired();
+
+        builder.HasOne(o => o.Subject).WithMany().HasForeignKey(o => o.SubjectId).OnDelete(DeleteBehavior.Restrict);
+
+        // A code is used once per subject.
+        builder.HasIndex(o => new { o.SubjectId, o.Code }).IsUnique().HasFilter("[IsDeleted] = 0");
+    }
+}
+
+internal sealed class GradePublicationConfiguration: IEntityTypeConfiguration<GradePublication>
 {
     public void Configure(EntityTypeBuilder<GradePublication> builder)
     {
