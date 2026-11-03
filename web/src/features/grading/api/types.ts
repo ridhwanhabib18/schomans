@@ -8,6 +8,8 @@ export type GradeComponent = (typeof GRADE_COMPONENTS)[number]
 export const ENTERABLE_COMPONENTS = ['Quiz', 'Midterm', 'Final'] as const
 export type EnterableComponent = (typeof ENTERABLE_COMPONENTS)[number]
 
+export type AchievementStatus = 'Draft' | 'Accepted'
+
 export interface GradeWeightItem {
   component: GradeComponent
   weightPercent: number
@@ -35,6 +37,9 @@ export interface GradeBookRow {
   band: string | null
   isPassing: boolean | null
   description: string | null
+  /** Draft until the teacher accepts it; only accepted texts reach the report card. */
+  descriptionStatus: AchievementStatus | null
+  descriptionIsAiDrafted: boolean
 }
 
 export interface GradeBook {
@@ -51,6 +56,8 @@ export interface GradeBookParams {
   classroomId: string
   subjectId: string
   termId: string
+  /** Show only the scores linked to this learning objective in the component columns. */
+  learningObjectiveId?: string
 }
 
 export interface EnterGradeCommand {
@@ -59,6 +66,7 @@ export interface EnterGradeCommand {
   termId: string
   component: EnterableComponent
   score: number
+  learningObjectiveId?: string
 }
 
 export interface WriteDescriptionCommand {
@@ -89,4 +97,40 @@ export interface GradeBand {
 export interface GradeBandInput {
   label: string
   minScore: number
+}
+
+export interface LearningObjective {
+  id: string
+  subjectId: string
+  code: string
+  description: string
+}
+
+export interface LearningObjectiveInput {
+  code: string
+  description: string
+}
+
+export interface DescriptionCommand {
+  studentId: string
+  subjectId: string
+  termId: string
+}
+
+export interface AchievementDescription {
+  studentId: string
+  subjectId: string
+  termId: string
+  body: string
+  status: AchievementStatus
+  isAiDrafted: boolean
+}
+
+export interface DraftedDescriptions {
+  drafted: number
+  alreadyHadText: number
+  noScores: number
+  failed: number
+  /** The error code when the run stopped early (daily limit or monthly budget). */
+  stoppedBy: string | null
 }

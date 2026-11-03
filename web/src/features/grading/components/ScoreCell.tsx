@@ -13,13 +13,15 @@ interface ScoreCellProps {
   subjectId: string
   termId: string
   component: EnterableComponent
+  /** The learning objective the typed score is linked to; none for a score of the component as a whole. */
+  learningObjectiveId?: string
   /** The average the grade book shows now; null while there is no score. */
   value: number | null
   locked: boolean
 }
 
 /** One score the teacher types straight into the table: it is saved when the field loses focus and the value changed. */
-export function ScoreCell({ studentId, studentName, subjectId, termId, component, value, locked }: ScoreCellProps) {
+export function ScoreCell({ studentId, studentName, subjectId, termId, component, learningObjectiveId, value, locked }: ScoreCellProps) {
   const { t } = useTranslation('grading')
   const { t: tCommon } = useTranslation()
   const showToast = useToastStore(selectShowToast)
@@ -44,7 +46,7 @@ export function ScoreCell({ studentId, studentName, subjectId, termId, component
 
     setInvalid(false)
     enter.mutate(
-      { studentId, subjectId, termId, component, score },
+      { studentId, subjectId, termId, component, score, learningObjectiveId },
       {
         onSuccess: () => {
           setDraft(null)

@@ -1,4 +1,4 @@
-import { Lock } from 'lucide-react'
+import { Lock, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useTermOptions } from '@/shared/hooks/useTermOptions'
@@ -10,16 +10,25 @@ import { Select } from '@/shared/ui/form-controls'
 import { EmptyState, ErrorNotice, PageHeader } from '@/shared/ui/page-parts'
 import { Skeleton } from '@/shared/ui/skeleton'
 import { selectShowToast, useToastStore } from '@/stores/useToastStore'
-import { useGenerateReportCards, useGradeBook, useGradingOptions, usePublishGrades, useUnpublishGrades } from '../api/grading'
+import {
+  useDraftClassroomDescriptions,
+  useGenerateReportCards,
+  useGradeBook,
+  useGradingOptions,
+  useLearningObjectives,
+  usePublishGrades,
+  useUnpublishGrades,
+} from '../api/grading'
 import type { GradeBook, GradeBookRow, GradeComponent } from '../api/types'
 import { ENTERABLE_COMPONENTS } from '../api/types'
 import { DescriptionDialog } from '../components/DescriptionDialog'
+import { ObjectivesDialog } from '../components/ObjectivesDialog'
 import { ScoreCell } from '../components/ScoreCell'
 import { WeightsDialog } from '../components/WeightsDialog'
 import { gradingErrorText } from '../errors'
 import '../i18n'
 
-type Action = 'publish' | 'unpublish' | 'generate'
+type Action = 'publish' | 'unpublish' | 'generate' | 'ai'
 
 const averageOf = (row: GradeBookRow, component: GradeComponent) => row.components.find((c) => c.component === component)?.average ?? null
 
@@ -33,20 +42,29 @@ function ResultBadge({ row }: { row: GradeBookRow }) {
   return <Badge variant={row.isPassing ? 'success' : 'destructive'}>{row.isPassing ? t('book.passing') : t('book.below')}</Badge>
 }
 
-function GradeBookView({ book }: { book: GradeBook }) {
+interface GradeBookViewProps {
+  book: GradeBook
+  objectiveId: string
+  onObjectiveChange: (id: string) => void
+}
+
+function GradeBookView({ book, objectiveId, onObjectiveChange }: GradeBookViewProps) {
   const { t } = useTranslation('grading')
   const { t: tCommon } = useTranslation()
   const showToast = useToastStore(selectShowToast)
   const publish = usePublishGrades()
   const unpublish = useUnpublishGrades()
   const generate = useGenerateReportCards()
+  const draftAll = useDraftClassroomDescriptions()
+  const objectives = useLearningObjectives(book.subjectId)
+  const [objectivesOpen, setObjectivesOpen] = useState(false)
   const [editing, setEditing] = useState<GradeBookRow | null>(null)
   const [weightsOpen, setWeightsOpen] = useState(false)
   const [action, setAction] = useState<Action | null>(null)
   const [actionError, setActionError] = useState<string>()
 
   const target = { classroomId: book.classroomId, termId: book.termId }
-  const pending = publish.isPending || unpublish.isPending || generate.isPending
+  const pending = publish.isPending || unpublish.isPending || generate.isPending || draftAll.isPending
 
   function confirm() {
     if (!action) {
@@ -64,8 +82,29 @@ function GradeBookView({ book }: { book: GradeBook }) {
       publish.mutate(target, { onSuccess: () => done(t('book.publish.done')), onError: fail })
     } else if (action === 'unpublish') {
       unpublish.mutate(target, { onSuccess: () => done(t('book.unpublish.done')), onError: fail })
-    } else {
+    } else if (action === 'generate') {
       generate.mutate(target, { onSuccess: (result) => done(t('book.generate.done', { count: result.count })), onError: fail })
+    } else {
+      draftAll.mutate(
+        { ...target, subjectId: book.subjectId },
+        {
+          onSuccess: (result) => {
+            const notes = [
+              result.alreadyHadText > 0 && t('book.ai.skipped', { count: result.alreadyHadText }),
+              result.noScores > 0 && t('book.ai.noScores', { count: result.noScores }),
+              result.failed > 0 && t('book.ai.failed', { count: result.failed }),
+              result.stoppedBy && t('book.ai.stopped', { reason: t(`errors.${result.stoppedBy}`, { defaultValue: result.stoppedBy }) }),
+            ].filter(Boolean)
+            setAction(null)
+            showToast({
+              kind: result.stoppedBy || result.failed > 0 ? 'error' : 'success',
+              title: t('book.ai.done', { drafted: result.drafted }),
+              body: notes.join(' ') || undefined,
+            })
+          },
+          onError: fail,
+        },
+      )
     }
   }
 
@@ -87,6 +126,7 @@ function GradeBookView({ book }: { book: GradeBook }) {
           subjectId={book.subjectId}
           termId={book.termId}
           component={component}
+          learningObjectiveId={objectiveId || undefined}
           value={averageOf(r, component)}
           locked={book.isPublished}
         />
@@ -100,15 +140,21 @@ function GradeBookView({ book }: { book: GradeBook }) {
       header: t('book.columns.description'),
       className: 'text-right',
       render: (r) => (
-        <Button variant="outline" size="sm" onClick={() => setEditing(r)}>
-          {t('book.actions.text')}
-          <span className="sr-only">: {r.studentName}</span>
-        </Button>
+        <div className="flex items-center justify-end gap-2">
+          {r.descriptionStatus === 'Draft' && (
+            <Badge variant="warning">{r.descriptionIsAiDrafted ? t('book.aiStatus.draftAi') : t('book.aiStatus.draft')}</Badge>
+          )}
+          <Button variant="outline" size="sm" onClick={() => setEditing(r)}>
+            {t('book.actions.text')}
+            <span className="sr-only">: {r.studentName}</span>
+          </Button>
+        </div>
       ),
     },
   ]
 
   const confirmCopy = action ? t(`book.${action}.title`) : ''
+  const confirmLabel = action === 'ai' ? t('book.ai.confirm') : confirmCopy
 
   return (
     <section className="flex min-w-0 flex-col gap-4">
@@ -126,11 +172,35 @@ function GradeBookView({ book }: { book: GradeBook }) {
           ) : (
             <Button onClick={() => setAction('publish')}>{t('book.actions.publish')}</Button>
           )}
+          <Button variant="outline" onClick={() => setObjectivesOpen(true)}>
+            {t('book.actions.objectives')}
+          </Button>
+          <Button variant="outline" disabled={book.isPublished} onClick={() => setAction('ai')}>
+            <Sparkles aria-hidden="true" />
+            {t('book.actions.draftAi')}
+          </Button>
           <Button variant="secondary" disabled={!book.isPublished} onClick={() => setAction('generate')}>
             {t('book.actions.generate')}
           </Button>
         </div>
       </div>
+
+      {objectives.data && objectives.data.length > 0 && (
+        <div className="flex flex-wrap items-end gap-3">
+          <label className="flex min-w-48 flex-col gap-1.5 text-sm font-medium">
+            {t('book.objective.label')}
+            <Select value={objectiveId} onChange={(event) => onObjectiveChange(event.target.value)}>
+              <option value="">{t('book.objective.overall')}</option>
+              {objectives.data.map((objective) => (
+                <option key={objective.id} value={objective.id}>
+                  {objective.code} - {objective.description}
+                </option>
+              ))}
+            </Select>
+          </label>
+          {objectiveId && <p className="text-sm text-muted-foreground">{t('book.objective.hint')}</p>}
+        </div>
+      )}
 
       {book.isPublished && (
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -149,6 +219,17 @@ function GradeBookView({ book }: { book: GradeBook }) {
       />
 
       {weightsOpen && <WeightsDialog subjectId={book.subjectId} onClose={() => setWeightsOpen(false)} />}
+      {objectivesOpen && (
+        <ObjectivesDialog
+          subjectId={book.subjectId}
+          onClose={() => {
+            setObjectivesOpen(false)
+            if (objectiveId && !objectives.data?.some((o) => o.id === objectiveId)) {
+              onObjectiveChange('')
+            }
+          }}
+        />
+      )}
       {editing && (
         <DescriptionDialog
           studentId={editing.studentId}
@@ -156,6 +237,8 @@ function GradeBookView({ book }: { book: GradeBook }) {
           subjectId={book.subjectId}
           termId={book.termId}
           initial={editing.description}
+          initialStatus={editing.descriptionStatus}
+          initialIsAiDrafted={editing.descriptionIsAiDrafted}
           locked={book.isPublished}
           onClose={() => setEditing(null)}
         />
@@ -179,7 +262,7 @@ function GradeBookView({ book }: { book: GradeBook }) {
             )}
           </span>
         }
-        confirmLabel={confirmCopy}
+        confirmLabel={confirmLabel}
         pending={pending}
         onConfirm={confirm}
       />
@@ -194,10 +277,11 @@ export function GradeBookPage() {
   const terms = useTermOptions()
   const [choice, setChoice] = useState('')
   const [chosenTerm, setChosenTerm] = useState<string>()
+  const [objectiveId, setObjectiveId] = useState('')
 
   const termId = chosenTerm ?? terms.data?.find((term) => term.isActive)?.id ?? ''
   const [classroomId = '', subjectId = ''] = choice.split('|')
-  const params = classroomId && subjectId && termId ? { classroomId, subjectId, termId } : null
+  const params = classroomId && subjectId && termId ? { classroomId, subjectId, termId, ...(objectiveId ? { learningObjectiveId: objectiveId } : {}) } : null
   const book = useGradeBook(params)
 
   return (
@@ -214,7 +298,13 @@ export function GradeBookPage() {
         <div className="flex flex-wrap gap-4">
           <label className="flex min-w-0 flex-col sm:min-w-64 gap-1.5 text-sm font-medium">
             {t('book.pick.classAndSubject')}
-            <Select value={choice} onChange={(event) => setChoice(event.target.value)}>
+            <Select
+              value={choice}
+              onChange={(event) => {
+                setChoice(event.target.value)
+                setObjectiveId('')
+              }}
+            >
               <option value="">{t('book.pick.choose')}</option>
               {options.data.map((option) => (
                 <option key={`${option.classroomId}|${option.subjectId}`} value={`${option.classroomId}|${option.subjectId}`}>
@@ -243,7 +333,7 @@ export function GradeBookPage() {
       ) : book.isError ? (
         <ErrorNotice message={gradingErrorText(book.error, t, t('book.error'))} onRetry={() => void book.refetch()} />
       ) : (
-        <GradeBookView key={`${params.classroomId}|${params.subjectId}|${params.termId}`} book={book.data} />
+        <GradeBookView key={`${params.classroomId}|${params.subjectId}|${params.termId}`} book={book.data} objectiveId={objectiveId} onObjectiveChange={setObjectiveId} />
       )}
     </div>
   )
