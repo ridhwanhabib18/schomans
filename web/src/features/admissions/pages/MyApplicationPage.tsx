@@ -18,9 +18,11 @@ import {
 } from '../api/admissions'
 import { ApplicationForm } from '../components/ApplicationForm'
 import { DocumentsSection } from '../components/DocumentsSection'
+import { ExtractionSuggestions } from '../components/ExtractionSuggestions'
 import { PeriodDates } from '../components/PeriodDates'
 import { StatusTracker } from '../components/StatusTracker'
 import { admissionErrorText } from '../errors'
+import type { Suggestion } from '../extraction'
 import '../i18n'
 
 const FIELDS = ['fullName', 'dateOfBirth', 'placeOfBirth', 'address', 'guardianName', 'guardianPhone', 'previousSchool'] as const
@@ -116,15 +118,25 @@ function ApplicationView({ application, period }: { application: MyApplication; 
   const [form, setForm] = useState(application.form)
   const [asking, setAsking] = useState(false)
   const [error, setError] = useState<string>()
+  const [filled, setFilled] = useState<ReadonlySet<keyof ApplicantForm>>(new Set())
   const dirty = !sameForm(form, application.form)
   const draft = application.status === 'Draft'
 
   function saveForm() {
     setError(undefined)
     save.mutate(form, {
-      onSuccess: () => showToast({ kind: 'success', title: t('form.saved') }),
+      onSuccess: () => {
+        setFilled(new Set())
+        showToast({ kind: 'success', title: t('form.saved') })
+      },
       onError: (e) => setError(admissionErrorText(e, t, tCommon('errors.generic'))),
     })
+  }
+
+  /** Puts suggestions of the AI in the form (not saved) and highlights them until the applicant has saved. */
+  function applySuggestions(suggestions: Suggestion[]) {
+    setForm((current) => suggestions.reduce((next, s) => ({ ...next, [s.field]: s.value }), current))
+    setFilled((current) => new Set([...current, ...suggestions.map((s) => s.field)]))
   }
 
   return (
@@ -136,7 +148,16 @@ function ApplicationView({ application, period }: { application: MyApplication; 
       {error && <Alert tone="error" message={error} />}
 
       <Step title={t('mine.steps.form')}>
-        <ApplicationForm value={form} onChange={setForm} editable={application.canEdit} dirty={dirty} saving={save.isPending} onSave={saveForm} />
+        {application.canEdit && <ExtractionSuggestions form={form} onUse={applySuggestions} />}
+        <ApplicationForm
+          value={form}
+          onChange={setForm}
+          editable={application.canEdit}
+          dirty={dirty}
+          saving={save.isPending}
+          onSave={saveForm}
+          highlighted={dirty ? filled : undefined}
+        />
       </Step>
 
       <Step title={t('mine.steps.documents')}>
