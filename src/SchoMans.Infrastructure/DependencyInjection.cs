@@ -2,7 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SchoMans.Application.Common.Interfaces;
+using SchoMans.Application.Features.Ai;
 using SchoMans.Application.Features.Attendance;
+using SchoMans.Infrastructure.Ai;
 using SchoMans.Infrastructure.Content;
 using SchoMans.Infrastructure.Excel;
 using SchoMans.Infrastructure.Identity;
@@ -52,6 +54,9 @@ public static class DependencyInjection
         services.Configure<KeycloakAdminOptions>(configuration.GetSection(KeycloakAdminOptions.SectionName));
         services.AddHttpClient<IIdentityProvisioner, KeycloakIdentityProvisioner>(client => client.Timeout = TimeSpan.FromSeconds(10));
 
+        services.Configure<AiOptions>(configuration.GetSection(AiOptions.SectionName));
+        services.AddAiService(configuration);
+
         services.Configure<SchoolOptions>(configuration.GetSection(SchoolOptions.SectionName));
         services.AddSingleton<ISchoolClock, SchoolClock>();
         services.Configure<AttendanceOptions>(configuration.GetSection(AttendanceOptions.SectionName));
@@ -59,5 +64,25 @@ public static class DependencyInjection
 
         services.AddScoped<DemoDataSeeder>();
         return services;
+    }
+
+    /// <summary>The provider is chosen once at start-up from <c>Ai:Provider</c> (ADR-004); the mock is the default.</summary>
+    private static void AddAiService(this IServiceCollection services, IConfiguration configuration)
+    {
+        var ai = configuration.GetSection(AiOptions.SectionName).Get<AiOptions>() ?? new AiOptions();
+        switch (ai.Provider)
+        {
+            case AiProviders.Ollama:
+                services.AddHttpClient<IAiService, OllamaAiService>(client => client.Timeout = TimeSpan.FromSeconds(ai.Ollama.TimeoutSeconds));
+                break;
+            case AiProviders.Claude:
+                services.AddHttpClient<IAiService, ClaudeAiService>(client => client.Timeout = TimeSpan.FromSeconds(ai.Claude.TimeoutSeconds));
+                break;
+            case AiProviders.Mock:
+                services.AddSingleton<IAiService, MockAiService>();
+                break;
+            default:
+                throw new InvalidOperationException($"Ai:Provider '{ai.Provider}' is unknown; use {AiProviders.Mock}, {AiProviders.Ollama} or {AiProviders.Claude}.");
+        }
     }
 }

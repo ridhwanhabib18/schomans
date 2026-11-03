@@ -18,6 +18,7 @@ public static class DependencyInjection
             }
         }
 
+        services.AddScoped<Features.Ai.AiGateway>();
         services.AddValidatorsFromAssembly(assembly, includeInternalTypes: true);
         return services;
     }

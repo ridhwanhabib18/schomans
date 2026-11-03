@@ -60,6 +60,19 @@ services:
       retries: 12
       start_period: 10s
 
+  # A local model for the AI features (ADR-004). Not started by default (several GB of models); start it with
+  #   docker compose -f infra/docker-compose.yml --profile ai up -d
+  # then pull the model once:  docker compose -f infra/docker-compose.yml exec ollama ollama pull qwen2.5:7b
+  # and run the API with Ai__Provider=Ollama. It runs on the CPU unless the host gives the container a GPU.
+  ollama:
+    image: ollama/ollama:0.12.6
+    profiles: ["ai"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+
 volumes:
   sqlserver-data:
   seaweedfs-data:
+  ollama-data:
