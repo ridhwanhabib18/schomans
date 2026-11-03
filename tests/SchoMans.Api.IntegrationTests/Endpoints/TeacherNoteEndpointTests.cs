@@ -3,6 +3,7 @@ using SchoMans.Api.IntegrationTests.Infrastructure;
 using SchoMans.Application.Common;
 using SchoMans.Application.Features.TeacherNotes;
 using SchoMans.Application.Features.TeacherNotes.CreateTeacherNote;
+using SchoMans.Application.Features.TeacherNotes.ListMyClassrooms;
 using SchoMans.Domain.Students;
 
 namespace SchoMans.Api.IntegrationTests.Endpoints;
@@ -66,6 +67,30 @@ public class TeacherNoteEndpointTests(ApiFixture fixture)
         Assert.Equal(HttpStatusCode.Forbidden, write.StatusCode);
         Assert.Equal("notes.not_your_student", await write.ProblemCodeAsync());
         Assert.Equal(HttpStatusCode.Forbidden, read.StatusCode);
+    }
+
+    [Fact]
+    public async Task A_teacher_sees_the_classrooms_they_work_in_and_which_of_them_are_theirs_as_homeroom_teacher()
+    {
+        var scenario = await ClassroomScenario.CreateAsync(fixture.Factory, 1);
+        using var teacher = scenario.TeacherClient();
+
+        var classrooms = await (await teacher.GetAsync($"{Url}/classrooms")).ReadAsync<List<MyClassroomDto>>();
+
+        var own = Assert.Single(classrooms);
+        Assert.Equal((scenario.Classroom.Id, true), (own.Id, own.IsHomeroom));
+    }
+
+    [Fact]
+    public async Task A_teacher_without_a_teacher_record_has_no_classrooms_and_other_roles_are_forbidden()
+    {
+        using var newTeacher = fixture.AsNewUser("Teacher");
+        using var student = fixture.AsStudent();
+
+        var none = await (await newTeacher.GetAsync($"{Url}/classrooms")).ReadAsync<List<MyClassroomDto>>();
+
+        Assert.Empty(none);
+        Assert.Equal(HttpStatusCode.Forbidden, (await student.GetAsync($"{Url}/classrooms")).StatusCode);
     }
 
     [Fact]

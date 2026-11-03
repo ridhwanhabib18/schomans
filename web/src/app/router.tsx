@@ -23,6 +23,9 @@ import { CallbackPage } from '@/features/auth/pages/CallbackPage'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { RequireAuth } from '@/features/auth/components/RequireAuth'
 import { RequireRole } from '@/features/auth/components/RequireRole'
+import { ChildSummariesPage } from '@/features/progress/pages/MySummariesPage'
+import { ReviewSummariesPage } from '@/features/progress/pages/ReviewSummariesPage'
+import { TeacherNotesPage } from '@/features/progress/pages/TeacherNotesPage'
 import { ChildGradesPage, MyGradesPage } from '@/features/reportcards/pages/GradesPages'
 import { ApprovalChainsPage } from '@/features/requests/pages/ApprovalChainsPage'
 import { AllRequestsPage, MyRequestsPage, RequestInboxPage } from '@/features/requests/pages/ListPages'
@@ -122,6 +125,10 @@ export const routes: RouteObject[] = [
           { path: '/my-children/grades', element: guarded(PARENT, <ChildGradesPage />) },
           { path: '/grading', element: guarded(TEACHER, <GradeBookPage />) },
           { path: '/manage/grade-bands', element: guarded(ADMIN, <GradeBandsPage />) },
+
+          { path: '/progress-summaries', element: guarded(TEACHER, <ReviewSummariesPage />) },
+          { path: '/teacher-notes', element: guarded(TEACHER, <TeacherNotesPage />) },
+          { path: '/my-children/summaries', element: guarded(PARENT, <ChildSummariesPage />) },
 
           { path: '/admissions', element: guarded(APPLICANT, <MyApplicationPage />) },
           { path: '/manage/admissions', element: guarded(ADMIN, <ApplicantsPage />) },

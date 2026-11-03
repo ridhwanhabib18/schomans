@@ -53,6 +53,9 @@
     "approvalChains": "Approval chains",
     "childAttendance": "Attendance",
     "childAssignments": "Assignments",
+    "progressSummaries": "Progress summaries",
+    "teacherNotes": "Teacher notes",
+    "childSummaries": "Progress summaries",
     "jobs": "Background jobs"
   },
   "actions": {

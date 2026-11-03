@@ -6,6 +6,7 @@ using SchoMans.Application.Common;
 using SchoMans.Application.Features.TeacherNotes;
 using SchoMans.Application.Features.TeacherNotes.CreateTeacherNote;
 using SchoMans.Application.Features.TeacherNotes.DeleteTeacherNote;
+using SchoMans.Application.Features.TeacherNotes.ListMyClassrooms;
 using SchoMans.Application.Features.TeacherNotes.ListTeacherNotes;
 
 namespace SchoMans.Api.Endpoints;
@@ -20,6 +21,9 @@ public static class TeacherNoteEndpoints
             .ProducesProblem(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status403Forbidden);
 
+        group.MapGet("/classrooms", ListMyClassrooms)
+            .WithName("ListMyClassrooms");
+
         group.MapGet("/", ListTeacherNotes)
             .WithValidation<ListTeacherNotesQuery>()
             .WithName("ListTeacherNotes");
@@ -33,6 +37,10 @@ public static class TeacherNoteEndpoints
 
         return app;
     }
+
+    private static async Task<Results<Ok<List<MyClassroomDto>>, ProblemHttpResult>> ListMyClassrooms(
+        ListMyClassroomsHandler handler, CancellationToken ct)
+        => (await handler.Handle(new ListMyClassroomsQuery(), ct)).ToHttpResult();
 
     private static async Task<Results<Ok<PagedResult<TeacherNoteDto>>, ProblemHttpResult>> ListTeacherNotes(
         [AsParameters] ListTeacherNotesQuery query, ListTeacherNotesHandler handler, CancellationToken ct)

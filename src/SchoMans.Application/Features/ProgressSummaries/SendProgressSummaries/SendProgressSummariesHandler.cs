@@ -48,7 +48,7 @@ public sealed class SendProgressSummariesHandler(IAppDbContext db, ICurrentUser 
                 NotificationType.ProgressSummary,
                 $"Progress summary of {studentName}",
                 $"The summary of {MonthName(summary.Month)} is ready to read.",
-                $"/progress-summaries?studentId={summary.StudentId}",
+                $"/my-children/summaries?studentId={summary.StudentId}",
                 ct);
         }
 

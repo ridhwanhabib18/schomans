@@ -230,7 +230,7 @@ public class ProgressSummaryEndpointTests(ApiFixture fixture)
 
         var notifications = await (await parent.GetAsync("/api/v1/notifications?pageSize=100")).ReadAsync<PagedResult<NotificationDto>>();
         var notice = Assert.Single(notifications.Items, n => n.Type == "ProgressSummary");
-        Assert.StartsWith("/progress-summaries", notice.LinkUrl, StringComparison.Ordinal);
+        Assert.Equal($"/my-children/summaries?studentId={scenario.Students[0].Id}", notice.LinkUrl);
     }
 
     [Fact]
