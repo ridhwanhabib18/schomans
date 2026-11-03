@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  Bot,
   BookOpen,
   CalendarClock,
   CalendarRange,
@@ -47,6 +48,7 @@ const EDITORS: readonly AppRole[] = ['Admin', 'Principal']
  */
 export const navItems: readonly NavItem[] = [
   { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard, roles: APP_ROLES, section: 'main' },
+  { to: '/assistant', labelKey: 'nav.assistant', icon: Bot, roles: ['Principal'], section: 'main' },
   { to: '/admissions', labelKey: 'nav.myApplication', icon: ClipboardList, roles: ['Applicant'], section: 'main' },
   { to: '/attendance', labelKey: 'nav.attendance', icon: ClipboardCheck, roles: ['Teacher'], section: 'classroom', end: true },
   { to: '/attendance/scan', labelKey: 'nav.scanQr', icon: ScanLine, roles: ['Student'], section: 'classroom' },

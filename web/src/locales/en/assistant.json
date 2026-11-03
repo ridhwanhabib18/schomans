@@ -1,0 +1,38 @@
+{
+  "title": "Assistant",
+  "description": "Ask about attendance, grades, requests, admissions and assignments in plain language. The assistant only reads the school's data and shows where its numbers come from.",
+  "examples": {
+    "title": "Try asking",
+    "attendance": "How is the attendance this month?",
+    "grades": "What is the average grade per subject?",
+    "requests": "Which requests are waiting for approval?",
+    "risk": "Which students have low attendance?"
+  },
+  "input": {
+    "label": "Your question",
+    "placeholder": "Ask a question…",
+    "send": "Ask",
+    "sending": "Thinking…"
+  },
+  "you": "You",
+  "assistant": "Assistant",
+  "sources": "Where the numbers come from",
+  "openReport": "Open the report",
+  "newConversation": "New conversation",
+  "empty": "No questions yet.",
+  "limit": "One question uses one of your daily AI calls.",
+  "errors": {
+    "ai": {
+      "daily_limit": "You have used your AI calls of today. Try again tomorrow.",
+      "budget_exhausted": "The AI budget of this month is used up. The AI features are off until next month.",
+      "invalid_output": "The AI did not give a usable answer. Try again.",
+      "provider_failed": "The AI service did not answer. Try again in a moment.",
+      "not_configured": "The AI service is not set up.",
+      "refused": "The AI model declined this question."
+    },
+    "assistant": {
+      "too_many_steps": "The assistant needed too many steps for this question. Try a simpler question.",
+      "principal_only": "Only the principal can use the assistant."
+    }
+  }
+}

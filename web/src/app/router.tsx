@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { createBrowserRouter, type RouteObject } from 'react-router'
+import { AssistantPage } from '@/features/assistant/pages/AssistantPage'
 import { AssignmentDetailPage } from '@/features/assignments/pages/AssignmentDetailPage'
 import { AssignmentEditorPage } from '@/features/assignments/pages/AssignmentEditorPage'
 import { AssignmentsHomePage } from '@/features/assignments/pages/AssignmentsHomePage'
@@ -60,6 +61,7 @@ const STAFF: readonly AppRole[] = ['Admin', 'Principal', 'Teacher']
 const TEACHER: readonly AppRole[] = ['Teacher']
 const STUDENT: readonly AppRole[] = ['Student']
 const PARENT: readonly AppRole[] = ['Parent']
+const PRINCIPAL: readonly AppRole[] = ['Principal']
 const APPLICANT: readonly AppRole[] = ['Applicant']
 // Admin staff do not work with assignments (authorization matrix).
 const ASSIGNMENT_READERS: readonly AppRole[] = ['Teacher', 'Principal', 'Student', 'Parent']
@@ -125,6 +127,8 @@ export const routes: RouteObject[] = [
           { path: '/my-children/grades', element: guarded(PARENT, <ChildGradesPage />) },
           { path: '/grading', element: guarded(TEACHER, <GradeBookPage />) },
           { path: '/manage/grade-bands', element: guarded(ADMIN, <GradeBandsPage />) },
+
+          { path: '/assistant', element: guarded(PRINCIPAL, <AssistantPage />) },
 
           { path: '/progress-summaries', element: guarded(TEACHER, <ReviewSummariesPage />) },
           { path: '/teacher-notes', element: guarded(TEACHER, <TeacherNotesPage />) },
