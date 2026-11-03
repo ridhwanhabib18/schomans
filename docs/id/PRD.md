@@ -209,7 +209,7 @@ Prinsip untuk semua fitur AI:
 - [ ] Setiap panggilan dicatat: fitur, pengguna, jumlah token, biaya, durasi
 - [ ] Prompt caching untuk instruksi sistem yang panjang
 - [ ] Tiap fitur punya kumpulan contoh uji (minimal 10 kasus) untuk mengevaluasi kualitas setiap kali prompt diubah
-- [ ] Mode mock untuk demo dan test, sehingga aplikasi tetap jalan tanpa API key
+- [ ] Mode mock untuk demo dan test, sehingga aplikasi tetap jalan tanpa API key; provider (Mock, Ollama, atau Claude) dipilih lewat konfigurasi, lihat ADR-004
 
 **AI-01: Ringkasan perkembangan untuk orang tua** (US-14, Wajib)
 
@@ -268,7 +268,7 @@ Prinsip untuk semua fitur AI:
 **F-11: Audit log & notifikasi eksternal**
 
 - [ ] Setiap perubahan nilai, absensi, dan approval tercatat: siapa, kapan, nilai lama dan baru
-- [ ] Notifikasi penting dikirim lewat email; WhatsApp opsional lewat gateway sandbox
+- [ ] Notifikasi penting dikirim lewat email (SMTP; Mailpit menangkap email secara lokal); WhatsApp tidak dibangun di v1
 
 ## 5. Kebutuhan non-fungsional
 
@@ -312,7 +312,7 @@ Stack sudah ditetapkan: backend .NET 10 (LTS terbaru, didukung sampai November 2
 | Testing | xUnit + Testcontainers (SQL Server, SeaweedFS), Vitest untuk store dan hook, Playwright end-to-end | CI di GitHub Actions, repo publik | Gratis |
 | Deployment | Docker Compose: api, web, sqlserver, keycloak (+ seaweedfs di lokal) | VPS sendiri; reverse proxy Caddy dengan HTTPS otomatis; Docker Engine di server | Software gratis, server berbayar |
 | Logging | Serilog + Seq, health check endpoint | Mendukung audit log F-11; alternatif: log ke file | Gratis (Seq lisensi individu) |
-| AI | Claude API dipanggil dari backend .NET | Hanya F-10; pasang batas budget dan mode mock untuk demo | Berbayar per token |
+| AI | Claude API dipanggil dari backend .NET, di balik `IAiService` dengan provider mock dan Ollama lokal (ADR-004) | Hanya F-10; batas budget; mock jadi default sehingga demo dan test gratis | Claude: berbayar per token; Mock dan Ollama: gratis |
 
 **Desain penyimpanan S3.** Pola ini sama dengan yang dipakai di produksi AWS S3, jadi pengalamannya langsung relevan untuk CV.
 
@@ -727,7 +727,7 @@ Claude bisa membaca gambar, jadi lampirkan wireframe, sketsa tangan, atau screen
 - [ ] Jenjang sekolah: SD, SMP, atau SMA/SMK? Ini memengaruhi format rapor dan komponen nilai
 - [ ] Kurikulum yang diikuti untuk format rapor (Kurikulum Merdeka?)
 - [ ] Perlu validasi lokasi (geofence) di absensi QR?
-- [ ] Notifikasi WhatsApp dimasukkan, atau cukup email + in-app?
+- [x] Notifikasi WhatsApp dimasukkan, atau cukup email + in-app? Diputuskan: cukup email + in-app
 - [ ] Apakah dokumen resmi (rapor, surat) perlu locale bahasa Indonesia di v1, atau tetap bahasa Inggris untuk demo?
 
 ## 10. Rencana implementasi bertahap
