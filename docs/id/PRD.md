@@ -255,6 +255,8 @@ _Sesuai build (Fase 6): delapan tool read-only (lebih banyak dari contoh di atas
 - [ ] Guru mengedit lalu menyimpan ke bank soal per mapel
 - [ ] Soal dari bank soal bisa dirakit menjadi kuis online sederhana di modul tugas, dengan penilaian otomatis untuk pilihan ganda
 
+_Diputuskan untuk Fase 7: teks PDF dibaca di server dengan PdfPig (Apache-2.0, paket baru) dan hanya teksnya yang dikirim ke AI; kuis dikerjakan satu kali per siswa tanpa batas waktu; pilihan ganda dinilai seketika dan masuk nilai Quiz, isian singkat menunggu guru._
+
 **AI-08: Chatbot info sekolah & PPDB** (US-17, Sebaiknya)
 
 - [ ] Widget chat di landing page dan dashboard orang tua
@@ -263,11 +265,15 @@ _Sesuai build (Fase 6): delapan tool read-only (lebih banyak dari contoh di atas
 - [ ] Jika jawaban tidak ada di sumber, chatbot mengatakan tidak tahu dan memberikan kontak TU, tanpa menebak
 - [ ] Pengguna publik dibatasi per IP untuk mencegah penyalahgunaan dan biaya membengkak
 
+_Diputuskan untuk Fase 7: image SQL Server tidak punya komponen full-text, jadi 5 kutipan paling relevan diambil dari skor kata kunci yang dihitung di SQL atas sumber yang diizinkan; tidak ada image database kustom._
+
 **AI-09: Draf pengumuman & surat** (US-18, Sebaiknya)
 
 - [ ] TU mengisi jenis dokumen, target pembaca, dan poin-poin singkat; AI menyusun draf di editor
 - [ ] Kop, nomor surat, dan tanda tangan tetap diisi sistem, bukan AI
 - [ ] Draf tidak pernah terbit atau terkirim otomatis
+
+_Diputuskan untuk Fase 7: draf pengumuman masuk ke editor pengumuman; surat umum (undangan, pemberitahuan) punya halaman baru tempat AI menulis isinya, sedangkan sistem menambahkan kop, nomor, dan tanda tangan lalu mengekspor PDF. Surat keterangan di alur persetujuan tidak berubah._
 
 **F-11: Audit log & notifikasi eksternal**
 
@@ -306,6 +312,7 @@ Stack sudah ditetapkan: backend .NET 10 (LTS terbaru, didukung sampai November 2
 | Storage file | API S3 lewat AWSSDK.S3: SeaweedFS di Docker untuk lokal, Cloudflare R2 untuk demo live | Berkas PR, PPDB, gambar berita. Satu implementasi S3FileStorage di balik interface IFileStorage; lokal dan demo hanya beda konfigurasi endpoint. MinIO tidak dipakai karena edisi komunitasnya dikurangi sejak 2025 | Gratis (SeaweedFS Apache 2.0; R2 free tier, berbayar jika melebihi kuota) |
 | PDF | QuestPDF | Rapor dan surat bernomor dengan QR verifikasi | Gratis (Community License, individu & omzet < 1 juta USD) |
 | Import/ekspor Excel | ClosedXML | Import siswa, ekspor rekap absensi | Gratis (MIT) |
+| Baca teks PDF | UglyToad.PdfPig | Teks materi ajar untuk AI-06 (Fase 7) | Gratis (Apache-2.0) |
 | Frontend | React 19 + TypeScript + Vite | React Router untuk routing | Gratis (MIT) |
 | Server state | TanStack Query | Semua data dari API: caching, loading/error, pagination, invalidasi setelah mutasi; event SignalR memicu invalidasi query terkait | Gratis (MIT) |
 | Client state | Zustand | Hanya state di browser, satu store kecil per kebutuhan: useAuthStore, useAttendanceSessionStore, useAdmissionWizardStore, useUiStore; selalu pakai selector; tidak menyimpan salinan data API | Gratis (MIT) |
