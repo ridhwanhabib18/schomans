@@ -552,12 +552,15 @@ public class QuizEndpointTests(ApiFixture fixture)
     public async Task Parents_read_the_quiz_of_their_child_without_the_result_before_the_due_date()
     {
         var quiz = await ChoiceQuizAsync();
-        using var parent = fixture.AsParent();
+        // A parent of its own: the demo parent has exactly two children, which other tests count on.
+        var key = Guid.NewGuid().ToString("N");
+        var email = $"parent-{key}@test.example";
+        using var parent = fixture.AsUser(email, "Pia Parent", $"sub-{key}", "Parent");
         (await parent.GetAsync("/api/v1/announcements/mine")).EnsureSuccessStatusCode(); // the first request creates the user record
         await using (var scope = fixture.Factory.Services.CreateAsyncScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var parentId = await db.Users.Where(u => u.Email == "parent@schomans.demo").Select(u => u.Id).SingleAsync();
+            var parentId = await db.Users.Where(u => u.Email == email).Select(u => u.Id).SingleAsync();
             db.StudentParents.Add(SchoMans.Domain.Students.StudentParent.Create(parentId, quiz.Scenario.Students[0].Id));
             await db.SaveChangesAsync();
         }
@@ -572,7 +575,7 @@ public class QuizEndpointTests(ApiFixture fixture)
         Assert.All(seen.Questions, q => Assert.Null(q.AnswerKey));
 
         await using var later = After(out _);
-        using var parentLater = later.AsUser("parent@schomans.demo", "Agus Putra", "sub-demo-parent", "Parent");
+        using var parentLater = later.AsUser(email, "Pia Parent", $"sub-{key}", "Parent");
         var result = await ReadQuizAsync(parentLater, quiz.Id, quiz.Scenario.Students[0].Id);
         Assert.Equal(100m, result.Attempt!.Score);
     }

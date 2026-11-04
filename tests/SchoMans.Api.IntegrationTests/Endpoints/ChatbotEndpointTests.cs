@@ -224,12 +224,14 @@ public class ChatbotEndpointTests(ApiFixture fixture) : IAsyncLifetime
     {
         var token = Token();
         var scenario = await ClassroomScenario.CreateAsync(_open, 1);
-        using var parent = _open.AsUser("parent@schomans.demo", "Agus Putra", "sub-demo-parent", "Parent");
+        // A parent of its own: the demo parent has exactly two children, which other tests count on.
+        var email = $"parent-{token}@test.example";
+        using var parent = _open.AsUser(email, "Pia Parent", $"sub-{token}", "Parent");
         (await parent.GetAsync("/api/v1/announcements/mine")).EnsureSuccessStatusCode(); // the first request creates the user record
         await using (var scope = fixture.Factory.Services.CreateAsyncScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            var parentId = await db.Users.Where(u => u.Email == "parent@schomans.demo").Select(u => u.Id).SingleAsync();
+            var parentId = await db.Users.Where(u => u.Email == email).Select(u => u.Id).SingleAsync();
             db.StudentParents.Add(StudentParent.Create(parentId, scenario.Students[0].Id));
             await db.SaveChangesAsync();
         }
