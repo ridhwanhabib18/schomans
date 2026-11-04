@@ -76,7 +76,11 @@
     "wrongType": "Upload a PDF or an image (JPEG, PNG, WebP).",
     "wrongSize": "The file must be larger than 0 and at most 10 MB.",
     "note": "Note from the staff: {{note}}",
-    "fileLabel": "{{type}}: choose a file"
+    "fileLabel": "{{type}}: choose a file",
+    "readAi": "Read with AI",
+    "reading": "Reading…",
+    "readDone": "The AI read the document. Check what it found.",
+    "readHint": "The AI can read a photo of a document and suggest what to put in the form. It reads photos only (JPEG, PNG, WebP), not PDFs, and you decide what to use."
   },
   "submit": {
     "button": "Hand in the application",
@@ -158,7 +162,11 @@
       "done": "Applicant enrolled as a student",
       "waiting": "The applicant has not confirmed the place yet.",
       "enrolled": "Enrolled as a student."
-    }
+    },
+    "aiTitle": "What the AI read from the documents",
+    "aiBody": "A reading is a suggestion, not a fact: check it against the document itself. The AI never verifies a document.",
+    "aiNone": "Nothing has been read yet. Use \"Read with AI\" on a document.",
+    "aiMismatches": "These do not agree between the documents and the form:"
   },
   "periods": {
     "title": "Admission periods",
@@ -228,7 +236,10 @@
       "not_confirmed": "Only an accepted applicant who confirmed the place can be enrolled.",
       "cannot_enroll": "The applicant has no date of birth or has not signed in yet.",
       "identity_not_configured": "The identity provider is not set up to change roles.",
-      "identity_failed": "The account could not be changed to a student in the identity provider. Try again."
+      "identity_failed": "The account could not be changed to a student in the identity provider. Try again.",
+      "extract_needs_image": "The AI reads photos only. Upload the document as a photo (JPEG, PNG or WebP) to use it.",
+      "extract_too_large": "The photo is larger than 5 MB. Upload a smaller photo to use the AI.",
+      "extract_unreadable": "The AI could not read anything from this photo. Upload a clearer photo."
     },
     "files": {
       "not_uploaded": "The file was not uploaded. Upload it first.",
@@ -244,6 +255,36 @@
     },
     "academic_years": {
       "not_found": "The academic year does not exist."
+    },
+    "ai": {
+      "daily_limit": "You have used your AI calls of today. Try again tomorrow.",
+      "budget_exhausted": "The AI budget of this month is used up. The AI features are off until next month.",
+      "invalid_output": "The AI did not give a usable reading of the document. Try again.",
+      "provider_failed": "The AI service did not answer. Try again in a moment.",
+      "not_configured": "The AI service is not set up."
+    }
+  },
+  "extraction": {
+    "title": "Suggestions from your documents",
+    "body": "The AI read your documents. Nothing is changed until you choose to use a suggestion, and you must still check it and save the form.",
+    "from": "from {{document}}",
+    "use": "Use",
+    "useAll": "Use all suggestions",
+    "used": "Filled in from a document: check it, then save",
+    "none": "The form already matches what the AI read.",
+    "mismatchTitle": "The documents do not agree",
+    "mismatchBody": "Staff will look at these when they verify your documents. If one of them is wrong, upload that document again.",
+    "sourceForm": "Form",
+    "fields": {
+      "fullName": "Full name",
+      "nik": "National ID number (NIK)",
+      "dateOfBirth": "Date of birth",
+      "placeOfBirth": "Place of birth",
+      "address": "Address",
+      "fatherName": "Father",
+      "motherName": "Mother",
+      "guardianName": "Parent or guardian",
+      "grades": "Grades"
     }
   }
 }

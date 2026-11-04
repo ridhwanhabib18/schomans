@@ -18,6 +18,10 @@ public static class DependencyInjection
             }
         }
 
+        services.AddScoped<Features.Ai.AiGateway>();
+        services.AddScoped<Features.ProgressSummaries.ProgressSummaryDrafter>();
+        services.AddScoped<Features.AchievementDescriptions.AchievementDescriptionDrafter>();
+        services.AddScoped<Features.Admissions.ExtractDocuments.DocumentExtractor>();
         services.AddValidatorsFromAssembly(assembly, includeInternalTypes: true);
         return services;
     }

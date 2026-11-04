@@ -209,7 +209,7 @@ Prinsip untuk semua fitur AI:
 - [ ] Setiap panggilan dicatat: fitur, pengguna, jumlah token, biaya, durasi
 - [ ] Prompt caching untuk instruksi sistem yang panjang
 - [ ] Tiap fitur punya kumpulan contoh uji (minimal 10 kasus) untuk mengevaluasi kualitas setiap kali prompt diubah
-- [ ] Mode mock untuk demo dan test, sehingga aplikasi tetap jalan tanpa API key
+- [ ] Mode mock untuk demo dan test, sehingga aplikasi tetap jalan tanpa API key; provider (Mock, Ollama, atau Claude) dipilih lewat konfigurasi, lihat ADR-004
 
 **AI-01: Ringkasan perkembangan untuk orang tua** (US-14, Wajib)
 
@@ -231,11 +231,15 @@ Prinsip untuk semua fitur AI:
 - [ ] Field hasil ekstraksi ditandai di formulir; pendaftar atau TU wajib mengonfirmasi
 - [ ] Ketidakcocokan antardokumen (misalnya tanggal lahir di KK dan akta berbeda) ditandai untuk dicek TU
 
+_Sesuai build (Fase 6): hanya foto (PDF ditolak dengan pesan jelas); hasil disimpan di dokumen; NIK, nama orang tua, dan nilai hanya ditampilkan sebagai informasi, formulir pendaftaran tidak berubah; TU melihat hasil bacaan AI di samping dokumen._
+
 **AI-04: Asisten kepala sekolah** (US-13, Sebaiknya)
 
 - [ ] Kepala sekolah bertanya dengan bahasa biasa; AI memakai tool use untuk memanggil fungsi query yang disediakan backend, misalnya rekap kehadiran per kelas, rata-rata nilai per mapel, dan daftar pengajuan menunggu
 - [ ] AI tidak pernah menulis SQL sendiri; hanya fungsi yang terdaftar dan sudah dicek hak aksesnya yang bisa dipanggil
 - [ ] Jawaban menyertakan angka sumber dan tautan ke halaman laporan terkait
+
+_Sesuai build (Fase 6): delapan tool read-only (lebih banyak dari contoh di atas), multi-giliran dengan riwayat disimpan browser, jawaban utuh sekaligus (tanpa streaming SignalR), maksimal 5 langkah tool per pertanyaan._
 
 **AI-05: Umpan balik esai berbasis rubrik** (US-10, Sebaiknya)
 
@@ -268,7 +272,7 @@ Prinsip untuk semua fitur AI:
 **F-11: Audit log & notifikasi eksternal**
 
 - [ ] Setiap perubahan nilai, absensi, dan approval tercatat: siapa, kapan, nilai lama dan baru
-- [ ] Notifikasi penting dikirim lewat email; WhatsApp opsional lewat gateway sandbox
+- [ ] Notifikasi penting dikirim lewat email (SMTP; Mailpit menangkap email secara lokal); WhatsApp tidak dibangun di v1
 
 ## 5. Kebutuhan non-fungsional
 
@@ -312,7 +316,7 @@ Stack sudah ditetapkan: backend .NET 10 (LTS terbaru, didukung sampai November 2
 | Testing | xUnit + Testcontainers (SQL Server, SeaweedFS), Vitest untuk store dan hook, Playwright end-to-end | CI di GitHub Actions, repo publik | Gratis |
 | Deployment | Docker Compose: api, web, sqlserver, keycloak (+ seaweedfs di lokal) | VPS sendiri; reverse proxy Caddy dengan HTTPS otomatis; Docker Engine di server | Software gratis, server berbayar |
 | Logging | Serilog + Seq, health check endpoint | Mendukung audit log F-11; alternatif: log ke file | Gratis (Seq lisensi individu) |
-| AI | Claude API dipanggil dari backend .NET | Hanya F-10; pasang batas budget dan mode mock untuk demo | Berbayar per token |
+| AI | Claude API dipanggil dari backend .NET, di balik `IAiService` dengan provider mock dan Ollama lokal (ADR-004) | Hanya F-10; batas budget; mock jadi default sehingga demo dan test gratis | Claude: berbayar per token; Mock dan Ollama: gratis |
 
 **Desain penyimpanan S3.** Pola ini sama dengan yang dipakai di produksi AWS S3, jadi pengalamannya langsung relevan untuk CV.
 
@@ -361,7 +365,8 @@ GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, P
 GradeBand: Id, Label, MinScore   ← skala predikat sekolah, diatur admin; satu predikat mulai dari 0
 ReportCard: Id, StudentId, TermId, Status (Draft|Published), PdfKey, GeneratedAt
 AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status (Draft|Accepted), IsAiDrafted
-ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt
+ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), IsAiDrafted, ApprovedById → User, SentAt
+TeacherNote: Id, StudentId, AuthorId → User, Date, Body   ← pengamatan pribadi guru; dibaca AI-01 dan AI-02, tidak pernah ditampilkan ke keluarga
 
 -- PPDB
 AdmissionPeriod: Id, AcademicYearId, Name, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline, ResultsNotifiedAt   ← ResultsNotifiedAt diisi job yang memberi tahu calon siswa bahwa hasil sudah keluar
@@ -381,8 +386,9 @@ AnnouncementRead: AnnouncementId → Announcement, UserId → User, ReadAt
 Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← notifikasi in-app (tugas, approval, draf AI, ...)
 
 -- Audit & AI
-AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
-AiUsageLog: Id, UserId → User, Feature, Model, Tokens, CostUsd, DurationMs, CreatedAt
+AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp   ← ditambah EntityId dan waktu (CreatedAt); satu baris per perubahan nilai, presensi, permohonan, atau langkah persetujuan
+EmailMessage: Id, UserId → User, ToAddress, Subject, Body, LinkUrl, Status (Pending | Sent | Failed), Attempts, SentAt, LastError   ← antrean email F-11 (belum ada di PRD awal)
+AiUsageLog: Id, UserId → User (kosong bila diminta job), Feature, Provider, Model, Tokens, CostUsd, DurationMs, Succeeded, IsBulk, CreatedAt   ← IsBulk: panggilan lanjutan dari satu proses massal; dihitung ke anggaran, bukan ke jatah harian pengguna
 
 Semua entitas: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (concurrency EF Core)
 ```
@@ -452,6 +458,7 @@ Semua entitas: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (concur
 | Surat | Letter |
 | Bank soal | QuestionBank |
 | Ringkasan perkembangan | ProgressSummary |
+| Catatan guru | TeacherNote |
 | Jejak audit | AuditLog |
 
 ## 7. Arsitektur kode
@@ -727,7 +734,7 @@ Claude bisa membaca gambar, jadi lampirkan wireframe, sketsa tangan, atau screen
 - [ ] Jenjang sekolah: SD, SMP, atau SMA/SMK? Ini memengaruhi format rapor dan komponen nilai
 - [ ] Kurikulum yang diikuti untuk format rapor (Kurikulum Merdeka?)
 - [ ] Perlu validasi lokasi (geofence) di absensi QR?
-- [ ] Notifikasi WhatsApp dimasukkan, atau cukup email + in-app?
+- [x] Notifikasi WhatsApp dimasukkan, atau cukup email + in-app? Diputuskan: cukup email + in-app
 - [ ] Apakah dokumen resmi (rapor, surat) perlu locale bahasa Indonesia di v1, atau tetap bahasa Inggris untuk demo?
 
 ## 10. Rencana implementasi bertahap

@@ -1,8 +1,10 @@
 using SchoMans.Application.Features.Grading.GetGradeBook;
+using SchoMans.Domain.Grading;
 
 namespace SchoMans.Application.Features.ReportCards;
 
-public sealed record AchievementDescriptionDto(Guid StudentId, Guid SubjectId, Guid TermId, string Body);
+public sealed record AchievementDescriptionDto(
+    Guid StudentId, Guid SubjectId, Guid TermId, string Body, AchievementStatus Status = AchievementStatus.Accepted, bool IsAiDrafted = false);
 
 public sealed record ReportCardUrlDto(string Url, DateTimeOffset ExpiresAt);
 

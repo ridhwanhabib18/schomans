@@ -10,11 +10,22 @@ namespace SchoMans.Api.IntegrationTests.Infrastructure;
 public sealed class InMemoryFileStorage : IFileStorage
 {
     private readonly ConcurrentDictionary<(FileBucket Bucket, string Key), StoredObject> _objects = new();
+    private readonly ConcurrentDictionary<(FileBucket Bucket, string Key), byte[]> _contents = new();
 
     public int UploadUrlsCreated { get; private set; }
 
-    public void Put(FileBucket bucket, string key, long sizeBytes = 1024, string contentType = "image/png") =>
+    public void Put(FileBucket bucket, string key, long sizeBytes = 1024, string contentType = "image/png")
+    {
         _objects[(bucket, key)] = new StoredObject(sizeBytes, contentType);
+        _contents.TryRemove((bucket, key), out _);
+    }
+
+    /// <summary>A file with this content, for the tests that read it back.</summary>
+    public void PutContent(FileBucket bucket, string key, byte[] content, string contentType = "image/png")
+    {
+        _objects[(bucket, key)] = new StoredObject(content.Length, contentType);
+        _contents[(bucket, key)] = content;
+    }
 
     public bool Contains(FileBucket bucket, string key) => _objects.ContainsKey((bucket, key));
 
@@ -37,9 +48,21 @@ public sealed class InMemoryFileStorage : IFileStorage
     public Task<StoredObject?> GetObjectInfoAsync(FileBucket bucket, string key, CancellationToken ct) =>
         Task.FromResult(_objects.TryGetValue((bucket, key), out var info) ? info : null);
 
+    public Task<byte[]?> DownloadAsync(FileBucket bucket, string key, CancellationToken ct)
+    {
+        if (!_objects.TryGetValue((bucket, key), out var info))
+        {
+            return Task.FromResult<byte[]?>(null);
+        }
+
+        // A file put without content is still a file: small filler bytes stand in for it.
+        return Task.FromResult<byte[]?>(_contents.TryGetValue((bucket, key), out var content) ? content : new byte[Math.Min(info.SizeBytes, 64)]);
+    }
+
     public Task DeleteAsync(FileBucket bucket, string key, CancellationToken ct)
     {
         _objects.TryRemove((bucket, key), out _);
+        _contents.TryRemove((bucket, key), out _);
         return Task.CompletedTask;
     }
 }

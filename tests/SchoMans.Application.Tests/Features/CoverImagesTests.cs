@@ -26,6 +26,8 @@ public class CoverImagesTests
         public Task<StoredObject?> GetObjectInfoAsync(FileBucket bucket, string key, CancellationToken ct) =>
             Task.FromResult(Objects.TryGetValue(key, out var info) ? info : null);
 
+        public Task<byte[]?> DownloadAsync(FileBucket bucket, string key, CancellationToken ct) => throw new NotSupportedException();
+
         public Task DeleteAsync(FileBucket bucket, string key, CancellationToken ct)
         {
             Deleted.Add(key);

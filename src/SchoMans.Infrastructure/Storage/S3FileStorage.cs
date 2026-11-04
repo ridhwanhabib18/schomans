@@ -76,6 +76,21 @@ public sealed class S3FileStorage : IFileStorage, IDisposable
         }
     }
 
+    public async Task<byte[]?> DownloadAsync(FileBucket bucket, string key, CancellationToken ct)
+    {
+        try
+        {
+            using var response = await _client.GetObjectAsync(BucketName(bucket), key, ct);
+            using var buffer = new MemoryStream();
+            await response.ResponseStream.CopyToAsync(buffer, ct);
+            return buffer.ToArray();
+        }
+        catch (AmazonS3Exception exception) when (exception.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+    }
+
     public Task DeleteAsync(FileBucket bucket, string key, CancellationToken ct) =>
         _client.DeleteObjectAsync(BucketName(bucket), key, ct);
 

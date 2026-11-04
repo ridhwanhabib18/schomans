@@ -29,6 +29,8 @@ public sealed class ApiFixture : IAsyncLifetime
 
     public RecordingIdentityProvisioner Identity => Factory.Identity;
 
+    public FakeEmailSender Email => Factory.Email;
+
     public async Task InitializeAsync()
     {
         _serverConnectionString = await AcquireServerAsync();

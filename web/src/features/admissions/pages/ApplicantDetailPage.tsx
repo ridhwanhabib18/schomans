@@ -1,4 +1,4 @@
-import { ArrowLeft, FileText } from 'lucide-react'
+import { ArrowLeft, FileText, Sparkles } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useParams } from 'react-router'
@@ -16,16 +16,20 @@ import { selectShowToast, useToastStore } from '@/stores/useToastStore'
 import {
   DOCUMENT_KINDS,
   useApplicant,
+  useApplicantExtractions,
   useDecideApplicant,
   useEnrollApplicant,
+  useExtractApplicantDocument,
   useOpenApplicantDocument,
   useReviewDocument,
   type ApplicantDetail,
   type DocumentType,
 } from '../api/admissions'
+import { MismatchList } from '../components/MismatchList'
 import { NoteDialog } from '../components/NoteDialog'
 import { ApplicantStatusBadge, DocumentStatusBadge } from '../components/StatusBadges'
 import { admissionErrorText } from '../errors'
+import { canReadWithAi } from '../extraction'
 import '../i18n'
 
 const NISN = /^\d{10}$/
@@ -109,6 +113,8 @@ export function ApplicantDetailPage() {
   const { data: applicant, isPending, isError, refetch } = useApplicant(id)
   const openDocument = useOpenApplicantDocument()
   const review = useReviewDocument()
+  const extract = useExtractApplicantDocument(id)
+  const extractions = useApplicantExtractions(id)
   const decide = useDecideApplicant()
   const [asking, setAsking] = useState<Asking>(null)
   const [error, setError] = useState<string>()
@@ -198,6 +204,21 @@ export function ApplicantDetailPage() {
                       {t('detail.view')}
                       <span className="sr-only">: {label}</span>
                     </Button>
+                    {canReadWithAi(document.fileName) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={extract.isPending}
+                        onClick={() => {
+                          setError(undefined)
+                          extract.mutate(type, { onSuccess: () => showToast({ kind: 'success', title: t('documents.readDone') }), onError: fail })
+                        }}
+                      >
+                        <Sparkles aria-hidden="true" />
+                        {extract.isPending && extract.variables === type ? t('documents.reading') : t('documents.readAi')}
+                        <span className="sr-only">: {label}</span>
+                      </Button>
+                    )}
                     {inReview && (
                       <>
                         <Button
@@ -227,6 +248,50 @@ export function ApplicantDetailPage() {
             )
           })}
         </ul>
+      </Section>
+
+      <Section title={t('detail.aiTitle')}>
+        <p className="text-sm text-muted-foreground">{t('detail.aiBody')}</p>
+        {extractions.data && extractions.data.mismatches.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <Alert tone="info" message={t('detail.aiMismatches')} />
+            <MismatchList mismatches={extractions.data.mismatches} />
+          </div>
+        )}
+        {!extractions.data || extractions.data.documents.length === 0 ? (
+          <p className="text-sm text-muted-foreground">{t('detail.aiNone')}</p>
+        ) : (
+          <ul className="flex flex-col gap-3">
+            {extractions.data.documents.map((reading) => {
+              const rows: [string, string][] = [
+                [t('extraction.fields.fullName'), reading.fields.fullName ?? ''],
+                [t('extraction.fields.nik'), reading.fields.nik ?? ''],
+                [t('extraction.fields.dateOfBirth'), reading.fields.dateOfBirth ? formatDate(reading.fields.dateOfBirth) : ''],
+                [t('extraction.fields.placeOfBirth'), reading.fields.placeOfBirth ?? ''],
+                [t('extraction.fields.address'), reading.fields.address ?? ''],
+                [t('extraction.fields.fatherName'), reading.fields.fatherName ?? ''],
+                [t('extraction.fields.motherName'), reading.fields.motherName ?? ''],
+                [t('extraction.fields.guardianName'), reading.fields.guardianName ?? ''],
+                [t('extraction.fields.grades'), reading.fields.grades.map((g) => `${g.subject} ${g.score}`).join(', ')],
+              ]
+              return (
+                <li key={reading.type} className="min-w-0 rounded-lg border border-border p-3">
+                  <p className="font-medium">{t(`docTypes.${reading.type}`)}</p>
+                  <dl className="mt-2 grid min-w-0 gap-2 text-sm sm:grid-cols-2">
+                    {rows
+                      .filter(([, value]) => value !== '')
+                      .map(([label, value]) => (
+                        <div key={label} className="min-w-0">
+                          <dt className="text-muted-foreground">{label}</dt>
+                          <dd className="break-words font-medium">{value}</dd>
+                        </div>
+                      ))}
+                  </dl>
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </Section>
 
       <Section title={t('detail.decision')}>

@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SchoMans.Api.Auth;
 using SchoMans.Api.Extensions;
+using SchoMans.Application.Features.AchievementDescriptions;
+using SchoMans.Application.Features.AchievementDescriptions.AcceptAchievementDescription;
+using SchoMans.Application.Features.AchievementDescriptions.DraftAchievementDescription;
+using SchoMans.Application.Features.AchievementDescriptions.DraftAchievementDescriptions;
 using SchoMans.Application.Features.ReportCards;
 using SchoMans.Application.Features.ReportCards.GenerateReportCards;
 using SchoMans.Application.Features.ReportCards.GetReportCardUrl;
@@ -36,6 +40,19 @@ public static class ReportCardEndpoints
             .WithValidation<WriteAchievementDescriptionCommand>()
             .WithName("WriteAchievementDescription");
 
+        // AI-02: the AI drafts; the teacher accepts, edits (the PUT above) or asks for a new draft.
+        group.MapPost("/descriptions/draft", DraftAchievementDescription)
+            .RequireAuthorization(Policies.Teacher)
+            .WithName("DraftAchievementDescription");
+
+        group.MapPost("/descriptions/draft-classroom", DraftAchievementDescriptions)
+            .RequireAuthorization(Policies.Teacher)
+            .WithName("DraftAchievementDescriptions");
+
+        group.MapPost("/descriptions/accept", AcceptAchievementDescription)
+            .RequireAuthorization(Policies.Teacher)
+            .WithName("AcceptAchievementDescription");
+
         group.MapPost("/generate", GenerateReportCards)
             .RequireAuthorization(Policies.Teacher)
             .WithName("GenerateReportCards");
@@ -61,5 +78,17 @@ public static class ReportCardEndpoints
 
     private static async Task<Results<Ok<GeneratedReportCardsDto>, ProblemHttpResult>> GenerateReportCards(
         [FromBody] GenerateReportCardsCommand command, GenerateReportCardsHandler handler, CancellationToken ct)
+        => (await handler.Handle(command, ct)).ToHttpResult();
+
+    private static async Task<Results<Ok<AchievementDescriptionDto>, ProblemHttpResult>> DraftAchievementDescription(
+        [FromBody] DraftAchievementDescriptionCommand command, DraftAchievementDescriptionHandler handler, CancellationToken ct)
+        => (await handler.Handle(command, ct)).ToHttpResult();
+
+    private static async Task<Results<Ok<DraftedDescriptionsDto>, ProblemHttpResult>> DraftAchievementDescriptions(
+        [FromBody] DraftAchievementDescriptionsCommand command, DraftAchievementDescriptionsHandler handler, CancellationToken ct)
+        => (await handler.Handle(command, ct)).ToHttpResult();
+
+    private static async Task<Results<Ok<AchievementDescriptionDto>, ProblemHttpResult>> AcceptAchievementDescription(
+        [FromBody] AcceptAchievementDescriptionCommand command, AcceptAchievementDescriptionHandler handler, CancellationToken ct)
         => (await handler.Handle(command, ct)).ToHttpResult();
 }

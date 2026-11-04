@@ -1,12 +1,13 @@
-import { FileText, Upload } from 'lucide-react'
+import { FileText, Sparkles, Upload } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Alert } from '@/shared/ui/alert'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { selectShowToast, useToastStore } from '@/stores/useToastStore'
-import { DOCUMENT_KINDS, useUploadApplicantDocument, type DocumentStatus, type DocumentType, type MyApplication } from '../api/admissions'
+import { DOCUMENT_KINDS, useExtractMyDocument, useUploadApplicantDocument, type DocumentStatus, type DocumentType, type MyApplication } from '../api/admissions'
 import { admissionErrorText } from '../errors'
+import { canReadWithAi } from '../extraction'
 import { checkDocument, DOCUMENT_TYPES } from '../files'
 import '../i18n'
 
@@ -25,6 +26,7 @@ export function DocumentsSection({ application }: { application: MyApplication }
   const { t: tCommon } = useTranslation()
   const showToast = useToastStore(selectShowToast)
   const upload = useUploadApplicantDocument()
+  const extract = useExtractMyDocument()
   const [error, setError] = useState<string>()
   const inputs = useRef<Partial<Record<DocumentType, HTMLInputElement | null>>>({})
 
@@ -52,6 +54,7 @@ export function DocumentsSection({ application }: { application: MyApplication }
   return (
     <div className="flex min-w-0 flex-col gap-3">
       <p className="text-sm text-muted-foreground">{t('documents.hint')}</p>
+      {application.canEdit && <p className="text-sm text-muted-foreground">{t('documents.readHint')}</p>}
       {error && <Alert tone="error" message={error} />}
       <ul className="flex flex-col gap-3">
         {DOCUMENT_KINDS.map((type) => {
@@ -75,6 +78,26 @@ export function DocumentsSection({ application }: { application: MyApplication }
                 )}
                 {document?.reviewNote && <p className="mt-1 text-sm text-destructive">{t('documents.note', { note: document.reviewNote })}</p>}
               </div>
+
+              {application.canEdit && document && canReadWithAi(document.fileName) && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={extract.isPending}
+                  onClick={() => {
+                    setError(undefined)
+                    extract.mutate(type, {
+                      onSuccess: () => showToast({ kind: 'success', title: t('documents.readDone') }),
+                      onError: (e) => setError(admissionErrorText(e, t, tCommon('errors.generic'))),
+                    })
+                  }}
+                >
+                  <Sparkles aria-hidden="true" />
+                  {extract.isPending && extract.variables === type ? t('documents.reading') : t('documents.readAi')}
+                  <span className="sr-only">: {label}</span>
+                </Button>
+              )}
 
               {mayChange && (
                 <div className="shrink-0">

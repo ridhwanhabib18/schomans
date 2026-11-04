@@ -40,6 +40,41 @@ export interface ApplicantDocument {
   reviewNote: string | null
 }
 
+export interface ExtractedGrade {
+  subject: string
+  score: number
+}
+
+/** What the AI read from one document; empty fields are null. */
+export interface ExtractedFields {
+  fullName: string | null
+  nik: string | null
+  dateOfBirth: string | null
+  placeOfBirth: string | null
+  address: string | null
+  fatherName: string | null
+  motherName: string | null
+  guardianName: string | null
+  grades: ExtractedGrade[]
+}
+
+export interface DocumentExtraction {
+  type: DocumentType
+  extractedAt: string
+  fields: ExtractedFields
+}
+
+/** A field the documents and the form do not agree on; <c>source</c> is Form or a document type. */
+export interface ExtractionMismatch {
+  field: string
+  values: { source: string; value: string }[]
+}
+
+export interface ApplicantExtractions {
+  documents: DocumentExtraction[]
+  mismatches: ExtractionMismatch[]
+}
+
 export interface MyApplication {
   id: string
   status: ApplicantStatus
@@ -140,6 +175,8 @@ export const admissionKeys = {
   applicants: (params: ApplicantsParams) => [...admissionKeys.all, 'applicants', params] as const,
   applicant: (id: string) => [...admissionKeys.all, 'applicant', id] as const,
   years: () => [...admissionKeys.all, 'academic-years'] as const,
+  myExtractions: () => [...admissionKeys.all, 'my-extractions'] as const,
+  extractions: (id: string) => [...admissionKeys.all, 'extractions', id] as const,
 }
 
 const base = '/api/v1/admissions'
@@ -279,6 +316,38 @@ export function useEnrollApplicant() {
   return useApplicantMutation(({ id, classroomId, nisn }: { id: string; classroomId: string; nisn: string }) =>
     customInstance<ApplicantDetail>({ url: `${base}/applicants/${id}/enroll`, method: 'POST', data: { applicantId: id, classroomId, nisn } }),
   )
+}
+
+// ---- AI-03: the AI reads the photos of the documents ----
+
+export function useMyExtractions() {
+  return useQuery({
+    queryKey: admissionKeys.myExtractions(),
+    queryFn: () => customInstance<ApplicantExtractions>({ url: `${base}/me/extractions`, method: 'GET' }),
+  })
+}
+
+export function useExtractMyDocument() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (type: DocumentType) => customInstance<DocumentExtraction>({ url: `${base}/me/documents/${type}/extract`, method: 'POST' }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: admissionKeys.myExtractions() }),
+  })
+}
+
+export function useApplicantExtractions(id: string) {
+  return useQuery({
+    queryKey: admissionKeys.extractions(id),
+    queryFn: () => customInstance<ApplicantExtractions>({ url: `${base}/applicants/${id}/extractions`, method: 'GET' }),
+  })
+}
+
+export function useExtractApplicantDocument(id: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (type: DocumentType) => customInstance<DocumentExtraction>({ url: `${base}/applicants/${id}/documents/${type}/extract`, method: 'POST' }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: admissionKeys.extractions(id) }),
+  })
 }
 
 // ---- the admin staff: the periods ----

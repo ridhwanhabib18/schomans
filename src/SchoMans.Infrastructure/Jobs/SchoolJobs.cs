@@ -3,6 +3,8 @@ using SchoMans.Application.Features.Admissions.AnnounceResults;
 using SchoMans.Application.Features.Assignments.SendDueReminders;
 using SchoMans.Application.Features.Attendance.CloseStaleSessions;
 using SchoMans.Application.Features.Attendance.RotateQrCodes;
+using SchoMans.Application.Features.Email.SendQueuedEmails;
+using SchoMans.Application.Features.ProgressSummaries.DraftProgressSummaries;
 
 namespace SchoMans.Infrastructure.Jobs;
 
@@ -30,9 +32,27 @@ public sealed class AssignmentDueReminderJob(SendDueRemindersHandler handler)
     public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
 }
 
+/// <summary>
+/// 06:00 school time on the 1st to the 3rd of each month (AI-01): draft the summaries of the previous month. Each run only
+/// drafts the students that still have none, so the later days make up for a provider that was down.
+/// </summary>
+[DisableConcurrentExecution(timeoutInSeconds: 3_000)]
+public sealed class ProgressSummaryDraftJob(DraftProgressSummariesHandler handler)
+{
+    public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
+}
+
 /// <summary>Every 5 minutes: tell the applicants of a period that the results are out, once its announcement moment has come.</summary>
 [DisableConcurrentExecution(timeoutInSeconds: 240)]
 public sealed class AdmissionResultsJob(AnnounceAdmissionResultsHandler handler)
+{
+    public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
+}
+
+/// <summary>Every minute: send the queued emails (F-11). It never overlaps itself, so a slow mail server cannot send a mail twice.</summary>
+[AutomaticRetry(Attempts = 0)] // the next run is a minute away and picks up whatever is still pending
+[DisableConcurrentExecution(timeoutInSeconds: 120)]
+public sealed class SendQueuedEmailsJob(SendQueuedEmailsHandler handler)
 {
     public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
 }

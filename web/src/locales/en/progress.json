@@ -1,0 +1,91 @@
+{
+  "review": {
+    "title": "Progress summaries",
+    "description": "Review the monthly summaries the AI drafted for the parents of your homeroom class. Nothing reaches the parents until you approve and send it.",
+    "pickClass": "Classroom",
+    "noHomeroom": "You are not the homeroom teacher of a classroom this year, so there are no summaries to review.",
+    "error": "The summaries could not be loaded.",
+    "empty": "There are no summaries for this month yet. The drafts are written at the start of each month; you can also ask for one below.",
+    "summary": "{{count}} summaries: {{approved}} approved, {{sent}} sent",
+    "send": "Send approved ({{count}})",
+    "sendTitle": "Send the approved summaries?",
+    "sendBody": "The parents of {{count}} student(s) will be notified and can read the summary. A sent summary can no longer be changed.",
+    "sendConfirm": "Send to parents",
+    "sent": "Sent {{sent}} summary(ies); {{parents}} parent(s) notified.",
+    "nothingToSend": "Approve at least one summary first.",
+    "aiDraft": "AI draft",
+    "edited": "Edited by you",
+    "status": {
+      "Draft": "Draft",
+      "Approved": "Approved",
+      "Sent": "Sent"
+    },
+    "actions": {
+      "edit": "Edit",
+      "approve": "Approve",
+      "regenerate": "New draft",
+      "notes": "Notes"
+    },
+    "approved": "Summary approved.",
+    "regenerated": "A new draft was written.",
+    "missing": {
+      "title": "Students without a summary",
+      "hint": "Students with no grades, attendance, assignments or notes that month get no summary. Ask for one when data was added later.",
+      "draft": "Write a draft"
+    }
+  },
+  "edit": {
+    "title": "Summary of {{name}}",
+    "label": "Text for the parents",
+    "help": "Keep it simple and kind. Describe what happened; do not guess causes or label the child.",
+    "save": "Save text",
+    "saved": "Text saved. Approve it to include it in the next send."
+  },
+  "notes": {
+    "title": "Teacher notes",
+    "description": "Short notes about your students. They help the AI write the monthly summaries and the report-card texts; parents never see a note itself.",
+    "pickClass": "Classroom",
+    "pickStudent": "Student",
+    "choose": "Choose…",
+    "noClasses": "You do not work in any classroom this year.",
+    "prompt": "Choose a classroom and a student to see and add notes.",
+    "dialogTitle": "Notes about {{name}}",
+    "label": "New note",
+    "placeholder": "For example: helped a classmate with fractions this week.",
+    "add": "Add note",
+    "added": "Note added.",
+    "delete": "Delete",
+    "deleted": "Note deleted.",
+    "empty": "No notes yet.",
+    "by": "{{name}} on {{date}}",
+    "error": "The notes could not be loaded."
+  },
+  "mine": {
+    "title": "Progress summaries",
+    "description": "The monthly letters from the school about how your child is doing.",
+    "empty": "No summary has been sent yet.",
+    "error": "The summaries could not be loaded.",
+    "sentOn": "Sent on {{date}}",
+    "going": "What is going well",
+    "attention": "What needs attention",
+    "home": "A suggestion for home"
+  },
+  "errors": {
+    "progress": {
+      "no_data": "There is no data of this student in that month to write a summary from.",
+      "already_sent": "This summary was already sent to the parents and can no longer change.",
+      "not_homeroom": "Only the homeroom teacher of the classroom works with its summaries.",
+      "future_month": "A summary cannot be written for a month that has not started."
+    },
+    "ai": {
+      "daily_limit": "You have used your AI calls of today. Try again tomorrow.",
+      "budget_exhausted": "The AI budget of this month is used up. The AI features are off until next month.",
+      "invalid_output": "The AI did not give a usable text. Try again.",
+      "provider_failed": "The AI service did not answer. Try again in a moment.",
+      "not_configured": "The AI service is not set up."
+    },
+    "notes": {
+      "future_date": "A note cannot be about a day that has not come yet."
+    }
+  }
+}

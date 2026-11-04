@@ -9,7 +9,7 @@ namespace SchoMans.Application.Features.ReportCards.WriteAchievementDescription;
 
 /// <summary>
 /// The teacher of the subject writes what a student achieved in it. The text goes on the report card, so it counts as
-/// accepted as soon as the teacher saves it (AI drafts that need a review come in Phase 6). Locked once grades are published.
+/// accepted as soon as the teacher saves it, which also settles an AI draft (AI-02) that was waiting for review. Locked once grades are published.
 /// </summary>
 public sealed class WriteAchievementDescriptionHandler(IAppDbContext db, ICurrentUser currentUser)
 {

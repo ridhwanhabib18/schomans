@@ -42,7 +42,9 @@
       "publish": "Publish grades",
       "unpublish": "Unpublish grades",
       "generate": "Generate report cards",
-      "text": "Report text"
+      "text": "Report text",
+      "draftAi": "Draft texts with AI",
+      "objectives": "Learning objectives"
     },
     "publish": {
       "title": "Publish the grades of this class?",
@@ -65,7 +67,33 @@
       "label": "What the student achieved in this subject",
       "help": "This text is printed on the report card.",
       "saved": "Report text saved",
-      "save": "Save text"
+      "save": "Save text",
+      "draftAi": "Draft with AI",
+      "redraftAi": "Draft again with AI",
+      "drafting": "Drafting…",
+      "accept": "Accept text",
+      "accepted": "Text accepted",
+      "drafted": "Draft ready. Read it, edit it if you like, then accept it.",
+      "reviewNote": "This text was drafted by AI. It reaches the report card only after you accept it."
+    },
+    "objective": {
+      "label": "Scores for",
+      "overall": "All scores",
+      "hint": "Scores you type now are linked to this learning objective. The final grade counts every score."
+    },
+    "aiStatus": {
+      "draftAi": "AI draft: review it",
+      "draft": "Draft: not accepted yet"
+    },
+    "ai": {
+      "title": "Draft the report texts with AI?",
+      "body": "The AI writes a draft for each student of this class who has scores and no text yet. Texts you wrote are never replaced. Every draft must be reviewed and accepted before it reaches the report card.",
+      "confirm": "Draft texts",
+      "done": "Drafts written: {{drafted}}. Review them one by one.",
+      "skipped": "{{count}} already had a text.",
+      "noScores": "{{count}} have no scores yet.",
+      "failed": "{{count}} could not be drafted; try those again.",
+      "stopped": "The run stopped early: {{reason}}"
     }
   },
   "weights": {
@@ -101,10 +129,44 @@
       "not_homeroom": "Only the homeroom teacher of the class can do this.",
       "already_published": "The grades of this term are already published.",
       "not_published": "The grades of this term are not published.",
-      "not_found": "The class, subject or term no longer exists."
+      "not_found": "The class, subject or term no longer exists.",
+      "objective_not_found": "That learning objective does not exist for this subject."
     },
     "report_cards": {
       "grades_not_published": "Publish the grades of this term before generating report cards."
+    },
+    "achievement": {
+      "no_data": "This student has no scores in the subject this term to write a text from.",
+      "not_found": "There is no text to accept yet.",
+      "duplicate": "The AI wrote the same text as for another student. Try again."
+    },
+    "objectives": {
+      "code_taken": "This subject already has a learning objective with that code.",
+      "in_use": "Scores are linked to this learning objective, so it cannot be removed.",
+      "not_your_subject": "You can only manage the learning objectives of the subjects you teach.",
+      "not_found": "The learning objective no longer exists.",
+      "subject_not_found": "The subject no longer exists."
+    },
+    "ai": {
+      "daily_limit": "You have used your AI calls of today. Try again tomorrow.",
+      "budget_exhausted": "The AI budget of this month is used up. The AI features are off until next month.",
+      "invalid_output": "The AI did not give a usable text. Try again.",
+      "provider_failed": "The AI service did not answer. Try again in a moment.",
+      "not_configured": "The AI service is not set up."
     }
+  },
+  "objectives": {
+    "title": "Learning objectives",
+    "body": "The goals of the subject. Link scores to them in the grade book; the AI uses them to describe what each student achieved.",
+    "none": "No learning objectives yet.",
+    "code": "Code",
+    "description": "What the student can do",
+    "add": "Add objective",
+    "save": "Save",
+    "saved": "Objective saved",
+    "removed": "Objective removed",
+    "edit": "Edit objective {{code}}",
+    "remove": "Remove objective {{code}}",
+    "error": "The learning objectives could not be loaded."
   }
 }

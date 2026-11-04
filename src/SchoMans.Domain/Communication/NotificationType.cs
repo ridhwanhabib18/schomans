@@ -11,4 +11,5 @@ public enum NotificationType
     AdmissionResult,
     RequestAwaitingApproval,
     RequestDecided,
+    ProgressSummary,
 }

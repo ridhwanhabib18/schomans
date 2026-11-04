@@ -1,5 +1,6 @@
 import {
   BarChart3,
+  Bot,
   BookOpen,
   CalendarClock,
   CalendarRange,
@@ -8,6 +9,7 @@ import {
   FileText,
   Inbox,
   ListChecks,
+  ShieldCheck,
   GraduationCap,
   LayoutDashboard,
   Award,
@@ -18,6 +20,8 @@ import {
   Workflow,
   ScanLine,
   School,
+  Sparkles,
+  StickyNote,
   Users,
   type LucideIcon,
 } from 'lucide-react'
@@ -45,6 +49,7 @@ const EDITORS: readonly AppRole[] = ['Admin', 'Principal']
  */
 export const navItems: readonly NavItem[] = [
   { to: '/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard, roles: APP_ROLES, section: 'main' },
+  { to: '/assistant', labelKey: 'nav.assistant', icon: Bot, roles: ['Principal'], section: 'main' },
   { to: '/admissions', labelKey: 'nav.myApplication', icon: ClipboardList, roles: ['Applicant'], section: 'main' },
   { to: '/attendance', labelKey: 'nav.attendance', icon: ClipboardCheck, roles: ['Teacher'], section: 'classroom', end: true },
   { to: '/attendance/scan', labelKey: 'nav.scanQr', icon: ScanLine, roles: ['Student'], section: 'classroom' },
@@ -52,10 +57,13 @@ export const navItems: readonly NavItem[] = [
   { to: '/assignments', labelKey: 'nav.assignments', icon: NotebookPen, roles: ['Teacher', 'Principal', 'Student'], section: 'classroom' },
   { to: '/grades/me', labelKey: 'nav.myGrades', icon: Award, roles: ['Student'], section: 'classroom' },
   { to: '/grading', labelKey: 'nav.gradeBook', icon: Award, roles: ['Teacher'], section: 'classroom' },
+  { to: '/progress-summaries', labelKey: 'nav.progressSummaries', icon: Sparkles, roles: ['Teacher'], section: 'classroom' },
+  { to: '/teacher-notes', labelKey: 'nav.teacherNotes', icon: StickyNote, roles: ['Teacher'], section: 'classroom' },
   { to: '/attendance/reports', labelKey: 'nav.attendanceReports', icon: BarChart3, roles: STAFF, section: 'classroom' },
   { to: '/my-children/attendance', labelKey: 'nav.childAttendance', icon: ClipboardCheck, roles: ['Parent'], section: 'children' },
   { to: '/my-children/assignments', labelKey: 'nav.childAssignments', icon: NotebookPen, roles: ['Parent'], section: 'children' },
   { to: '/my-children/grades', labelKey: 'nav.childGrades', icon: Award, roles: ['Parent'], section: 'children' },
+  { to: '/my-children/summaries', labelKey: 'nav.childSummaries', icon: Sparkles, roles: ['Parent'], section: 'children' },
   { to: '/announcements', labelKey: 'nav.announcements', icon: Megaphone, roles: APP_ROLES, section: 'communication' },
   { to: '/manage/students', labelKey: 'nav.students', icon: GraduationCap, roles: STAFF, section: 'school' },
   { to: '/manage/teachers', labelKey: 'nav.teachers', icon: Users, roles: EDITORS, section: 'school' },
@@ -69,6 +77,7 @@ export const navItems: readonly NavItem[] = [
   { to: '/requests', labelKey: 'nav.requests', icon: FileText, roles: ['Parent', 'Student', 'Teacher'], section: 'communication', end: true },
   { to: '/requests/inbox', labelKey: 'nav.approvals', icon: Inbox, roles: STAFF, section: 'communication' },
   { to: '/manage/requests', labelKey: 'nav.allRequests', icon: ListChecks, roles: EDITORS, section: 'manage' },
+  { to: '/manage/audit-log', labelKey: 'nav.auditLog', icon: ShieldCheck, roles: EDITORS, section: 'manage' },
   { to: '/manage/approval-chains', labelKey: 'nav.approvalChains', icon: Workflow, roles: EDITORS, section: 'manage' },
   { to: '/manage/news', labelKey: 'nav.manageNews', icon: Newspaper, roles: EDITORS, section: 'manage' },
   { to: '/manage/announcements', labelKey: 'nav.manageAnnouncements', icon: Megaphone, roles: EDITORS, section: 'manage' },

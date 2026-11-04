@@ -8,7 +8,7 @@ namespace SchoMans.Application.Features.Grading.EnterGrade;
 
 /// <summary>
 /// A teacher enters or corrects the score of a student for a quiz, the midterm or the final. One such score per
-/// student, subject, term and component. Refused once the grades of the student's classroom are published for the term.
+/// student, subject, term, component and learning objective (none for a score of the component as a whole). Refused once the grades of the student's classroom are published for the term.
 /// </summary>
 public sealed class EnterGradeHandler(IAppDbContext db, ICurrentUser currentUser)
 {
@@ -31,13 +31,20 @@ public sealed class EnterGradeHandler(IAppDbContext db, ICurrentUser currentUser
             return Error.Conflict("grades.published", "The grades of this term are published; unpublish them before changing a score.");
         }
 
+        if (command.LearningObjectiveId is { } objectiveId
+            && !await db.LearningObjectives.AnyAsync(o => o.Id == objectiveId && o.SubjectId == command.SubjectId, ct))
+        {
+            return Error.NotFound("grades.objective_not_found", "The learning objective does not exist for this subject.");
+        }
+
         var grade = await db.Grades.FirstOrDefaultAsync(
             g => g.StudentId == command.StudentId && g.SubjectId == command.SubjectId && g.TermId == command.TermId
-                && g.Component == command.Component && g.SubmissionId == null,
+                && g.Component == command.Component && g.SubmissionId == null && g.LearningObjectiveId == command.LearningObjectiveId,
             ct);
         if (grade is null)
         {
-            grade = Grade.Create(command.StudentId, command.SubjectId, command.TermId, command.Component, command.Score);
+            grade = Grade.Create(
+                command.StudentId, command.SubjectId, command.TermId, command.Component, command.Score, learningObjectiveId: command.LearningObjectiveId);
             db.Grades.Add(grade);
         }
         else
@@ -46,6 +53,6 @@ public sealed class EnterGradeHandler(IAppDbContext db, ICurrentUser currentUser
         }
 
         await db.SaveChangesAsync(ct);
-        return new EnteredGradeDto(grade.Id, grade.StudentId, grade.SubjectId, grade.TermId, grade.Component, grade.Score);
+        return new EnteredGradeDto(grade.Id, grade.StudentId, grade.SubjectId, grade.TermId, grade.Component, grade.Score, grade.LearningObjectiveId);
     }
 }

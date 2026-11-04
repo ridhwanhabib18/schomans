@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 import { createBrowserRouter, type RouteObject } from 'react-router'
+import { AssistantPage } from '@/features/assistant/pages/AssistantPage'
+import { AuditLogPage } from '@/features/audit/pages/AuditLogPage'
 import { AssignmentDetailPage } from '@/features/assignments/pages/AssignmentDetailPage'
 import { AssignmentEditorPage } from '@/features/assignments/pages/AssignmentEditorPage'
 import { AssignmentsHomePage } from '@/features/assignments/pages/AssignmentsHomePage'
@@ -23,6 +25,9 @@ import { CallbackPage } from '@/features/auth/pages/CallbackPage'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { RequireAuth } from '@/features/auth/components/RequireAuth'
 import { RequireRole } from '@/features/auth/components/RequireRole'
+import { ChildSummariesPage } from '@/features/progress/pages/MySummariesPage'
+import { ReviewSummariesPage } from '@/features/progress/pages/ReviewSummariesPage'
+import { TeacherNotesPage } from '@/features/progress/pages/TeacherNotesPage'
 import { ChildGradesPage, MyGradesPage } from '@/features/reportcards/pages/GradesPages'
 import { ApprovalChainsPage } from '@/features/requests/pages/ApprovalChainsPage'
 import { AllRequestsPage, MyRequestsPage, RequestInboxPage } from '@/features/requests/pages/ListPages'
@@ -57,6 +62,7 @@ const STAFF: readonly AppRole[] = ['Admin', 'Principal', 'Teacher']
 const TEACHER: readonly AppRole[] = ['Teacher']
 const STUDENT: readonly AppRole[] = ['Student']
 const PARENT: readonly AppRole[] = ['Parent']
+const PRINCIPAL: readonly AppRole[] = ['Principal']
 const APPLICANT: readonly AppRole[] = ['Applicant']
 // Admin staff do not work with assignments (authorization matrix).
 const ASSIGNMENT_READERS: readonly AppRole[] = ['Teacher', 'Principal', 'Student', 'Parent']
@@ -123,6 +129,12 @@ export const routes: RouteObject[] = [
           { path: '/grading', element: guarded(TEACHER, <GradeBookPage />) },
           { path: '/manage/grade-bands', element: guarded(ADMIN, <GradeBandsPage />) },
 
+          { path: '/assistant', element: guarded(PRINCIPAL, <AssistantPage />) },
+
+          { path: '/progress-summaries', element: guarded(TEACHER, <ReviewSummariesPage />) },
+          { path: '/teacher-notes', element: guarded(TEACHER, <TeacherNotesPage />) },
+          { path: '/my-children/summaries', element: guarded(PARENT, <ChildSummariesPage />) },
+
           { path: '/admissions', element: guarded(APPLICANT, <MyApplicationPage />) },
           { path: '/manage/admissions', element: guarded(ADMIN, <ApplicantsPage />) },
           { path: '/manage/admissions/:id', element: guarded(ADMIN, <ApplicantDetailPage />) },
@@ -133,6 +145,7 @@ export const routes: RouteObject[] = [
           { path: '/requests/inbox', element: guarded(STAFF, <RequestInboxPage />) },
           { path: '/requests/:id', element: guarded(REQUEST_VIEWERS, <RequestDetailPage />) },
           { path: '/manage/requests', element: guarded(EDITORS, <AllRequestsPage />) },
+          { path: '/manage/audit-log', element: guarded(EDITORS, <AuditLogPage />) },
           { path: '/manage/approval-chains', element: guarded(EDITORS, <ApprovalChainsPage />) },
 
           { path: '/manage/news', element: guarded(EDITORS, <NewsManagePage />) },

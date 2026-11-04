@@ -2,7 +2,7 @@ import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useToastStore } from '@/stores/useToastStore'
 import { apiError, pageOf, renderPage, signInAs } from '@/test/utils'
-import type { GradeBook } from '../api/types'
+import type { GradeBook, LearningObjective } from '../api/types'
 import { GradeBandsPage } from './GradeBandsPage'
 import { GradeBookPage } from './GradeBookPage'
 
@@ -43,6 +43,8 @@ const book = (overrides: Partial<GradeBook> = {}): GradeBook => ({
       band: 'B',
       isPassing: true,
       description: 'Understands fractions well.',
+      descriptionStatus: 'Accepted',
+      descriptionIsAiDrafted: false,
     },
     {
       studentId: 's2',
@@ -58,6 +60,8 @@ const book = (overrides: Partial<GradeBook> = {}): GradeBook => ({
       band: 'D',
       isPassing: false,
       description: null,
+      descriptionStatus: null,
+      descriptionIsAiDrafted: false,
     },
   ],
   ...overrides,
@@ -65,9 +69,20 @@ const book = (overrides: Partial<GradeBook> = {}): GradeBook => ({
 
 const calls = (method: string, url: string) => http.customInstance.mock.calls.filter(([c]) => c.method === method && c.url === url).map(([c]) => c)
 
+let objectives: LearningObjective[] = []
+
 function serve(current: GradeBook) {
-  http.customInstance.mockImplementation(async ({ url, method }: { url: string; method: string }) => {
+  http.customInstance.mockImplementation(async ({ url, method, data }: { url: string; method: string; data?: Record<string, unknown> }) => {
     if (url === '/api/v1/grades/book') return current
+    if (url === '/api/v1/learning-objectives' && method === 'GET') return objectives
+    if (url === '/api/v1/learning-objectives' && method === 'POST') return { id: 'o-new', subjectId: 'sub-math', ...data }
+    if (url === '/api/v1/report-cards/descriptions/draft') {
+      return { studentId: data?.studentId, subjectId: 'sub-math', termId: 't1', body: 'Dimas Pratama has shown a good grasp of fractions.', status: 'Draft', isAiDrafted: true }
+    }
+    if (url === '/api/v1/report-cards/descriptions/accept') {
+      return { studentId: data?.studentId, subjectId: 'sub-math', termId: 't1', body: 'Dimas Pratama has shown a good grasp of fractions.', status: 'Accepted', isAiDrafted: true }
+    }
+    if (url === '/api/v1/report-cards/descriptions/draft-classroom') return { drafted: 1, alreadyHadText: 1, noScores: 0, failed: 0, stoppedBy: null }
     if (url.startsWith('/api/v1/grade-weights/') && method === 'GET') return current.weights
     if (url === '/api/v1/grade-bands') return [{ id: 'b1', label: 'A', minScore: 90 }, { id: 'b2', label: 'B', minScore: 80 }, { id: 'b3', label: 'E', minScore: 0 }]
     if (url === '/api/v1/report-cards/generate') return { classroomId: 'c1', termId: 't1', count: 2, generatedAt: '2026-10-28T00:00:00Z' }
@@ -82,6 +97,7 @@ async function openBook() {
 }
 
 beforeEach(() => {
+  objectives = []
   http.customInstance.mockReset()
   api.listTeachingOptions.mockReset()
   api.listAcademicYears.mockReset()
@@ -240,6 +256,140 @@ describe('GradeBookPage', () => {
       termId: 't1',
       body: 'Needs practice with fractions.',
     })
+  })
+
+  // ---- AI-02 ----
+
+  it('drafts a text with the AI, shows it for review, and accepts it as it is', async () => {
+    serve(book())
+    await openBook()
+
+    fireEvent.click(screen.getByRole('button', { name: /Report text.*Dimas Pratama/ }))
+    const dialog = await screen.findByRole('dialog')
+    expect(within(dialog).queryByRole('button', { name: 'Accept text' })).toBeNull()
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Draft with AI' }))
+
+    const field = (await within(dialog).findByDisplayValue('Dimas Pratama has shown a good grasp of fractions.')) as HTMLTextAreaElement
+    expect(within(dialog).getByText('This text was drafted by AI. It reaches the report card only after you accept it.')).toBeTruthy()
+    expect(calls('POST', '/api/v1/report-cards/descriptions/draft')[0]?.data).toEqual({ studentId: 's2', subjectId: 'sub-math', termId: 't1' })
+
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Accept text' }))
+    await waitFor(() => expect(calls('POST', '/api/v1/report-cards/descriptions/accept')).toHaveLength(1))
+    expect(field.value).toBe('Dimas Pratama has shown a good grasp of fractions.')
+    await waitFor(() => expect(useToastStore.getState().toasts.map((x) => x.title)).toContain('Text accepted'))
+  })
+
+  it('does not offer to accept a draft once the teacher has changed the text', async () => {
+    serve(book())
+    await openBook()
+
+    fireEvent.click(screen.getByRole('button', { name: /Report text.*Dimas Pratama/ }))
+    const dialog = await screen.findByRole('dialog')
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Draft with AI' }))
+    const field = await within(dialog).findByDisplayValue('Dimas Pratama has shown a good grasp of fractions.')
+    expect(within(dialog).getByRole('button', { name: 'Accept text' })).toBeTruthy()
+
+    fireEvent.change(field, { target: { value: 'My own words.' } })
+
+    expect(within(dialog).queryByRole('button', { name: 'Accept text' })).toBeNull()
+    expect(within(dialog).getByRole('button', { name: 'Draft again with AI' })).toBeTruthy()
+  })
+
+  it('marks a draft in the table and cannot draft once the grades are published', async () => {
+    const withDraft = book()
+    withDraft.rows[1] = { ...withDraft.rows[1]!, description: 'A draft.', descriptionStatus: 'Draft', descriptionIsAiDrafted: true }
+    serve(withDraft)
+    await openBook()
+
+    expect(screen.getByText('AI draft: review it')).toBeTruthy()
+    expect((screen.getByRole('button', { name: 'Draft texts with AI' }) as HTMLButtonElement).disabled).toBe(false)
+  })
+
+  it('drafts the texts of the whole class after a confirmation and says what happened', async () => {
+    serve(book())
+    await openBook()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Draft texts with AI' }))
+    const dialog = await screen.findByRole('alertdialog')
+    expect(calls('POST', '/api/v1/report-cards/descriptions/draft-classroom')).toHaveLength(0)
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Draft texts' }))
+
+    await waitFor(() => expect(calls('POST', '/api/v1/report-cards/descriptions/draft-classroom')).toHaveLength(1))
+    expect(calls('POST', '/api/v1/report-cards/descriptions/draft-classroom')[0]?.data).toEqual({ classroomId: 'c1', termId: 't1', subjectId: 'sub-math' })
+    await waitFor(() => {
+      const toast = useToastStore.getState().toasts.find((x) => x.title === 'Drafts written: 1. Review them one by one.')
+      expect(toast?.body).toBe('1 already had a text.')
+    })
+  })
+
+  it('cannot draft texts while the grades are published', async () => {
+    serve(book({ isPublished: true }))
+    await openBook()
+
+    expect((screen.getByRole('button', { name: 'Draft texts with AI' }) as HTMLButtonElement).disabled).toBe(true)
+  })
+
+  it('links typed scores to a chosen learning objective', async () => {
+    objectives = [{ id: 'o1', subjectId: 'sub-math', code: '1.1', description: 'Understands fractions' }]
+    serve(book())
+    await openBook()
+
+    fireEvent.change(await screen.findByLabelText('Scores for'), { target: { value: 'o1' } })
+    await waitFor(() => expect(calls('GET', '/api/v1/grades/book').at(-1)?.params).toEqual({ classroomId: 'c1', subjectId: 'sub-math', termId: 't1', learningObjectiveId: 'o1' }))
+    expect(await screen.findByText('Scores you type now are linked to this learning objective. The final grade counts every score.')).toBeTruthy()
+
+    const field = screen.getByLabelText('Quiz score of Rina Putri')
+    fireEvent.change(field, { target: { value: '95' } })
+    fireEvent.blur(field)
+
+    await waitFor(() => expect(calls('PUT', '/api/v1/grades')).toHaveLength(1))
+    expect(calls('PUT', '/api/v1/grades')[0]?.data).toEqual({
+      studentId: 's1',
+      subjectId: 'sub-math',
+      termId: 't1',
+      component: 'Quiz',
+      score: 95,
+      learningObjectiveId: 'o1',
+    })
+  })
+
+  it('does not show the objective picker for a subject without objectives', async () => {
+    serve(book())
+    await openBook()
+
+    expect(screen.queryByLabelText('Scores for')).toBeNull()
+  })
+
+  it('lets the teacher add a learning objective', async () => {
+    serve(book())
+    await openBook()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Learning objectives' }))
+    const dialog = await screen.findByRole('dialog')
+    expect(await within(dialog).findByText('No learning objectives yet.')).toBeTruthy()
+    fireEvent.change(within(dialog).getByLabelText('Code'), { target: { value: '2.1' } })
+    fireEvent.change(within(dialog).getByLabelText('What the student can do'), { target: { value: 'Reads graphs' } })
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Add objective' }))
+
+    await waitFor(() => expect(calls('POST', '/api/v1/learning-objectives')).toHaveLength(1))
+    expect(calls('POST', '/api/v1/learning-objectives')[0]?.data).toEqual({ subjectId: 'sub-math', code: '2.1', description: 'Reads graphs' })
+  })
+
+  it('shows the reason when the AI cannot be used', async () => {
+    serve(book())
+    http.customInstance.mockImplementation(async ({ url }: { url: string }) => {
+      if (url === '/api/v1/grades/book') return book()
+      if (url === '/api/v1/learning-objectives') return []
+      if (url === '/api/v1/report-cards/descriptions/draft') throw apiError(429, { code: 'ai.daily_limit' })
+      return {}
+    })
+    await openBook()
+
+    fireEvent.click(screen.getByRole('button', { name: /Report text.*Dimas Pratama/ }))
+    const dialog = await screen.findByRole('dialog')
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Draft with AI' }))
+
+    expect(await within(dialog).findByText('You have used your AI calls of today. Try again tomorrow.')).toBeTruthy()
   })
 
   it('only saves weights that add up to 100', async () => {

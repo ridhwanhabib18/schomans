@@ -44,6 +44,8 @@ erDiagram
   ReportCard ||--o{ AchievementDescription : "describes"
   Subject ||--o{ AchievementDescription : "for"
   Student ||--o{ ProgressSummary : "summarized in"
+  Student ||--o{ TeacherNote : "noted in"
+  User ||--o{ TeacherNote : "writes"
   AcademicYear ||--o{ AdmissionPeriod : "runs"
   User ||--o| Applicant : "applies as"
   AdmissionPeriod ||--o{ Applicant : "receives"
@@ -58,6 +60,7 @@ erDiagram
   User ||--o{ AnnouncementRead : "reads"
   User ||--o{ Notification : "receives"
   User ||--o{ AuditLog : "changes"
+  User ||--o{ EmailMessage : "receives"
   User ||--o{ AiUsageLog : "uses AI"
 
   User {
@@ -264,7 +267,15 @@ erDiagram
     string Body
     string Status
     guid ApprovedById FK
+    bool IsAiDrafted
     datetime SentAt
+  }
+  TeacherNote {
+    guid Id PK
+    guid StudentId FK
+    guid AuthorId FK
+    date Date
+    string Body
   }
   AdmissionPeriod {
     guid Id PK
@@ -374,17 +385,33 @@ erDiagram
     guid UserId FK
     string Action
     string EntityName
+    guid EntityId
     json OldValues
     json NewValues
-    datetime Timestamp
+    datetime CreatedAt
+  }
+  EmailMessage {
+    guid Id PK
+    guid UserId FK
+    string ToAddress
+    string Subject
+    string Body
+    string LinkUrl
+    string Status
+    int Attempts
+    datetime SentAt
+    string LastError
   }
   AiUsageLog {
     guid Id PK
     guid UserId FK
     string Feature
+    string Provider
     string Model
     int Tokens
     decimal CostUsd
     int DurationMs
+    bool Succeeded
+    bool IsBulk
     datetime CreatedAt
   }

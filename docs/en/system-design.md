@@ -324,6 +324,8 @@ erDiagram
   ReportCard ||--o{ AchievementDescription : "describes"
   Subject ||--o{ AchievementDescription : "for"
   Student ||--o{ ProgressSummary : "summarized in"
+  Student ||--o{ TeacherNote : "noted in"
+  User ||--o{ TeacherNote : "writes"
 
   GradeWeight {
     guid Id PK
@@ -382,11 +384,19 @@ erDiagram
     string Body
     string Status
     guid ApprovedById FK
+    bool IsAiDrafted
     datetime SentAt
+  }
+  TeacherNote {
+    guid Id PK
+    guid StudentId FK
+    guid AuthorId FK
+    date Date
+    string Body
   }
 ```
 
-Grade weights are per subject and component and add up to 100. A GradePublication row per classroom and term is what makes grades visible to students and parents. A graded submission creates its Grade row automatically (Grade.SubmissionId). GradeBand is a standalone table: the admin sets the school's scale, and the band of a final grade is the one with the highest MinScore it reaches.
+Grade weights are per subject and component and add up to 100. A GradePublication row per classroom and term is what makes grades visible to students and parents. A graded submission creates its Grade row automatically (Grade.SubmissionId). A score can optionally be linked to a LearningObjective of the subject (Grade.LearningObjectiveId); the AI-02 drafts of the report-card texts use those scores. TeacherNote holds the short private observations of the teachers about a student; AI-01 and AI-02 read them, families never see them. An AI-02 draft is an AchievementDescription with Status Draft and IsAiDrafted; only Accepted texts reach the report card. GradeBand is a standalone table: the admin sets the school's scale, and the band of a final grade is the one with the highest MinScore it reaches.
 
 ```mermaid
 %% Source: diagrams/erd.mmd (admissions & approvals)
@@ -480,6 +490,7 @@ erDiagram
   User ||--o{ AnnouncementRead : "reads"
   User ||--o{ Notification : "receives"
   User ||--o{ AuditLog : "changes"
+  User ||--o{ EmailMessage : "receives"
   User ||--o{ AiUsageLog : "uses AI"
 
   NewsArticle {
@@ -523,18 +534,34 @@ erDiagram
     guid UserId FK
     string Action
     string EntityName
+    guid EntityId
     json OldValues
     json NewValues
-    datetime Timestamp
+    datetime CreatedAt
+  }
+  EmailMessage {
+    guid Id PK
+    guid UserId FK
+    string ToAddress
+    string Subject
+    string Body
+    string LinkUrl
+    string Status
+    int Attempts
+    datetime SentAt
+    string LastError
   }
   AiUsageLog {
     guid Id PK
     guid UserId FK
     string Feature
+    string Provider
     string Model
     int Tokens
     decimal CostUsd
     int DurationMs
+    bool Succeeded
+    bool IsBulk
     datetime CreatedAt
   }
 ```
@@ -552,7 +579,8 @@ NewsArticle is public (landing page and a source for the AI-08 chatbot); Announc
 | Submission | Unique (AssignmentId, StudentId) | One submission per student per assignment |
 | AttendanceSession | Index (ScheduleId, Date) | Today's sessions per teacher |
 | AnnouncementRead | Primary key (AnnouncementId, UserId) | Unread counts |
-| AuditLog | Index (EntityName, Timestamp) | Audit lookups; append-only |
+| AuditLog | Index (EntityName, CreatedAt), index (EntityId, CreatedAt) | Audit lookups and the history of one row; append-only |
+| EmailMessage | Index (Status, CreatedAt) | The sender job takes the pending mails, oldest first |
 | Term | Index (AcademicYearId, IsActive) | Current term lookups |
 | GradeWeight | Unique (SubjectId, Component) | One weight per component per subject |
 | GradePublication | Unique (ClassroomId, TermId) | Grades published once per classroom and term |
@@ -709,7 +737,9 @@ Uploads: the browser asks the API for a presigned PUT URL, the API validates typ
 | Concern | Approach |
 | --- | --- |
 | Logging | Serilog structured logs with correlation id per request, shipped to Seq |
-| Audit | `SaveChangesInterceptor` writes AuditLog rows for grades, attendance, and approvals |
+| Audit | `SaveChangesInterceptor` writes AuditLog rows (user, action, old and new values) for grades, attendance records, requests, and approval steps in the same save as the change; admin staff and the principal read them at `GET /api/v1/audit-logs` |
+| Email | Handlers queue an `EmailMessage` next to the in-app notification (request decided, admission result, announcement published, progress summary sent); a Hangfire job sends the queue every minute over SMTP (Mailpit locally), retries 5 times, then marks the mail Failed |
+| PWA | `manifest.webmanifest` with PNG icons makes the app installable; a hand-written service worker (`web/public/sw.js`, production builds only) caches the app shell and the hashed build assets, never the API or Keycloak, so the installed app opens offline but all data stays live |
 | Health | `/health/live` and `/health/ready` (SQL Server, Keycloak, S3) used by Docker and the reverse proxy |
 | AI usage | Every Claude call logged with feature, user, tokens, cost, and duration; monthly budget cap |
 | Backups | Nightly SQL Server backup to the private bucket, 14-day retention |

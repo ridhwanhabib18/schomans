@@ -2,6 +2,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { listTeachingOptions } from '@/api/generated/schomans'
 import { customInstance } from '@/shared/lib/http'
 import type {
+  AchievementDescription,
+  DescriptionCommand,
+  DraftedDescriptions,
   EnterGradeCommand,
   GeneratedReportCards,
   GradeBand,
@@ -10,6 +13,8 @@ import type {
   GradeBookParams,
   GradeWeightItem,
   GradeWeights,
+  LearningObjective,
+  LearningObjectiveInput,
   PublicationCommand,
   WriteDescriptionCommand,
 } from './types'
@@ -20,6 +25,7 @@ export const gradingKeys = {
   book: (params: GradeBookParams) => [...gradingKeys.all, 'book', params] as const,
   weights: (subjectId: string) => [...gradingKeys.all, 'weights', subjectId] as const,
   bands: () => [...gradingKeys.all, 'bands'] as const,
+  objectives: (subjectId: string) => [...gradingKeys.all, 'objectives', subjectId] as const,
 }
 
 // ---- requests (the Phase 4 endpoints) ----
@@ -34,6 +40,26 @@ const unpublishGrades = (params: PublicationCommand) => customInstance<void>({ u
 
 const writeDescription = (command: WriteDescriptionCommand) =>
   customInstance<unknown>({ url: '/api/v1/report-cards/descriptions', method: 'PUT', data: command })
+
+const draftDescription = (command: DescriptionCommand) =>
+  customInstance<AchievementDescription>({ url: '/api/v1/report-cards/descriptions/draft', method: 'POST', data: command })
+
+const draftClassroomDescriptions = (command: PublicationCommand & { subjectId: string }) =>
+  customInstance<DraftedDescriptions>({ url: '/api/v1/report-cards/descriptions/draft-classroom', method: 'POST', data: command })
+
+const acceptDescription = (command: DescriptionCommand) =>
+  customInstance<AchievementDescription>({ url: '/api/v1/report-cards/descriptions/accept', method: 'POST', data: command })
+
+const listObjectives = (subjectId: string) =>
+  customInstance<LearningObjective[]>({ url: '/api/v1/learning-objectives', method: 'GET', params: { subjectId } })
+
+const createObjective = (subjectId: string, input: LearningObjectiveInput) =>
+  customInstance<LearningObjective>({ url: '/api/v1/learning-objectives', method: 'POST', data: { subjectId, ...input } })
+
+const updateObjective = (id: string, input: LearningObjectiveInput) =>
+  customInstance<LearningObjective>({ url: `/api/v1/learning-objectives/${id}`, method: 'PUT', data: { id, ...input } })
+
+const deleteObjective = (id: string) => customInstance<void>({ url: `/api/v1/learning-objectives/${id}`, method: 'DELETE' })
 
 const generateReportCards = (command: PublicationCommand) =>
   customInstance<GeneratedReportCards>({ url: '/api/v1/report-cards/generate', method: 'POST', data: command })
@@ -114,4 +140,39 @@ export function useGradeBands() {
 export function useReplaceGradeBands() {
   const invalidate = useInvalidateGrading()
   return useMutation({ mutationFn: (bands: GradeBandInput[]) => replaceGradeBands(bands), onSuccess: invalidate })
+}
+
+/** The AI writes a draft of one student's text (or a new draft); it waits for the teacher's review. */
+export function useDraftDescription() {
+  const invalidate = useInvalidateGrading()
+  return useMutation({ mutationFn: (command: DescriptionCommand) => draftDescription(command), onSuccess: invalidate })
+}
+
+export function useDraftClassroomDescriptions() {
+  const invalidate = useInvalidateGrading()
+  return useMutation({ mutationFn: (command: PublicationCommand & { subjectId: string }) => draftClassroomDescriptions(command), onSuccess: invalidate })
+}
+
+export function useAcceptDescription() {
+  const invalidate = useInvalidateGrading()
+  return useMutation({ mutationFn: (command: DescriptionCommand) => acceptDescription(command), onSuccess: invalidate })
+}
+
+export function useLearningObjectives(subjectId: string | null) {
+  return useQuery({ queryKey: gradingKeys.objectives(subjectId ?? ''), queryFn: () => listObjectives(subjectId!), enabled: subjectId !== null })
+}
+
+export function useCreateObjective(subjectId: string) {
+  const invalidate = useInvalidateGrading()
+  return useMutation({ mutationFn: (input: LearningObjectiveInput) => createObjective(subjectId, input), onSuccess: invalidate })
+}
+
+export function useUpdateObjective() {
+  const invalidate = useInvalidateGrading()
+  return useMutation({ mutationFn: ({ id, input }: { id: string; input: LearningObjectiveInput }) => updateObjective(id, input), onSuccess: invalidate })
+}
+
+export function useDeleteObjective() {
+  const invalidate = useInvalidateGrading()
+  return useMutation({ mutationFn: (id: string) => deleteObjective(id), onSuccess: invalidate })
 }

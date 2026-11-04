@@ -134,6 +134,7 @@ public sealed class DecideRequestHandler(
             approved ? "Your request was approved" : "Your request was rejected",
             approved ? "Open it to see the decisions" + (request.Type == RequestType.CertificateLetter ? " and download the letter." : ".") : request.Approvals.OrderBy(a => a.Step).Last().Notes ?? "Open it to read why.",
             $"/requests/{request.Id}",
-            ct);
+            ct,
+            alsoEmail: true);
     }
 }

@@ -32,10 +32,16 @@ public sealed class Grade : BaseEntity
 
     public Submission? Submission { get; private set; }
 
+    /// <summary>The learning objective this score measures; null for a score of the component as a whole.</summary>
+    public Guid? LearningObjectiveId { get; private set; }
+
+    public LearningObjective? LearningObjective { get; private set; }
+
     /// <summary>0 to 100.</summary>
     public decimal Score { get; private set; }
 
-    public static Grade Create(Guid studentId, Guid subjectId, Guid termId, GradeComponent component, decimal score, Guid? submissionId = null)
+    public static Grade Create(
+        Guid studentId, Guid subjectId, Guid termId, GradeComponent component, decimal score, Guid? submissionId = null, Guid? learningObjectiveId = null)
     {
         var grade = new Grade
         {
@@ -44,6 +50,7 @@ public sealed class Grade : BaseEntity
             TermId = termId,
             Component = component,
             SubmissionId = submissionId,
+            LearningObjectiveId = learningObjectiveId,
         };
         grade.SetScore(score);
         return grade;

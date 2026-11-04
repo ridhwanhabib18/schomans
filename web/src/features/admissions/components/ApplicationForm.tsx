@@ -13,13 +13,18 @@ interface ApplicationFormProps {
   dirty: boolean
   saving: boolean
   onSave: () => void
+  /** Fields filled in from a document (AI-03) that the applicant still has to check and save. */
+  highlighted?: ReadonlySet<keyof ApplicantForm>
 }
 
 /** The registration form. It can be saved as a draft with empty fields; handing the application in needs all of them. */
-export function ApplicationForm({ value, onChange, editable, dirty, saving, onSave }: ApplicationFormProps) {
+export function ApplicationForm({ value, onChange, editable, dirty, saving, onSave, highlighted }: ApplicationFormProps) {
   const { t } = useTranslation('admissions')
   const { t: tCommon } = useTranslation()
   const set = <K extends keyof ApplicantForm>(key: K, next: ApplicantForm[K]) => onChange({ ...value, [key]: next })
+  const filled = (key: keyof ApplicantForm) => highlighted?.has(key) === true
+  const hint = (key: keyof ApplicantForm) => (filled(key) ? t('extraction.used') : undefined)
+  const mark = (key: keyof ApplicantForm) => (filled(key) ? 'ring-2 ring-primary' : undefined)
 
   return (
     <form
@@ -31,20 +36,20 @@ export function ApplicationForm({ value, onChange, editable, dirty, saving, onSa
       }}
     >
       <div className="grid min-w-0 gap-4 sm:grid-cols-2">
-        <FormField label={t('form.fullName')} required className="sm:col-span-2">
-          <Input value={value.fullName} maxLength={200} disabled={!editable} onChange={(event) => set('fullName', event.target.value)} />
+        <FormField label={t('form.fullName')} required className="sm:col-span-2" hint={hint('fullName')}>
+          <Input className={mark('fullName')} value={value.fullName} maxLength={200} disabled={!editable} onChange={(event) => set('fullName', event.target.value)} />
         </FormField>
-        <FormField label={t('form.dateOfBirth')} required>
-          <Input type="date" value={value.dateOfBirth ?? ''} disabled={!editable} onChange={(event) => set('dateOfBirth', event.target.value || null)} />
+        <FormField label={t('form.dateOfBirth')} required hint={hint('dateOfBirth')}>
+          <Input className={mark('dateOfBirth')} type="date" value={value.dateOfBirth ?? ''} disabled={!editable} onChange={(event) => set('dateOfBirth', event.target.value || null)} />
         </FormField>
-        <FormField label={t('form.placeOfBirth')} required>
-          <Input value={value.placeOfBirth} maxLength={100} disabled={!editable} onChange={(event) => set('placeOfBirth', event.target.value)} />
+        <FormField label={t('form.placeOfBirth')} required hint={hint('placeOfBirth')}>
+          <Input className={mark('placeOfBirth')} value={value.placeOfBirth} maxLength={100} disabled={!editable} onChange={(event) => set('placeOfBirth', event.target.value)} />
         </FormField>
-        <FormField label={t('form.address')} required className="sm:col-span-2">
-          <Input value={value.address} maxLength={300} disabled={!editable} onChange={(event) => set('address', event.target.value)} />
+        <FormField label={t('form.address')} required className="sm:col-span-2" hint={hint('address')}>
+          <Input className={mark('address')} value={value.address} maxLength={300} disabled={!editable} onChange={(event) => set('address', event.target.value)} />
         </FormField>
-        <FormField label={t('form.guardianName')} required>
-          <Input value={value.guardianName} maxLength={200} disabled={!editable} onChange={(event) => set('guardianName', event.target.value)} />
+        <FormField label={t('form.guardianName')} required hint={hint('guardianName')}>
+          <Input className={mark('guardianName')} value={value.guardianName} maxLength={200} disabled={!editable} onChange={(event) => set('guardianName', event.target.value)} />
         </FormField>
         <FormField label={t('form.guardianPhone')} required>
           <Input type="tel" value={value.guardianPhone} maxLength={30} disabled={!editable} onChange={(event) => set('guardianPhone', event.target.value)} />

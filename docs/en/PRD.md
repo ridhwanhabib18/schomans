@@ -207,7 +207,7 @@ Principles for every AI feature:
 - [ ] Every call is logged: feature, user, token count, cost, duration
 - [ ] Prompt caching for long system instructions
 - [ ] Each feature has a test set (at least 10 cases) to evaluate quality whenever the prompt changes
-- [ ] Mock mode for demos and tests, so the app runs without an API key
+- [ ] Mock mode for demos and tests, so the app runs without an API key; the provider (Mock, Ollama or Claude) is chosen by configuration, see ADR-004
 
 **AI-01: Progress summary for parents** (US-14, Must)
 
@@ -229,11 +229,15 @@ Principles for every AI feature:
 - [ ] Extracted fields are highlighted in the form; the applicant or staff must confirm them
 - [ ] Mismatches between documents (for example different dates of birth) are flagged for staff
 
+_As built (Phase 6): photos only (PDFs are refused with a clear message); the result is stored on the document; the national ID number, parents' names and grades are shown as information only, the application form is unchanged; staff see what the AI read next to the documents._
+
 **AI-04: Principal assistant** (US-13, Should)
 
 - [ ] The principal asks questions in plain language; AI uses tool use to call query functions exposed by the backend, such as attendance per classroom, average grades per subject, and pending requests
 - [ ] AI never writes SQL; only registered functions with permission checks can be called
 - [ ] Answers include the source numbers and links to the related report pages
+
+_As built (Phase 6): eight read-only tools (more than the examples above), multi-turn with the history kept by the browser, the whole answer at once (no SignalR streaming), at most 5 tool steps per question._
 
 **AI-05: Rubric-based essay feedback** (US-10, Should)
 
@@ -266,7 +270,7 @@ Principles for every AI feature:
 **F-11: Audit log & external notifications**
 
 - [ ] Every change to grades, attendance, and approvals is recorded: who, when, old and new values
-- [ ] Important notifications are sent by email; WhatsApp is optional through a sandbox gateway
+- [ ] Important notifications are sent by email (SMTP; Mailpit catches the mail locally); WhatsApp is not built in v1
 
 ## 5. Non-functional requirements
 
@@ -310,7 +314,7 @@ The stack is fixed: .NET 10 backend (latest LTS, supported until November 2028),
 | Testing | xUnit + Testcontainers (SQL Server, SeaweedFS), Vitest for stores and hooks, Playwright end to end | CI on GitHub Actions, public repo | Free |
 | Deployment | Docker Compose: api, web, sqlserver, keycloak (+ seaweedfs locally) | Own VPS; Caddy reverse proxy with automatic HTTPS; Docker Engine on the server | Software free, server paid |
 | Logging | Serilog + Seq, health check endpoint | Supports the F-11 audit log; alternative: log to files | Free (Seq individual license) |
-| AI | Claude API called from the .NET backend | F-10 only; budget cap and mock mode for demos | Paid per token |
+| AI | Claude API called from the .NET backend, behind `IAiService` with a mock and a local Ollama provider (ADR-004) | F-10 only; budget cap; mock is the default so demos and tests cost nothing | Claude: paid per token; Mock and Ollama: free |
 
 **S3 storage design.** The same pattern used with AWS S3 in production, so the experience transfers directly to a CV.
 
@@ -384,6 +388,7 @@ The stack is fixed: .NET 10 backend (latest LTS, supported until November 2028),
 | Surat | Letter |
 | Bank soal | QuestionBank |
 | Ringkasan perkembangan | ProgressSummary |
+| Catatan guru | TeacherNote |
 | Jejak audit | AuditLog |
 
 **Data model** (main entities):
@@ -424,7 +429,8 @@ GradePublication: Id, ClassroomId → Classroom, TermId → Term, PublishedAt, P
 GradeBand: Id, Label, MinScore   ← the school's band scale, set by the admin; one band starts at 0
 ReportCard: Id, StudentId, TermId, Status (Draft|Published), PdfKey, GeneratedAt
 AchievementDescription: Id, ReportCardId → ReportCard, SubjectId, Body, Status (Draft|Accepted), IsAiDrafted
-ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), ApprovedById → User, SentAt
+ProgressSummary: Id, StudentId, Month (yyyy-MM), Body, Status (Draft|Approved|Sent), IsAiDrafted, ApprovedById → User, SentAt
+TeacherNote: Id, StudentId, AuthorId → User, Date, Body   ← private teacher observations; read by AI-01 and AI-02, never shown to families
 
 -- Admissions
 AdmissionPeriod: Id, AcademicYearId, Name, OpensAt, ClosesAt, ResultsAnnouncedAt, ReregistrationDeadline, ResultsNotifiedAt   ← ResultsNotifiedAt is set by the job that told the applicants the results are out
@@ -444,8 +450,9 @@ AnnouncementRead: AnnouncementId → Announcement, UserId → User, ReadAt
 Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← in-app notifications (assignments, approvals, AI drafts, ...)
 
 -- Audit & AI
-AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
-AiUsageLog: Id, UserId → User, Feature, Model, Tokens, CostUsd, DurationMs, CreatedAt
+AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp   ← EntityId and the moment (CreatedAt) added; one row per changed grade, attendance record, request or approval step
+EmailMessage: Id, UserId → User, ToAddress, Subject, Body, LinkUrl, Status (Pending | Sent | Failed), Attempts, SentAt, LastError   ← the queue of emails of F-11 (not in the first PRD)
+AiUsageLog: Id, UserId → User (empty when a job asked), Feature, Provider, Model, Tokens, CostUsd, DurationMs, Succeeded, IsBulk, CreatedAt   ← IsBulk: a further call of a bulk run; it counts toward the budget, not toward the user's daily calls
 
 Every entity: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (EF Core concurrency)
 ```
@@ -723,7 +730,7 @@ Claude can read images, so attach wireframes, hand sketches, or screenshots of r
 - [ ] School level: elementary, junior high, or senior/vocational high school? This affects the report-card format and grade components
 - [ ] Which curriculum the report-card format follows (Kurikulum Merdeka?)
 - [ ] Location check (geofence) for QR attendance?
-- [ ] Include WhatsApp notifications, or email + in-app only?
+- [x] Include WhatsApp notifications, or email + in-app only? Decided: email + in-app only
 - [ ] Should official documents (report cards, letters) get an Indonesian locale in v1, or stay English for the demo?
 
 ## 10. Phased implementation plan
