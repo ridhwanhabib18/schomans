@@ -27,6 +27,9 @@ const api = vi.hoisted(() => ({
 
 vi.mock('@/api/generated/schomans', () => api)
 
+const http = vi.hoisted(() => ({ customInstance: vi.fn() }))
+vi.mock('@/shared/lib/http', async (importOriginal) => ({ ...(await importOriginal<typeof import('@/shared/lib/http')>()), customInstance: http.customInstance }))
+
 vi.mock('@/shared/ui/rich-text-editor', () => ({
   RichTextEditor: ({ value, onChange, label }: { value: string; onChange: (html: string) => void; label: string }) => (
     <textarea aria-label={label} value={value} onChange={(event) => onChange(event.target.value)} />
@@ -63,6 +66,7 @@ const toasts = () => useToastStore.getState().toasts.map((toast) => `${toast.kin
 
 beforeEach(() => {
   Object.values(api).forEach((mock) => mock.mockReset())
+  http.customInstance.mockReset()
   api.listMyAnnouncements.mockResolvedValue(pageOf([summary(), summary({ id: 'a2', title: 'Holiday', isRead: true })], { pageSize: 10 }))
   api.getMyAnnouncement.mockResolvedValue({ id: 'a1', title: 'School trip', body: '<p>Bring <em>lunch</em>.</p>', coverImageUrl: null, publishedAt: '2026-10-02T08:00:00Z', isRead: false })
   api.markAnnouncementRead.mockResolvedValue(undefined)
@@ -296,6 +300,39 @@ describe('AnnouncementEditPage', () => {
       }),
     )
     await waitFor(() => expect(api.getAnnouncement).toHaveBeenCalledWith('a9'))
+  })
+
+  it('puts an AI draft into the title and the text and leaves saving to the person', async () => {
+    http.customInstance.mockResolvedValue({ title: 'Open day', paragraphs: ['We invite you & yours.', 'Please come at nine.'] })
+    renderEdit('/manage/announcements/new')
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Draft with AI' }))
+    const dialog = await screen.findByRole('dialog')
+    fireEvent.change(within(dialog).getByLabelText(/^Who is it for/), { target: { value: 'Parents' } })
+    fireEvent.change(within(dialog).getByLabelText(/^Short notes/), { target: { value: 'Open day on Saturday.' } })
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Write a draft' }))
+
+    await waitFor(() => expect((screen.getByLabelText(/^Title/) as HTMLInputElement).value).toBe('Open day'))
+    expect((screen.getByLabelText('Announcement message') as HTMLTextAreaElement).value).toBe('<p>We invite you &amp; yours.</p><p>Please come at nine.</p>')
+    expect(http.customInstance).toHaveBeenCalledWith({ url: '/api/v1/drafts', method: 'POST', data: { type: 'Announcement', audience: 'Parents', notes: 'Open day on Saturday.' } })
+    expect(api.createAnnouncement).not.toHaveBeenCalled()
+  })
+
+  it('warns that a draft replaces the text already typed', async () => {
+    renderEdit('/manage/announcements/new')
+
+    fireEvent.change(await screen.findByLabelText(/^Title/), { target: { value: 'My own title' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Draft with AI' }))
+
+    expect(await screen.findByText('The draft replaces the title and the text you have now.')).toBeTruthy()
+  })
+
+  it('offers no AI draft for an announcement that is already published', async () => {
+    api.getAnnouncement.mockResolvedValue(announcement({ status: 'Published', publishedAt: '2026-10-03T08:00:00Z' }))
+    renderEdit()
+    await screen.findByLabelText(/^Title/)
+
+    expect(screen.queryByRole('button', { name: 'Draft with AI' })).toBeNull()
   })
 
   it('unchecking a role takes it out of the audience again', async () => {

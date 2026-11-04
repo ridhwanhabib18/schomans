@@ -77,7 +77,8 @@
     "conflict": "Somebody else changed this announcement while you were editing it.",
     "reload": "Load the latest version",
     "loadError": "The announcement could not be loaded.",
-    "classroomsLoadError": "The classrooms could not be loaded."
+    "classroomsLoadError": "The classrooms could not be loaded.",
+    "draftWithAi": "Draft with AI"
   },
   "delete": {
     "title": "Delete this announcement?",

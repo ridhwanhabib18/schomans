@@ -58,7 +58,8 @@
     "teacherNotes": "Teacher notes",
     "childSummaries": "Progress summaries",
     "assistant": "Assistant",
-    "jobs": "Background jobs"
+    "jobs": "Background jobs",
+    "generalLetters": "General letters"
   },
   "actions": {
     "signIn": "Sign in",
@@ -160,5 +161,29 @@
     "label": "Month",
     "previous": "Previous month",
     "next": "Next month"
+  },
+  "draft": {
+    "title": {
+      "Announcement": "Draft the announcement with AI",
+      "Invitation": "Draft the invitation with AI",
+      "Notice": "Draft the notice with AI"
+    },
+    "intro": "Say who it is for and what it must say. The AI writes a draft that you read and change; nothing is published or sent for you. One draft uses one of your daily AI calls.",
+    "replaces": "The draft replaces the title and the text you have now.",
+    "audience": "Who is it for?",
+    "audienceHint": "For example: parents of class 7A.",
+    "notes": "Short notes",
+    "notesHint": "The facts the text must contain, such as the date, the time and what to bring. The AI adds no facts of its own.",
+    "write": "Write a draft",
+    "writing": "Writing…",
+    "errors": {
+      "ai": {
+        "daily_limit": "You have used your AI calls of today. Try again tomorrow.",
+        "budget_exhausted": "The AI budget of this month is used up. The AI features are off until next month.",
+        "invalid_output": "The AI did not give a usable draft. Try again.",
+        "provider_failed": "The AI service did not answer. Try again in a moment.",
+        "not_configured": "The AI service is not set up."
+      }
+    }
   }
 }
