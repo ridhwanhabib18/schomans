@@ -7,4 +7,5 @@ public static class AiFeatures
     public const string AchievementDescription = "AI-02";
     public const string DocumentExtraction = "AI-03";
     public const string PrincipalAssistant = "AI-04";
+    public const string EssayFeedback = "AI-05";
 }

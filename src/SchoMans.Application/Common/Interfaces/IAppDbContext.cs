@@ -83,6 +83,10 @@ public interface IAppDbContext
 
     DbSet<AuditLog> AuditLogs { get; }
 
+    DbSet<Rubric> Rubrics { get; }
+
+    DbSet<FeedbackDraft> FeedbackDrafts { get; }
+
     DbSet<EmailMessage> EmailMessages { get; }
 
     DbSet<TeacherNote> TeacherNotes { get; }

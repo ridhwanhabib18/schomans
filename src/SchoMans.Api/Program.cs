@@ -66,6 +66,8 @@ app.MapTeacherNoteEndpoints();
 app.MapLearningObjectiveEndpoints();
 app.MapAssistantEndpoints();
 app.MapAuditEndpoints();
+app.MapRubricEndpoints();
+app.MapEssayFeedbackEndpoints();
 app.MapFileEndpoints();
 app.MapSitemapEndpoints();
 app.MapHealthEndpoints();

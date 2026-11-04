@@ -23,6 +23,7 @@ public sealed class MockAiService : IAiService
             AiFeatures.ProgressSummary => MockProgressSummary(request.UserPrompt),
             AiFeatures.AchievementDescription => MockAchievementDescription(request.UserPrompt),
             AiFeatures.DocumentExtraction => MockDocumentExtraction(request),
+            AiFeatures.EssayFeedback => MockEssayFeedback(request.UserPrompt),
             _ => request.JsonOutput ? "{\"mock\":true}" : "This is an answer of the mock AI.",
         };
 
@@ -246,6 +247,41 @@ public sealed class MockAiService : IAiService
         needsSupport += " " + Closings[pick / (AchievedOpeners.Length * SupportOpeners.Length)];
 
         return JsonSerializer.Serialize(new { achieved, needsSupport });
+    }
+
+    /// <summary>
+    /// AI-05: one entry per criterion of the rubric in the prompt. The points rise with the length of the text and move a little with
+    /// a hash of the criterion and the text, so different work gets different points and the same work always gets the same.
+    /// </summary>
+    private static string MockEssayFeedback(string prompt)
+    {
+        var criteria = Regex.Matches(prompt, @"^- (.+?) \(0-(\d+)\): ", RegexOptions.Multiline)
+            .Select(m => (Name: m.Groups[1].Value, Max: int.Parse(m.Groups[2].Value, CultureInfo.InvariantCulture)))
+            .ToList();
+        var essay = Regex.Match(prompt, @"<<<\s*(.*?)\s*>>>", RegexOptions.Singleline).Groups[1].Value;
+        var words = essay.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
+        var length = Math.Min(1.0, words / 120.0);
+
+        var scored = criteria.Select(c =>
+        {
+            var hash = (c.Name + essay).Aggregate(0, (sum, ch) => unchecked((sum * 31) + ch)) & 0xFF;
+            var ratio = Math.Min(1.0, 0.2 + (length * 0.6) + ((hash % 20) / 100.0));
+            var points = (int)Math.Round(c.Max * ratio, MidpointRounding.AwayFromZero);
+            var reason = ratio switch
+            {
+                >= 0.8 => $"The text deals with {c.Name.ToLowerInvariant()} clearly and with enough detail.",
+                >= 0.5 => $"The text touches on {c.Name.ToLowerInvariant()} but stays on the surface.",
+                _ => $"{c.Name} is hardly developed in the text.",
+            };
+            return (c.Name, points, reason, ratio);
+        }).ToList();
+
+        var weakest = scored.Count == 0 ? "the text" : scored.MinBy(c => c.ratio).Name.ToLowerInvariant();
+        return JsonSerializer.Serialize(new
+        {
+            criteria = scored.Select(c => new { name = c.Name, points = c.points, reason = c.reason }),
+            suggestion = $"Add one concrete example to strengthen the part on {weakest}.",
+        });
     }
 
     private static int Number(string text, string pattern)
