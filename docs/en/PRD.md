@@ -253,6 +253,8 @@ _As built (Phase 6): eight read-only tools (more than the examples above), multi
 - [ ] Teachers edit and save to a question bank per subject
 - [ ] Questions from the bank can be assembled into a simple online quiz in the assignments module, auto-graded for multiple choice
 
+_Decided for Phase 7: the PDF text is read on the server with PdfPig (Apache-2.0, a new package) and only the text goes to the AI; a quiz is taken once per student, without a time limit; multiple choice is graded at once and enters the Quiz grade, short answers wait for the teacher._
+
 **AI-08: School & admissions chatbot** (US-17, Should)
 
 - [ ] Chat widget on the landing page and the parent dashboard
@@ -261,11 +263,15 @@ _As built (Phase 6): eight read-only tools (more than the examples above), multi
 - [ ] If the answer is not in the sources, the chatbot says it doesn't know and gives the staff contact, without guessing
 - [ ] Public users are rate limited per IP to prevent abuse and runaway cost
 
+_Decided for Phase 7: the SQL Server image has no full-text component, so the 5 most relevant passages come from a keyword score computed in SQL over the allowed sources; no custom database image._
+
 **AI-09: Announcement & letter drafts** (US-18, Should)
 
 - [ ] Staff enter the document type, audience, and short notes; AI drafts it in the editor
 - [ ] Letterhead, letter number, and signature are filled by the system, not by AI
 - [ ] Drafts are never published or sent automatically
+
+_Decided for Phase 7: announcement drafts go into the announcement editor; general letters (invitation, notice) get a new page where the AI writes the body and the system adds letterhead, number and signature and exports a PDF. The certificate letters of the approval flow do not change._
 
 **F-11: Audit log & external notifications**
 
@@ -304,6 +310,7 @@ The stack is fixed: .NET 10 backend (latest LTS, supported until November 2028),
 | File storage | S3 API via AWSSDK.S3: SeaweedFS in Docker locally, Cloudflare R2 for the live demo | Assignment files, admission documents, news images. One S3FileStorage implementation behind IFileStorage; local and demo differ only by endpoint config. MinIO is not used because its community edition was cut back in 2025 | Free (SeaweedFS Apache 2.0; R2 free tier, billed above quota) |
 | PDF | QuestPDF | Report cards and numbered letters with verification QR | Free (Community License, individuals & revenue < USD 1M) |
 | Excel import/export | ClosedXML | Student import, attendance export | Free (MIT) |
+| PDF text reading | UglyToad.PdfPig | Text of teaching materials for AI-06 (Phase 7) | Free (Apache-2.0) |
 | Frontend | React 19 + TypeScript + Vite | React Router for routing | Free (MIT) |
 | Server state | TanStack Query | All API data: caching, loading/error, pagination, invalidation after mutations; SignalR events invalidate related queries | Free (MIT) |
 | Client state | Zustand | Browser-only state, one small store per need: useAuthStore, useAttendanceSessionStore, useAdmissionWizardStore, useUiStore; always use selectors; never a copy of API data | Free (MIT) |
