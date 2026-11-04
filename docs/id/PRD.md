@@ -231,11 +231,15 @@ Prinsip untuk semua fitur AI:
 - [ ] Field hasil ekstraksi ditandai di formulir; pendaftar atau TU wajib mengonfirmasi
 - [ ] Ketidakcocokan antardokumen (misalnya tanggal lahir di KK dan akta berbeda) ditandai untuk dicek TU
 
+_Sesuai build (Fase 6): hanya foto (PDF ditolak dengan pesan jelas); hasil disimpan di dokumen; NIK, nama orang tua, dan nilai hanya ditampilkan sebagai informasi, formulir pendaftaran tidak berubah; TU melihat hasil bacaan AI di samping dokumen._
+
 **AI-04: Asisten kepala sekolah** (US-13, Sebaiknya)
 
 - [ ] Kepala sekolah bertanya dengan bahasa biasa; AI memakai tool use untuk memanggil fungsi query yang disediakan backend, misalnya rekap kehadiran per kelas, rata-rata nilai per mapel, dan daftar pengajuan menunggu
 - [ ] AI tidak pernah menulis SQL sendiri; hanya fungsi yang terdaftar dan sudah dicek hak aksesnya yang bisa dipanggil
 - [ ] Jawaban menyertakan angka sumber dan tautan ke halaman laporan terkait
+
+_Sesuai build (Fase 6): delapan tool read-only (lebih banyak dari contoh di atas), multi-giliran dengan riwayat disimpan browser, jawaban utuh sekaligus (tanpa streaming SignalR), maksimal 5 langkah tool per pertanyaan._
 
 **AI-05: Umpan balik esai berbasis rubrik** (US-10, Sebaiknya)
 

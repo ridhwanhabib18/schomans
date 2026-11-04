@@ -229,11 +229,15 @@ Principles for every AI feature:
 - [ ] Extracted fields are highlighted in the form; the applicant or staff must confirm them
 - [ ] Mismatches between documents (for example different dates of birth) are flagged for staff
 
+_As built (Phase 6): photos only (PDFs are refused with a clear message); the result is stored on the document; the national ID number, parents' names and grades are shown as information only, the application form is unchanged; staff see what the AI read next to the documents._
+
 **AI-04: Principal assistant** (US-13, Should)
 
 - [ ] The principal asks questions in plain language; AI uses tool use to call query functions exposed by the backend, such as attendance per classroom, average grades per subject, and pending requests
 - [ ] AI never writes SQL; only registered functions with permission checks can be called
 - [ ] Answers include the source numbers and links to the related report pages
+
+_As built (Phase 6): eight read-only tools (more than the examples above), multi-turn with the history kept by the browser, the whole answer at once (no SignalR streaming), at most 5 tool steps per question._
 
 **AI-05: Rubric-based essay feedback** (US-10, Should)
 

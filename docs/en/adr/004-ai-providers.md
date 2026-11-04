@@ -31,4 +31,8 @@ mapped back in the backend, whatever the provider. Daily limits per user, the mo
   validation is reported as an error, never saved. The test set of each feature (at least 10 cases) runs against the mock in the
   test suite; running it against Ollama or Claude is a manual step whenever a prompt changes.
 - The public demo (Cloudflare) cannot reach a local Ollama, so it runs on Mock unless a Claude key is configured.
-- Vision for AI-03 needs a vision-capable model in Ollama; the mock returns fixed fields.
+- Vision for AI-03 needs a vision-capable model in Ollama; the mock returns fixed fields. Photos are sent as they are (JPEG, PNG,
+  WebP, up to 5 MB; PDFs are refused), so a student name on a document cannot be replaced by an ID; with Ollama they stay on the machine.
+- Tool use (AI-04) goes through `IAiService.ChatAsync`: the model may only call the registered, read-only tools of the principal
+  assistant, at most 5 steps per question. A question with its tool steps counts as one call toward the daily limit (every call still
+  counts toward the monthly budget), and student names in tool results, the question and the history are replaced by IDs.
