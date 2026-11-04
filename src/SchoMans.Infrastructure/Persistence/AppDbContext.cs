@@ -88,6 +88,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     public DbSet<GeneralLetter> GeneralLetters => Set<GeneralLetter>();
 
+    public DbSet<Question> Questions => Set<Question>();
+
     public DbSet<EmailMessage> EmailMessages => Set<EmailMessage>();
 
     public DbSet<TeacherNote> TeacherNotes => Set<TeacherNote>();

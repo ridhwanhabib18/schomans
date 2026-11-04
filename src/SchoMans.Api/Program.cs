@@ -70,6 +70,7 @@ app.MapRubricEndpoints();
 app.MapEssayFeedbackEndpoints();
 app.MapDraftEndpoints();
 app.MapChatbotEndpoints();
+app.MapQuestionBankEndpoints();
 app.MapGeneralLetterEndpoints();
 app.MapFileEndpoints();
 app.MapSitemapEndpoints();

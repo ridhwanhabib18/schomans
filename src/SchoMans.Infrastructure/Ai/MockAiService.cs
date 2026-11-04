@@ -26,6 +26,7 @@ public sealed class MockAiService : IAiService
             AiFeatures.EssayFeedback => MockEssayFeedback(request.UserPrompt),
             AiFeatures.DocumentDraft => MockDocumentDraft(request.UserPrompt),
             AiFeatures.Chatbot => MockChatbot(request.UserPrompt),
+            AiFeatures.QuestionGenerator => MockQuestions(request.UserPrompt),
             _ => request.JsonOutput ? "{\"mock\":true}" : "This is an answer of the mock AI.",
         };
 
@@ -334,6 +335,60 @@ public sealed class MockAiService : IAiService
         return best.Sentence is null
             ? JsonSerializer.Serialize(new { answer = (string?)null, sources = Array.Empty<int>() })
             : JsonSerializer.Serialize(new { answer = best.Sentence.Length > 400 ? best.Sentence[..400] : best.Sentence, sources = new[] { best.Number } });
+    }
+
+    /// <summary>
+    /// AI-06: questions built from the sentences of the material in the prompt, one question per sentence, in the type asked. The right
+    /// option moves from position to position, so the answer key is not always the same. It adds nothing that is not in the material.
+    /// </summary>
+    private static string MockQuestions(string prompt)
+    {
+        var multipleChoice = prompt.Contains("Type: multiple choice", StringComparison.Ordinal);
+        var count = Number(prompt, @"Number of questions: (\d+)");
+        var material = Regex.Match(prompt, @"<<<\s*(.*?)\s*>>>", RegexOptions.Singleline).Groups[1].Value;
+        var sentences = Regex.Split(material, @"(?<=[.!?])\s+")
+            .Select(sentence => Regex.Replace(sentence, @"\s+", " ").Trim())
+            .Where(sentence => sentence.Length >= 12)
+            .Select(sentence => sentence.Length > 150 ? sentence[..150] : sentence)
+            .ToList();
+        if (sentences.Count == 0)
+        {
+            sentences.Add("The material has no sentence that can be asked about");
+        }
+
+        var questions = Enumerable.Range(0, Math.Max(1, count)).Select(i =>
+        {
+            var sentence = sentences[i % sentences.Count];
+            var number = i + 1;
+            if (!multipleChoice)
+            {
+                return (object)new
+                {
+                    body = $"Question {number}: complete this idea from the material: \"{string.Join(' ', sentence.Split(' ').Take(4))} ...\"",
+                    options = Array.Empty<string>(),
+                    answer = (object)sentence,
+                    explanation = "This is stated in the material.",
+                };
+            }
+
+            var right = i % 4;
+            var wrong = new[] { "This is not mentioned in the material.", "The material says the opposite.", "Only a small part of this is stated." };
+            var options = new List<string>();
+            for (var position = 0; position < 4; position++)
+            {
+                options.Add(position == right ? sentence : $"{wrong[(position < right ? position : position - 1) % 3]} ({number}.{position + 1})");
+            }
+
+            return new
+            {
+                body = $"Question {number}: which statement is made in the material?",
+                options = options.ToArray(),
+                answer = (object)right,
+                explanation = "The material states this.",
+            };
+        });
+
+        return JsonSerializer.Serialize(new { questions });
     }
 
     private static int Number(string text, string pattern)
