@@ -231,6 +231,12 @@ public class ProgressSummaryEndpointTests(ApiFixture fixture)
         var notifications = await (await parent.GetAsync("/api/v1/notifications?pageSize=100")).ReadAsync<PagedResult<NotificationDto>>();
         var notice = Assert.Single(notifications.Items, n => n.Type == "ProgressSummary");
         Assert.Equal($"/my-children/summaries?studentId={scenario.Students[0].Id}", notice.LinkUrl);
+
+        // The parents also get the summary by email (F-11), queued next to the notification.
+        await using var scope = fixture.Factory.Services.CreateAsyncScope();
+        var mail = Assert.Single(
+            await scope.ServiceProvider.GetRequiredService<AppDbContext>().EmailMessages.AsNoTracking().Where(m => m.LinkUrl == notice.LinkUrl).ToListAsync());
+        Assert.Equal(($"Progress summary of {scenario.Students[0].FullName}", EmailStatus.Pending), (mail.Subject, mail.Status));
     }
 
     [Fact]

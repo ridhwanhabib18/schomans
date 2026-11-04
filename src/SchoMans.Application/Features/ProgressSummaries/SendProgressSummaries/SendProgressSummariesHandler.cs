@@ -49,7 +49,8 @@ public sealed class SendProgressSummariesHandler(IAppDbContext db, ICurrentUser 
                 $"Progress summary of {studentName}",
                 $"The summary of {MonthName(summary.Month)} is ready to read.",
                 $"/my-children/summaries?studentId={summary.StudentId}",
-                ct);
+                ct,
+                alsoEmail: true);
         }
 
         return new SentProgressSummariesDto(approved.Count, parentsNotified);

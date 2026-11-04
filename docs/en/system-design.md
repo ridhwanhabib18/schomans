@@ -738,7 +738,7 @@ Uploads: the browser asks the API for a presigned PUT URL, the API validates typ
 | --- | --- |
 | Logging | Serilog structured logs with correlation id per request, shipped to Seq |
 | Audit | `SaveChangesInterceptor` writes AuditLog rows (user, action, old and new values) for grades, attendance records, requests, and approval steps in the same save as the change; admin staff and the principal read them at `GET /api/v1/audit-logs` |
-| Email | Handlers queue an `EmailMessage` next to the in-app notification (request decided, admission result, announcement published); a Hangfire job sends the queue every minute over SMTP (Mailpit locally), retries 5 times, then marks the mail Failed |
+| Email | Handlers queue an `EmailMessage` next to the in-app notification (request decided, admission result, announcement published, progress summary sent); a Hangfire job sends the queue every minute over SMTP (Mailpit locally), retries 5 times, then marks the mail Failed |
 | PWA | `manifest.webmanifest` with PNG icons makes the app installable; a hand-written service worker (`web/public/sw.js`, production builds only) caches the app shell and the hashed build assets, never the API or Keycloak, so the installed app opens offline but all data stays live |
 | Health | `/health/live` and `/health/ready` (SQL Server, Keycloak, S3) used by Docker and the reverse proxy |
 | AI usage | Every Claude call logged with feature, user, tokens, cost, and duration; monthly budget cap |
