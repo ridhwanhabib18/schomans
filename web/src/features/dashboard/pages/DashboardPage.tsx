@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { Button, buttonVariants } from '@/shared/ui/button'
+import { ChatWidget } from '@/shared/ui/chat-widget'
 import { useDashboard } from '../api/useDashboard'
 import { AnalyticsSection } from '../components/AnalyticsSection'
 import { DashboardSkeleton } from '../components/DashboardSkeleton'
@@ -37,6 +38,7 @@ export function DashboardPage() {
         <p className="text-muted-foreground">{t('welcome', { name: data.fullName })}</p>
       </header>
       {HAS_ANALYTICS.includes(data.role) ? <AnalyticsSection /> : data.sections.length === 0 && <EmptyDashboard roleLabel={tCommon(`roles.${data.role}`)} />}
+      {data.role === 'Parent' && <ChatWidget audience="parent" />}
       {data.role === 'Applicant' && (
         <div>
           <Link to="/admissions" className={buttonVariants({ size: 'lg' })}>

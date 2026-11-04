@@ -228,6 +228,18 @@ describe('DashboardPage', () => {
     expect(await screen.findByText('No student needs attention right now.')).toBeTruthy()
   })
 
+  it('offers a parent the chatbot of the school, and nobody else', async () => {
+    getDashboard.mockResolvedValue({ role: 'Parent', fullName: 'Ibu Putri', sections: [] })
+    const parent = renderDashboard()
+    expect(await screen.findByRole('heading', { name: 'Ask about the school' })).toBeTruthy()
+    parent.unmount()
+
+    getDashboard.mockResolvedValue({ role: 'Teacher', fullName: 'Pak Budi', sections: [] })
+    renderDashboard()
+    await screen.findByRole('heading', { level: 1 })
+    expect(screen.queryByRole('heading', { name: 'Ask about the school' })).toBeNull()
+  })
+
   it('shows a parent the monthly grades and attendance of each child', async () => {
     getDashboard.mockResolvedValue({ role: 'Parent', fullName: 'Ibu Putri', sections: [] })
     http.customInstance.mockResolvedValue(
