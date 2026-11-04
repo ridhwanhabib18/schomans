@@ -10,6 +10,8 @@ export default defineConfig({
   timeout: 90_000,
   fullyParallel: false,
   workers: 1,
+  // The default 5 seconds is too tight for a save or a sign-in against real services on a busy machine.
+  expect: { timeout: 15_000 },
   retries: isCi ? 1 : 0,
   forbidOnly: isCi,
   reporter: [

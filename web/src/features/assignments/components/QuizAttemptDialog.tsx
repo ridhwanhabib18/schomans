@@ -119,7 +119,7 @@ export function QuizAttemptDialog({ assignmentId, studentId, studentName, canSco
                 <QuestionResult key={q.questionId} question={q} />
               ))}
             </ol>
-            <Grading key={data.attempt.submissionId + String(data.attempt.score)} assignmentId={assignmentId} studentId={studentId} quiz={data} canScore={canScore} onClose={onClose} />
+            <Grading key={data.attempt.submissionId}assignmentId={assignmentId} studentId={studentId} quiz={data} canScore={canScore} onClose={onClose} />
           </div>
         )}
       </DialogContent>
