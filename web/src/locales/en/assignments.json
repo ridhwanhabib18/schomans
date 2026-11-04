@@ -175,6 +175,16 @@
       "invalid_output": "The AI did not give a usable draft. Try again.",
       "provider_failed": "The AI service did not answer. Try again in a moment.",
       "not_configured": "The AI service is not set up."
+    },
+    "questions": {
+      "pdf_invalid": "The file is not a PDF that can be read.",
+      "pdf_too_long": "The PDF has more than 30 pages.",
+      "pdf_no_text": "The PDF has no text to read; a scanned document cannot be used.",
+      "not_your_subject": "You can only use the question bank of a subject you teach.",
+      "not_a_teacher": "Only teachers use the question bank.",
+      "not_yours": "Only the teacher who wrote a question can change it.",
+      "not_found": "The question does not exist.",
+      "invalid_request": "The request is not valid. Check the file and the number of questions."
     }
   },
   "rubric": {
@@ -215,6 +225,82 @@
       "Draft": "Draft",
       "Accepted": "Accepted",
       "Rejected": "Rejected"
+    }
+  },
+  "questions": {
+    "title": "Question bank",
+    "description": "The questions of the subjects you teach. Add them by hand, or let the AI draft them from a PDF and review them first. Teachers of the same subject share the bank; only the author changes a question.",
+    "caption": "Questions of the subject, newest first",
+    "loadError": "The questions could not be loaded.",
+    "add": "Add a question",
+    "edit": "Change the question",
+    "save": "Save the question",
+    "saved": "Question saved.",
+    "deleted": "Question deleted.",
+    "you": "You",
+    "editQuestion": "Change the question: {{body}}",
+    "deleteQuestion": "Delete the question: {{body}}",
+    "deleteTitle": "Delete this question?",
+    "noSubjects": {
+      "title": "No subjects yet",
+      "body": "The question bank is of the subjects you teach. Ask the admin staff to put your lessons in the timetable."
+    },
+    "empty": {
+      "title": "No questions",
+      "body": "Add a question or draft some from a PDF."
+    },
+    "filters": {
+      "subject": "Subject",
+      "all": "All",
+      "search": "Search in the text"
+    },
+    "columns": {
+      "body": "Question",
+      "type": "Type",
+      "difficulty": "Difficulty",
+      "author": "Written by",
+      "actions": "Actions"
+    },
+    "type": {
+      "MultipleChoice": "Multiple choice",
+      "ShortAnswer": "Short answer"
+    },
+    "difficulty": {
+      "Easy": "Easy",
+      "Medium": "Medium",
+      "Hard": "Hard"
+    },
+    "editor": {
+      "type": "Type",
+      "difficulty": "Difficulty",
+      "body": "Question",
+      "options": "Options (mark the right one)",
+      "option": "Option {{number}}",
+      "markRight": "Option {{number}} is the right answer",
+      "removeOption": "Remove option {{number}}",
+      "addOption": "Add an option",
+      "rightHint": "Two to five different options; exactly one is right.",
+      "modelAnswer": "Model answer",
+      "modelAnswerHint": "What you expect the student to write; you give the points yourself.",
+      "explanation": "Explanation"
+    },
+    "generate": {
+      "open": "Draft from a PDF",
+      "title": "Draft questions from a PDF",
+      "intro": "Upload your study material. The text of the PDF is read on the server and only the text goes to the AI. You review every question before it is saved. One draft uses one of your daily AI calls.",
+      "file": "PDF file",
+      "fileHint": "At most 30 pages and 10 MB, with text in it (a scan has none).",
+      "notPdf": "Choose a PDF file.",
+      "tooBig": "The PDF is larger than 10 MB.",
+      "count": "Number of questions",
+      "submit": "Draft the questions",
+      "working": "Reading and drafting…",
+      "reviewIntro": "{{count}} drafts from {{pages}} page(s). Change what you want, discard what you do not, then save.",
+      "truncated": "The PDF has more text than the AI reads at once; the questions come from the first part.",
+      "draftNumber": "Draft {{number}}",
+      "discard": "Discard",
+      "saveAll": "Save {{count}} to the bank",
+      "saved": "{{count}} questions saved to the bank."
     }
   }
 }

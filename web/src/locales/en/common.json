@@ -59,7 +59,8 @@
     "childSummaries": "Progress summaries",
     "assistant": "Assistant",
     "jobs": "Background jobs",
-    "generalLetters": "General letters"
+    "generalLetters": "General letters",
+    "questionBank": "Question bank"
   },
   "actions": {
     "signIn": "Sign in",

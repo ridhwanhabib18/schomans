@@ -6,6 +6,7 @@ import { GeneralLettersPage } from '@/features/letters/pages/GeneralLettersPage'
 import { AssignmentDetailPage } from '@/features/assignments/pages/AssignmentDetailPage'
 import { AssignmentEditorPage } from '@/features/assignments/pages/AssignmentEditorPage'
 import { AssignmentsHomePage } from '@/features/assignments/pages/AssignmentsHomePage'
+import { QuestionBankPage } from '@/features/assignments/pages/QuestionBankPage'
 import { ChildAssignmentsPage } from '@/features/assignments/pages/StudentAssignmentsPage'
 import { AttendanceReportPage } from '@/features/attendance/pages/AttendanceReportPage'
 import { CheckInPage } from '@/features/attendance/pages/CheckInPage'
@@ -120,6 +121,7 @@ export const routes: RouteObject[] = [
           { path: '/my-children/attendance', element: guarded(PARENT, <ChildAttendancePage />) },
 
           { path: '/assignments', element: guarded(ASSIGNMENT_READERS, <AssignmentsHomePage />) },
+          { path: '/assignments/questions', element: guarded(TEACHER, <QuestionBankPage />) },
           { path: '/assignments/new', element: guarded(TEACHER, <AssignmentEditorPage />) },
           { path: '/assignments/:id', element: guarded(ASSIGNMENT_READERS, <AssignmentDetailPage />) },
           { path: '/assignments/:id/edit', element: guarded(TEACHER, <AssignmentEditorPage />) },
