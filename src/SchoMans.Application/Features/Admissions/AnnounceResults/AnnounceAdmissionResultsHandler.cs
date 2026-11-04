@@ -29,10 +29,10 @@ public sealed class AnnounceAdmissionResultsHandler(IAppDbContext db, INotificat
             var deadline = clock.ToSchoolDateTime(period.ReregistrationDeadline).ToString("d MMMM yyyy", CultureInfo.InvariantCulture);
             told += await NotificationSender.SendAsync(
                 db, notifications, decided.Where(a => a.Status == ApplicantStatus.Accepted).Select(a => a.UserId),
-                NotificationType.AdmissionResult, "You are accepted", $"Confirm your place before {deadline}.", "/admissions", ct);
+                NotificationType.AdmissionResult, "You are accepted", $"Confirm your place before {deadline}.", "/admissions", ct, alsoEmail: true);
             told += await NotificationSender.SendAsync(
                 db, notifications, decided.Where(a => a.Status == ApplicantStatus.Rejected).Select(a => a.UserId),
-                NotificationType.AdmissionResult, "The result of your application is out", "Open your application to read it.", "/admissions", ct);
+                NotificationType.AdmissionResult, "The result of your application is out", "Open your application to read it.", "/admissions", ct, alsoEmail: true);
 
             period.MarkResultsNotified(now);
             await db.SaveChangesAsync(ct);

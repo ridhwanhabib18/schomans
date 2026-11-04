@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using SchoMans.Domain.Admissions;
 using SchoMans.Domain.Ai;
+using SchoMans.Domain.Audit;
 using SchoMans.Domain.Approvals;
 using SchoMans.Domain.Assignments;
 using SchoMans.Domain.Attendance;
@@ -79,6 +80,10 @@ public interface IAppDbContext
     DbSet<Notification> Notifications { get; }
 
     DbSet<AiUsageLog> AiUsageLogs { get; }
+
+    DbSet<AuditLog> AuditLogs { get; }
+
+    DbSet<EmailMessage> EmailMessages { get; }
 
     DbSet<TeacherNote> TeacherNotes { get; }
 

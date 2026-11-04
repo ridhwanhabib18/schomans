@@ -60,6 +60,13 @@ services:
       retries: 12
       start_period: 10s
 
+  # Catches the emails of the app (F-11): SMTP on 1025, the inbox to read them on http://localhost:8025. Nothing is delivered.
+  mailpit:
+    image: axllent/mailpit:v1.27.0
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
   # A local model for the AI features (ADR-004). Not started by default (several GB of models); start it with
   #   docker compose -f infra/docker-compose.yml --profile ai up -d
   # then pull the model once:  docker compose -f infra/docker-compose.yml exec ollama ollama pull qwen2.5:7b

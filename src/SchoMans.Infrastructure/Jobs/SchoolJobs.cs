@@ -3,6 +3,7 @@ using SchoMans.Application.Features.Admissions.AnnounceResults;
 using SchoMans.Application.Features.Assignments.SendDueReminders;
 using SchoMans.Application.Features.Attendance.CloseStaleSessions;
 using SchoMans.Application.Features.Attendance.RotateQrCodes;
+using SchoMans.Application.Features.Email.SendQueuedEmails;
 using SchoMans.Application.Features.ProgressSummaries.DraftProgressSummaries;
 
 namespace SchoMans.Infrastructure.Jobs;
@@ -44,6 +45,14 @@ public sealed class ProgressSummaryDraftJob(DraftProgressSummariesHandler handle
 /// <summary>Every 5 minutes: tell the applicants of a period that the results are out, once its announcement moment has come.</summary>
 [DisableConcurrentExecution(timeoutInSeconds: 240)]
 public sealed class AdmissionResultsJob(AnnounceAdmissionResultsHandler handler)
+{
+    public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
+}
+
+/// <summary>Every minute: send the queued emails (F-11). It never overlaps itself, so a slow mail server cannot send a mail twice.</summary>
+[AutomaticRetry(Attempts = 0)] // the next run is a minute away and picks up whatever is still pending
+[DisableConcurrentExecution(timeoutInSeconds: 120)]
+public sealed class SendQueuedEmailsJob(SendQueuedEmailsHandler handler)
 {
     public Task RunAsync(CancellationToken ct) => handler.Handle(ct);
 }

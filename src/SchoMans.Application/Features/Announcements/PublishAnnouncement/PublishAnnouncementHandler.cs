@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SchoMans.Application.Common;
 using SchoMans.Application.Common.Errors;
 using SchoMans.Application.Common.Interfaces;
 using SchoMans.Domain.Communication;
@@ -38,6 +39,7 @@ public sealed class PublishAnnouncementHandler(
             .Select(userId => Notification.Create(userId, NotificationType.Announcement, announcement.Title, excerpt, link))
             .ToList();
         db.Notifications.AddRange(stored);
+        await NotificationSender.QueueEmailsAsync(db, recipientIds, announcement.Title, excerpt, link, ct);
         await db.SaveChangesAsync(ct);
 
         // Stored first, pushed second: a failed push loses nothing, the notification is there at the next page load.

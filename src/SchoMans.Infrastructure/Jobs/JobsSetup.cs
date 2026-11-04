@@ -24,6 +24,7 @@ public static class JobsSetup
     public const string DueReminderJobId = "assignment-due-reminder";
     public const string AdmissionResultsJobId = "admission-results";
     public const string ProgressSummaryDraftJobId = "progress-summary-drafts";
+    public const string SendEmailsJobId = "send-queued-emails";
 
     /// <summary>Hangfire with SQL Server storage in its own schema of the application database.</summary>
     public static IServiceCollection AddSchoolJobs(this IServiceCollection services, IConfiguration configuration, string connectionString)
@@ -53,6 +54,7 @@ public static class JobsSetup
         services.AddScoped<AssignmentDueReminderJob>();
         services.AddScoped<AdmissionResultsJob>();
         services.AddScoped<ProgressSummaryDraftJob>();
+        services.AddScoped<SendQueuedEmailsJob>();
         return services;
     }
 
@@ -70,6 +72,7 @@ public static class JobsSetup
         jobs.AddOrUpdate<RotateAttendanceQrJob>(RotateQrJobId, job => job.RunAsync(CancellationToken.None), Cron.Minutely());
         jobs.AddOrUpdate<CloseStaleSessionsJob>(CloseStaleSessionsJobId, job => job.RunAsync(CancellationToken.None), "*/15 * * * *");
         jobs.AddOrUpdate<AdmissionResultsJob>(AdmissionResultsJobId, job => job.RunAsync(CancellationToken.None), "*/5 * * * *");
+        jobs.AddOrUpdate<SendQueuedEmailsJob>(SendEmailsJobId, job => job.RunAsync(CancellationToken.None), Cron.Minutely());
         jobs.AddOrUpdate<ProgressSummaryDraftJob>(
             ProgressSummaryDraftJobId,
             job => job.RunAsync(CancellationToken.None),

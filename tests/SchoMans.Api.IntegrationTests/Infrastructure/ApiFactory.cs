@@ -24,6 +24,8 @@ public sealed class ApiFactory(
 
     public RecordingIdentityProvisioner Identity { get; } = new();
 
+    public FakeEmailSender Email { get; } = new();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment(environment);
@@ -61,6 +63,10 @@ public sealed class ApiFactory(
             // Keycloak is not reachable in the tests; a recording stand-in takes the place of its Admin API.
             services.RemoveAll<IIdentityProvisioner>();
             services.AddSingleton<IIdentityProvisioner>(Identity);
+
+            // No mail server in the tests either.
+            services.RemoveAll<IEmailSender>();
+            services.AddSingleton<IEmailSender>(Email);
 
             if (timeProvider is not null)
             {

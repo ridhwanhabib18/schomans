@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SchoMans.Application.Common.Interfaces;
 using SchoMans.Domain.Admissions;
 using SchoMans.Domain.Ai;
+using SchoMans.Domain.Audit;
 using SchoMans.Domain.Approvals;
 using SchoMans.Domain.Assignments;
 using SchoMans.Domain.Attendance;
@@ -78,6 +79,10 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<Notification> Notifications => Set<Notification>();
 
     public DbSet<AiUsageLog> AiUsageLogs => Set<AiUsageLog>();
+
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+
+    public DbSet<EmailMessage> EmailMessages => Set<EmailMessage>();
 
     public DbSet<TeacherNote> TeacherNotes => Set<TeacherNote>();
 

@@ -6,6 +6,7 @@ using SchoMans.Application.Features.Ai;
 using SchoMans.Application.Features.Attendance;
 using SchoMans.Infrastructure.Ai;
 using SchoMans.Infrastructure.Content;
+using SchoMans.Infrastructure.Email;
 using SchoMans.Infrastructure.Excel;
 using SchoMans.Infrastructure.Identity;
 using SchoMans.Infrastructure.Jobs;
@@ -29,10 +30,12 @@ public static class DependencyInjection
 
         services.AddSingleton(TimeProvider.System);
         services.AddSingleton<BaseEntitySaveChangesInterceptor>();
+        services.AddScoped<AuditSaveChangesInterceptor>();
 
         services.AddDbContext<AppDbContext>((provider, options) => options
             .UseSqlServer(connectionString, sql => sql.EnableRetryOnFailure())
-            .AddInterceptors(provider.GetRequiredService<BaseEntitySaveChangesInterceptor>()));
+            // The audit interceptor runs first: it has to see the deletes before they become soft deletes.
+            .AddInterceptors(provider.GetRequiredService<AuditSaveChangesInterceptor>(), provider.GetRequiredService<BaseEntitySaveChangesInterceptor>()));
         services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 
         services.AddScoped<CurrentUser>();
@@ -53,6 +56,9 @@ public static class DependencyInjection
 
         services.Configure<KeycloakAdminOptions>(configuration.GetSection(KeycloakAdminOptions.SectionName));
         services.AddHttpClient<IIdentityProvisioner, KeycloakIdentityProvisioner>(client => client.Timeout = TimeSpan.FromSeconds(10));
+
+        services.Configure<EmailOptions>(configuration.GetSection(EmailOptions.SectionName));
+        services.AddSingleton<IEmailSender, SmtpEmailSender>();
 
         services.Configure<AiOptions>(configuration.GetSection(AiOptions.SectionName));
         services.AddAiService(configuration);
