@@ -51,6 +51,7 @@ public static class DependencyInjection
         services.AddSingleton<IAttendanceExport, AttendanceExcelWriter>();
         services.AddSingleton<IReportCardPdf, ReportCardPdfRenderer>();
         services.AddSingleton<ILetterPdf, LetterPdfRenderer>();
+        services.AddSingleton<IGeneralLetterPdf, GeneralLetterPdfRenderer>();
         services.AddSingleton<IQrCodeGenerator, QrCoderGenerator>();
         services.AddSingleton<ISiteLinks, SiteLinks>();
 

@@ -87,6 +87,8 @@ public interface IAppDbContext
 
     DbSet<FeedbackDraft> FeedbackDrafts { get; }
 
+    DbSet<GeneralLetter> GeneralLetters { get; }
+
     DbSet<EmailMessage> EmailMessages { get; }
 
     DbSet<TeacherNote> TeacherNotes { get; }

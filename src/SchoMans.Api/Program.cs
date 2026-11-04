@@ -68,6 +68,8 @@ app.MapAssistantEndpoints();
 app.MapAuditEndpoints();
 app.MapRubricEndpoints();
 app.MapEssayFeedbackEndpoints();
+app.MapDraftEndpoints();
+app.MapGeneralLetterEndpoints();
 app.MapFileEndpoints();
 app.MapSitemapEndpoints();
 app.MapHealthEndpoints();

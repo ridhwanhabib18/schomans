@@ -24,6 +24,7 @@ public sealed class MockAiService : IAiService
             AiFeatures.AchievementDescription => MockAchievementDescription(request.UserPrompt),
             AiFeatures.DocumentExtraction => MockDocumentExtraction(request),
             AiFeatures.EssayFeedback => MockEssayFeedback(request.UserPrompt),
+            AiFeatures.DocumentDraft => MockDocumentDraft(request.UserPrompt),
             _ => request.JsonOutput ? "{\"mock\":true}" : "This is an answer of the mock AI.",
         };
 
@@ -282,6 +283,35 @@ public sealed class MockAiService : IAiService
             criteria = scored.Select(c => new { name = c.Name, points = c.points, reason = c.reason }),
             suggestion = $"Add one concrete example to strengthen the part on {weakest}.",
         });
+    }
+
+    /// <summary>
+    /// AI-09: a short document built from the kind, the audience and the notes in the prompt. It adds no fact of its own: what the staff
+    /// wrote in the notes is quoted back, and nothing else (no date, place or name), like the real prompt demands.
+    /// </summary>
+    private static string MockDocumentDraft(string prompt)
+    {
+        var kind = Regex.Match(prompt, @"Document: (.+)").Groups[1].Value.Trim();
+        var audience = Regex.Match(prompt, @"Audience: (.+)").Groups[1].Value.Trim();
+        var notes = Regex.Match(prompt, @"<<<\s*(.*?)\s*>>>", RegexOptions.Singleline).Groups[1].Value;
+        var points = notes.Split(['\n', '.'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(4).Select(p => p.Length > 180 ? p[..180] : p).ToList();
+        var topic = points.Count == 0 ? "School information" : points[0];
+        var title = kind switch
+        {
+            "invitation letter" => $"Invitation: {topic}",
+            "notice letter" => $"Notice: {topic}",
+            _ => topic,
+        };
+
+        var opening = kind switch
+        {
+            "invitation letter" => $"We warmly invite {audience.ToLowerInvariant()} to the following.",
+            "notice letter" => $"We would like to inform {audience.ToLowerInvariant()} of the following.",
+            _ => $"A message for {audience.ToLowerInvariant()}.",
+        };
+
+        var paragraphs = new List<string> { opening, string.Join(" ", points.Select(p => p.TrimEnd('.', '!') + ".")), "Thank you for your attention and cooperation." };
+        return JsonSerializer.Serialize(new { title = title.Length > 150 ? title[..150] : title, paragraphs });
     }
 
     private static int Number(string text, string pattern)

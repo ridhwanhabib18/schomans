@@ -38,6 +38,7 @@ public sealed class InMemoryFileStorage : IFileStorage
     public Task UploadAsync(FileBucket bucket, string key, byte[] content, string contentType, CancellationToken ct)
     {
         _objects[(bucket, key)] = new StoredObject(content.Length, contentType);
+        _contents[(bucket, key)] = content;
         return Task.CompletedTask;
     }
 
