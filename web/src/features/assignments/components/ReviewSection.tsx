@@ -19,6 +19,7 @@ import { useDraftAllFeedback, useFeedbackDrafts, type FeedbackStatus } from '../
 import { assignmentErrorText } from '../errors'
 import { AssignmentStatusBadge } from './AssignmentStatusBadge'
 import { FeedbackPanel } from './FeedbackPanel'
+import { QuizAttemptDialog } from './QuizAttemptDialog'
 import { RubricDialog } from './RubricDialog'
 import { SubmissionSummary } from './SubmissionPanel'
 import '../i18n'
@@ -99,12 +100,13 @@ function ReviewDialog({ row, canScore, onClose }: { row: SubmissionRowDto; canSc
 }
 
 /** Every student of the assignment's classrooms, handed in or not, with the way to review and score the work. */
-export function ReviewSection({ assignmentId, canScore }: { assignmentId: string; canScore: boolean }) {
+export function ReviewSection({ assignmentId, canScore, isQuiz = false }: { assignmentId: string; canScore: boolean; isQuiz?: boolean }) {
   const { t } = useTranslation('assignments')
   const { data, isPending, isError, refetch } = useSubmissions(assignmentId)
   const { t: tCommon } = useTranslation()
   const showToast = useToastStore(selectShowToast)
-  const drafts = useFeedbackDrafts(assignmentId, canScore)
+  // A quiz is scored from its questions, so the rubric and the AI feedback of written work do not apply to it.
+  const drafts = useFeedbackDrafts(assignmentId, canScore && !isQuiz)
   const draftAll = useDraftAllFeedback(assignmentId)
   const [reviewing, setReviewing] = useState<SubmissionRowDto | null>(null)
   const [editingRubric, setEditingRubric] = useState(false)
@@ -130,7 +132,7 @@ export function ReviewSection({ assignmentId, canScore }: { assignmentId: string
     { key: 'status', header: t('review.columns.status'), render: (r) => <AssignmentStatusBadge status={r.status} /> },
     { key: 'submitted', header: t('review.columns.submitted'), render: (r) => (r.submittedAt ? formatDateTime(r.submittedAt) : '—') },
     { key: 'score', header: t('review.columns.score'), className: 'tabular-nums', render: (r) => r.score ?? '—' },
-    ...(canScore
+    ...(canScore && !isQuiz
       ? [
           {
             key: 'draft',
@@ -164,7 +166,7 @@ export function ReviewSection({ assignmentId, canScore }: { assignmentId: string
       <h2 id="review-title" className="text-lg font-semibold">
         {t('review.title')}
       </h2>
-      {canScore && (
+      {canScore && !isQuiz && (
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="outline" size="sm" onClick={() => setEditingRubric(true)}>
             {t('rubric.open')}
@@ -192,7 +194,10 @@ export function ReviewSection({ assignmentId, canScore }: { assignmentId: string
         </>
       )}
       {editingRubric && <RubricDialog assignmentId={assignmentId} onClose={() => setEditingRubric(false)} />}
-      {reviewing && <ReviewDialog row={reviewing} canScore={canScore} onClose={() => setReviewing(null)} />}
+      {reviewing && isQuiz && (
+        <QuizAttemptDialog assignmentId={assignmentId} studentId={reviewing.studentId} studentName={reviewing.studentName} canScore={canScore} onClose={() => setReviewing(null)} />
+      )}
+      {reviewing && !isQuiz && <ReviewDialog row={reviewing} canScore={canScore} onClose={() => setReviewing(null)} />}
     </section>
   )
 }

@@ -7,6 +7,7 @@ import { AssignmentDetailPage } from '@/features/assignments/pages/AssignmentDet
 import { AssignmentEditorPage } from '@/features/assignments/pages/AssignmentEditorPage'
 import { AssignmentsHomePage } from '@/features/assignments/pages/AssignmentsHomePage'
 import { QuestionBankPage } from '@/features/assignments/pages/QuestionBankPage'
+import { QuizBuilderPage } from '@/features/assignments/pages/QuizBuilderPage'
 import { ChildAssignmentsPage } from '@/features/assignments/pages/StudentAssignmentsPage'
 import { AttendanceReportPage } from '@/features/attendance/pages/AttendanceReportPage'
 import { CheckInPage } from '@/features/attendance/pages/CheckInPage'
@@ -121,6 +122,7 @@ export const routes: RouteObject[] = [
           { path: '/my-children/attendance', element: guarded(PARENT, <ChildAttendancePage />) },
 
           { path: '/assignments', element: guarded(ASSIGNMENT_READERS, <AssignmentsHomePage />) },
+          { path: '/assignments/quizzes/new', element: guarded(TEACHER, <QuizBuilderPage />) },
           { path: '/assignments/questions', element: guarded(TEACHER, <QuestionBankPage />) },
           { path: '/assignments/new', element: guarded(TEACHER, <AssignmentEditorPage />) },
           { path: '/assignments/:id', element: guarded(ASSIGNMENT_READERS, <AssignmentDetailPage />) },

@@ -12,6 +12,7 @@ import { selectAuthRole, useAuthStore } from '@/stores/useAuthStore'
 import { selectShowToast, useToastStore } from '@/stores/useToastStore'
 import { useAssignment, useDeleteAssignment } from '../api/assignments'
 import { AttachmentList } from '../components/AttachmentList'
+import { QuizPanel } from '../components/QuizPanel'
 import { ReviewSection } from '../components/ReviewSection'
 import { SubmissionPanel, SubmissionSummary } from '../components/SubmissionPanel'
 import '../i18n'
@@ -104,9 +105,12 @@ export function AssignmentDetailPage() {
             </section>
           )}
 
-          {role === 'Student' && <SubmissionPanel key={`${data.id}-${data.mySubmission?.submittedAt ?? ''}`} assignment={data} />}
+          {data.type === 'Quiz' && role === 'Student' && <QuizPanel assignmentId={data.id} canTake />}
+          {data.type === 'Quiz' && role === 'Parent' && <QuizPanel assignmentId={data.id} studentId={childId} canTake={false} />}
 
-          {role === 'Parent' && (
+          {data.type !== 'Quiz' && role === 'Student' && <SubmissionPanel key={`${data.id}-${data.mySubmission?.submittedAt ?? ''}`} assignment={data} />}
+
+          {data.type !== 'Quiz' && role === 'Parent' && (
             <section aria-labelledby="child-work" className="flex flex-col gap-3 rounded-xl border border-border bg-card p-4">
               <h2 id="child-work" className="text-lg font-semibold">
                 {t('submit.titleChild')}
@@ -115,7 +119,7 @@ export function AssignmentDetailPage() {
             </section>
           )}
 
-          {(role === 'Teacher' || role === 'Principal') && <ReviewSection assignmentId={data.id} canScore={data.canEdit} />}
+          {(role === 'Teacher' || role === 'Principal') && <ReviewSection assignmentId={data.id} canScore={data.canEdit} isQuiz={data.type === 'Quiz'} />}
 
           <ConfirmDialog
             open={confirmDelete}

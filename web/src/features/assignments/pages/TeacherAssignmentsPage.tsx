@@ -46,10 +46,16 @@ export function TeacherAssignmentsPage() {
         description={isTeacher ? t('teacher.description') : t('teacher.descriptionPrincipal')}
         actions={
           isTeacher && (
-            <Link to="/assignments/new" className={buttonVariants()}>
-              <Plus aria-hidden="true" />
-              {t('teacher.new')}
-            </Link>
+            <>
+              <Link to="/assignments/quizzes/new" className={buttonVariants({ variant: 'outline' })}>
+                <Plus aria-hidden="true" />
+                {t('teacher.newQuiz')}
+              </Link>
+              <Link to="/assignments/new" className={buttonVariants()}>
+                <Plus aria-hidden="true" />
+                {t('teacher.new')}
+              </Link>
+            </>
           )
         }
       />

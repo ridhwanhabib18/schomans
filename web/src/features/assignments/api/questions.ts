@@ -60,18 +60,18 @@ export const QUESTION_PAGE_SIZE = 20
 
 export const questionKeys = {
   all: ['question-bank'] as const,
-  list: (filters: QuestionFilters, page: number) => [...questionKeys.all, 'list', filters, page] as const,
+  list: (filters: QuestionFilters, page: number, pageSize: number) => [...questionKeys.all, 'list', filters, page, pageSize] as const,
 }
 
 /** The bank of a subject the teacher teaches. */
-export function useQuestions(filters: QuestionFilters, page: number, enabled = true) {
+export function useQuestions(filters: QuestionFilters, page: number, enabled = true, pageSize = QUESTION_PAGE_SIZE) {
   return useQuery({
-    queryKey: questionKeys.list(filters, page),
+    queryKey: questionKeys.list(filters, page, pageSize),
     queryFn: () =>
       customInstance<Paged<Question>>({
         url: '/api/v1/question-bank',
         method: 'GET',
-        params: { subjectId: filters.subjectId, type: filters.type, difficulty: filters.difficulty, search: filters.search || undefined, page, pageSize: QUESTION_PAGE_SIZE },
+        params: { subjectId: filters.subjectId, type: filters.type, difficulty: filters.difficulty, search: filters.search || undefined, page, pageSize },
       }),
     enabled,
     placeholderData: keepPreviousData,
