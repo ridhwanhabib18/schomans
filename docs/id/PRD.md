@@ -382,7 +382,8 @@ AnnouncementRead: AnnouncementId → Announcement, UserId → User, ReadAt
 Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← notifikasi in-app (tugas, approval, draf AI, ...)
 
 -- Audit & AI
-AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
+AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp   ← ditambah EntityId dan waktu (CreatedAt); satu baris per perubahan nilai, presensi, permohonan, atau langkah persetujuan
+EmailMessage: Id, UserId → User, ToAddress, Subject, Body, LinkUrl, Status (Pending | Sent | Failed), Attempts, SentAt, LastError   ← antrean email F-11 (belum ada di PRD awal)
 AiUsageLog: Id, UserId → User (kosong bila diminta job), Feature, Provider, Model, Tokens, CostUsd, DurationMs, Succeeded, IsBulk, CreatedAt   ← IsBulk: panggilan lanjutan dari satu proses massal; dihitung ke anggaran, bukan ke jatah harian pengguna
 
 Semua entitas: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (concurrency EF Core)

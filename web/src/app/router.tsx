@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { createBrowserRouter, type RouteObject } from 'react-router'
 import { AssistantPage } from '@/features/assistant/pages/AssistantPage'
+import { AuditLogPage } from '@/features/audit/pages/AuditLogPage'
 import { AssignmentDetailPage } from '@/features/assignments/pages/AssignmentDetailPage'
 import { AssignmentEditorPage } from '@/features/assignments/pages/AssignmentEditorPage'
 import { AssignmentsHomePage } from '@/features/assignments/pages/AssignmentsHomePage'
@@ -144,6 +145,7 @@ export const routes: RouteObject[] = [
           { path: '/requests/inbox', element: guarded(STAFF, <RequestInboxPage />) },
           { path: '/requests/:id', element: guarded(REQUEST_VIEWERS, <RequestDetailPage />) },
           { path: '/manage/requests', element: guarded(EDITORS, <AllRequestsPage />) },
+          { path: '/manage/audit-log', element: guarded(EDITORS, <AuditLogPage />) },
           { path: '/manage/approval-chains', element: guarded(EDITORS, <ApprovalChainsPage />) },
 
           { path: '/manage/news', element: guarded(EDITORS, <NewsManagePage />) },

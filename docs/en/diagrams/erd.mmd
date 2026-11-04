@@ -60,6 +60,7 @@ erDiagram
   User ||--o{ AnnouncementRead : "reads"
   User ||--o{ Notification : "receives"
   User ||--o{ AuditLog : "changes"
+  User ||--o{ EmailMessage : "receives"
   User ||--o{ AiUsageLog : "uses AI"
 
   User {
@@ -384,9 +385,22 @@ erDiagram
     guid UserId FK
     string Action
     string EntityName
+    guid EntityId
     json OldValues
     json NewValues
-    datetime Timestamp
+    datetime CreatedAt
+  }
+  EmailMessage {
+    guid Id PK
+    guid UserId FK
+    string ToAddress
+    string Subject
+    string Body
+    string LinkUrl
+    string Status
+    int Attempts
+    datetime SentAt
+    string LastError
   }
   AiUsageLog {
     guid Id PK

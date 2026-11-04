@@ -1,0 +1,38 @@
+{
+  "title": "Audit log",
+  "description": "Every change to grades, attendance and approvals: who made it, when, and what changed.",
+  "caption": "Recorded changes, newest first",
+  "filters": {
+    "entity": "Kind of record",
+    "allEntities": "All records",
+    "from": "From",
+    "to": "Until"
+  },
+  "entity": {
+    "Grade": "Grade",
+    "AttendanceRecord": "Attendance",
+    "Request": "Request",
+    "Approval": "Approval step"
+  },
+  "action": {
+    "Created": "Created",
+    "Updated": "Changed",
+    "Deleted": "Deleted"
+  },
+  "columns": {
+    "when": "When",
+    "who": "Who",
+    "action": "Action",
+    "record": "Record",
+    "changes": "Changes"
+  },
+  "system": "System",
+  "noChanges": "No details",
+  "change": "{{field}}: {{from}} → {{to}}",
+  "value": "{{field}}: {{value}}",
+  "empty": {
+    "title": "No changes recorded",
+    "body": "Nothing matches these filters."
+  },
+  "error": "The audit log could not be loaded."
+}

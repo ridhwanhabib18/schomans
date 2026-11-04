@@ -490,6 +490,7 @@ erDiagram
   User ||--o{ AnnouncementRead : "reads"
   User ||--o{ Notification : "receives"
   User ||--o{ AuditLog : "changes"
+  User ||--o{ EmailMessage : "receives"
   User ||--o{ AiUsageLog : "uses AI"
 
   NewsArticle {
@@ -533,9 +534,22 @@ erDiagram
     guid UserId FK
     string Action
     string EntityName
+    guid EntityId
     json OldValues
     json NewValues
-    datetime Timestamp
+    datetime CreatedAt
+  }
+  EmailMessage {
+    guid Id PK
+    guid UserId FK
+    string ToAddress
+    string Subject
+    string Body
+    string LinkUrl
+    string Status
+    int Attempts
+    datetime SentAt
+    string LastError
   }
   AiUsageLog {
     guid Id PK
@@ -565,7 +579,8 @@ NewsArticle is public (landing page and a source for the AI-08 chatbot); Announc
 | Submission | Unique (AssignmentId, StudentId) | One submission per student per assignment |
 | AttendanceSession | Index (ScheduleId, Date) | Today's sessions per teacher |
 | AnnouncementRead | Primary key (AnnouncementId, UserId) | Unread counts |
-| AuditLog | Index (EntityName, Timestamp) | Audit lookups; append-only |
+| AuditLog | Index (EntityName, CreatedAt), index (EntityId, CreatedAt) | Audit lookups and the history of one row; append-only |
+| EmailMessage | Index (Status, CreatedAt) | The sender job takes the pending mails, oldest first |
 | Term | Index (AcademicYearId, IsActive) | Current term lookups |
 | GradeWeight | Unique (SubjectId, Component) | One weight per component per subject |
 | GradePublication | Unique (ClassroomId, TermId) | Grades published once per classroom and term |
@@ -722,7 +737,8 @@ Uploads: the browser asks the API for a presigned PUT URL, the API validates typ
 | Concern | Approach |
 | --- | --- |
 | Logging | Serilog structured logs with correlation id per request, shipped to Seq |
-| Audit | `SaveChangesInterceptor` writes AuditLog rows for grades, attendance, and approvals |
+| Audit | `SaveChangesInterceptor` writes AuditLog rows (user, action, old and new values) for grades, attendance records, requests, and approval steps in the same save as the change; admin staff and the principal read them at `GET /api/v1/audit-logs` |
+| Email | Handlers queue an `EmailMessage` next to the in-app notification (request decided, admission result, announcement published); a Hangfire job sends the queue every minute over SMTP (Mailpit locally), retries 5 times, then marks the mail Failed |
 | Health | `/health/live` and `/health/ready` (SQL Server, Keycloak, S3) used by Docker and the reverse proxy |
 | AI usage | Every Claude call logged with feature, user, tokens, cost, and duration; monthly budget cap |
 | Backups | Nightly SQL Server backup to the private bucket, 14-day retention |

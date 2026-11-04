@@ -50,6 +50,7 @@
     "requests": "Requests",
     "approvals": "Approvals",
     "allRequests": "All requests",
+    "auditLog": "Audit log",
     "approvalChains": "Approval chains",
     "childAttendance": "Attendance",
     "childAssignments": "Assignments",

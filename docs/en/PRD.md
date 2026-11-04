@@ -446,7 +446,8 @@ AnnouncementRead: AnnouncementId → Announcement, UserId → User, ReadAt
 Notification: Id, UserId → User, Type, Title, Body, LinkUrl, ReadAt   ← in-app notifications (assignments, approvals, AI drafts, ...)
 
 -- Audit & AI
-AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp
+AuditLog: Id, UserId, Action, EntityName, OldValues, NewValues, Timestamp   ← EntityId and the moment (CreatedAt) added; one row per changed grade, attendance record, request or approval step
+EmailMessage: Id, UserId → User, ToAddress, Subject, Body, LinkUrl, Status (Pending | Sent | Failed), Attempts, SentAt, LastError   ← the queue of emails of F-11 (not in the first PRD)
 AiUsageLog: Id, UserId → User (empty when a job asked), Feature, Provider, Model, Tokens, CostUsd, DurationMs, Succeeded, IsBulk, CreatedAt   ← IsBulk: a further call of a bulk run; it counts toward the budget, not toward the user's daily calls
 
 Every entity: CreatedAt, UpdatedAt, IsDeleted (soft delete), RowVersion (EF Core concurrency)
