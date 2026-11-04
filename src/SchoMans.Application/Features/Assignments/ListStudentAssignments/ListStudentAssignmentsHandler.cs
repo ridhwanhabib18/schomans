@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using SchoMans.Application.Common;
 using SchoMans.Application.Common.Errors;
 using SchoMans.Application.Common.Interfaces;
+using SchoMans.Domain.Assignments;
 using SchoMans.Domain.Students;
 
 namespace SchoMans.Application.Features.Assignments.ListStudentAssignments;
@@ -37,6 +38,7 @@ public sealed class ListStudentAssignmentsHandler(IAppDbContext db, ICurrentUser
                 SubjectName = a.Subject!.Name,
                 TeacherName = a.Teacher!.User!.FullName,
                 a.DueAt,
+                a.Type,
                 Submission = db.Submissions
                     .Where(s => s.AssignmentId == a.Id && s.StudentId == id)
                     .Select(s => new { s.SubmittedAt, s.IsLate, s.Score })
@@ -54,7 +56,7 @@ public sealed class ListStudentAssignmentsHandler(IAppDbContext db, ICurrentUser
                 a.Submission is null ? StudentAssignmentStatus.NotSubmitted : a.Submission.IsLate ? StudentAssignmentStatus.Late : StudentAssignmentStatus.Submitted,
                 a.Submission is null && a.DueAt < now,
                 a.Submission?.SubmittedAt,
-                a.Submission?.Score))
+                a.Type == AssignmentType.Quiz && a.DueAt > now ? null : a.Submission?.Score))
             .ToList();
         return new PagedResult<StudentAssignmentDto>(items, page.Page, page.PageSize, page.TotalCount);
     }

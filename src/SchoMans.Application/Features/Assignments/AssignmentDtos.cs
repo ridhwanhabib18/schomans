@@ -1,3 +1,5 @@
+using SchoMans.Domain.Assignments;
+
 namespace SchoMans.Application.Features.Assignments;
 
 public sealed record AssignmentClassroomDto(Guid Id, string Name);
@@ -21,7 +23,8 @@ public sealed record AssignmentDto(
     SubmissionDto? MySubmission,
     bool CanEdit,
     DateTimeOffset CreatedAt,
-    string RowVersion);
+    string RowVersion,
+    AssignmentType Type = AssignmentType.Regular);
 
 /// <summary>A row of the teacher's list: how far the class is with the work.</summary>
 public sealed record AssignmentListItemDto(

@@ -71,6 +71,7 @@ app.MapEssayFeedbackEndpoints();
 app.MapDraftEndpoints();
 app.MapChatbotEndpoints();
 app.MapQuestionBankEndpoints();
+app.MapQuizEndpoints();
 app.MapGeneralLetterEndpoints();
 app.MapFileEndpoints();
 app.MapSitemapEndpoints();

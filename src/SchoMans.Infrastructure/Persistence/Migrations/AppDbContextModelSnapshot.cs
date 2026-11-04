@@ -593,6 +593,54 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                     b.ToTable("AssignmentClassrooms", (string)null);
                 });
 
+            modelBuilder.Entity("SchoMans.Domain.Assignments.AssignmentQuestion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AssignmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("AssignmentId", "Order")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.HasIndex("AssignmentId", "QuestionId")
+                        .IsUnique()
+                        .HasFilter("[IsDeleted] = 0");
+
+                    b.ToTable("AssignmentQuestions");
+                });
+
             modelBuilder.Entity("SchoMans.Domain.Assignments.FeedbackDraft", b =>
                 {
                     b.Property<Guid>("Id")
@@ -751,6 +799,10 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AnswersJson")
+                        .HasMaxLength(40000)
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("AssignmentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -790,6 +842,10 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                     b.Property<decimal?>("Score")
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
+
+                    b.Property<string>("ShortPointsJson")
+                        .HasMaxLength(40000)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
@@ -2375,6 +2431,25 @@ namespace SchoMans.Infrastructure.Persistence.Migrations
                         .HasForeignKey("ClassroomId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SchoMans.Domain.Assignments.AssignmentQuestion", b =>
+                {
+                    b.HasOne("SchoMans.Domain.Assignments.Assignment", "Assignment")
+                        .WithMany()
+                        .HasForeignKey("AssignmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SchoMans.Domain.Assignments.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("SchoMans.Domain.Assignments.FeedbackDraft", b =>

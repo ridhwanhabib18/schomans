@@ -91,6 +91,8 @@ public interface IAppDbContext
 
     DbSet<Question> Questions { get; }
 
+    DbSet<AssignmentQuestion> AssignmentQuestions { get; }
+
     DbSet<EmailMessage> EmailMessages { get; }
 
     DbSet<TeacherNote> TeacherNotes { get; }

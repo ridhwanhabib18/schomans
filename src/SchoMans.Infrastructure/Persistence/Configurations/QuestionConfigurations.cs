@@ -23,3 +23,17 @@ internal sealed class QuestionConfiguration : IEntityTypeConfiguration<Question>
         builder.HasIndex(q => new { q.SubjectId, q.Type, q.Difficulty });
     }
 }
+
+internal sealed class AssignmentQuestionConfiguration : IEntityTypeConfiguration<AssignmentQuestion>
+{
+    public void Configure(EntityTypeBuilder<AssignmentQuestion> builder)
+    {
+        builder.HasOne(q => q.Assignment).WithMany().HasForeignKey(q => q.AssignmentId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(q => q.Question).WithMany().HasForeignKey(q => q.QuestionId).OnDelete(DeleteBehavior.Restrict);
+
+        // A question is in a quiz once, and takes one place.
+        builder.HasIndex(q => new { q.AssignmentId, q.QuestionId }).IsUnique().HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(q => new { q.AssignmentId, q.Order }).IsUnique().HasFilter("[IsDeleted] = 0");
+        builder.HasIndex(q => q.QuestionId);
+    }
+}

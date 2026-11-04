@@ -13,6 +13,9 @@ internal sealed class SubmissionConfiguration : IEntityTypeConfiguration<Submiss
         builder.Property(s => s.FileName).HasMaxLength(AssignmentAttachment.FileNameMaxLength);
         builder.Property(s => s.TextBody).HasMaxLength(Submission.TextMaxLength);
         builder.Property(s => s.Feedback).HasMaxLength(Submission.FeedbackMaxLength);
+        builder.Property(s => s.AnswersJson).HasMaxLength(Submission.AnswersJsonMaxLength);
+        builder.Property(s => s.ShortPointsJson).HasMaxLength(Submission.AnswersJsonMaxLength);
+        builder.Ignore(s => s.IsQuiz);
         builder.Property(s => s.Score).HasPrecision(5, 2);
         builder.Ignore(s => s.IsGraded);
 

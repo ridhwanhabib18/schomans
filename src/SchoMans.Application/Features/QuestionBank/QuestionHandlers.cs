@@ -121,6 +121,11 @@ public sealed class UpdateQuestionHandler(IAppDbContext db, ICurrentUser current
             return own.Error;
         }
 
+        if (await db.AssignmentQuestions.AnyAsync(a => a.QuestionId == command.Id, ct))
+        {
+            return Error.Conflict("questions.in_use", "This question is in a quiz, so it can no longer be changed.");
+        }
+
         var q = command.Question;
         question!.Update(q.Type, q.Difficulty, q.Body, q.Options ?? [], q.AnswerKey, q.Explanation ?? string.Empty);
         await db.SaveChangesAsync(ct);
@@ -143,7 +148,7 @@ public sealed class UpdateQuestionHandler(IAppDbContext db, ICurrentUser current
 
 public sealed record DeleteQuestionCommand(Guid Id);
 
-/// <summary>Deletes a question of the bank. Quizzes already built from it keep their own copy of the question, so they are not affected.</summary>
+/// <summary>Deletes a question of the bank, unless a quiz uses it: a quiz asks its questions from the bank, so they must stay as they were.</summary>
 public sealed class DeleteQuestionHandler(IAppDbContext db, ICurrentUser currentUser)
 {
     public async Task<Result<Unit>> Handle(DeleteQuestionCommand command, CancellationToken ct)
@@ -153,6 +158,11 @@ public sealed class DeleteQuestionHandler(IAppDbContext db, ICurrentUser current
         if (!own.IsSuccess)
         {
             return own.Error;
+        }
+
+        if (await db.AssignmentQuestions.AnyAsync(a => a.QuestionId == command.Id, ct))
+        {
+            return Error.Conflict("questions.in_use", "This question is in a quiz, so it can no longer be deleted.");
         }
 
         db.Questions.Remove(question!);

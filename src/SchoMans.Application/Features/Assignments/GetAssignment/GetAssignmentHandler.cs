@@ -5,7 +5,7 @@ using SchoMans.Application.Common.Interfaces;
 namespace SchoMans.Application.Features.Assignments.GetAssignment;
 
 /// <summary>An assignment with its attachments; for a student (or a parent) also the student's own work.</summary>
-public sealed class GetAssignmentHandler(IAppDbContext db, ICurrentUser currentUser)
+public sealed class GetAssignmentHandler(IAppDbContext db, ICurrentUser currentUser, ISchoolClock clock)
 {
     public async Task<Result<AssignmentDto>> Handle(GetAssignmentQuery query, CancellationToken ct)
     {
@@ -21,6 +21,6 @@ public sealed class GetAssignmentHandler(IAppDbContext db, ICurrentUser currentU
             return Error.Forbidden("assignments.not_yours", "This assignment is not for you.");
         }
 
-        return (await AssignmentLoader.LoadAsync(db, query.Id, viewer.IsOwner, viewer.StudentId, ct))!;
+        return (await AssignmentLoader.LoadAsync(db, query.Id, viewer.IsOwner, viewer.StudentId, ct, clock.UtcNow))!;
     }
 }
