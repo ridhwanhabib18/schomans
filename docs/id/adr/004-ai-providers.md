@@ -36,3 +36,7 @@ pemakaian (`AiUsageLog`) berlaku untuk semua provider; provider gratis berbiaya 
 - Tool use (AI-04) lewat `IAiService.ChatAsync`: model hanya boleh memanggil tool terdaftar yang read-only milik asisten kepala
   sekolah, maksimal 5 langkah per pertanyaan. Satu pertanyaan beserta langkah toolnya dihitung satu panggilan pada batas harian
   (tiap panggilan tetap dihitung pada anggaran bulanan), dan nama siswa di hasil tool, pertanyaan, dan riwayat diganti ID.
+- Fitur Fase 7 mengikuti aturan yang sama. Chatbot (AI-08) hanya menjawab dari kutipan yang diberikan dan menjawab "tidak tahu"
+  beserta kontak staf bila tidak ada; satu pertanyaan orang tua dihitung satu panggilan harian, pertanyaan tamu hanya dihitung pada
+  anggaran bulanan dan dibatasi 6 per menit per IP. Generator soal (AI-06) hanya mengirim teks PDF (dibaca dengan PdfPig di server),
+  dan pekerjaan siswa (AI-05) dikirim dengan nama siswa diganti ID. Penilaian kuis sama sekali tidak memakai AI.

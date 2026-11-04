@@ -131,3 +131,7 @@ Delapan fitur: ringkasan perkembangan untuk orang tua (AI-01, wajib), deskripsi 
 ## 16. Kenapa kode dan aplikasi full bahasa Inggris, tapi dokumentasi dua bahasa?
 
 Kode bahasa Inggris adalah standar industri dan konsisten dengan nama framework. Aplikasi bahasa Inggris membuat demo bisa dicoba rekruter dari mana saja, dan struktur i18n memungkinkan bahasa Indonesia ditambahkan nanti tanpa mengubah kode. Dokumentasi dua bahasa melayani dua pembaca: versi Inggris untuk reviewer internasional, versi Indonesia untuk pembaca lokal dan untuk persiapan wawancara.
+
+## 17. Apakah SchoMans modular monolith, dan berlapis atau vertical slice?
+
+SchoMans adalah monolith (satu deployable) dengan Clean Architecture: dependensi mengarah ke dalam, Api ke Infrastructure ke Application ke Domain, dan layer Application memiliki interface yang diimplementasikan Infrastructure. Di dalam Application, kode disusun sebagai vertical slice, satu folder per use case beserta command atau query, handler, dan validator-nya. Ini bukan desain N-layer klasik dan bukan modular monolith yang ketat: semua fitur memakai satu `AppDbContext` dan tidak ada yang di build melarang satu fitur memanggil fitur lain (bank soal membaca opsi mengajar dari tugas, chatbot membaca aturan audiens dari pengumuman). Memecahnya menjadi modul berarti satu konteks database per modul dan kontrak publik di antaranya; itu tindak lanjut yang mungkin, bukan sesuatu yang diklaim proyek saat ini.

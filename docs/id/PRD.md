@@ -248,6 +248,8 @@ _Sesuai build (Fase 6): delapan tool read-only (lebih banyak dari contoh di atas
 - [ ] Guru menerima, mengubah, atau menolak draf; skor final selalu dari guru
 - [ ] Bisa dijalankan massal untuk semua pengumpulan satu tugas
 
+_Seperti dibangun (Fase 7): hanya pekerjaan berupa teks ketikan (berkas yang diunggah tidak dibaca); draf menyimpan salinan kriteria, jadi perubahan rubrik kemudian tidak mengubahnya; draf yang diterima bersifat final; AI tidak pernah menulis nilai ke buku nilai sendiri._
+
 **AI-06: Generator soal dari materi** (US-15, Sebaiknya)
 
 - [ ] Guru upload PDF materi (maks 30 halaman) lalu memilih jumlah soal, tingkat kesulitan, dan tipe (pilihan ganda atau isian singkat)
@@ -256,6 +258,8 @@ _Sesuai build (Fase 6): delapan tool read-only (lebih banyak dari contoh di atas
 - [ ] Soal dari bank soal bisa dirakit menjadi kuis online sederhana di modul tugas, dengan penilaian otomatis untuk pilihan ganda
 
 _Diputuskan untuk Fase 7: teks PDF dibaca di server dengan PdfPig (Apache-2.0, paket baru) dan hanya teksnya yang dikirim ke AI; kuis dikerjakan satu kali per siswa tanpa batas waktu; pilihan ganda dinilai seketika dan masuk nilai Quiz, isian singkat menunggu guru. Diputuskan lebih lanjut: skor setiap kuis yang sudah dinilai penuh dirata-rata per siswa, mata pelajaran, dan semester menjadi komponen Quiz, bersama nilai Quiz yang dimasukkan manual (buku nilai merata-ratakan semua skor satu komponen); kuis ditutup saat tenggat dan tidak bisa dikerjakan setelahnya; guru memberi tiap isian singkat 0 sampai poinnya, dan skor menjadi final serta masuk nilai setelah semuanya dinilai; setiap soal sama bobotnya secara bawaan (poin 1, guru boleh mengubah), skor = poin diperoleh dibagi total dikali 100, dan siswa melihat skor serta penjelasan baru setelah tenggat, kunci jawaban tidak pernah dibuka lebih awal._
+
+_Seperti dibangun (Fase 7): bank soal per mata pelajaran, dipakai bersama oleh gurunya, dan hanya penulis yang mengubah atau menghapus soal; soal yang sudah ada di kuis tidak bisa lagi diubah atau dihapus. ID paket PdfPig adalah `PdfPig` (versi 0.1.16, pembuat UglyToad); ID `UglyToad.PdfPig` hanya berisi build pihak ketiga._
 
 **AI-08: Chatbot info sekolah & PPDB** (US-17, Sebaiknya)
 
@@ -267,6 +271,8 @@ _Diputuskan untuk Fase 7: teks PDF dibaca di server dengan PdfPig (Apache-2.0, p
 
 _Diputuskan untuk Fase 7: image SQL Server tidak punya komponen full-text, jadi 5 kutipan paling relevan diambil dari skor kata kunci yang dihitung di SQL atas sumber yang diizinkan; tidak ada image database kustom._
 
+_Seperti dibangun (Fase 7): satu pertanyaan ke chatbot dihitung sebagai satu dari 10 panggilan AI harian orang tua; tamu dibatasi 6 pertanyaan per menit per IP; kutipan diberi skor per kata kunci dengan `LIKE`, jadi kata kunci bisa juga cocok dengan teks di HTML artikel._
+
 **AI-09: Draf pengumuman & surat** (US-18, Sebaiknya)
 
 - [ ] TU mengisi jenis dokumen, target pembaca, dan poin-poin singkat; AI menyusun draf di editor
@@ -274,6 +280,8 @@ _Diputuskan untuk Fase 7: image SQL Server tidak punya komponen full-text, jadi 
 - [ ] Draf tidak pernah terbit atau terkirim otomatis
 
 _Diputuskan untuk Fase 7: draf pengumuman masuk ke editor pengumuman; surat umum (undangan, pemberitahuan) punya halaman baru tempat AI menulis isinya, sedangkan sistem menambahkan kop, nomor, dan tanda tangan lalu mengekspor PDF. Surat keterangan di alur persetujuan tidak berubah._
+
+_Seperti dibangun (Fase 7): nomor surat memakai kode `UND` (undangan) dan `PEM` (pemberitahuan), yang belum didefinisikan PRD ini: `NNN/UND/SCHOMANS/<bulan Romawi>/<tahun>`._
 
 **F-11: Audit log & notifikasi eksternal**
 
@@ -312,7 +320,7 @@ Stack sudah ditetapkan: backend .NET 10 (LTS terbaru, didukung sampai November 2
 | Storage file | API S3 lewat AWSSDK.S3: SeaweedFS di Docker untuk lokal, Cloudflare R2 untuk demo live | Berkas PR, PPDB, gambar berita. Satu implementasi S3FileStorage di balik interface IFileStorage; lokal dan demo hanya beda konfigurasi endpoint. MinIO tidak dipakai karena edisi komunitasnya dikurangi sejak 2025 | Gratis (SeaweedFS Apache 2.0; R2 free tier, berbayar jika melebihi kuota) |
 | PDF | QuestPDF | Rapor dan surat bernomor dengan QR verifikasi | Gratis (Community License, individu & omzet < 1 juta USD) |
 | Import/ekspor Excel | ClosedXML | Import siswa, ekspor rekap absensi | Gratis (MIT) |
-| Baca teks PDF | UglyToad.PdfPig | Teks materi ajar untuk AI-06 (Fase 7) | Gratis (Apache-2.0) |
+| Baca teks PDF | PdfPig (UglyToad) | Teks materi ajar untuk AI-06 (Fase 7) | Gratis (Apache-2.0) |
 | Frontend | React 19 + TypeScript + Vite | React Router untuk routing | Gratis (MIT) |
 | Server state | TanStack Query | Semua data dari API: caching, loading/error, pagination, invalidasi setelah mutasi; event SignalR memicu invalidasi query terkait | Gratis (MIT) |
 | Client state | Zustand | Hanya state di browser, satu store kecil per kebutuhan: useAuthStore, useAttendanceSessionStore, useAdmissionWizardStore, useUiStore; selalu pakai selector; tidak menyimpan salinan data API | Gratis (MIT) |

@@ -131,3 +131,7 @@ Eight features: parent progress summaries (AI-01, must), report-card achievement
 ## 16. Why is the code and app fully English but the documentation bilingual?
 
 English code is the industry standard and consistent with framework names. An English app lets recruiters anywhere try the demo, and the i18n structure allows Indonesian to be added later without code changes. Bilingual documentation serves two audiences: English for international reviewers, Indonesian for local readers and interview preparation.
+
+## 17. Is SchoMans a modular monolith, and is it layered or vertical slices?
+
+It is a monolith (one deployable) with Clean Architecture: the dependencies point inward, Api to Infrastructure to Application to Domain, and the Application layer owns the interfaces that Infrastructure implements. Inside Application the code is organized in vertical slices, one folder per use case with its command or query, handler and validator. It is not a classic N-layer design and not a strict modular monolith: all features share one `AppDbContext` and nothing in the build forbids one feature from calling another (the question bank reads the teaching options of the assignments, the chatbot reads the audience rules of the announcements). Splitting it into modules would mean one database context per module and a public contract between them; that is a possible follow-up, not something the project claims today.
