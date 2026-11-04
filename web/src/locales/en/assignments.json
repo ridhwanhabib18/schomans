@@ -126,7 +126,8 @@
       "classroom": "Classroom",
       "status": "Status",
       "submitted": "Handed in",
-      "score": "Score"
+      "score": "Score",
+      "draft": "AI draft"
     },
     "review": "Review",
     "reviewFor": "Review the work of {{name}}",
@@ -155,6 +156,65 @@
       "invalid_key": "A file does not belong to this assignment. Upload it again.",
       "not_uploaded": "A file was not uploaded completely. Upload it again.",
       "invalid_file": "A file type or size is not accepted."
+    },
+    "feedback": {
+      "no_rubric": "Give the assignment a rubric first; the AI judges against its criteria.",
+      "needs_text": "The AI can only read work that was typed in; this one is a file.",
+      "already_scored": "This work is already scored; there is nothing left to draft.",
+      "already_accepted": "This draft is already accepted.",
+      "not_found": "There is no draft for this work.",
+      "criteria_mismatch": "Give points and a reason for every criterion.",
+      "points_out_of_range": "The points of a criterion are between 0 and its highest score."
+    },
+    "rubrics": {
+      "too_long": "The rubric is too long; shorten the descriptions."
+    },
+    "ai": {
+      "daily_limit": "You have used your AI calls of today. Try again tomorrow.",
+      "budget_exhausted": "The AI budget of this month is used up. The AI features are off until next month.",
+      "invalid_output": "The AI did not give a usable draft. Try again.",
+      "provider_failed": "The AI service did not answer. Try again in a moment.",
+      "not_configured": "The AI service is not set up."
+    }
+  },
+  "rubric": {
+    "open": "Rubric",
+    "title": "Rubric",
+    "body": "The criteria the AI judges the work against, each with the highest score it can get. The AI only drafts: you decide the score.",
+    "name": "Criterion {{number}}",
+    "maxPoints": "Highest score of criterion {{number}}",
+    "description": "What a good answer shows for criterion {{number}}",
+    "criterion": "criterion {{number}}",
+    "add": "Add a criterion",
+    "remove": "Remove",
+    "total": "Highest total: {{total}} points",
+    "save": "Save rubric",
+    "saved": "Rubric saved.",
+    "error": "The rubric could not be loaded."
+  },
+  "feedback": {
+    "title": "Feedback by AI",
+    "intro": "The AI reads the typed answer against the rubric and drafts a score and a reason per criterion. Nothing is scored until you accept. One draft uses one of your daily AI calls.",
+    "needsText": "The AI can only read work that was typed in; this work is a file.",
+    "draft": "Draft feedback with AI",
+    "draftAll": "Draft feedback for all",
+    "drafting": "Drafting…",
+    "again": "Draft again",
+    "points": "Points for {{name}} (0 to {{max}})",
+    "reason": "Reason for {{name}}",
+    "suggestion": "Suggestion for the student",
+    "score": "Score from these points: {{score}}",
+    "accept": "Accept and score",
+    "reject": "Reject draft",
+    "accepted": "Draft accepted. The work is scored and the student was notified.",
+    "rejected": "Draft rejected.",
+    "rejectedNote": "You rejected the last draft. Edit it and accept, or draft again.",
+    "acceptedSummary": "Accepted: the work was scored {{score}} from the rubric.",
+    "bulkDone": "{{drafted}} drafts written.",
+    "status": {
+      "Draft": "Draft",
+      "Accepted": "Accepted",
+      "Rejected": "Rejected"
     }
   }
 }
