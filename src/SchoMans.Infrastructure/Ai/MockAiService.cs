@@ -25,6 +25,7 @@ public sealed class MockAiService : IAiService
             AiFeatures.DocumentExtraction => MockDocumentExtraction(request),
             AiFeatures.EssayFeedback => MockEssayFeedback(request.UserPrompt),
             AiFeatures.DocumentDraft => MockDocumentDraft(request.UserPrompt),
+            AiFeatures.Chatbot => MockChatbot(request.UserPrompt),
             _ => request.JsonOutput ? "{\"mock\":true}" : "This is an answer of the mock AI.",
         };
 
@@ -312,6 +313,27 @@ public sealed class MockAiService : IAiService
 
         var paragraphs = new List<string> { opening, string.Join(" ", points.Select(p => p.TrimEnd('.', '!') + ".")), "Thank you for your attention and cooperation." };
         return JsonSerializer.Serialize(new { title = title.Length > 150 ? title[..150] : title, paragraphs });
+    }
+
+    /// <summary>
+    /// AI-08: answers with the sentence of the numbered passages that shares the most words with the question, and names that passage.
+    /// With no shared word it answers null, like a real model told to answer only from the passages.
+    /// </summary>
+    private static string MockChatbot(string prompt)
+    {
+        var question = Regex.Match(prompt, @"Question: (.+)").Groups[1].Value.ToLowerInvariant();
+        var words = Regex.Matches(question, "[a-z0-9]+").Select(m => m.Value).Where(w => w.Length >= 3).ToHashSet();
+        var best = Regex.Matches(prompt, @"\[(\d+)\] [^\r\n]*\s*<<<\s*(.*?)\s*>>>", RegexOptions.Singleline)
+            .SelectMany(m => Regex.Split(m.Groups[2].Value, @"(?<=[.!?])\s+")
+                .Select(sentence => (Number: int.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture), Sentence: sentence.Trim(),
+                    Shared: Regex.Matches(sentence.ToLowerInvariant(), "[a-z0-9]+").Select(w => w.Value).Count(words.Contains))))
+            .Where(c => c.Shared > 0 && c.Sentence.Length > 0)
+            .OrderByDescending(c => c.Shared).ThenBy(c => c.Number)
+            .FirstOrDefault();
+
+        return best.Sentence is null
+            ? JsonSerializer.Serialize(new { answer = (string?)null, sources = Array.Empty<int>() })
+            : JsonSerializer.Serialize(new { answer = best.Sentence.Length > 400 ? best.Sentence[..400] : best.Sentence, sources = new[] { best.Number } });
     }
 
     private static int Number(string text, string pattern)

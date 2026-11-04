@@ -66,6 +66,7 @@ public static class DependencyInjection
 
         services.Configure<SchoolOptions>(configuration.GetSection(SchoolOptions.SectionName));
         services.AddSingleton<ISchoolClock, SchoolClock>();
+        services.AddSingleton<ISchoolContact, SchoolContact>();
         services.Configure<AttendanceOptions>(configuration.GetSection(AttendanceOptions.SectionName));
         services.AddSchoolJobs(configuration, connectionString);
 

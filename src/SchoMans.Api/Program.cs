@@ -69,6 +69,7 @@ app.MapAuditEndpoints();
 app.MapRubricEndpoints();
 app.MapEssayFeedbackEndpoints();
 app.MapDraftEndpoints();
+app.MapChatbotEndpoints();
 app.MapGeneralLetterEndpoints();
 app.MapFileEndpoints();
 app.MapSitemapEndpoints();

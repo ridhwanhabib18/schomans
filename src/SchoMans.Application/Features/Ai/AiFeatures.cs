@@ -8,5 +8,6 @@ public static class AiFeatures
     public const string DocumentExtraction = "AI-03";
     public const string PrincipalAssistant = "AI-04";
     public const string EssayFeedback = "AI-05";
+    public const string Chatbot = "AI-08";
     public const string DocumentDraft = "AI-09";
 }

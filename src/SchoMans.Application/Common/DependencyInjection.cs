@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddScoped<Features.ProgressSummaries.ProgressSummaryDrafter>();
         services.AddScoped<Features.AchievementDescriptions.AchievementDescriptionDrafter>();
         services.AddScoped<Features.EssayFeedback.EssayFeedbackDrafter>();
+        services.AddScoped<Features.Chatbot.ChatbotAnswerer>();
         services.AddScoped<Features.Admissions.ExtractDocuments.DocumentExtractor>();
         services.AddValidatorsFromAssembly(assembly, includeInternalTypes: true);
         return services;
