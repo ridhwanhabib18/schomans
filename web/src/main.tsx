@@ -5,6 +5,7 @@ import { SILENT_CALLBACK_PATH, getUserManager } from '@/features/auth/api/authSe
 import { AppProviders } from '@/app/providers'
 import { createAppRouter } from '@/app/router'
 import '@/shared/lib/i18n'
+import { registerServiceWorker } from '@/shared/lib/pwa'
 import './index.css'
 
 if (window.location.pathname === SILENT_CALLBACK_PATH) {
@@ -16,6 +17,7 @@ if (window.location.pathname === SILENT_CALLBACK_PATH) {
     throw new Error('The #root element is missing from index.html.')
   }
 
+  registerServiceWorker()
   createRoot(root).render(
     <StrictMode>
       <AppProviders>
