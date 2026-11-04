@@ -253,7 +253,7 @@ _As built (Phase 6): eight read-only tools (more than the examples above), multi
 - [ ] Teachers edit and save to a question bank per subject
 - [ ] Questions from the bank can be assembled into a simple online quiz in the assignments module, auto-graded for multiple choice
 
-_Decided for Phase 7: the PDF text is read on the server with PdfPig (Apache-2.0, a new package) and only the text goes to the AI; a quiz is taken once per student, without a time limit; multiple choice is graded at once and enters the Quiz grade, short answers wait for the teacher._
+_Decided for Phase 7: the PDF text is read on the server with PdfPig (Apache-2.0, a new package) and only the text goes to the AI; a quiz is taken once per student, without a time limit; multiple choice is graded at once and enters the Quiz grade, short answers wait for the teacher. Further decided: the score of every fully graded quiz is averaged per student, subject and term into the Quiz component (a grade entered by hand still wins); the teacher gives each short answer 0 to its points, and the score is final, and enters the grade, once all of them are graded; every question counts the same by default (points 1, the teacher may change them), the score is points earned over the total times 100, and the student sees the score and the explanations only after the due date, never the answer key earlier._
 
 **AI-08: School & admissions chatbot** (US-17, Should)
 
