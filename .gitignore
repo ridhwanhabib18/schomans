@@ -13,6 +13,8 @@ web/test-results/
 web/coverage/
 # Secrets & local config
 .env
+.env.production
+infra/keycloak/realm-schomans.production.json
 *.local
 appsettings.Local.json
 # IDE / OS

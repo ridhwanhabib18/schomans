@@ -1,0 +1,15 @@
+# The API image is built from the repository root; keep everything it does not need out of the build context.
+**/bin/
+**/obj/
+**/node_modules/
+.git/
+web/
+docs/
+tests/
+tools/
+infra/
+TestResults/
+**/TestResults/
+**/test-results/
+**/playwright-report/
+**/coverage/
