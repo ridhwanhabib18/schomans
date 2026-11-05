@@ -1,0 +1,61 @@
+name: Docs
+
+# The documents derived from the code (ERD, API reference, authorization matrix, jobs and events, the generated parts of the system
+# design) are written by tools/SchoMans.DocGen. A pull request only has to show that no hand-written document names an API route or
+# hub that is gone. After a merge to main, and on a release tag, the documents are regenerated and a pull request is opened when
+# anything changed. (Repository setting needed: Actions > General > "Allow GitHub Actions to create and approve pull requests".)
+
+on:
+  pull_request:
+    paths: ['docs/**', 'src/**', 'tools/**']
+  push:
+    branches: [main]
+    tags: ['v*']
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  docs:
+    name: Documents (generate and check)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - run: dotnet build tools/SchoMans.DocGen --configuration Release
+
+      - name: Check that the hand-written documents match the API
+        if: github.event_name == 'pull_request'
+        run: dotnet run --project tools/SchoMans.DocGen --configuration Release --no-build -- --drift-only
+
+      # Fails when a hand-written diagram or the design names a route that no longer exists; otherwise rewrites the generated files.
+      - name: Regenerate
+        if: github.event_name == 'push'
+        run: dotnet run --project tools/SchoMans.DocGen --configuration Release --no-build
+
+      - name: Open a pull request with the changes
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- docs; then
+            echo "The generated documents are up to date."
+            exit 0
+          fi
+          branch="docs/regenerate-${GITHUB_SHA::8}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add docs
+          git commit -m "docs: regenerate the documents derived from the code"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "docs: regenerate the documents derived from the code" \
+            --body "Written by tools/SchoMans.DocGen after the change in ${GITHUB_SHA}. Review the diff of docs/en and merge."
