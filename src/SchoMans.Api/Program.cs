@@ -23,13 +23,15 @@ builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
     .AddSchoMansAuth(builder.Configuration)
-    .AddSchoMansApi(builder.Configuration);
+    .AddSchoMansApi(builder.Configuration)
+    .AddSchoMansForwardedHeaders(builder.Configuration);
 
 var app = builder.Build();
 
 // The database first: Hangfire keeps its tables inside it and creates them as soon as the dashboard is mapped below.
 await DatabaseInitializer.InitializeAsync(app.Services, app.Configuration);
 
+app.UseSchoMansForwardedHeaders();
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
@@ -40,44 +42,7 @@ app.UseAuthorization();
 app.UseRateLimiter();
 app.UseMiddleware<UserSyncMiddleware>();
 
-app.MapDashboardEndpoints();
-app.MapUserEndpoints();
-app.MapStudentEndpoints();
-app.MapTeacherEndpoints();
-app.MapClassroomEndpoints();
-app.MapSubjectEndpoints();
-app.MapAcademicYearEndpoints();
-app.MapScheduleEndpoints();
-app.MapAttendanceEndpoints();
-app.MapAssignmentEndpoints();
-app.MapGradeEndpoints();
-app.MapReportCardEndpoints();
-app.MapAdmissionEndpoints();
-app.MapRequestEndpoints();
-app.MapApprovalChainEndpoints();
-app.MapLetterEndpoints();
-app.MapGradeBandEndpoints();
-app.MapGradeWeightEndpoints();
-app.MapNewsEndpoints();
-app.MapAnnouncementEndpoints();
-app.MapNotificationEndpoints();
-app.MapProgressSummaryEndpoints();
-app.MapTeacherNoteEndpoints();
-app.MapLearningObjectiveEndpoints();
-app.MapAssistantEndpoints();
-app.MapAuditEndpoints();
-app.MapRubricEndpoints();
-app.MapEssayFeedbackEndpoints();
-app.MapDraftEndpoints();
-app.MapChatbotEndpoints();
-app.MapQuestionBankEndpoints();
-app.MapQuizEndpoints();
-app.MapGeneralLetterEndpoints();
-app.MapFileEndpoints();
-app.MapSitemapEndpoints();
-app.MapHealthEndpoints();
-app.MapHub<NotificationHub>(NotificationHub.Path);
-app.MapHub<AttendanceHub>(AttendanceHub.Path);
+app.MapSchoMansEndpoints();
 app.MapJobsDashboard();
 
 // The API docs are not public in production.
