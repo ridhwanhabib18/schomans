@@ -131,7 +131,8 @@ describe('app routes', () => {
 
     const { router } = renderRoutes(routes, '/attend?t=0123456789abcdef0123456789abcdef.abc')
 
-    expect(router.state.location.pathname).toBe('/login')
+    // The page of the route is fetched first (routes of the signed-in area are lazy); then the guard sends the visitor to the login.
+    await waitFor(() => expect(router.state.location.pathname).toBe('/login'))
     expect(router.state.location.state).toEqual({ from: '/attend?t=0123456789abcdef0123456789abcdef.abc' })
   })
 
@@ -146,12 +147,12 @@ describe('app routes', () => {
     expect(screen.queryByRole('link', { name: 'Manage news' })).toBeNull()
   })
 
-  it('sends an anonymous visitor who opens the dashboard to the login page with the demo buttons', () => {
+  it('sends an anonymous visitor who opens the dashboard to the login page with the demo buttons', async () => {
     useAuthStore.setState({ status: 'anonymous' })
 
     const { router } = renderRoutes(routes, '/dashboard')
 
-    expect(router.state.location.pathname).toBe('/login')
+    await waitFor(() => expect(router.state.location.pathname).toBe('/login'))
     expect(screen.getByRole('heading', { name: 'Sign in to SchoMans' })).toBeTruthy()
     expect(screen.getByRole('heading', { name: 'Try the demo' })).toBeTruthy()
     expect(screen.getByRole('link', { name: 'Browse as guest' }).getAttribute('href')).toBe('/')
