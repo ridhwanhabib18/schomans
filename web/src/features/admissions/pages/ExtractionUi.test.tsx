@@ -229,7 +229,7 @@ describe('the staff and the AI reading of the documents', () => {
 
   const render = () => renderRoutes([{ path: '/manage/admissions/:id', element: <ApplicantDetailPage /> }], '/manage/admissions/a1')
 
-  beforeEach(() => signInAs('Admin', 'Sari Utami'))
+  beforeEach(() => signInAs('Admin', 'M Ridhwan Habib A'))
 
   it('lets staff read a photo with the AI, but not a PDF', async () => {
     serveStaff(extractions())

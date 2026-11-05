@@ -37,7 +37,7 @@ public class ChatbotEndpointTests(ApiFixture fixture) : IAsyncLifetime
     /// <summary>A word no other test uses, so only what a test publishes can be found.</summary>
     private static string Token() => "qx" + Guid.NewGuid().ToString("N");
 
-    private HttpClient Editor() => _open.AsUser("admin@schomans.demo", "Sari Utami", "sub-demo-admin", "Admin");
+    private HttpClient Editor() => _open.AsUser("admin@schomans.demo", "M Ridhwan Habib A", "sub-demo-admin", "Admin");
 
     private static async Task<NewsDto> NewsAsync(HttpClient editor, string title, string body, NewsCategory category = NewsCategory.News, bool publish = true)
     {

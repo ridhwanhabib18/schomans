@@ -206,7 +206,7 @@ public sealed class DemoDataSeeder(AppDbContext db, TimeProvider timeProvider, I
 
         // One account for each remaining role. The parent has two children: the demo student and the next student.
         AddUser("principal", "Hendra Wirawan", UserRole.Principal);
-        AddUser("admin", "Sari Utami", UserRole.Admin);
+        AddUser("admin", "M Ridhwan Habib A", UserRole.Admin);
         AddUser("applicant", "Dewi Lestari", UserRole.Applicant);
         var parent = AddUser("parent", "Agus Putra", UserRole.Parent);
         db.StudentParents.Add(StudentParent.Create(parent.Id, students[0].Id));

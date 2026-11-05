@@ -11,7 +11,7 @@ const demoUsers = [
   { button: 'Student', name: 'Rina Putri', role: 'Student', section: /^Progress of / },
   { button: 'Parent', name: 'Agus Putra', role: 'Parent', section: /^Progress of / },
   // Admin staff and applicants have no analytics (F-09): their dashboard stays empty.
-  { button: 'Admin staff', name: 'Sari Utami', role: 'Admin', section: null },
+  { button: 'Admin staff', name: 'M Ridhwan Habib A', role: 'Admin', section: null },
   { button: 'Applicant', name: 'Dewi Lestari', role: 'Applicant', section: null },
 ] as const
 

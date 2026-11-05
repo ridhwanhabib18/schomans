@@ -48,7 +48,7 @@ public class UserEndpointTests(ApiFixture fixture)
     [Fact]
     public async Task Email_already_linked_to_another_keycloak_account_is_a_conflict()
     {
-        using var first = fixture.AsUser("admin@schomans.demo", "Sari Utami", "sub-demo-admin", "Admin");
+        using var first = fixture.AsUser("admin@schomans.demo", "M Ridhwan Habib A", "sub-demo-admin", "Admin");
         Assert.Equal(HttpStatusCode.OK, (await first.GetAsync(Url)).StatusCode);
 
         using var impostor = fixture.AsUser("admin@schomans.demo", "Someone Else", "sub-impostor", "Admin");

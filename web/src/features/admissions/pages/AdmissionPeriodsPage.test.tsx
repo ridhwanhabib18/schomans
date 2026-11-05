@@ -54,7 +54,7 @@ beforeEach(() => {
   api.listAcademicYears.mockReset().mockResolvedValue({ items: [{ id: 'y1', name: '2026/2027', isActive: true }, { id: 'y2', name: '2027/2028', isActive: false }] })
   http.customInstance.mockReset()
   useToastStore.setState({ toasts: [] })
-  signInAs('Admin', 'Sari Utami')
+  signInAs('Admin', 'M Ridhwan Habib A')
 })
 
 describe('AdmissionPeriodsPage', () => {

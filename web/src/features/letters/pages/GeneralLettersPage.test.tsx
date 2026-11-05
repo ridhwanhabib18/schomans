@@ -14,7 +14,7 @@ const letter = (overrides: Partial<GeneralLetter> = {}): GeneralLetter => ({
   letterNumber: '001/UND/SCHOMANS/XI/2026',
   recipient: 'Parents of class 7A',
   subject: 'Open day',
-  signedByName: 'Sari Utami',
+  signedByName: 'M Ridhwan Habib A',
   issuedAt: '2026-11-04T02:00:00Z',
   ...overrides,
 })
@@ -42,7 +42,7 @@ const fillLetter = async () => {
 beforeEach(() => {
   http.customInstance.mockReset()
   useToastStore.setState({ toasts: [] })
-  signInAs('Admin', 'Sari Utami')
+  signInAs('Admin', 'M Ridhwan Habib A')
 })
 
 afterEach(() => {
@@ -70,7 +70,7 @@ describe('GeneralLettersPage', () => {
 
     expect(await screen.findByText('001/UND/SCHOMANS/XI/2026')).toBeTruthy()
     expect(screen.getByText('Holiday notice')).toBeTruthy()
-    expect(screen.getAllByText('Sari Utami').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('M Ridhwan Habib A').length).toBeGreaterThan(0)
   })
 
   it('shows an empty state when no letter was issued', async () => {

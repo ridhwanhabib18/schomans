@@ -80,7 +80,7 @@ describe('RequestInboxPage', () => {
 })
 
 describe('AllRequestsPage', () => {
-  beforeEach(() => signInAs('Admin', 'Sari Utami'))
+  beforeEach(() => signInAs('Admin', 'M Ridhwan Habib A'))
 
   it('filters by status and by kind and goes back to the first page', async () => {
     http.customInstance.mockResolvedValue(pageOf([listItem()], { totalCount: 45 }))

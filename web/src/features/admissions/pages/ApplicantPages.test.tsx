@@ -78,7 +78,7 @@ beforeEach(() => {
   useToastStore.setState({ toasts: [] })
   api.listAcademicYears.mockResolvedValue({ items: [{ id: 'y1', name: '2026/2027', isActive: true }] })
   api.listClassrooms.mockResolvedValue({ items: [{ id: 'c1', name: 'Class A' }, { id: 'c2', name: 'Class B' }] })
-  signInAs('Admin', 'Sari Utami')
+  signInAs('Admin', 'M Ridhwan Habib A')
 })
 
 describe('ApplicantsPage', () => {
