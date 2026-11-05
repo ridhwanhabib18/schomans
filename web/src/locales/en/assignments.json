@@ -26,7 +26,8 @@
       "title": "No assignments yet",
       "description": "Give your classrooms their first assignment."
     },
-    "error": "The assignments could not be loaded."
+    "error": "The assignments could not be loaded.",
+    "newQuiz": "New quiz"
   },
   "student": {
     "title": "Assignments",
@@ -126,7 +127,8 @@
       "classroom": "Classroom",
       "status": "Status",
       "submitted": "Handed in",
-      "score": "Score"
+      "score": "Score",
+      "draft": "AI draft"
     },
     "review": "Review",
     "reviewFor": "Review the work of {{name}}",
@@ -155,6 +157,228 @@
       "invalid_key": "A file does not belong to this assignment. Upload it again.",
       "not_uploaded": "A file was not uploaded completely. Upload it again.",
       "invalid_file": "A file type or size is not accepted."
+    },
+    "feedback": {
+      "no_rubric": "Give the assignment a rubric first; the AI judges against its criteria.",
+      "needs_text": "The AI can only read work that was typed in; this one is a file.",
+      "already_scored": "This work is already scored; there is nothing left to draft.",
+      "already_accepted": "This draft is already accepted.",
+      "not_found": "There is no draft for this work.",
+      "criteria_mismatch": "Give points and a reason for every criterion.",
+      "points_out_of_range": "The points of a criterion are between 0 and its highest score."
+    },
+    "rubrics": {
+      "too_long": "The rubric is too long; shorten the descriptions."
+    },
+    "ai": {
+      "daily_limit": "You have used your AI calls of today. Try again tomorrow.",
+      "budget_exhausted": "The AI budget of this month is used up. The AI features are off until next month.",
+      "invalid_output": "The AI did not give a usable draft. Try again.",
+      "provider_failed": "The AI service did not answer. Try again in a moment.",
+      "not_configured": "The AI service is not set up."
+    },
+    "questions": {
+      "pdf_invalid": "The file is not a PDF that can be read.",
+      "pdf_too_long": "The PDF has more than 30 pages.",
+      "pdf_no_text": "The PDF has no text to read; a scanned document cannot be used.",
+      "not_your_subject": "You can only use the question bank of a subject you teach.",
+      "not_a_teacher": "Only teachers use the question bank.",
+      "not_yours": "Only the teacher who wrote a question can change it.",
+      "not_found": "The question does not exist.",
+      "invalid_request": "The request is not valid. Check the file and the number of questions.",
+      "in_use": "This question is in a quiz, so it can no longer be changed or deleted."
+    },
+    "quizzes": {
+      "closed": "The quiz is closed: its due date has passed.",
+      "already_submitted": "You have already taken this quiz. It can be taken once.",
+      "invalid_answer": "A multiple choice answer is one of its options.",
+      "unknown_question": "An answer is for a question that is not in this quiz.",
+      "not_found": "The quiz does not exist.",
+      "no_attempt": "This student has not taken the quiz.",
+      "due_in_past": "A quiz closes at its due date, so the due date must be in the future.",
+      "question_not_found": "A question of the quiz does not exist.",
+      "question_other_subject": "Every question must be from the question bank of the subject of the quiz.",
+      "not_a_short_answer": "Points are given to the short answer questions only.",
+      "points_out_of_range": "The points of a short answer are between 0 and what the question is worth.",
+      "use_quiz": "A quiz is taken on its own page.",
+      "scored_by_questions": "A quiz is scored from its questions.",
+      "not_a_quiz": "This assignment is not an online quiz."
+    }
+  },
+  "rubric": {
+    "open": "Rubric",
+    "title": "Rubric",
+    "body": "The criteria the AI judges the work against, each with the highest score it can get. The AI only drafts: you decide the score.",
+    "name": "Criterion {{number}}",
+    "maxPoints": "Highest score of criterion {{number}}",
+    "description": "What a good answer shows for criterion {{number}}",
+    "criterion": "criterion {{number}}",
+    "add": "Add a criterion",
+    "remove": "Remove",
+    "total": "Highest total: {{total}} points",
+    "save": "Save rubric",
+    "saved": "Rubric saved.",
+    "error": "The rubric could not be loaded."
+  },
+  "feedback": {
+    "title": "Feedback by AI",
+    "intro": "The AI reads the typed answer against the rubric and drafts a score and a reason per criterion. Nothing is scored until you accept. One draft uses one of your daily AI calls.",
+    "needsText": "The AI can only read work that was typed in; this work is a file.",
+    "draft": "Draft feedback with AI",
+    "draftAll": "Draft feedback for all",
+    "drafting": "Drafting…",
+    "again": "Draft again",
+    "points": "Points for {{name}} (0 to {{max}})",
+    "reason": "Reason for {{name}}",
+    "suggestion": "Suggestion for the student",
+    "score": "Score from these points: {{score}}",
+    "accept": "Accept and score",
+    "reject": "Reject draft",
+    "accepted": "Draft accepted. The work is scored and the student was notified.",
+    "rejected": "Draft rejected.",
+    "rejectedNote": "You rejected the last draft. Edit it and accept, or draft again.",
+    "acceptedSummary": "Accepted: the work was scored {{score}} from the rubric.",
+    "bulkDone": "{{drafted}} drafts written.",
+    "status": {
+      "Draft": "Draft",
+      "Accepted": "Accepted",
+      "Rejected": "Rejected"
+    }
+  },
+  "questions": {
+    "title": "Question bank",
+    "description": "The questions of the subjects you teach. Add them by hand, or let the AI draft them from a PDF and review them first. Teachers of the same subject share the bank; only the author changes a question.",
+    "caption": "Questions of the subject, newest first",
+    "loadError": "The questions could not be loaded.",
+    "add": "Add a question",
+    "edit": "Change the question",
+    "save": "Save the question",
+    "saved": "Question saved.",
+    "deleted": "Question deleted.",
+    "you": "You",
+    "editQuestion": "Change the question: {{body}}",
+    "deleteQuestion": "Delete the question: {{body}}",
+    "deleteTitle": "Delete this question?",
+    "noSubjects": {
+      "title": "No subjects yet",
+      "body": "The question bank is of the subjects you teach. Ask the admin staff to put your lessons in the timetable."
+    },
+    "empty": {
+      "title": "No questions",
+      "body": "Add a question or draft some from a PDF."
+    },
+    "filters": {
+      "subject": "Subject",
+      "all": "All",
+      "search": "Search in the text"
+    },
+    "columns": {
+      "body": "Question",
+      "type": "Type",
+      "difficulty": "Difficulty",
+      "author": "Written by",
+      "actions": "Actions"
+    },
+    "type": {
+      "MultipleChoice": "Multiple choice",
+      "ShortAnswer": "Short answer"
+    },
+    "difficulty": {
+      "Easy": "Easy",
+      "Medium": "Medium",
+      "Hard": "Hard"
+    },
+    "editor": {
+      "type": "Type",
+      "difficulty": "Difficulty",
+      "body": "Question",
+      "options": "Options (mark the right one)",
+      "option": "Option {{number}}",
+      "markRight": "Option {{number}} is the right answer",
+      "removeOption": "Remove option {{number}}",
+      "addOption": "Add an option",
+      "rightHint": "Two to five different options; exactly one is right.",
+      "modelAnswer": "Model answer",
+      "modelAnswerHint": "What you expect the student to write; you give the points yourself.",
+      "explanation": "Explanation"
+    },
+    "generate": {
+      "open": "Draft from a PDF",
+      "title": "Draft questions from a PDF",
+      "intro": "Upload your study material. The text of the PDF is read on the server and only the text goes to the AI. You review every question before it is saved. One draft uses one of your daily AI calls.",
+      "file": "PDF file",
+      "fileHint": "At most 30 pages and 10 MB, with text in it (a scan has none).",
+      "notPdf": "Choose a PDF file.",
+      "tooBig": "The PDF is larger than 10 MB.",
+      "count": "Number of questions",
+      "submit": "Draft the questions",
+      "working": "Reading and drafting…",
+      "reviewIntro": "{{count}} drafts from {{pages}} page(s). Change what you want, discard what you do not, then save.",
+      "truncated": "The PDF has more text than the AI reads at once; the questions come from the first part.",
+      "draftNumber": "Draft {{number}}",
+      "discard": "Discard",
+      "saveAll": "Save {{count}} to the bank",
+      "saved": "{{count}} questions saved to the bank."
+    }
+  },
+  "quiz": {
+    "title": "Quiz",
+    "titleChild": "The quiz of your child",
+    "error": "The quiz could not be loaded.",
+    "onceNote": "You can take this quiz only once, and it closes at the due date. There is no time limit. You see the result after the due date.",
+    "points": "{{count}} point(s)",
+    "pointsOf": "{{earned}} of {{total}} point(s)",
+    "answerFor": "Your answer to question {{number}}",
+    "handIn": "Hand in the quiz",
+    "handingIn": "Handing in…",
+    "handedIn": "Your quiz is handed in.",
+    "confirmTitle": "Hand in the quiz?",
+    "confirmBody": "You cannot take the quiz again after this.",
+    "confirmUnanswered": "{{count}} question(s) have no answer yet, and they count as wrong. You cannot take the quiz again after this.",
+    "waitForDue": "Your quiz is handed in. The result is shown after the due date ({{date}}).",
+    "childNotYet": "Your child has not taken the quiz yet.",
+    "closedNotTaken": "The quiz is closed and was not taken.",
+    "resultsLabel": "The questions with the right answers",
+    "status": {
+      "Scored": "Scored",
+      "WaitingForTeacher": "Waiting for the teacher"
+    },
+    "waitingForTeacher": "{{count}} short answer(s) wait for points from the teacher.",
+    "score": "Score {{score}}",
+    "yourAnswer": "Your answer",
+    "rightAnswer": "Right answer",
+    "noAnswer": "No answer",
+    "modelAnswer": "Model answer",
+    "explanation": "Explanation",
+    "noAttempt": "This student has not taken the quiz.",
+    "grading": {
+      "title": "Points for the short answers",
+      "intro": "Give every short answer points from 0 to what it is worth. The quiz is scored, and the student is told, when all of them have points.",
+      "points": "Points for question {{number}} (0 to {{max}})",
+      "save": "Save the points",
+      "saved": "Points saved."
+    },
+    "builder": {
+      "title": "New quiz",
+      "description": "Build an online quiz from the question bank. Students take it once before the due date; multiple choice is scored at once and short answers wait for your points.",
+      "name": "Title of the quiz",
+      "instructions": "Instructions",
+      "due": "Closes at",
+      "dueHint": "The quiz cannot be taken after this moment; students see the results then.",
+      "dueInPast": "Choose a moment in the future.",
+      "classrooms": "Classrooms",
+      "bank": "Questions of the bank",
+      "emptyBank": "The question bank of this subject has no questions yet.",
+      "openBank": "Open the question bank",
+      "bankMore": "Only the {{count}} newest are shown; search to find others.",
+      "picked": "In the quiz: {{count}} question(s), {{total}} point(s)",
+      "nonePicked": "Tick questions of the bank to put them in the quiz, in the order you tick them.",
+      "pointsLabel": "Points",
+      "pointsFor": "Points of question {{number}}",
+      "remove": "Remove question {{number}} from the quiz",
+      "lockNote": "A question in a quiz can no longer be changed or deleted in the bank.",
+      "create": "Create the quiz",
+      "created": "Quiz created. The students are told."
     }
   }
 }

@@ -23,6 +23,10 @@ public sealed class MockAiService : IAiService
             AiFeatures.ProgressSummary => MockProgressSummary(request.UserPrompt),
             AiFeatures.AchievementDescription => MockAchievementDescription(request.UserPrompt),
             AiFeatures.DocumentExtraction => MockDocumentExtraction(request),
+            AiFeatures.EssayFeedback => MockEssayFeedback(request.UserPrompt),
+            AiFeatures.DocumentDraft => MockDocumentDraft(request.UserPrompt),
+            AiFeatures.Chatbot => MockChatbot(request.UserPrompt),
+            AiFeatures.QuestionGenerator => MockQuestions(request.UserPrompt),
             _ => request.JsonOutput ? "{\"mock\":true}" : "This is an answer of the mock AI.",
         };
 
@@ -246,6 +250,145 @@ public sealed class MockAiService : IAiService
         needsSupport += " " + Closings[pick / (AchievedOpeners.Length * SupportOpeners.Length)];
 
         return JsonSerializer.Serialize(new { achieved, needsSupport });
+    }
+
+    /// <summary>
+    /// AI-05: one entry per criterion of the rubric in the prompt. The points rise with the length of the text and move a little with
+    /// a hash of the criterion and the text, so different work gets different points and the same work always gets the same.
+    /// </summary>
+    private static string MockEssayFeedback(string prompt)
+    {
+        var criteria = Regex.Matches(prompt, @"^- (.+?) \(0-(\d+)\): ", RegexOptions.Multiline)
+            .Select(m => (Name: m.Groups[1].Value, Max: int.Parse(m.Groups[2].Value, CultureInfo.InvariantCulture)))
+            .ToList();
+        var essay = Regex.Match(prompt, @"<<<\s*(.*?)\s*>>>", RegexOptions.Singleline).Groups[1].Value;
+        var words = essay.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Length;
+        var length = Math.Min(1.0, words / 120.0);
+
+        var scored = criteria.Select(c =>
+        {
+            var hash = (c.Name + essay).Aggregate(0, (sum, ch) => unchecked((sum * 31) + ch)) & 0xFF;
+            var ratio = Math.Min(1.0, 0.2 + (length * 0.6) + ((hash % 20) / 100.0));
+            var points = (int)Math.Round(c.Max * ratio, MidpointRounding.AwayFromZero);
+            var reason = ratio switch
+            {
+                >= 0.8 => $"The text deals with {c.Name.ToLowerInvariant()} clearly and with enough detail.",
+                >= 0.5 => $"The text touches on {c.Name.ToLowerInvariant()} but stays on the surface.",
+                _ => $"{c.Name} is hardly developed in the text.",
+            };
+            return (c.Name, points, reason, ratio);
+        }).ToList();
+
+        var weakest = scored.Count == 0 ? "the text" : scored.MinBy(c => c.ratio).Name.ToLowerInvariant();
+        return JsonSerializer.Serialize(new
+        {
+            criteria = scored.Select(c => new { name = c.Name, points = c.points, reason = c.reason }),
+            suggestion = $"Add one concrete example to strengthen the part on {weakest}.",
+        });
+    }
+
+    /// <summary>
+    /// AI-09: a short document built from the kind, the audience and the notes in the prompt. It adds no fact of its own: what the staff
+    /// wrote in the notes is quoted back, and nothing else (no date, place or name), like the real prompt demands.
+    /// </summary>
+    private static string MockDocumentDraft(string prompt)
+    {
+        var kind = Regex.Match(prompt, @"Document: (.+)").Groups[1].Value.Trim();
+        var audience = Regex.Match(prompt, @"Audience: (.+)").Groups[1].Value.Trim();
+        var notes = Regex.Match(prompt, @"<<<\s*(.*?)\s*>>>", RegexOptions.Singleline).Groups[1].Value;
+        var points = notes.Split(['\n', '.'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(4).Select(p => p.Length > 180 ? p[..180] : p).ToList();
+        var topic = points.Count == 0 ? "School information" : points[0];
+        var title = kind switch
+        {
+            "invitation letter" => $"Invitation: {topic}",
+            "notice letter" => $"Notice: {topic}",
+            _ => topic,
+        };
+
+        var opening = kind switch
+        {
+            "invitation letter" => $"We warmly invite {audience.ToLowerInvariant()} to the following.",
+            "notice letter" => $"We would like to inform {audience.ToLowerInvariant()} of the following.",
+            _ => $"A message for {audience.ToLowerInvariant()}.",
+        };
+
+        var paragraphs = new List<string> { opening, string.Join(" ", points.Select(p => p.TrimEnd('.', '!') + ".")), "Thank you for your attention and cooperation." };
+        return JsonSerializer.Serialize(new { title = title.Length > 150 ? title[..150] : title, paragraphs });
+    }
+
+    /// <summary>
+    /// AI-08: answers with the sentence of the numbered passages that shares the most words with the question, and names that passage.
+    /// With no shared word it answers null, like a real model told to answer only from the passages.
+    /// </summary>
+    private static string MockChatbot(string prompt)
+    {
+        var question = Regex.Match(prompt, @"Question: (.+)").Groups[1].Value.ToLowerInvariant();
+        var words = Regex.Matches(question, "[a-z0-9]+").Select(m => m.Value).Where(w => w.Length >= 3).ToHashSet();
+        var best = Regex.Matches(prompt, @"\[(\d+)\] [^\r\n]*\s*<<<\s*(.*?)\s*>>>", RegexOptions.Singleline)
+            .SelectMany(m => Regex.Split(m.Groups[2].Value, @"(?<=[.!?])\s+")
+                .Select(sentence => (Number: int.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture), Sentence: sentence.Trim(),
+                    Shared: Regex.Matches(sentence.ToLowerInvariant(), "[a-z0-9]+").Select(w => w.Value).Count(words.Contains))))
+            .Where(c => c.Shared > 0 && c.Sentence.Length > 0)
+            .OrderByDescending(c => c.Shared).ThenBy(c => c.Number)
+            .FirstOrDefault();
+
+        return best.Sentence is null
+            ? JsonSerializer.Serialize(new { answer = (string?)null, sources = Array.Empty<int>() })
+            : JsonSerializer.Serialize(new { answer = best.Sentence.Length > 400 ? best.Sentence[..400] : best.Sentence, sources = new[] { best.Number } });
+    }
+
+    /// <summary>
+    /// AI-06: questions built from the sentences of the material in the prompt, one question per sentence, in the type asked. The right
+    /// option moves from position to position, so the answer key is not always the same. It adds nothing that is not in the material.
+    /// </summary>
+    private static string MockQuestions(string prompt)
+    {
+        var multipleChoice = prompt.Contains("Type: multiple choice", StringComparison.Ordinal);
+        var count = Number(prompt, @"Number of questions: (\d+)");
+        var material = Regex.Match(prompt, @"<<<\s*(.*?)\s*>>>", RegexOptions.Singleline).Groups[1].Value;
+        var sentences = Regex.Split(material, @"(?<=[.!?])\s+")
+            .Select(sentence => Regex.Replace(sentence, @"\s+", " ").Trim())
+            .Where(sentence => sentence.Length >= 12)
+            .Select(sentence => sentence.Length > 150 ? sentence[..150] : sentence)
+            .ToList();
+        if (sentences.Count == 0)
+        {
+            sentences.Add("The material has no sentence that can be asked about");
+        }
+
+        var questions = Enumerable.Range(0, Math.Max(1, count)).Select(i =>
+        {
+            var sentence = sentences[i % sentences.Count];
+            var number = i + 1;
+            if (!multipleChoice)
+            {
+                return (object)new
+                {
+                    body = $"Question {number}: complete this idea from the material: \"{string.Join(' ', sentence.Split(' ').Take(4))} ...\"",
+                    options = Array.Empty<string>(),
+                    answer = (object)sentence,
+                    explanation = "This is stated in the material.",
+                };
+            }
+
+            var right = i % 4;
+            var wrong = new[] { "This is not mentioned in the material.", "The material says the opposite.", "Only a small part of this is stated." };
+            var options = new List<string>();
+            for (var position = 0; position < 4; position++)
+            {
+                options.Add(position == right ? sentence : $"{wrong[(position < right ? position : position - 1) % 3]} ({number}.{position + 1})");
+            }
+
+            return new
+            {
+                body = $"Question {number}: which statement is made in the material?",
+                options = options.ToArray(),
+                answer = (object)right,
+                explanation = "The material states this.",
+            };
+        });
+
+        return JsonSerializer.Serialize(new { questions });
     }
 
     private static int Number(string text, string pattern)

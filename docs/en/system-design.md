@@ -2,7 +2,7 @@
 
 Oct 23, 2026 · @M Ridhwan Habib A
 
-SchoMans is a modular monolith: one ASP.NET Core API and one React SPA, backed by SQL Server, Keycloak, S3-compatible storage, and the Claude API, deployed with Docker Compose on a single VPS. This document describes the system as designed in the PRD and is regenerated from the repository on the final-phase deploy (section 12).
+SchoMans is a monolith: one ASP.NET Core API and one React SPA, backed by SQL Server, Keycloak, S3-compatible storage, and the Claude API, deployed with Docker Compose on a single VPS. This document describes the system as designed in the PRD and is regenerated from the repository on the final-phase deploy (section 12).
 
 ## 1. Scope & quality goals
 
@@ -17,7 +17,7 @@ The design optimizes for a single school (up to 1,500 students and 100 teachers)
 | Cost | Free software; only hosting and Claude API are paid | Open-source stack, AI budget caps, mock mode |
 | Evolvability | Add features or locales without rewiring | Vertical slices, i18n, multi-tenant-ready schema |
 
-**Architecture style:** modular monolith. One deployable API keeps operations simple for a solo developer; feature folders and interfaces keep module boundaries explicit.
+**Architecture style:** monolith with Clean Architecture and vertical slices. One deployable API keeps operations simple for a solo developer; feature folders and interfaces keep the features apart. It is not a strict modular monolith: all features share one `AppDbContext`, and a few features call each other (the question bank reads the teaching options of the assignments, the chatbot reads the audience rules of the announcements), because no module boundary is enforced by the build.
 
 ## 2. System context
 

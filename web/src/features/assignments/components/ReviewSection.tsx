@@ -1,9 +1,11 @@
+import { Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { SubmissionRowDto } from '@/api/generated/model'
 import { formatDateTime } from '@/shared/lib/format'
 import { fieldError, parseProblem, type Problem } from '@/shared/lib/problem'
 import { Alert } from '@/shared/ui/alert'
+import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { DataTable, type Column } from '@/shared/ui/data-table'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog'
@@ -13,7 +15,12 @@ import { EmptyState, ErrorNotice } from '@/shared/ui/page-parts'
 import { Skeleton } from '@/shared/ui/skeleton'
 import { selectShowToast, useToastStore } from '@/stores/useToastStore'
 import { useGradeSubmission, useSubmission, useSubmissions } from '../api/assignments'
+import { useDraftAllFeedback, useFeedbackDrafts, type FeedbackStatus } from '../api/feedback'
+import { assignmentErrorText } from '../errors'
 import { AssignmentStatusBadge } from './AssignmentStatusBadge'
+import { FeedbackPanel } from './FeedbackPanel'
+import { QuizAttemptDialog } from './QuizAttemptDialog'
+import { RubricDialog } from './RubricDialog'
 import { SubmissionSummary } from './SubmissionPanel'
 import '../i18n'
 
@@ -58,6 +65,7 @@ function ReviewDialog({ row, canScore, onClose }: { row: SubmissionRowDto; canSc
           <div className="flex flex-col gap-4">
             <SubmissionSummary submission={{ ...data, score: null, feedback: null }} />
             {!data.textBody && !data.hasFile && <p className="text-sm text-muted-foreground">{t('review.noText')}</p>}
+            {canScore && row.submissionId && <FeedbackPanel submissionId={row.submissionId} hasText={Boolean(data.textBody)} isScored={row.score !== null} onAccepted={onClose} />}
             {canScore && (
               <form
                 noValidate
@@ -92,10 +100,31 @@ function ReviewDialog({ row, canScore, onClose }: { row: SubmissionRowDto; canSc
 }
 
 /** Every student of the assignment's classrooms, handed in or not, with the way to review and score the work. */
-export function ReviewSection({ assignmentId, canScore }: { assignmentId: string; canScore: boolean }) {
+export function ReviewSection({ assignmentId, canScore, isQuiz = false }: { assignmentId: string; canScore: boolean; isQuiz?: boolean }) {
   const { t } = useTranslation('assignments')
   const { data, isPending, isError, refetch } = useSubmissions(assignmentId)
+  const { t: tCommon } = useTranslation()
+  const showToast = useToastStore(selectShowToast)
+  // A quiz is scored from its questions, so the rubric and the AI feedback of written work do not apply to it.
+  const drafts = useFeedbackDrafts(assignmentId, canScore && !isQuiz)
+  const draftAll = useDraftAllFeedback(assignmentId)
   const [reviewing, setReviewing] = useState<SubmissionRowDto | null>(null)
+  const [editingRubric, setEditingRubric] = useState(false)
+  const [bulkError, setBulkError] = useState<string>()
+  const statusOf = (submissionId: string | null | undefined): FeedbackStatus | undefined => drafts.data?.find((d) => d.submissionId === submissionId)?.status
+
+  function runBulk() {
+    setBulkError(undefined)
+    draftAll.mutate(undefined, {
+      onSuccess: (result) => {
+        showToast({ kind: 'success', title: t('feedback.bulkDone', { drafted: result.drafted }) })
+        if (result.stoppedBy) {
+          setBulkError(t(`errors.${result.stoppedBy}`, { defaultValue: tCommon('errors.generic') }))
+        }
+      },
+      onError: (e) => setBulkError(assignmentErrorText(e, t, tCommon('errors.generic'))),
+    })
+  }
 
   const columns: Column<SubmissionRowDto>[] = [
     { key: 'student', header: t('review.columns.student'), render: (r) => <span className="font-medium">{r.studentName}</span> },
@@ -103,6 +132,18 @@ export function ReviewSection({ assignmentId, canScore }: { assignmentId: string
     { key: 'status', header: t('review.columns.status'), render: (r) => <AssignmentStatusBadge status={r.status} /> },
     { key: 'submitted', header: t('review.columns.submitted'), render: (r) => (r.submittedAt ? formatDateTime(r.submittedAt) : '—') },
     { key: 'score', header: t('review.columns.score'), className: 'tabular-nums', render: (r) => r.score ?? '—' },
+    ...(canScore && !isQuiz
+      ? [
+          {
+            key: 'draft',
+            header: t('review.columns.draft'),
+            render: (r: SubmissionRowDto) => {
+              const status = statusOf(r.submissionId)
+              return status ? <Badge variant={status === 'Accepted' ? 'success' : status === 'Rejected' ? 'muted' : 'warning'}>{t(`feedback.status.${status}`)}</Badge> : '—'
+            },
+          },
+        ]
+      : []),
     {
       key: 'actions',
       header: '',
@@ -125,6 +166,18 @@ export function ReviewSection({ assignmentId, canScore }: { assignmentId: string
       <h2 id="review-title" className="text-lg font-semibold">
         {t('review.title')}
       </h2>
+      {canScore && !isQuiz && (
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" variant="outline" size="sm" onClick={() => setEditingRubric(true)}>
+            {t('rubric.open')}
+          </Button>
+          <Button type="button" variant="outline" size="sm" disabled={draftAll.isPending} onClick={runBulk}>
+            <Sparkles aria-hidden="true" />
+            {draftAll.isPending ? t('feedback.drafting') : t('feedback.draftAll')}
+          </Button>
+        </div>
+      )}
+      {bulkError && <Alert tone="error" message={bulkError} />}
       {isError ? (
         <ErrorNotice message={t('review.error')} onRetry={() => void refetch()} />
       ) : (
@@ -140,7 +193,11 @@ export function ReviewSection({ assignmentId, canScore }: { assignmentId: string
           />
         </>
       )}
-      {reviewing && <ReviewDialog row={reviewing} canScore={canScore} onClose={() => setReviewing(null)} />}
+      {editingRubric && <RubricDialog assignmentId={assignmentId} onClose={() => setEditingRubric(false)} />}
+      {reviewing && isQuiz && (
+        <QuizAttemptDialog assignmentId={assignmentId} studentId={reviewing.studentId} studentName={reviewing.studentName} canScore={canScore} onClose={() => setReviewing(null)} />
+      )}
+      {reviewing && !isQuiz && <ReviewDialog row={reviewing} canScore={canScore} onClose={() => setReviewing(null)} />}
     </section>
   )
 }

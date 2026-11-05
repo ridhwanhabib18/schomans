@@ -29,6 +29,7 @@ erDiagram
   Assignment ||--o| Rubric : "graded by"
   Rubric ||--o{ RubricCriterion : "has"
   Submission ||--o{ RubricScore : "scored by"
+  Submission ||--o{ FeedbackDraft : "AI-05 draft"
   RubricCriterion ||--o{ RubricScore : "applies to"
   Subject ||--o{ GradeWeight : "weighted by"
   Subject ||--o{ LearningObjective : "defines"
@@ -175,10 +176,30 @@ erDiagram
     string FileKey
     string TextBody
     json Answers
+    json ShortPoints
     datetime SubmittedAt
     decimal Score
     string Feedback
     bool IsLate
+  }
+  FeedbackDraft {
+    guid Id PK
+    guid SubmissionId FK
+    string Status
+    json Criteria
+    string Suggestion
+  }
+  GeneralLetter {
+    guid Id PK
+    string Kind
+    string LetterNumber
+    string Recipient
+    string Subject
+    string Body
+    guid IssuedByUserId FK
+    string SignedByName
+    string PdfKey
+    datetime IssuedAt
   }
   Rubric {
     guid Id PK

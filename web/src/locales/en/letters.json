@@ -1,0 +1,52 @@
+{
+  "title": "General letters",
+  "description": "Write an invitation or a notice, with the help of the AI if you like. The system adds the letterhead, the number and your signature, and keeps the PDF. Nothing is sent to anybody.",
+  "form": {
+    "title": "New letter",
+    "kind": "Kind of letter",
+    "recipient": "To",
+    "recipientHint": "For example: parents of class 7A.",
+    "subject": "Subject",
+    "body": "Text of the letter",
+    "bodyHint": "Separate paragraphs with a blank line. Do not write the letterhead, the number or the signature: they are added for you.",
+    "draftWithAi": "Draft with AI",
+    "issue": "Issue the letter",
+    "issuing": "Issuing…",
+    "tooManyParagraphs": "A letter has at most {{max}} paragraphs.",
+    "paragraphTooLong": "A paragraph has at most {{max}} characters.",
+    "tooLong": "The letter is too long; shorten the text.",
+    "confirmTitle": "Issue this letter?",
+    "confirmBody": "The letter gets the next number and your signature. It is not sent to anybody, and an issued letter cannot be changed.",
+    "issued": "Letter {{number}} issued."
+  },
+  "kind": {
+    "Invitation": "Invitation",
+    "Notice": "Notice"
+  },
+  "list": {
+    "title": "Issued letters",
+    "caption": "Issued general letters, newest first",
+    "error": "The letters could not be loaded.",
+    "open": "Open PDF",
+    "openFor": "Open the PDF of letter {{number}}",
+    "empty": {
+      "title": "No letters yet",
+      "body": "The letters you issue appear here."
+    },
+    "columns": {
+      "number": "Number",
+      "kind": "Kind",
+      "recipient": "To",
+      "subject": "Subject",
+      "signedBy": "Signed by",
+      "issued": "Issued",
+      "actions": "Actions"
+    }
+  },
+  "errors": {
+    "general_letters": {
+      "number_conflict": "The letter could not be numbered. Try again.",
+      "not_found": "The letter does not exist."
+    }
+  }
+}

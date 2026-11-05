@@ -50,6 +50,20 @@ public sealed class Assignment : BaseEntity
         return assignment;
     }
 
+    /// <summary>
+    /// An online quiz: an assignment of type Quiz whose scores count in the Quiz component of the subject grade. Its questions
+    /// (<see cref="AssignmentQuestion"/>) are added by the caller.
+    /// </summary>
+    public static Assignment CreateQuiz(Guid teacherId, Guid subjectId, Guid termId, string title, string description, DateTimeOffset dueAt, IEnumerable<Guid> classroomIds)
+    {
+        var quiz = Create(teacherId, subjectId, termId, title, description, dueAt, classroomIds);
+        quiz.Type = AssignmentType.Quiz;
+        quiz.Component = GradeComponent.Quiz;
+        return quiz;
+    }
+
+    public bool IsQuiz => Type == AssignmentType.Quiz;
+
     public void UpdateDetails(string title, string description, DateTimeOffset dueAt)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(title);

@@ -11,6 +11,9 @@ public static class RateLimitPolicies
 
     /// <summary>Endpoints open to anybody (public news and announcements): per client address.</summary>
     public const string Public = "public";
+
+    /// <summary>The chatbot: every question costs an AI call, so the limit is tight and per client address.</summary>
+    public const string Chatbot = "chatbot";
 }
 
 public static class RateLimiting
@@ -23,6 +26,7 @@ public static class RateLimiting
     {
         var uploadsPerMinute = configuration.GetValue("RateLimiting:UploadsPerMinute", 30);
         var publicPerMinute = configuration.GetValue("RateLimiting:PublicPerMinute", 120);
+        var chatbotPerMinute = configuration.GetValue("RateLimiting:ChatbotPerMinute", 6);
 
         services.AddRateLimiter(options =>
         {
@@ -35,6 +39,10 @@ public static class RateLimiting
             options.AddPolicy(RateLimitPolicies.Public, context => RateLimitPartition.GetFixedWindowLimiter(
                 context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                 _ => Window(publicPerMinute)));
+
+            options.AddPolicy(RateLimitPolicies.Chatbot, context => RateLimitPartition.GetFixedWindowLimiter(
+                context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                _ => Window(chatbotPerMinute)));
         });
 
         return services;

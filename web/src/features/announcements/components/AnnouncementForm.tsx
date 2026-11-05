@@ -1,3 +1,4 @@
+import { Sparkles } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
@@ -7,8 +8,10 @@ import { Button } from '@/shared/ui/button'
 import { ConfirmDialog } from '@/shared/ui/confirm-dialog'
 import { CoverImageField } from '@/shared/ui/cover-image-field'
 import { Input } from '@/shared/ui/form-controls'
+import { DraftDialog } from '@/shared/ui/draft-dialog'
 import { FormField } from '@/shared/ui/form-field'
 import { RichTextEditor } from '@/shared/ui/rich-text-editor'
+import { paragraphsToHtml, type DocumentDraft } from '@/shared/lib/drafts'
 import { fieldError, isConcurrencyConflict, parseProblem, type Problem } from '@/shared/lib/problem'
 import { isAppRole, type AppRole } from '@/shared/lib/roles'
 import { selectShowToast, useToastStore } from '@/stores/useToastStore'
@@ -43,6 +46,7 @@ export function AnnouncementForm({ announcement, onReload }: AnnouncementFormPro
   const [coverUrl, setCoverUrl] = useState<string | null>(announcement?.coverImageUrl ?? null)
   const [problem, setProblem] = useState<Problem>()
   const [confirmPublish, setConfirmPublish] = useState(false)
+  const [drafting, setDrafting] = useState(false)
 
   const locked = announcement?.status === 'Published'
   const saving = create.isPending || update.isPending
@@ -78,6 +82,12 @@ export function AnnouncementForm({ announcement, onReload }: AnnouncementFormPro
     )
   }
 
+  // The AI draft goes into the editor like typed text: the person still reads it, changes it and saves it.
+  function applyDraft(draft: DocumentDraft) {
+    setTitle(draft.title)
+    setBody(paragraphsToHtml(draft.paragraphs))
+  }
+
   const generalError = problem && Object.keys(problem.fieldErrors).length === 0 && !isConcurrencyConflict(problem)
 
   return (
@@ -101,6 +111,15 @@ export function AnnouncementForm({ announcement, onReload }: AnnouncementFormPro
       )}
       {generalError && <Alert tone="error" message={problem?.title ?? tCommon('errors.generic')} />}
       {locked && <Alert tone="info" message={t('form.locked')} />}
+
+      {!locked && (
+        <div>
+          <Button type="button" variant="outline" size="sm" onClick={() => setDrafting(true)}>
+            <Sparkles aria-hidden="true" />
+            {t('form.draftWithAi')}
+          </Button>
+        </div>
+      )}
 
       <FormField label={t('form.title')} required error={fieldError(problem, 'title')}>
         <Input value={title} maxLength={200} onChange={(event) => setTitle(event.target.value)} />
@@ -158,6 +177,8 @@ export function AnnouncementForm({ announcement, onReload }: AnnouncementFormPro
           </Button>
         )}
       </div>
+
+      <DraftDialog open={drafting} onOpenChange={setDrafting} type="Announcement" replaces={title.trim() !== '' || body !== ''} onDraft={applyDraft} />
 
       <ConfirmDialog
         open={confirmPublish}

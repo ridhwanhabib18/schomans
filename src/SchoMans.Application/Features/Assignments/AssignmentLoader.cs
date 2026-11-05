@@ -7,7 +7,8 @@ namespace SchoMans.Application.Features.Assignments;
 
 internal static class AssignmentLoader
 {
-    public static async Task<AssignmentDto?> LoadAsync(IAppDbContext db, Guid id, bool canEdit, Guid? studentId, CancellationToken ct)
+    /// <param name="now">When given, the score of a quiz is left out of a student's own work until the quiz is due: a student sees the result only then.</param>
+    public static async Task<AssignmentDto?> LoadAsync(IAppDbContext db, Guid id, bool canEdit, Guid? studentId, CancellationToken ct, DateTimeOffset? now = null)
     {
         var row = await db.Assignments.AsNoTracking()
             .Where(a => a.Id == id)
@@ -17,6 +18,7 @@ internal static class AssignmentLoader
                 a.Title,
                 a.Description,
                 a.DueAt,
+                a.Type,
                 a.SubjectId,
                 SubjectName = a.Subject!.Name,
                 a.TeacherId,
@@ -40,6 +42,10 @@ internal static class AssignmentLoader
             .ToListAsync(ct);
 
         var submission = studentId is null ? null : await SubmissionOfAsync(db, id, studentId.Value, ct);
+        if (submission is not null && row.Type == AssignmentType.Quiz && now is { } at && at < row.DueAt)
+        {
+            submission = QuizRedaction.Hide(submission);
+        }
 
         return new AssignmentDto(
             row.Id,
@@ -56,7 +62,8 @@ internal static class AssignmentLoader
             submission,
             canEdit,
             row.CreatedAt,
-            RowVersionCodec.Encode(row.RowVersion));
+            RowVersionCodec.Encode(row.RowVersion),
+            row.Type);
     }
 
     public static Task<SubmissionDto?> SubmissionOfAsync(IAppDbContext db, Guid assignmentId, Guid studentId, CancellationToken ct) =>

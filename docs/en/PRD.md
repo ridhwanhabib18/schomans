@@ -246,12 +246,18 @@ _As built (Phase 6): eight read-only tools (more than the examples above), multi
 - [ ] The teacher accepts, edits, or rejects the draft; the final score always comes from the teacher
 - [ ] Can run in bulk for all submissions of an assignment
 
+_As built (Phase 7): typed work only (an uploaded file is not read); the draft snapshots the criteria, so a later rubric change does not alter it; an accepted draft is final; the AI never writes the score into the grade by itself._
+
 **AI-06: Question generator from materials** (US-15, Should)
 
 - [ ] Teachers upload a PDF (max 30 pages) and choose the number of questions, difficulty, and type (multiple choice or short answer)
 - [ ] AI returns JSON with questions, options, answer key, and explanations; the JSON is validated before display
 - [ ] Teachers edit and save to a question bank per subject
 - [ ] Questions from the bank can be assembled into a simple online quiz in the assignments module, auto-graded for multiple choice
+
+_Decided for Phase 7: the PDF text is read on the server with PdfPig (Apache-2.0, a new package) and only the text goes to the AI; a quiz is taken once per student, without a time limit; multiple choice is graded at once and enters the Quiz grade, short answers wait for the teacher. Further decided: the score of every fully graded quiz is averaged per student, subject and term into the Quiz component, together with any Quiz score entered by hand (the grade book averages all scores of a component); a quiz closes at its due date and cannot be taken after it; the teacher gives each short answer 0 to its points, and the score is final, and enters the grade, once all of them are graded; every question counts the same by default (points 1, the teacher may change them), the score is points earned over the total times 100, and the student sees the score and the explanations only after the due date, never the answer key earlier._
+
+_As built (Phase 7): the question bank is per subject, shared by its teachers, and only the author edits or deletes a question; a question that is in a quiz can no longer be changed or deleted. The package id of PdfPig is `PdfPig` (version 0.1.16, author UglyToad); the id `UglyToad.PdfPig` only has third-party builds._
 
 **AI-08: School & admissions chatbot** (US-17, Should)
 
@@ -261,11 +267,19 @@ _As built (Phase 6): eight read-only tools (more than the examples above), multi
 - [ ] If the answer is not in the sources, the chatbot says it doesn't know and gives the staff contact, without guessing
 - [ ] Public users are rate limited per IP to prevent abuse and runaway cost
 
+_Decided for Phase 7: the SQL Server image has no full-text component, so the 5 most relevant passages come from a keyword score computed in SQL over the allowed sources; no custom database image._
+
+_As built (Phase 7): a question to the chatbot counts as one of the 10 daily AI calls of a parent; guests are limited to 6 questions per minute per IP; passages are scored per keyword with `LIKE`, so a keyword can also match text in the HTML of an article._
+
 **AI-09: Announcement & letter drafts** (US-18, Should)
 
 - [ ] Staff enter the document type, audience, and short notes; AI drafts it in the editor
 - [ ] Letterhead, letter number, and signature are filled by the system, not by AI
 - [ ] Drafts are never published or sent automatically
+
+_Decided for Phase 7: announcement drafts go into the announcement editor; general letters (invitation, notice) get a new page where the AI writes the body and the system adds letterhead, number and signature and exports a PDF. The certificate letters of the approval flow do not change._
+
+_As built (Phase 7): the letter numbers use the codes `UND` (invitation) and `PEM` (notice), which this PRD did not define: `NNN/UND/SCHOMANS/<Roman month>/<year>`._
 
 **F-11: Audit log & external notifications**
 
@@ -304,6 +318,7 @@ The stack is fixed: .NET 10 backend (latest LTS, supported until November 2028),
 | File storage | S3 API via AWSSDK.S3: SeaweedFS in Docker locally, Cloudflare R2 for the live demo | Assignment files, admission documents, news images. One S3FileStorage implementation behind IFileStorage; local and demo differ only by endpoint config. MinIO is not used because its community edition was cut back in 2025 | Free (SeaweedFS Apache 2.0; R2 free tier, billed above quota) |
 | PDF | QuestPDF | Report cards and numbered letters with verification QR | Free (Community License, individuals & revenue < USD 1M) |
 | Excel import/export | ClosedXML | Student import, attendance export | Free (MIT) |
+| PDF text reading | PdfPig (UglyToad) | Text of teaching materials for AI-06 (Phase 7) | Free (Apache-2.0) |
 | Frontend | React 19 + TypeScript + Vite | React Router for routing | Free (MIT) |
 | Server state | TanStack Query | All API data: caching, loading/error, pagination, invalidation after mutations; SignalR events invalidate related queries | Free (MIT) |
 | Client state | Zustand | Browser-only state, one small store per need: useAuthStore, useAttendanceSessionStore, useAdmissionWizardStore, useUiStore; always use selectors; never a copy of API data | Free (MIT) |

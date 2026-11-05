@@ -36,3 +36,7 @@ mapped back in the backend, whatever the provider. Daily limits per user, the mo
 - Tool use (AI-04) goes through `IAiService.ChatAsync`: the model may only call the registered, read-only tools of the principal
   assistant, at most 5 steps per question. A question with its tool steps counts as one call toward the daily limit (every call still
   counts toward the monthly budget), and student names in tool results, the question and the history are replaced by IDs.
+- Phase 7 features follow the same rules. The chatbot (AI-08) answers only from the passages it is given and says "I don't know" with
+  the staff contact otherwise; a parent's question counts as one daily call, a guest's question counts toward the monthly budget
+  only and is limited to 6 per minute per IP. Question generation (AI-06) sends only the text of the PDF (read with PdfPig on the
+  server), and student work (AI-05) goes with the student name replaced by an ID. Quiz scoring does not use the AI at all.

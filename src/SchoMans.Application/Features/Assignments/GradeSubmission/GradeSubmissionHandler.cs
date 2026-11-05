@@ -27,6 +27,11 @@ public sealed class GradeSubmissionHandler(IAppDbContext db, ICurrentUser curren
             return Error.Forbidden("assignments.not_yours", "Only the teacher who gave the assignment can score the work.");
         }
 
+        if (submission.Assignment.IsQuiz)
+        {
+            return Error.Conflict("quizzes.scored_by_questions", "A quiz is scored from its questions: give points to its short answers.");
+        }
+
         if (await GradeBook.IsStudentLockedAsync(db, submission.StudentId, submission.Assignment.TermId, ct))
         {
             return Error.Conflict("grades.published", "The grades of this term are published; unpublish them before changing a score.");

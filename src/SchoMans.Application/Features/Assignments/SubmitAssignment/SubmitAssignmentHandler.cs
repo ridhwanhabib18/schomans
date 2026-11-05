@@ -21,6 +21,11 @@ public sealed class SubmitAssignmentHandler(IAppDbContext db, ICurrentUser curre
         }
 
         var assignment = await db.Assignments.AsNoTracking().FirstAsync(a => a.Id == command.AssignmentId, ct);
+        if (assignment.IsQuiz)
+        {
+            return Error.Conflict("quizzes.use_quiz", "A quiz is taken on its own page.");
+        }
+
         var fileKey = string.IsNullOrWhiteSpace(command.FileKey) ? null : command.FileKey.Trim();
         var submission = await db.Submissions.FirstOrDefaultAsync(s => s.AssignmentId == assignment.Id && s.StudentId == studentId, ct);
         if (submission?.IsGraded == true)

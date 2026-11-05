@@ -51,6 +51,8 @@ public static class DependencyInjection
         services.AddSingleton<IAttendanceExport, AttendanceExcelWriter>();
         services.AddSingleton<IReportCardPdf, ReportCardPdfRenderer>();
         services.AddSingleton<ILetterPdf, LetterPdfRenderer>();
+        services.AddSingleton<IGeneralLetterPdf, GeneralLetterPdfRenderer>();
+        services.AddSingleton<IPdfTextReader, PdfPigTextReader>();
         services.AddSingleton<IQrCodeGenerator, QrCoderGenerator>();
         services.AddSingleton<ISiteLinks, SiteLinks>();
 
@@ -65,6 +67,7 @@ public static class DependencyInjection
 
         services.Configure<SchoolOptions>(configuration.GetSection(SchoolOptions.SectionName));
         services.AddSingleton<ISchoolClock, SchoolClock>();
+        services.AddSingleton<ISchoolContact, SchoolContact>();
         services.Configure<AttendanceOptions>(configuration.GetSection(AttendanceOptions.SectionName));
         services.AddSchoolJobs(configuration, connectionString);
 

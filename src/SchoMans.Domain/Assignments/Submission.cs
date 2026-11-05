@@ -11,6 +11,7 @@ public sealed class Submission : BaseEntity
 {
     public const int TextMaxLength = 20_000;
     public const int FeedbackMaxLength = 2_000;
+    public const int AnswersJsonMaxLength = 40_000;
 
     private Submission()
     {
@@ -29,6 +30,14 @@ public sealed class Submission : BaseEntity
     public string? FileName { get; private set; }
 
     public string? TextBody { get; private set; }
+
+    /// <summary>A quiz: the answers of the student as one JSON document (question id to answer); null for ordinary work.</summary>
+    public string? AnswersJson { get; private set; }
+
+    /// <summary>A quiz: the points the teacher gave to the short answers (question id to points), as one JSON document.</summary>
+    public string? ShortPointsJson { get; private set; }
+
+    public bool IsQuiz => AnswersJson is not null;
 
     public DateTimeOffset SubmittedAt { get; private set; }
 
@@ -52,10 +61,50 @@ public sealed class Submission : BaseEntity
         return submission;
     }
 
+    /// <summary>A student's one attempt at a quiz. It cannot be replaced.</summary>
+    public static Submission CreateQuiz(Guid assignmentId, Guid studentId, string answersJson, DateTimeOffset now)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(answersJson);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(answersJson.Length, AnswersJsonMaxLength);
+
+        return new Submission { AssignmentId = assignmentId, StudentId = studentId, AnswersJson = answersJson, SubmittedAt = now, IsLate = false };
+    }
+
+    /// <summary>The teacher's points for the short answers of a quiz; the caller decides when the quiz is complete.</summary>
+    public void SetShortPoints(string shortPointsJson)
+    {
+        if (!IsQuiz)
+        {
+            throw new InvalidOperationException("Only a quiz has short answer points.");
+        }
+
+        ArgumentException.ThrowIfNullOrWhiteSpace(shortPointsJson);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(shortPointsJson.Length, AnswersJsonMaxLength);
+        ShortPointsJson = shortPointsJson;
+    }
+
+    /// <summary>A quiz is scored by its questions: automatically when it has only multiple choice, else when the teacher has given points to the short answers.</summary>
+    public void CompleteQuiz(decimal score, Guid? gradedById, DateTimeOffset now)
+    {
+        if (!IsQuiz)
+        {
+            throw new InvalidOperationException("Only a quiz is completed from its questions.");
+        }
+
+        if (score is < 0 or > 100)
+        {
+            throw new ArgumentOutOfRangeException(nameof(score), "A score is between 0 and 100.");
+        }
+
+        Score = score;
+        GradedAt = now;
+        GradedById = gradedById;
+    }
+
     /// <summary>Hands in new work instead of the old. Returns false once the work is scored: then it is final.</summary>
     public bool Replace(Assignment assignment, string? fileKey, string? fileName, string? textBody, DateTimeOffset now)
     {
-        if (IsGraded)
+        if (IsGraded || IsQuiz)
         {
             return false;
         }

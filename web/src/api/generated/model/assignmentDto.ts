@@ -24,4 +24,6 @@ export interface AssignmentDto {
   canEdit: boolean;
   createdAt: string;
   rowVersion: string;
+  /** Added by hand until `npm run api:generate` is run: a quiz is taken on its own screen. */
+  type?: 'Regular' | 'Quiz';
 }

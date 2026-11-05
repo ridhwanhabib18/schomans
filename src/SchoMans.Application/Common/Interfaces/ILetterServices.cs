@@ -19,6 +19,22 @@ public interface ILetterPdf
     byte[] Render(LetterDocument document);
 }
 
+/// <summary>Everything printed on a general letter (AI-09): the approved text and the facts the system adds. The letterhead is the renderer's business.</summary>
+public sealed record GeneralLetterDocument(
+    string LetterNumber,
+    string Heading,
+    string Recipient,
+    string Subject,
+    IReadOnlyList<string> Paragraphs,
+    DateOnly IssuedOn,
+    string SignedByName);
+
+/// <summary>Turns a general letter into a print-ready PDF (QuestPDF behind the interface).</summary>
+public interface IGeneralLetterPdf
+{
+    byte[] Render(GeneralLetterDocument document);
+}
+
 /// <summary>Draws a QR code as a PNG image.</summary>
 public interface IQrCodeGenerator
 {

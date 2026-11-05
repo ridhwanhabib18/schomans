@@ -82,6 +82,16 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
 
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
+    public DbSet<Rubric> Rubrics => Set<Rubric>();
+
+    public DbSet<FeedbackDraft> FeedbackDrafts => Set<FeedbackDraft>();
+
+    public DbSet<GeneralLetter> GeneralLetters => Set<GeneralLetter>();
+
+    public DbSet<Question> Questions => Set<Question>();
+
+    public DbSet<AssignmentQuestion> AssignmentQuestions => Set<AssignmentQuestion>();
+
     public DbSet<EmailMessage> EmailMessages => Set<EmailMessage>();
 
     public DbSet<TeacherNote> TeacherNotes => Set<TeacherNote>();

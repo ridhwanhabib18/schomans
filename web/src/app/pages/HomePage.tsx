@@ -6,6 +6,7 @@ import { LandingProfile } from '@/features/landing/components/LandingProfile'
 import { AwardsSection } from '@/features/news/components/AwardsSection'
 import { LatestNews } from '@/features/news/components/LatestNews'
 import { useDocumentMeta } from '@/shared/hooks/useDocumentMeta'
+import { ChatWidget } from '@/shared/ui/chat-widget'
 import '@/features/landing/i18n'
 
 /** The landing page. It lives in `app` because it composes several features, which are not allowed to import each other. */
@@ -18,6 +19,7 @@ export function HomePage() {
     <div className="flex flex-col gap-12">
       <LandingHero />
       <AdmissionsBanner />
+      <ChatWidget audience="public" />
       <LandingProfile />
       <LatestNews />
       <AwardsSection />
