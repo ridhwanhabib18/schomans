@@ -27,7 +27,7 @@ beforeEach(() => {
 })
 
 describe('ApprovalChainsPage as the admin staff', () => {
-  beforeEach(() => signInAs('Admin', 'Sari Utami'))
+  beforeEach(() => signInAs('Admin', 'M Ridhwan Habib A'))
 
   it('shows the chain of every kind of request as ordered steps', async () => {
     serve()

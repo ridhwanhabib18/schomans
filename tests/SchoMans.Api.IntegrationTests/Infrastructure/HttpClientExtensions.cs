@@ -35,7 +35,7 @@ public static class HttpClientExtensions
 
     // The seeded demo accounts. The first request of each links the account to its fixed sub (see SyncUserHandler).
     public static HttpClient AsAdmin(this ApiFixture fixture) =>
-        fixture.AsUser("admin@schomans.demo", "Sari Utami", "sub-demo-admin", "Admin");
+        fixture.AsUser("admin@schomans.demo", "M Ridhwan Habib A", "sub-demo-admin", "Admin");
 
     public static HttpClient AsPrincipal(this ApiFixture fixture) =>
         fixture.AsUser("principal@schomans.demo", "Hendra Wirawan", "sub-demo-principal", "Principal");

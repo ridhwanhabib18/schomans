@@ -33,5 +33,7 @@
     <PackageVersion Include="Testcontainers.MsSql" Version="4.16.0" />
     <!-- Security pin: transitive dependency of Testcontainers, 9.0.11 has known vulnerabilities -->
     <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+    <!-- Security pin: transitive dependency of Hangfire.Core; the API already resolves 13.0.4, a project that references the API alone fell back to 11.0.1 (known vulnerability) -->
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 </Project>

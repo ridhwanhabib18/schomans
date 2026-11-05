@@ -24,7 +24,7 @@ const log = (overrides: Partial<AuditLog> = {}): AuditLog => ({
 
 beforeEach(() => {
   http.customInstance.mockReset()
-  signInAs('Admin', 'Sari Utami')
+  signInAs('Admin', 'M Ridhwan Habib A')
 })
 
 describe('AuditLogPage', () => {

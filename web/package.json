@@ -11,6 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "capture:screenshots": "playwright test -c playwright.capture.config.ts pages.spec.ts",
+    "capture:flows": "playwright test -c playwright.capture.config.ts flows.spec.ts && python capture/make-gifs.py",
     "api:generate": "orval",
     "test:coverage": "vitest run --coverage"
   },

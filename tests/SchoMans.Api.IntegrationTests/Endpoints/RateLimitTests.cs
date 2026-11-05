@@ -12,7 +12,7 @@ public class RateLimitTests(ApiFixture fixture)
     public async Task Upload_urls_are_limited_per_user()
     {
         await using var limited = fixture.CreateFactory(new Dictionary<string, string> { ["RateLimiting:UploadsPerMinute"] = "2" });
-        using var admin = limited.AsUser("admin@schomans.demo", "Sari Utami", "sub-demo-admin", "Admin");
+        using var admin = limited.AsUser("admin@schomans.demo", "M Ridhwan Habib A", "sub-demo-admin", "Admin");
         using var principal = limited.AsUser("principal@schomans.demo", "Hendra Wirawan", "sub-demo-principal", "Principal");
         var command = new CreateUploadUrlCommand("news", Guid.NewGuid(), "image/png", 1024); // the record does not exist: still counts as a request
 
@@ -31,7 +31,7 @@ public class RateLimitTests(ApiFixture fixture)
     public async Task Imports_share_the_upload_allowance()
     {
         await using var limited = fixture.CreateFactory(new Dictionary<string, string> { ["RateLimiting:UploadsPerMinute"] = "1" });
-        using var admin = limited.AsUser("admin@schomans.demo", "Sari Utami", "sub-demo-admin", "Admin");
+        using var admin = limited.AsUser("admin@schomans.demo", "M Ridhwan Habib A", "sub-demo-admin", "Admin");
 
         using var first = TestData.FileContent(TestData.Workbook(), "students.xlsx");
         using var second = TestData.FileContent(TestData.Workbook(), "students.xlsx");

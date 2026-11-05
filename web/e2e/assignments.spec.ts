@@ -70,7 +70,7 @@ test('a teacher gives an assignment, a student hands in work, and the score reac
     const dialog = teacher.getByRole('dialog', { name: 'Work of Rina Putri' })
     await expect(dialog.getByText('The answer is three quarters.')).toBeVisible()
     await dialog.getByLabel(/Score/).fill('88.5')
-    await dialog.getByLabel('Feedback').fill('Well explained.')
+    await dialog.getByLabel('Feedback', { exact: true }).fill('Well explained.')
     await teacher.screenshot({ path: 'test-results/screens/assignment-review.png' })
     await dialog.getByRole('button', { name: 'Save score' }).click()
     await expect(teacher.getByText(/1 of \d+ handed in, 1 scored/)).toBeVisible()

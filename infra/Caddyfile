@@ -1,0 +1,40 @@
+# The reverse proxy of the deployment (infra/docker-compose.prod.yml). Caddy gets and renews the HTTPS certificates by itself.
+{$SITE_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		X-Frame-Options "DENY"
+		-Server
+	}
+
+	# The API, its real-time hubs (WebSockets are proxied as they are) and the sitemap. The jobs dashboard (/hangfire) is not
+	# routed on purpose: it is not meant for the public internet, so it answers like any unknown page.
+	@api path /api/* /hubs/* /sitemap.xml
+	handle @api {
+		reverse_proxy api:8080
+	}
+
+	# Everything else is the web app.
+	handle {
+		reverse_proxy web:80
+	}
+}
+
+# Keycloak, on its own address, so its cookies and pages stay apart from the app.
+{$AUTH_DOMAIN} {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		-Server
+	}
+
+	# The admin console is not for the public either: sign in to it through an SSH tunnel to port 8080 if you need it.
+	@admin path /admin /admin/* /realms/master /realms/master/*
+	respond @admin 404
+
+	reverse_proxy keycloak:8080
+}

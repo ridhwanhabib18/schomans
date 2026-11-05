@@ -55,6 +55,8 @@ test('a teacher takes attendance with the rotating QR code and a student checks 
 
     // Scanning again changes nothing.
     await goInApp(student, '/attendance/me') // a second scan is a new visit of the address, not the same page again
+    // The page of a route is fetched when it opens; leaving before it shows would cancel the move and keep the old page.
+    await expect(student.getByRole('heading', { level: 1, name: 'My attendance' })).toBeVisible()
     await goInApp(student, new URL(secondUrl).pathname + new URL(secondUrl).search)
     await expect(student.getByText('You were already checked in')).toBeVisible()
 
@@ -80,6 +82,8 @@ test('a teacher takes attendance with the rotating QR code and a student checks 
 
     // Nobody can check in after closing.
     await goInApp(student, '/attendance/me') // a second scan is a new visit of the address, not the same page again
+    // The page of a route is fetched when it opens; leaving before it shows would cancel the move and keep the old page.
+    await expect(student.getByRole('heading', { level: 1, name: 'My attendance' })).toBeVisible()
     await goInApp(student, new URL(secondUrl).pathname + new URL(secondUrl).search)
     await expect(student.getByText('You were already checked in')).toBeVisible() // Rina's record stays Present
 

@@ -1,0 +1,157 @@
+# The demo deployment on one VPS: Caddy (HTTPS) in front of the web app, the API and Keycloak, with SQL Server behind them.
+# Files go to Cloudflare R2, so there is no SeaweedFS here. See docs/en/deployment.md for the steps.
+#   cp infra/.env.production.example infra/.env.production   (fill it in)
+#   sh infra/make-production-realm.sh
+#   docker compose -f infra/docker-compose.prod.yml --env-file infra/.env.production up -d --build
+# Its own project name, so it never touches the containers and volumes of the development stack (infra/docker-compose.yml).
+name: schomans-prod
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?Set SITE_DOMAIN in infra/.env.production}
+      AUTH_DOMAIN: ${AUTH_DOMAIN:?Set AUTH_DOMAIN in infra/.env.production}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - web
+      - api
+      - keycloak
+
+  web:
+    build:
+      context: ../web
+      args:
+        VITE_API_URL: https://${SITE_DOMAIN}
+        VITE_KEYCLOAK_URL: https://${AUTH_DOMAIN}
+        VITE_DEMO_MODE: ${DEMO_MODE:-true}
+        VITE_DEMO_PASSWORD: ${DEMO_PASSWORD:-Demo123!}
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ..
+      dockerfile: src/SchoMans.Api/Dockerfile
+    restart: unless-stopped
+    environment:
+      # "Demo" turns on the API reference at /scalar; the settings below are what makes this a deployment.
+      ASPNETCORE_ENVIRONMENT: Demo
+      ConnectionStrings__Default: Server=sqlserver,1433;Database=SchoMans;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;Encrypt=False
+      Database__MigrateOnStartup: "true"
+      Database__SeedDemoData: ${SEED_DEMO_DATA:-true}
+      Keycloak__Authority: https://${AUTH_DOMAIN}/realms/schomans
+      # The API asks Keycloak for its keys over the internal network, while tokens are issued for the public address.
+      Keycloak__MetadataAddress: http://keycloak:8080/realms/schomans/.well-known/openid-configuration
+      # That internal address is plain HTTP inside the Docker network, which the JWT handler refuses unless it is told this is intended.
+      # Tokens are still only accepted for the issuer https://${AUTH_DOMAIN}/realms/schomans.
+      Keycloak__RequireHttpsMetadata: "false"
+      KeycloakAdmin__BaseUrl: http://keycloak:8080
+      KeycloakAdmin__ClientSecret: ${KEYCLOAK_ADMIN_CLIENT_SECRET}
+      Cors__AllowedOrigins__0: https://${SITE_DOMAIN}
+      Site__PublicBaseUrl: https://${SITE_DOMAIN}
+      # Caddy is on the compose network (a 172.16.0.0/12 address); only its X-Forwarded-* headers are believed.
+      ForwardedHeaders__Enabled: "true"
+      ForwardedHeaders__TrustedNetworks__0: 172.16.0.0/12
+      Storage__Endpoint: ${R2_ENDPOINT}
+      Storage__BrowserEndpoint: ${R2_ENDPOINT}
+      Storage__AccessKey: ${R2_ACCESS_KEY}
+      Storage__SecretKey: ${R2_SECRET_KEY}
+      Storage__Region: auto
+      Storage__ForcePathStyle: "true"
+      Storage__PublicBaseUrl: ${R2_PUBLIC_BASE_URL}
+      Storage__EnsureBuckets: "false"
+      Ai__Provider: ${AI_PROVIDER:-Mock}
+      Ai__Claude__ApiKey: ${CLAUDE_API_KEY:-}
+      Email__Host: ${SMTP_HOST:-}
+      Email__Port: ${SMTP_PORT:-587}
+      Email__UseSsl: ${SMTP_USE_SSL:-true}
+      Email__Username: ${SMTP_USERNAME:-}
+      Email__Password: ${SMTP_PASSWORD:-}
+      Email__FromAddress: ${SMTP_FROM:-no-reply@schomans.local}
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    healthcheck:
+      # The runtime image has no curl; ask the liveness endpoint over a plain TCP connection.
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080 && printf 'GET /health/live HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q '200 OK' <&3"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1
+    restart: unless-stopped
+    command: start --import-realm
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?Set KEYCLOAK_ADMIN_PASSWORD in infra/.env.production}
+      KC_DB: mssql
+      KC_DB_URL: jdbc:sqlserver://sqlserver:1433;databaseName=keycloak;encrypt=true;trustServerCertificate=true
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?Set KEYCLOAK_DB_PASSWORD in infra/.env.production}
+      # Caddy ends TLS and forwards X-Forwarded-*; the public address is what ends up in tokens and redirects.
+      KC_HOSTNAME: https://${AUTH_DOMAIN}
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
+      KC_HEALTH_ENABLED: "true"
+      JAVA_OPTS_KC_HEAP: -Xms256m -Xmx768m
+    volumes:
+      # Made by infra/make-production-realm.sh from realm-schomans.json: the public address and the admin client secret.
+      - ./keycloak/realm-schomans.production.json:/opt/keycloak/data/import/realm-schomans.json:ro
+      - ./keycloak/themes:/opt/keycloak/themes:ro
+    depends_on:
+      keycloak-db-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9000 && printf 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q '\"status\": \"UP\"' <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  # Runs once: creates the database and the login Keycloak uses (SQL Server has no "create if missing" at start-up).
+  keycloak-db-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: "no"
+    environment:
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in infra/.env.production}
+      KEYCLOAK_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    volumes:
+      - ./sqlserver/init-keycloak.sql:/init-keycloak.sql:ro
+    entrypoint: ["/bin/bash", "-c", "/opt/mssql-tools18/bin/sqlcmd -C -S sqlserver -U sa -P \"$$MSSQL_SA_PASSWORD\" -b -i /init-keycloak.sql -v KeycloakPassword=\"$$KEYCLOAK_DB_PASSWORD\""]
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in infra/.env.production}
+      # Express is free for production use (10 GB per database); Developer is for development only.
+      MSSQL_PID: Express
+      MSSQL_MEMORY_LIMIT_MB: "1536"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+volumes:
+  sqlserver-data:
+  caddy-data:
+  caddy-config:

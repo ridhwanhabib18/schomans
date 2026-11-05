@@ -44,7 +44,7 @@ public sealed class ClassroomScenario
         TimeOnly? end = null,
         string subjectName = "Mathematics")
     {
-        using var admin = factory.AsUser("admin@schomans.demo", "Sari Utami", "sub-demo-admin", "Admin");
+        using var admin = factory.AsUser("admin@schomans.demo", "M Ridhwan Habib A", "sub-demo-admin", "Admin");
         var scenario = new ClassroomScenario(factory) { Teacher = await TestData.CreateTeacherAsync(admin) };
 
         var years = await (await admin.GetAsync("/api/v1/academic-years?pageSize=100")).ReadAsync<PagedResult<Application.Features.AcademicYears.AcademicYearDto>>();
