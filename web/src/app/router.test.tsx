@@ -103,7 +103,8 @@ describe('app routes', () => {
 
     renderRoutes(routes, '/dashboard')
 
-    await waitFor(() => expect(screen.getAllByRole('link', { name: 'Manage news' }).length).toBeGreaterThan(0))
+    // The dashboard page is fetched when its route opens (it carries the charts), which takes a while the first time.
+    await waitFor(() => expect(screen.getAllByRole('link', { name: 'Manage news' }).length).toBeGreaterThan(0), { timeout: 15_000 })
     for (const name of ['Students', 'Teachers', 'Classrooms', 'Subjects', 'Academic years', 'Announcements', 'Manage announcements']) {
       expect(screen.getAllByRole('link', { name }).length).toBeGreaterThan(0)
     }

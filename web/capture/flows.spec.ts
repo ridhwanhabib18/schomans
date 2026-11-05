@@ -84,7 +84,7 @@ test('flow: assignments', async ({ browser, request }) => {
     await teacher.page.getByRole('row', { name: /Rina Putri/ }).getByRole('button', { name: /^Review/ }).click()
     const dialog = teacher.page.getByRole('dialog', { name: 'Work of Rina Putri' })
     await dialog.getByLabel(/Score/).fill('88.5')
-    await dialog.getByLabel('Feedback').fill('Well explained.')
+    await dialog.getByLabel('Feedback', { exact: true }).fill('Well explained.')
     await frame(teacher.page, 'assignments', 4, 'teacher-scores-it')
     await dialog.getByRole('button', { name: 'Save score' }).click()
 

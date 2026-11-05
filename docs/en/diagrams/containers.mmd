@@ -3,12 +3,13 @@ flowchart TB
   browser["Browser<br/>React SPA (PWA)"]
 
   subgraph vps["VPS (Docker Compose)"]
-    proxy["Reverse proxy (Caddy)<br/>HTTPS: / to web, /api and /hubs to api, /auth to keycloak"]
-    web["web<br/>React build, static files"]
+    proxy["Reverse proxy (Caddy)<br/>HTTPS: site address to web, /api and /hubs to api; own address for keycloak"]
+    web["web<br/>React build, static files (Caddy)"]
     keycloak["keycloak<br/>Realm schomans, OIDC + PKCE"]
     api["<b>api</b><br/>ASP.NET Core .NET 10<br/>Minimal API, SignalR, Hangfire, EF Core"]
     sql[("sqlserver<br/>SQL Server 2022 Express")]
     seaweed["seaweedfs<br/>S3 API, local dev only"]
+    kcinit["keycloak-db-init<br/>runs once"]
   end
 
   r2["Cloudflare R2<br/>S3 buckets"]
@@ -21,6 +22,8 @@ flowchart TB
   proxy --> api
   api --> sql
   api -->|signing keys, user sync| keycloak
+  keycloak --> sql
+  kcinit -.->|creates the keycloak database| sql
   api -.->|local only| seaweed
   api --> r2
   api --> claude
