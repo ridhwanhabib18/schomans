@@ -90,7 +90,7 @@ flowchart TB
   browser -->|presigned upload| r2
 ```
 
-The api validates tokens against Keycloak's signing keys (fetched over the internal network, while the tokens are issued for the public address), writes to SQL Server, and calls the three cloud services; browsers upload large files straight to R2 with presigned URLs. SeaweedFS replaces R2 only in local development. Keycloak keeps its data in a second database of the same SQL Server. Caddy sends the client address in `X-Forwarded-For`, and the api believes it only from the Docker network (`ForwardedHeaders` settings), so the rate limits per address see each visitor. The jobs dashboard (`/hangfire`) and the admin console of Keycloak are not routed to the internet. The files and the steps are in the [deployment guide](../deployment.md) (`infra/docker-compose.prod.yml`).
+The api validates tokens against Keycloak's signing keys (fetched over the internal network, while the tokens are issued for the public address), writes to SQL Server, and calls the three cloud services; browsers upload large files straight to R2 with presigned URLs. SeaweedFS replaces R2 only in local development. Keycloak keeps its data in a second database of the same SQL Server. Caddy sends the client address in `X-Forwarded-For`, and the api believes it only from the Docker network (`ForwardedHeaders` settings), so the rate limits per address see each visitor. The jobs dashboard (`/hangfire`) and the admin console of Keycloak are not routed to the internet. The files and the steps are in the [deployment guide](deployment.md) (`infra/docker-compose.prod.yml`).
 
 | Container | Image | Resources (approx.) | Persistent volume |
 | --- | --- | --- | --- |
@@ -801,7 +801,7 @@ Uploads: the browser asks the API for a presigned PUT URL, the API validates typ
 | PWA | `manifest.webmanifest` with PNG icons makes the app installable; a hand-written service worker (`web/public/sw.js`, production builds only) caches the app shell and the hashed build assets, never the API or Keycloak, so the installed app opens offline but all data stays live |
 | Health | `/health/live` and `/health/ready` (SQL Server, Keycloak, S3) used by Docker and the reverse proxy |
 | AI usage | Every Claude call logged with feature, user, tokens, cost, and duration; monthly budget cap |
-| Backups | Nightly SQL Server backup to the private bucket, 14-day retention |
+| Backups | Planned: a nightly SQL Server backup to the private bucket with 14-day retention. **Not built**: today the database is a Docker volume, and the [deployment guide](deployment.md) says how to take a manual backup. |
 | Configuration | Environment variables per environment (local, demo); realm exported as JSON and imported on startup |
 | CI/CD | GitHub Actions: build, tests with Testcontainers, coverage, Playwright E2E, Docker images, deploy on release tag |
 
