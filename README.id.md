@@ -1,3 +1,5 @@
+<p align="center"><img src="web/public/logo-mark.svg" alt="Logo SchoMans" width="96"></p>
+
 # SchoMans — School Management System
 
 [English](README.md)
@@ -12,6 +14,16 @@ bantuan AI dalam satu platform untuk guru, siswa, orang tua, dan staf sekolah.
 - Absensi QR realtime dengan SignalR
 - Rapor dan surat PDF, dashboard analitik
 - Fitur AI dengan peninjauan manusia (Claude API)
+
+## Logo
+Dua kartu membulat saling tumpang tindih di atas gradasi biru ke ungu, dengan titik oren kecil di pojok.
+- **Kartu putih di depan** adalah sekolah dan para guru, sumber informasi, tugas, dan nilai.
+- **Kartu transparan di belakang** adalah murid dan orang tua, yang menerima dan menanggapi.
+- **Tumpang tindih** berarti sekolah, murid, dan orang tua terhubung dalam satu platform. Bisa juga dibaca sebagai halaman yang bertumpuk: tugas, nilai, dan pengumuman.
+- **Titik oren** adalah notifikasi real-time: pesan baru yang langsung sampai (SignalR).
+- **Gradasi** (`#2563eb` ke `#7c3aed`) berangkat dari biru antarmuka dan bergerak ke ungu agar terasa modern.
+
+Tagline: *Satu platform, semua terhubung.*
 
 ## Tech stack
 .NET 10 · ASP.NET Core Minimal API · EF Core · SQL Server · Keycloak · SignalR · S3 ·

@@ -1,3 +1,5 @@
+<p align="center"><img src="web/public/logo-mark.svg" alt="SchoMans logo" width="96"></p>
+
 # SchoMans — School Management System
 
 [Bahasa Indonesia](README.id.md)
@@ -12,6 +14,16 @@ approvals, and AI assistance into one platform for teachers, students, parents, 
 - Real-time QR attendance with SignalR
 - PDF report cards and letters, analytics dashboards
 - AI features with human review (Claude API)
+
+## The logo
+Two rounded cards overlap on a blue-to-violet gradient, with a small orange dot in the corner.
+- **The white card in front** is the school and its teachers: the source of information, assignments and grades.
+- **The soft card behind** is the students and their parents, who receive and respond.
+- **The overlap** means school, students and parents are connected in one platform. It can also be read as stacked pages: assignments, grades and announcements.
+- **The orange dot** is the real-time notification: a new message that arrives at once (SignalR).
+- **The gradient** (`#2563eb` to `#7c3aed`) starts from the blue of the interface and moves to violet for a modern feel.
+
+Tagline: *One platform, everyone connected.*
 
 ## Tech stack
 .NET 10 · ASP.NET Core Minimal API · EF Core · SQL Server · Keycloak · SignalR · S3 ·
