@@ -5,6 +5,7 @@ import { useLogout } from '@/features/auth/api/useAuth'
 import { NotificationBell } from '@/features/notifications/components/NotificationBell'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/button'
+import { LogoMark } from '@/shared/ui/logo'
 import { selectAuthRole, selectAuthUser, useAuthStore } from '@/stores/useAuthStore'
 import { navItemsFor, navSectionsFor } from './navigation'
 import { JobsDashboardLink } from './JobsDashboardLink'
@@ -30,7 +31,10 @@ export function AppLayout() {
 
       <aside className="hidden border-r border-border bg-card md:block">
         <div className="sticky top-0 flex max-h-dvh flex-col gap-6 overflow-y-auto p-4">
-          <p className="px-2 text-lg font-bold tracking-tight">{t('app.name')}</p>
+          <p className="flex items-center gap-2 px-2 text-lg font-bold tracking-tight">
+            <LogoMark />
+            {t('app.name')}
+          </p>
           <nav aria-label={t('nav.main')} className="flex flex-col gap-5">
             {sections.map(({ section, items: sectionItems }) => (
               <div key={section} className="flex flex-col gap-1">
@@ -62,7 +66,10 @@ export function AppLayout() {
 
       <div className="flex min-w-0 flex-col">
         <header className="flex items-center justify-between gap-3 border-b border-border bg-card px-4 py-3">
-          <p className="font-bold tracking-tight md:invisible">{t('app.name')}</p>
+          <p className="flex items-center gap-2 font-bold tracking-tight md:invisible">
+            <LogoMark className="size-6" />
+            {t('app.name')}
+          </p>
           <div className="flex items-center gap-2">
             <NotificationBell />
             <div className="hidden text-right text-sm leading-tight sm:block">

@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, NavLink, Outlet } from 'react-router'
 import { cn } from '@/shared/lib/utils'
 import { buttonVariants } from '@/shared/ui/button'
+import { LogoMark } from '@/shared/ui/logo'
 import { selectAuthStatus, useAuthStore } from '@/stores/useAuthStore'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -22,7 +23,8 @@ export function PublicLayout() {
       <header className="border-b border-border bg-card">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex items-center gap-6">
-            <Link to="/" className="text-lg font-bold tracking-tight">
+            <Link to="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
+              <LogoMark />
               {t('app.name')}
             </Link>
             <nav aria-label={t('nav.publicMain')} className="flex gap-4 text-sm font-medium">
