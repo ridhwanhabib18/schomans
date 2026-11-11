@@ -1,12 +1,32 @@
-/* SchoMans brand colors on top of keycloak.v2 (PatternFly 5). */
+/* SchoMans brand on top of keycloak.v2 (PatternFly 5): the blue-to-violet gradient and the logo mark above the form. */
 :root {
-  --pf-v5-global--primary-color--100: #1d4ed8;
-  --pf-v5-global--primary-color--200: #1e40af;
-  --pf-v5-global--link--Color: #1d4ed8;
-  --pf-v5-global--link--Color--hover: #1e40af;
+  --pf-v5-global--primary-color--100: #2563eb;
+  --pf-v5-global--primary-color--200: #1d4ed8;
+  --pf-v5-global--link--Color: #2563eb;
+  --pf-v5-global--link--Color--hover: #1d4ed8;
 }
 
+/* The logo mark above the realm name. */
 #kc-header-wrapper {
   font-weight: 700;
   letter-spacing: 0.02em;
+}
+
+#kc-header-wrapper::before {
+  content: "";
+  display: block;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: 0 auto 0.75rem;
+  background: url("../img/logo-mark.svg") center / contain no-repeat;
+}
+
+.pf-v5-c-button.pf-m-primary {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  border: 0;
+}
+
+.pf-v5-c-button.pf-m-primary:hover,
+.pf-v5-c-button.pf-m-primary:focus {
+  background: linear-gradient(135deg, #1d4ed8, #6d28d9);
 }

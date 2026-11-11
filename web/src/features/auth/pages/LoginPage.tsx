@@ -3,6 +3,7 @@ import { Link, Navigate, useLocation } from 'react-router'
 import { config } from '@/shared/lib/config'
 import { Button } from '@/shared/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card'
+import { LogoMark } from '@/shared/ui/logo'
 import { selectAuthStatus, useAuthStore } from '@/stores/useAuthStore'
 import { DEFAULT_RETURN_PATH } from '../api/authService'
 import { useStartLogin } from '../api/useAuth'
@@ -26,6 +27,7 @@ export function LoginPage() {
     <main className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col justify-center gap-6 p-4 sm:p-8">
       <Card>
         <CardHeader>
+          <LogoMark className="mb-2 size-14" />
           <CardTitle className="text-2xl">{t('login.title')}</CardTitle>
           <CardDescription>{t('login.subtitle')}</CardDescription>
         </CardHeader>
